@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# This loop will update the music statusbar module whenever a command changes the
+# music player's status. mpd must be running on X's start for this to work.
+
+playerctl metadata --format "{{ status }}{{ title }}" -F 2>/dev/null |
+	while read; do kill -36 $(pidof dwmblocks); done &
+
+count=0;
+while [ $count -lt 3 ]; do mpc idle >/dev/null && kill -36 $(pidof dwmblocks) || (( count++ )); sleep $count; done &

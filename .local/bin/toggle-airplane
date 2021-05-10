@@ -1,0 +1,22 @@
+#!/bin/bash
+#---------------------------------------------------------------
+# Script to toggle airplane mode.
+#---------------------------------------------------------------
+
+deviceStates="$HOME/.cache/airplaneMode"
+mkdir -p $(dirname $deviceStates)
+touch $deviceStates
+
+if [[ $(rfkill -o soft | grep -c unblocked) != 0 ]]; then
+    bluetooth=$(rfkill list bluetooth | grep -c 'Soft blocked: no')
+    wifi=$(rfkill list wifi | grep -c 'Soft blocked: no')
+    echo $bluetooth$wifi >> $deviceStates
+
+    rfkill block all
+else
+    bluetooth=$(expr substr "`cat $deviceStates`" 1 1)
+    wifi=$(expr substr "`cat $deviceStates`" 2 1)
+
+    [[ $bluetooth -eq "1" ]] && rfkill unblock bluetooth
+    [[ $wifi -eq "1" ]] && rfkill unblock wifi
+fi

@@ -1,0 +1,51 @@
+* {
+	background-color: #282C33;
+	border-color: #2e343f;
+	text-color: #8ca0aa;
+	active-color: white;
+	spacing: 0;
+}
+
+inputbar {
+	border: 0 0 1px 0;
+	children: [prompt, entry, case-indicator];
+}
+
+case-indicator {
+	padding: 10px;
+}
+prompt {
+	padding: 10px;
+	border: 0 1px 0 0;
+}
+
+textbox {
+	background-color: @border-color;
+	border: 0 0 1px 0;
+	border-color: @background-color;
+	padding: 5px 10px;
+}
+
+entry {
+	padding: 10px;
+}
+
+listview {
+	cycle: false;
+	margin: 0 0 -1px 0;
+	scrollbar: false;
+}
+
+element {
+	border: 0 0 1px 0;
+	padding: 10px;
+}
+element selected {
+	background-color: #2e343f;
+}
+element active {
+	text-color: @active-color;
+}
+element selected.active {
+	text-color: @active-color;
+}

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+args=(-sel c -o)
+filename="Filename"
+xclip -sel c -t TARGETS -o | grep -q image/png && args+=(-t image/png) && filename="image.png"
+file="$(zenity --entry --title Paste --entry-text "$filename" --text="Filename for clipboard contents:")"
+[ ! -z $file ] && xclip "${args[@]}" > "$file"

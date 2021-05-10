@@ -1,0 +1,23 @@
+[Added Associations]
+image/jpeg=feh-2.desktop;
+text/plain=code.desktop;
+video/x-matroska=mpv.desktop;
+application/pdf=org.pwmt.zathura-pdf-poppler.desktop;
+application/x-shellscript=nvim.desktop;code.desktop;
+application/json=code.desktop;nvim.desktop;
+text/markdown=code.desktop;nvim.desktop;
+text/x-objcsrc=code.desktop;
+application/xml=code.desktop;
+text/x-csrc=code.desktop;
+text/x-tex=code.desktop;
+application/x-desktop=nvim.desktop;
+text/x-matlab=code.desktop;
+image/svg+xml=org.inkscape.Inkscape.desktop;
+
+[Default Applications]
+image/jpeg=feh-2.desktop;
+text/plain=code.desktop;
+video/x-matroska=mpv.desktop;
+x-scheme-handler/msteams=teams.desktop
+x-scheme-handler/mailto=brave-browser.desktop;
+x-scheme-handler/vscode=code.desktop;

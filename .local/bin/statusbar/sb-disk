@@ -1,0 +1,15 @@
+#!/bin/sh
+
+avail=$(df / | awk 'NR==2 {printf "%2.1f", ($4 / 1024 / 1024)}');
+percentUsed=$(df / | awk -F'[^0-9]*' 'NR==2 {print $5}');
+
+icon="🗄"
+redColor='\033[0;31m'
+noColor='\033[0m'
+
+if [ $percentUsed -le 10 ]; then
+	echo -e "$icon $redColor${avail}G";
+else
+	echo "$icon ${avail}G";
+fi
+

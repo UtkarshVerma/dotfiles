@@ -1,0 +1,16 @@
+#!/bin/sh
+
+[ $(cat /sys/class/net/w*/operstate 2>/dev/null) = up ] && wifiIcon="📶"
+
+if [ $(cat /sys/class/net/e*/operstate 2>/dev/null) = up ]; then
+	ethIcon="🌐"
+else
+	if [ ! $wifiIcon ]; then
+		echo "❎";
+		exit 0;
+	fi
+fi
+
+[ "$(ip tuntap show)" ] && vpnIcon="🔒" || vpnIcon=""
+echo "$wifiIcon$ethIcon$vpnIcon"
+

@@ -1,0 +1,13 @@
+#!/bin/env bash
+
+icon=" "
+threshold=5
+load=$(cut -d ' ' -f1 /proc/loadavg)
+redColor='\033[0;31m'
+
+if (( $(echo "$load > $threshold" | bc -l) )); then
+	echo "$icon$redColor$load"
+	exit 0
+fi
+echo "$icon$load"
+

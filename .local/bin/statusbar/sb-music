@@ -1,0 +1,24 @@
+#!/bin/sh
+
+icon="🎶 "
+pidof -x musicup >/dev/null 2>&1 || musicup >/dev/null 2>&1 &
+
+case $BLOCK_BUTTON in
+	1) musicctl prev ;;
+	2) musicctl toggle ;;
+	3) musicctl next ;;
+	4) musicctl seek +5 ;;
+	5) musicctl seek -5 ;;
+esac
+
+currentSong="$(playerctl metadata --format '{{ title }}{{ default(" - ", artist) }}{{ artist }}' 2>&1)"
+if [ $? = 0 ]; then
+    [ "$(playerctl status 2>&1)" = "Paused" ] && icon="⏸ "
+else
+    mpc | grep -q "\[paused\]" && icon="⏸ "
+    currentSong="$(mpc current)"
+fi
+
+[ -z "$currentSong" ] && exit
+echo "$icon$currentSong"
+

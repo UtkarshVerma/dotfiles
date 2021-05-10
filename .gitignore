@@ -1,0 +1,17 @@
+.config/git
+!.config/git/config
+
+.config/gtk-2.0
+!.config/gtk-2.0/gtkrc
+
+.config/gtk-3.0
+!.config/gtk-3.0/settings.ini
+
+.config/mpd/
+!.config/mpd/mpd.conf
+
+.config/ncmpcpp/
+!.config/ncmpcpp/{bindings,config}
+
+.config/nvim/*
+!.config/nvim/init.vim
