@@ -1,0 +1,14 @@
+[user]
+	email = utkarshverma@protonmail.com
+	name = Utkarsh Verma
+	signingkey = 817656CF818EFCCC
+[credential]
+	helper = store --file $HOME/.config/git/credentials
+[commit]
+	gpgsign = true
+[pull]
+	rebase = false
+[gpg]
+	program = gpg2
+[init]
+	defaultBranch = main
