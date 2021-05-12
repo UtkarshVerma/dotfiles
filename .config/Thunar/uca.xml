@@ -3,10 +3,9 @@
 <action>
 	<icon>utilities-terminal</icon>
 	<name>Open Terminal Here</name>
-	<submenu></submenu>
 	<unique-id>1611127802999324-1</unique-id>
 	<command>st -d %f</command>
-	<description>Example for a custom action</description>
+	<description>Open terminal in current directory.</description>
 	<patterns>*</patterns>
 	<startup-notify/>
 	<directories/>
@@ -19,7 +18,6 @@
 <action>
 	<icon></icon>
 	<name>Paste as File</name>
-	<submenu></submenu>
 	<unique-id>1618422006773669-1</unique-id>
 	<command>clip2file</command>
 	<description>Paste clipboard contents as file.</description>
