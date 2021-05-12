@@ -4,13 +4,16 @@
 wget --spider -q http://example.com || exit 1
 
 # Display the count, if non-zero.
-count1=`qgmail`
-count2=`qgmail -token ~/.config/qgmail/college_token.json`
+count1="$(qgmail)"
+count2="$(qgmail -token ~/.config/qgmail/college_token.json)"
+
+[ $? -gt 0 ] && exit
+
 output=""
-if [ $count1 -gt 0 ]; then
+if [ "$count1" -gt 0 ]; then
     output="📨 $count1"
-    [ $count2 -gt 0 ] && output="$output 🎓 $count2"
+    [ "$count2" -gt 0 ] && output="$output 🎓 $count2"
 else
-    [ $count2 -gt 0 ] && output="🎓 $count2"
+    [ "$count2" -gt 0 ] && output="🎓 $count2"
 fi
 echo "$output"

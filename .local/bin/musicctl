@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if playerctl status > /dev/null 2>&1; then
+	args=( $@ )
+	case "$1" in
+		"seek"|"volume")
+			args[0]="position"
+			args[1]="${2#+}+"
+			;;
+		"toggle") args[0]="play-pause" ;;
+	esac
+	playerctl ${args[@]}
+else
+	mpc $@
+fi
