@@ -24,6 +24,8 @@ call plug#begin()
 	Plug 'rhysd/vim-clang-format'
 	Plug 'jackguo380/vim-lsp-cxx-highlight'
 
+	Plug 'tomasr/molokai'
+
 	Plug 'vim-syntastic/syntastic'
 	Plug 'SirVer/ultisnips'
 	Plug 'preservim/nerdcommenter'
@@ -245,8 +247,18 @@ let g:tex_conceal="abdgm"
 let g:vim_markdown_math = 1
 set conceallevel=2
 
-set background=dark
-hi clear Conceal
+" Colorscheme
+colorscheme molokai
+"let g:molokai_original = 1
+hi Normal ctermbg=none guibg=none
+hi SignColumn ctermbg=none ctermfg=59
+hi Visual ctermbg=black
+hi Statement cterm=none
+hi LineNr ctermbg=none ctermfg=239
+hi GitGutterAdd ctermfg=118 ctermbg=none
+hi GitGutterChange ctermfg=208 ctermbg=none
+hi GitGutterDelete ctermfg=161 ctermbg=none cterm=bold
+hi GitGutterChangeDelete ctermfg=219 ctermbg=none
 
 " Split navigation
 nnoremap <C-J> <C-W><C-J>
