@@ -8,6 +8,7 @@ if playerctl status > /dev/null 2>&1; then
 			args[1]="${2#+}+"
 			;;
 		"toggle") args[0]="play-pause" ;;
+		"prev") args[0]="previous" ;;
 	esac
 	playerctl ${args[@]}
 else
