@@ -8,6 +8,7 @@ XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 HISTFILE="$XDG_DATA_HOME/zsh/history"
 HISTSIZE=10000
 SAVEHIST=10000
+ZLE_RPROMPT_INDENT=0
 export GPG_TTY=$TTY
 
 ## Enable p10k instant prompt
