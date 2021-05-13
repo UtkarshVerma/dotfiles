@@ -2,13 +2,12 @@
 
 # A dmenu wrapper script for system functions.
 cmds="\
-🔒 lock		slock
-🚪 leave dwm	kill -TERM $(pgrep -u $USER "\bdwm$")
-♻ renew dwm	kill -HUP $(pgrep -u $USER "\bdwm$")
-🐻 hibernate	loginctl hibernate
-🔃 reboot	loginctl reboot
-🖥 shutdown	loginctl poweroff"
+🔒 Lock		slock
+🚪 Leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
+♻️ Renew DWM	kill -HUP $(pgrep -u $USER "\bdwm$")
+🐻 Hibernate	loginctl hibernate
+🔃 Reboot	loginctl reboot
+🖥️ Shutdown	loginctl poweroff"
 
 choice="$(echo "$cmds" | cut -d'	' -f 1 | rofi -dmenu)" || exit 1
 `echo "$cmds" | grep "^$choice	" | cut -d '	' -f2-`
-

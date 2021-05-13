@@ -2,11 +2,11 @@ configuration {
 	modi: "run,window,drun";
 	run-list-command: ". rofi-aliases.sh";
 	run-shell-command: "{terminal} -e '{cmd}'";
-	run-command: "/bin/zsh -i -c '{cmd}'";
+	run-command: "/bin/sh -i -c '{cmd}'";
 	font: "monospace 14";
 	show-icons: true;
 	terminal: "rofi-sensible-terminal";
-	icon-theme:	"Papirus-Dark";
+	icon-theme: "Papirus-Dark";
 }
 
 @theme "themes/main"
