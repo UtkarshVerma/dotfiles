@@ -15,8 +15,8 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
-export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
-export XAUTHORITY="$XDG_CACHE_HOME/Xauthority"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
 export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
@@ -150,4 +150,3 @@ export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
 # Start X server if not already running
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx $XINITRC
-
