@@ -259,6 +259,7 @@ hi GitGutterAdd ctermfg=118 ctermbg=none
 hi GitGutterChange ctermfg=208 ctermbg=none
 hi GitGutterDelete ctermfg=161 ctermbg=none cterm=bold
 hi GitGutterChangeDelete ctermfg=219 ctermbg=none
+hi clear Conceal
 
 " Split navigation
 nnoremap <C-J> <C-W><C-J>
