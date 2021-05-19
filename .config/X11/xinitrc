@@ -1,9 +1,6 @@
 #!/bin/sh
 
-if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
-	eval $(dbus-launch --sh-syntax --exit-with-x11)
-	rm -r ~/.dbus
-fi
+[ -z "$DBUS_SESSION_BUS_ADDRESS" ] && eval $(dbus-launch --sh-syntax --exit-with-x11)
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 /usr/libexec/polkit-gnome-authentication-agent-1 &
