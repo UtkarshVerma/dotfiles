@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cacheDir=/var/cache/backlight
+[ -d $cacheDir ] || mkdir -p $cacheDir
+[ -w $cacheDir ] || chmod 755 $cacheDir
+
+# Cache current brightness state for each card.
+for card in $(find /sys/class/backlight/ -type l); do
+	echo $(cat $card/brightness) > $cacheDir/$(basename $card)
+done
