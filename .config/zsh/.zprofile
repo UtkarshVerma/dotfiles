@@ -14,7 +14,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
-export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
@@ -26,8 +26,10 @@ export LESSHISTFILE="-"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 
-export ANDROID_SDK_HOME="$XDG_DATA_HOME"
+export ANDROID_SDK_ROOT="$XDG_DATA_HOME/android-sdk"
+export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
+export CHROME_EXECUTABLE="$BROWSER"
 export JAVA_HOME="$XDG_DATA_HOME/java"
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export GOPATH="$XDG_DATA_HOME/go"
@@ -36,6 +38,10 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export MATLAB_PREFDIR="$XDG_DATA_HOME/matlab/R2020b"
 export MLM_LICENSE_FILE="$XDG_DATA_HOME/matlab/license.lic"
 export MATLAB_LOG_DIR="$XDG_CACHE_HOME/matlab"
+export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME/platformio"
+export PLATFORMIO_CACHE_DIR="$XDG_CACHE_HOME/platformio"
+
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 
 export TEXMFHOME="$XDG_DATA_HOME/texmf"
 export TEXMFVAR="$XDG_CACHE_HOME/texmf"
@@ -48,12 +54,12 @@ export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
-export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin"
+export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
 
 
 ## Look and feel
 export XCURSOR_THEME=Bibata-Modern-Classic
-export QT_QPA_PLATFORMTHEME=gtk2
+export QT_STYLE_OVERRIDE=kvantum
 export LF_ICONS="di=📁:\
 fi=📃:\
 tw=🤝:\
@@ -144,6 +150,9 @@ export LESS_TERMCAP_se="$(printf '%b' '[0m')"
 export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+
+# Disable Ctrl+Shift+u
+export GTK_IM_MODULE=xim
 
 ### Fix for Java AWT based software (e.g. MATLAB)
 export _JAVA_AWT_WM_NONREPARENTING=1
