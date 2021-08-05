@@ -1,10 +1,11 @@
 #!/bin/sh
 
+cards="/sys/class/backlight/amdgpu_bl0 /sys/class/leds/asus::kbd_backlight"
 cacheDir=/var/cache/backlight
 [ -d $cacheDir ] || mkdir -p $cacheDir
 [ -w $cacheDir ] || chmod 755 $cacheDir
 
 # Cache current brightness state for each card.
-for card in $(find /sys/class/backlight/ -type l); do
+for card in $cards; do
 	echo $(cat $card/brightness) > $cacheDir/$(basename $card)
 done

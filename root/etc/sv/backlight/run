@@ -1,7 +1,9 @@
 #!/bin/sh
 
+cards="/sys/class/backlight/amdgpu_bl0 /sys/class/leds/asus::kbd_backlight"
+
 # Restore saved brightness for each card, if any.
-for card in $(find /sys/class/backlight/ -type l); do
+for card in $cards; do
 	cacheFile=/var/cache/backlight/$(basename $card)
 	[ -r $cacheFile ] && echo $(cat $cacheFile) > $card/brightness
 done
