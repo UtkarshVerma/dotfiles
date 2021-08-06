@@ -1,0 +1,3 @@
+evdev:name:Asus WMI hotkeys:dmi:bvn*:bvr*:bd*:svnASUS*:pn*:pvr*
+ KEYBOARD_KEY_7c=190		# Mic mute
+ KEYBOARD_KEY_ae=148		# CPU fan speed control -> Launch 1
