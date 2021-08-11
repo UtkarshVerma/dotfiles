@@ -4,8 +4,8 @@
 wget --spider -q http://example.com || exit 1
 
 # Display the count, if non-zero.
-count1="$(qgmail)"
-count2="$(qgmail -token ~/.config/qgmail/college_token.json)"
+count1="$(qgmail request users.labels.get me INBOX | jq .messagesUnread)"
+count2="$(qgmail --token ~/.cache/qgmail/college_token.json request users.labels.get me INBOX | jq .messagesUnread)"
 
 [ $? -gt 0 ] && exit
 

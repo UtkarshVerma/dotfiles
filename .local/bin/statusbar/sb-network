@@ -13,4 +13,3 @@ fi
 
 [ "$(ip tuntap show)" ] && vpnIcon="🔒" || vpnIcon=""
 echo "$wifiIcon$ethIcon$vpnIcon"
-

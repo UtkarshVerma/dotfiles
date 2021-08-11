@@ -16,8 +16,8 @@ currentSong="$(playerctl metadata $args --format '{{ title }}{{ default(" - ", a
 if [ $? = 0 ]; then
     [ "$(playerctl status $args 2>&1)" = "Paused" ] && icon="⏸ "
 else
-    mpc -f "%title% - %artist%" | grep -q "\[paused\]" && icon="⏸ "
-    currentSong="$(mpc current)"
+    mpc | grep -q "\[paused\]" && icon="⏸ "
+    currentSong="$(mpc -f "%title% - %artist%" current)"
 fi
 
 [ -z "$currentSong" ] && exit
