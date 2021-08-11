@@ -159,4 +159,4 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
 # Start X server if not already running
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx $XINITRC
+[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg &> /dev/null && exec startx $XINITRC &> /dev/null
