@@ -1,9 +1,13 @@
 #!/bin/sh
 
-[ -z "$DBUS_SESSION_BUS_ADDRESS" ] && eval $(dbus-launch --sh-syntax --exit-with-x11)
+if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+	eval `dbus-launch --sh-syntax --exit-with-x11`
+	echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
+fi
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 /usr/libexec/polkit-gnome-authentication-agent-1 &
+! pidof -s pulseaudio > /dev/null 2>&1 && pulseaudio --start --exit-idle-time=-1 >/dev/null 2>&1
 
 #xrandr --setprovideroutputsource "AMD Radeon(TM) Vega 8 Graphics @ pci:0000:05:00.0" NVIDIA-0
 #xrandr --auto
