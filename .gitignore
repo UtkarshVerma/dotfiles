@@ -18,3 +18,5 @@
 
 .config/nvim/*
 !.config/nvim/init.vim
+
+root/etc/sv/*/supervise
