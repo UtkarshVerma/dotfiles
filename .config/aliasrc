@@ -13,6 +13,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 alias \
+	dosbox="dosbox -conf "$XDG_CONFIG_HOME"/dosbox/dosbox.conf" \
 	xi="sudo xbps-install" \
 	xr="sudo xbps-remove -R" \
 	xq="xbps-query"
