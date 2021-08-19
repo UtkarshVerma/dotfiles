@@ -56,6 +56,8 @@ export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
 export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
 
+# Add RubyGems to PATH, if installed
+command -v gem &>/dev/null && export PATH="$PATH:$(gem environment gemdir)/bin"
 
 ## Look and feel
 export XCURSOR_THEME=Bibata-Modern-Classic
@@ -154,7 +156,7 @@ export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 # Disable Ctrl+Shift+u
 export GTK_IM_MODULE=xim
 
-### Fix for Java AWT based software (e.g. MATLAB)
+# Fix for Java AWT based software (e.g. MATLAB)
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
