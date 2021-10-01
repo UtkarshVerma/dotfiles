@@ -53,7 +53,6 @@ augroup pandoc_syntax
 augroup END
 
 " clang-format settings
-autocmd FileType c,cpp ClangFormatAutoEnable
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
@@ -62,6 +61,7 @@ nmap <Leader>C :ClangFormatAutoToggle<CR>
 " Syntastic settings
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_avra_checkers = ['avra']
 
 " VimTeX settings
 let g:tex_flavor = 'latex'
@@ -278,9 +278,5 @@ augroup Markdown
 	autocmd FileType markdown set wrap
 augroup END
 
-" -------------------------------------------------------
-" Gentoo Specific Stuff
-" -------------------------------------------------------
-" Recompile dwmblocks on modifying config.h
-autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
-
+" Restore blinking cursor on exit
+au VimLeave,VimSuspend * set guicursor=a:ver2-blinkon1
