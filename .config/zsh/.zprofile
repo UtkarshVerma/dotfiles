@@ -65,6 +65,7 @@ export QT_STYLE_OVERRIDE=kvantum
 export LS_COLORS="$(cat $HOME/.config/lscolors)"
 
 ## Misc
+export BAT_THEME="Monokai Extended"
 export NVIM_LISTEN_ADDRESS=/tmp/nvim
 export AWT_TOOLKIT="MToolkit wmname LG3D"
 export LESS=-R
