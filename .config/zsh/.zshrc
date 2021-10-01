@@ -37,6 +37,7 @@ compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
 ## Key bindings
 bindkey -e
+bindkey '^[[P' delete-char
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
