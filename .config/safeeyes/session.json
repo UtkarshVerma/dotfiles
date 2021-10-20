@@ -1,0 +1,14 @@
+{
+    "break": "Focus on a point in the far distance",
+    "plugin": {
+        "healthstats": {
+            "last_screen_time": 2575,
+            "next_reset_time": "2021-10-21 00:00:00",
+            "no_of_breaks": 2,
+            "no_of_cycles": 0,
+            "no_of_skipped_breaks": 1,
+            "safe_eyes_start_time": "2021-10-18 11:00:58",
+            "total_idle_time": 607.015861
+        }
+    }
+}

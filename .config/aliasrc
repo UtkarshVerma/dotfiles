@@ -6,6 +6,7 @@ alias \
 	fgrep="fgrep --color=auto" \
 	egrep="egrep --color=auto" \
 	dosbox="dosbox -conf "$XDG_CONFIG_HOME"/dosbox/dosbox.conf" \
+	vi="nvim" \
 	xi="sudo xbps-install" \
 	xr="sudo xbps-remove -R" \
 	xq="xbps-query"

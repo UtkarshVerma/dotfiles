@@ -67,7 +67,7 @@ export LS_COLORS="$(cat $HOME/.config/lscolors)"
 ## Misc
 export BAT_THEME="Monokai Extended"
 export NVIM_LISTEN_ADDRESS=/tmp/nvim
-export AWT_TOOLKIT="MToolkit wmname LG3D"
+export AWT_TOOLKIT="MToolkit"
 export LESS=-R
 export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
 export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"

@@ -1,0 +1,5 @@
+cache=/home/subaru/.cache/npm
+init-module=/home/subaru/.config/npm/config/npm-init.js
+prefix=/home/subaru/.local/share/npm
+store-dir=/home/subaru/.local/share/pnpm-store
+tmp=/run/user/1000/npm
