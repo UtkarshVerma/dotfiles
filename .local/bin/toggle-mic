@@ -1,0 +1,7 @@
+#!/bin/sh
+
+notify() {
+	dunstify -h string:x-dunst-stack-tag:mic $@
+}
+
+pactl set-source-mute @DEFAULT_SOURCE@ toggle

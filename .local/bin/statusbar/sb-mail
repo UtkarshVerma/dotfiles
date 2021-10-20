@@ -10,10 +10,10 @@ count2="$(qgmail --token ~/.cache/qgmail/college_token.json request users.labels
 [ $? -gt 0 ] && exit
 
 output=""
-if [ "$count1" -gt 0 ]; then
-    output="📨 $count1"
-    [ "$count2" -gt 0 ] && output="$output 🎓 $count2"
+if [ "$count1" != "null" ]; then
+    output=" $count1"
+    [ "$count2" != "null" ] && output="$output  $count2"
 else
-    [ "$count2" -gt 0 ] && output="🎓 $count2"
+    [ "$count2" != "null" ] && output=" $count2"
 fi
 echo "$output"

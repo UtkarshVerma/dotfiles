@@ -1,0 +1,14 @@
+#!/bin/sh
+
+notify() {
+	notify-send -h string:x-canonical-private-synchronous:touchpad $@
+}
+
+touchpad=13
+if xinput list-props $touchpad | grep "Device Enabled" | grep -q "1$"; then
+	xinput disable $touchpad
+	notify -i touchpad-disabled-symbolic "Touchpad Off"
+else
+	xinput enable $touchpad
+	notify -i touchpad-enabled-symbolic "Touchpad On"
+fi

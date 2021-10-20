@@ -275,7 +275,11 @@ nnoremap <space> za
 " Markdown stuff
 augroup Markdown
 	autocmd!
-	autocmd FileType markdown set wrap
+
+	" backupcopy is necessary for joplin
+	autocmd FileType markdown
+		\ set wrap |
+		\ set backupcopy=yes
 augroup END
 
 " Restore blinking cursor on exit

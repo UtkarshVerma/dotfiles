@@ -1,0 +1,11 @@
+#!/bin/sh
+
+notify() {
+	notify-send -i sensors-fan-symbolic -h string:x-canonical-private-synchronous:fan $@
+}
+
+case $(cat /sys/devices/platform/asus-nb-wmi/throttle_thermal_policy) in
+	0) notify "Performance" ;;
+	1) notify "Turbo" ;;
+	2) notify "Silent" ;;
+esac

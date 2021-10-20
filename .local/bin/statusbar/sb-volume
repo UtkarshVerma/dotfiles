@@ -8,17 +8,16 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-[ $(pamixer --get-mute) = true ] && echo 🔇 && exit
+[ $(pamixer --get-mute) = true ] && echo "ﱝ" && exit
 
 vol="$(pamixer --get-volume)"
 
 if [ "$vol" -gt "70" ]; then
-	icon="🔊"
+	icon=""
 elif [ "$vol" -lt "30" ]; then
-	icon="🔈"
+	icon="奄"
 else
-	icon="🔉"
+	icon="奔"
 fi
 
 echo "$icon $vol%"
-

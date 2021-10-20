@@ -65,6 +65,7 @@
 ; (gtk_accel_path "<Actions>/ThunarWindow/preferences" "")
 ; (gtk_accel_path "<Actions>/ThunarWindow/zoom-in-alt1" "<Primary>plus")
 ; (gtk_accel_path "<Actions>/ThunarWindow/switch-previous-tab" "<Primary>Page_Up")
+; (gtk_accel_path "<Actions>/ThunarBookmarks/a6dd11a72eae446b7d18be0f63214d40" "")
 ; (gtk_accel_path "<Actions>/ThunarStandardView/sort-by-type" "")
 ; (gtk_accel_path "<Actions>/ThunarWindow/view-location-selector-menu" "")
 ; (gtk_accel_path "<Actions>/ThunarWindow/view-statusbar" "")

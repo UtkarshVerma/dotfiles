@@ -5,13 +5,13 @@
 
 dbus-monitor "path=/org/mpris/MediaPlayer2,member=PropertiesChanged" |
 	while read line; do
-		pkill -RTMIN+2 dwmblocks
+		pkill -RTMIN+18 dwmblocks
 	done &
 
 count=0;
 while [ $count -lt 3 ]; do
 	if mpc idle >/dev/null; then
-		pkill -RTMIN+2 dwmblocks
+		pkill -RTMIN+18 dwmblocks
 	else
 		(( count++ )); sleep $count
 	fi

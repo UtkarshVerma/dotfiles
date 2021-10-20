@@ -3,14 +3,13 @@
 battery=/sys/class/power_supply/BAT0
 status=$(cat "$battery/status")
 case "$status" in
-    "Full") status="⚡" ;;
-    "Discharging") status="🔋" ;;
-    "Charging") status="🔌" ;;
-    "Not charging") status="🛑" ;;
-    "Unknown") status="♻️" ;;
+    "Full") status="" ;;
+    "Discharging") status="" ;;
+    "Charging") status="" ;;
+    "Not charging") status="" ;;
+    "Unknown") status="♻" ;;
 esac
 
 capacity=$(cat "$battery/capacity")
-[ "$status" = "🔋" ] && [ "$capacity" -le 25 ] && warn="❗"
+[ "$status" = "" ] && [ "$capacity" -le 25 ] && warn="❗"
 echo "$status $warn$capacity%"
-
