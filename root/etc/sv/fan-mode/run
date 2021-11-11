@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cacheFile=/var/cache/fan-mode
+fanFile=/sys/devices/platform/asus-nb-wmi/fan_boost_mode
+
+# Restore cached fan-mode value, if any.
+[ -r $cacheFile ] && echo $(cat $cacheFile) > $fanFile
+
+exec chpst -b fan-mode pause
