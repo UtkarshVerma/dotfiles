@@ -3,7 +3,7 @@
 	border-color: #2e343f;
 	text-color: #8ca0aa;
 	active-color: white;
-	spacing: 0;
+	vertical-align: 0.5;
 }
 
 inputbar {
@@ -11,23 +11,20 @@ inputbar {
 	children: [prompt, entry, case-indicator];
 }
 
-case-indicator {
-	padding: 10px;
+
+prompt, case-indicator {
+	padding: 0.4em;
 }
-prompt {
-	padding: 10px;
-	border: 0 1px 0 0;
+
+entry {
+	padding: 0.4em 0;
 }
 
 textbox {
 	background-color: @border-color;
 	border: 0 0 1px 0;
 	border-color: @background-color;
-	padding: 5px 10px;
-}
-
-entry {
-	padding: 10px;
+	padding: 0.2em 0.4em;
 }
 
 listview {
@@ -38,14 +35,24 @@ listview {
 
 element {
 	border: 0 0 1px 0;
-	padding: 10px;
+	padding: 0.4em;
 }
-element selected {
-	background-color: #2e343f;
+
+element-text {
+	padding: 0 0 0 0.4em;
 }
-element active {
-	text-color: @active-color;
+
+element-icon {
+	size: 1em;
 }
-element selected.active {
+
+element selected,
+element-icon selected,
+element-text selected {
+	background-color: @border-color;
+}
+
+element-text active,
+element-text selected active {
 	text-color: @active-color;
 }

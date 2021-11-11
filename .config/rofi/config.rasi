@@ -1,5 +1,5 @@
 configuration {
-	modi: "run,window,drun";
+	modi: "run,drun";
 	run-list-command: ". rofi-aliases.sh";
 	run-shell-command: "{terminal} -e '{cmd}'";
 	run-command: "/bin/sh -i -c '{cmd}'";
