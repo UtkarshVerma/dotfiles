@@ -15,7 +15,7 @@ export SSH_AUTH_SOCK
 feh --no-fehbg --bg-scale --randomize -r ~/Pictures/Wallpapers &
 mpd &
 # mpdas -d
-picom &
+picom --experimental-backends &
 unclutter -noevents &
 clipit -n &
 safeeyes -e &
