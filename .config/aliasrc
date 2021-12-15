@@ -1,10 +1,12 @@
 #!/bin/sh
 
 alias \
+	nnn="nnn -P p" \
 	ls="ls --color=auto" \
 	grep="grep --color=auto" \
 	fgrep="fgrep --color=auto" \
 	egrep="egrep --color=auto" \
+	sudo="sudo " \
 	dosbox="dosbox -conf "$XDG_CONFIG_HOME"/dosbox/dosbox.conf" \
 	vi="nvim" \
 	xi="sudo xbps-install" \

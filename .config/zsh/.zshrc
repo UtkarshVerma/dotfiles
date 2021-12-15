@@ -72,11 +72,11 @@ fi
 source "$ZSH_THEMES/powerlevel10k/powerlevel10k.zsh-theme"
 source "$ZDOTDIR/.p10k.zsh"
 
-## Source aliases
-[[ -f "$XDG_CONFIG_HOME/aliasrc" ]] && source "$XDG_CONFIG_HOME/aliasrc"
-
 ## Source zsh-syntax-highlighting
 source "$ZSH_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 ## Source zsh-autosuggestions
 source "$ZSH_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+## Source common shell configurations
+[[ -f "$XDG_CONFIG_HOME/shellrc" ]] && source "$XDG_CONFIG_HOME/shellrc"

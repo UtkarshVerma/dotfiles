@@ -2,10 +2,6 @@
 #---------------------------------------------------------------------------------------------
 # Bash configurations
 #---------------------------------------------------------------------------------------------
-## Source aliases configurations
-[[ -f "$XDG_CONFIG_HOME/aliasrc" ]] && \
-    source $XDG_CONFIG_HOME/aliasrc
-
 ## If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -79,4 +75,9 @@ if ! shopt -oq posix; then
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   fi
+fi
+
+## Source common shell configurations
+if [[ -f "$XDG_CONFIG_HOME/shellrc" ]]; then
+    source "$XDG_CONFIG_HOME/shellrc"
 fi

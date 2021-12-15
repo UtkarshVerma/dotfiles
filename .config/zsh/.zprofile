@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## Set PATH
-export PATH="$PATH:$HOME/.local/bin:$HOME/.local/bin/statusbar"
+export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
 
 ## Default programs:
 export EDITOR="nvim"
@@ -28,9 +28,10 @@ export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 
 export ANDROID_SDK_ROOT="$XDG_DATA_HOME/android-sdk"
 export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
+export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export CHROME_EXECUTABLE="$BROWSER"
-export JAVA_HOME="$XDG_DATA_HOME/java"
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export GOPATH="$XDG_DATA_HOME/go"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
@@ -54,10 +55,10 @@ export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
-export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
+export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
 
 # Add RubyGems to PATH, if installed
-command -v gem &>/dev/null && export PATH="$PATH:$(gem environment gemdir)/bin"
+command -v gem 2>&1 >/dev/null && export PATH="$PATH:$(gem environment gemdir)/bin"
 
 ## Look and feel
 export XCURSOR_THEME=Bibata-Modern-Classic
@@ -78,6 +79,15 @@ export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 
+## nnn config
+export NNN_BMS="h:~;d:~/Downloads;n:~/notes;w:~/Wallpapers"
+# export NNN_USE_EDITOR=1
+export NNN_PLUG="d:dragdrop;o:fzopen;m:nmount;p:preview-tui;i:imgview"
+export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
+export NNN_COLORS="#0a1b2c3d;1234"
+export NNN_FCOLORS="c1e2272e006033f7c6d6abc4"
+export NNN_FIFO="/tmp/nnn.fifo"
+
 # Disable Ctrl+Shift+u
 export GTK_IM_MODULE=xim
 
@@ -87,4 +97,4 @@ export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
 # Start X server if not already running
 export DISPLAY=:0.0
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg &> /dev/null && exec startx $XINITRC &> /dev/null
+[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg 2>&1 > /dev/null && exec startx $XINITRC 2>&1 > /dev/null
