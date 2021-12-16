@@ -5,9 +5,14 @@
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-HISTFILE="$XDG_DATA_HOME/zsh/history"
+XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+# History file
+HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=10000
 SAVEHIST=10000
+[ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
+
 ZLE_RPROMPT_INDENT=0
 export GPG_TTY=$TTY
 

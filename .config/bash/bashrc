@@ -12,9 +12,10 @@ esac
 HISTCONTROL=ignoreboth
 
 ## For setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTFILE="$XDG_DATA_HOME/bash/history"
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/bash/history"
 HISTSIZE=1000
 HISTFILESIZE=2000
+[ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
 ## Append to the history file, don't overwrite it
 shopt -s histappend
