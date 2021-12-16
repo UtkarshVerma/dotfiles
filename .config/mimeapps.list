@@ -1,24 +1,16 @@
-[Added Associations]
-image/jpeg=feh-2.desktop;
-text/plain=code.desktop;
-video/x-matroska=mpv.desktop;
-application/pdf=org.pwmt.zathura-pdf-poppler.desktop;org.pwmt.zathura-pdf-mupdf.desktop;
-application/x-shellscript=code.desktop;nvim.desktop;
-application/json=code.desktop;nvim.desktop;
-text/markdown=code.desktop;nvim.desktop;
-text/x-objcsrc=code.desktop;
-application/xml=code.desktop;
-text/x-csrc=code.desktop;
-text/x-tex=code.desktop;
-application/x-desktop=nvim.desktop;
-text/x-matlab=code.desktop;
-image/svg+xml=org.inkscape.Inkscape.desktop;
-
 [Default Applications]
-image/jpeg=feh-2.desktop;
-text/plain=code.desktop;
-video/x-matroska=mpv.desktop;
-x-scheme-handler/msteams=teams.desktop
-x-scheme-handler/mailto=brave-browser.desktop;
-x-scheme-handler/vscode=code.desktop;
-application/pdf=org.pwmt.zathura-pdf-mupdf.desktop
+
+# xdg-open will use these settings to determine how to open filetypes.
+# These .desktop entries can also be seen and changed in ~/.local/share/applications/
+
+text/x-shellscript=text.desktop;
+x-scheme-handler/magnet=qBittorrent.desktop
+application/x-bittorrent=qBittorrent.desktop
+text/plain=text.desktop
+application/postscript=pdf.desktop
+application/pdf=pdf.desktop
+image/png=img.desktop
+image/jpeg=img.desktop
+image/gif=img.desktop
+video/x-matroska=video.desktop
+inode/directory=file.desktop
