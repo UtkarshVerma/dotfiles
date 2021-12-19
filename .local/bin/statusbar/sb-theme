@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Monokai colorscheme
+color1="#666666"
+color2="#f92672"
+color3="#a6e22e"
+color4="#e2e22e"
+color5="#819aff"
+color6="#ae81ff"
+color7="#66d9ef"
+color8="#f8f8f2"
+
+display() {
+	args=""
+	case $1 in
+		-n) args="-n"; shift ;;
+	esac
+
+	if [ -n "${2+x}" ]; then
+		color=$2
+	else
+		case "$(basename $0)" in
+			sb-mail) color="$color6" ;;
+			sb-music) color="$color7" ;;
+			sb-disk) color="$color3" ;;
+			sb-memory) color="$color8" ;;
+			sb-loadavg) color="$color5" ;;
+			sb-volume) color="$color8" ;;
+			sb-battery) color="$color7" ;;
+			sb-date) color="$color8" ;;
+			sb-network) color="$color2" ;;
+			*) color="$color8" ;;
+		esac
+	fi
+	echo $args "^c$color^$1"
+}

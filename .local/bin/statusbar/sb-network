@@ -12,5 +12,6 @@ else
 fi
 
 [ "$(ip tuntap show)" ] && vpnIcon="嬨" || vpnIcon=""
-env printf '\x02'
-echo "$wifiIcon$ethIcon$vpnIcon"
+
+. sb-theme
+display "$wifiIcon$ethIcon$vpnIcon"

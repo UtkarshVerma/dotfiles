@@ -76,7 +76,7 @@ download() {
 
 display() {
     emoji=$(cat "$EMOJI_FILE" | grep -v '#' | grep -v '^[[:space:]]*$')
-    line=$(echo "$emoji" | rofi -dmenu -i -p emoji $@)
+    line=$(echo "$emoji" | rofi -dmenu -i -p emoji -no-show-icons $@)
     exit_code=$?
 
     line=($line)

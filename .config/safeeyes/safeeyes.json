@@ -41,7 +41,7 @@
             "version": "0.0.3"
         },
         {
-            "enabled": false,
+            "enabled": true,
             "id": "trayicon",
             "settings": {
                 "allow_disabling": true,

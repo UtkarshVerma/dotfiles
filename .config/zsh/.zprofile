@@ -51,6 +51,7 @@ export TEXMFCONFIG="$XDG_CONFIG_HOME/texmf"
 
 export ARDUINO_DIRECTORIES_DATA="$XDG_DATA_HOME/Arduino"
 export ARDUINO_DIRECTORIES_DOWNLOADS="$ARDUINO_DIRECTORIES_DATA/staging"
+export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
 
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
@@ -81,9 +82,8 @@ export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 
 ## nnn config
-export NNN_BMS="h:~;d:~/Downloads;n:~/notes;w:~/Wallpapers"
-# export NNN_USE_EDITOR=1
-export NNN_PLUG="d:dragdrop;o:fzopen;m:nmount;p:preview-tui;i:imgview"
+export NNN_BMS="h:~;d:~/Downloads;n:~/notes;w:~/Pictures/Wallpapers"
+export NNN_PLUG="f:finder;d:dragdrop;o:fzopen;m:nmount;p:preview-tui;i:imgview"
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
 export NNN_COLORS="#0a1b2c3d;1234"
 export NNN_FCOLORS="c1e2272e006033f7c6d6abc4"

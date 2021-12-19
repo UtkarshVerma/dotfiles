@@ -3,4 +3,9 @@
 icon=" "
 threshold=5
 load=$(cut -d ' ' -f1 /proc/loadavg)
-echo "$icon$load"
+
+. sb-theme
+if [ 1 -eq $(echo "$load > $threshold" | bc) ]; then
+	color=$color2
+fi
+display "$icon$load" $color

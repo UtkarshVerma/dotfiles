@@ -1,13 +1,9 @@
 #!/bin/sh
 
-avail=$(df / | awk 'NR==2 {printf "%2.1f", ($4 / 1024 / 1024)}');
-percentUsed=$(df / | awk -F'[^0-9]*' 'NR==2 {print $5}');
-
+avail=$(df / | awk 'NR==2 {printf "%2.1f", ($4 / 1024 / 1024)}')
+percentUsed=$(df / | awk -F'[^0-9]*' 'NR==2 {print $5}')
 icon=""
 
-if [ $percentUsed -le 10 ]; then
-	echo -e "$icon $redColor${avail}G";
-else
-	echo "$icon ${avail}G";
-fi
-
+. sb-theme
+[ $percentUsed -le 10 ] && color=color2
+display "$icon ${avail}G" $color

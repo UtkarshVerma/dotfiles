@@ -30,7 +30,7 @@ n() {
 
 nnn() {
 	if command -v tmux 2>&1 > /dev/null; then
-		tmux new-session nnn -a $@ > /dev/null
+		tmux new-session nnn -c $PWD -a $@ > /dev/null
 	else
 		nnn $@
 	fi
