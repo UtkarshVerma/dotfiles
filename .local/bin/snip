@@ -3,7 +3,8 @@
 selArea() {
 	if [ "$1" = "full" ]; then
 		res="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'current ')"
-		echo "$res+0+0"
+		echo "-g $res+0+0"
+		return
 	fi
 	echo "$(slop -l -c 0.51,0.6,1,0.3 -f "-g %g")"
 }
@@ -27,7 +28,7 @@ snipTo() {
 
 case "$1" in
 	full|sel)
-		sel=$(selArea $2)
+		sel=$(selArea $1)
 		if [ "$2" = "clip" ]; then
 			snipTo clip $sel
 		else
