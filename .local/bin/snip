@@ -5,21 +5,24 @@ selArea() {
 		res="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'current ')"
 		echo "$res+0+0"
 	fi
-	echo "$(slop -l -c 0.51,0.6,1,0.6 -f "-g %g")"
+	echo "$(slop -l -c 0.51,0.6,1,0.3 -f "-g %g")"
 }
 
 snipTo() {
-	echo $1
+	# Selection was cancelled
+	[ -z "$2" ] && return
+
 	if [ "$1" = "clip" ]; then
 		shotgun $2 $3 - | xclip -selection clipboard -t image/png
-		message="The screenshot has been successfully saved to the clipboard."
+		message="The screenshot has been successfully saved to your clipboard."
 	else
 		folder="~/Pictures/Screenshots"
 		filename="$(date '+%Y-%m-%d_%H.%M.%S').png"
 		shotgun $2 $3 $folder/$filename
 		message="The screenshot has been successfully saved as $folder/$filename"
 	fi
-	notify-send "Snip" "$message"
+
+	notify-send -i screenshot "Snip" "$message"
 }
 
 case "$1" in
