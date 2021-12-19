@@ -1,7 +1,25 @@
-#!/bin/sh
+ #!/bin/sh
 
 notify() {
-	dunstify -h string:x-dunst-stack-tag:mic $@
+    icon="mic-unmuted"
+    message="The microphone has been unmuted."
+    if [ "$1" = "muted" ]; then
+        icon="mic-muted"
+        message="The microphone has been muted."
+    fi
+
+    notify-send -h string:x-canonical-private-synchronous:mic -i $icon Microphone "$message"
 }
 
 pactl set-source-mute @DEFAULT_SOURCE@ toggle
+[ $? -ne 0 ] && exit
+
+pkill -RTMIN+26 dwmblocks
+
+if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
+    . sb-theme
+    display ""
+    notify muted
+else
+    notify
+fi

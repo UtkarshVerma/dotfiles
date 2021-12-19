@@ -25,6 +25,7 @@ display() {
 			sb-disk) color="$color3" ;;
 			sb-memory) color="$color8" ;;
 			sb-loadavg) color="$color5" ;;
+			sb-mic) color="$color2" ;;
 			sb-volume) color="$color8" ;;
 			sb-battery) color="$color7" ;;
 			sb-date) color="$color8" ;;
