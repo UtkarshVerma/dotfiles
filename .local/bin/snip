@@ -1,0 +1,61 @@
+#!/bin/sh
+
+selArea() {
+	if [ "$1" = "full" ]; then
+		res="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'current ')"
+		echo "$res+0+0"
+	fi
+	echo "$(slop -l -c 0.51,0.6,1,0.6 -f "-g %g")"
+}
+
+snipTo() {
+	echo $1
+	if [ "$1" = "clip" ]; then
+		shotgun $2 $3 - | xclip -selection clipboard -t image/png
+		message="The screenshot has been successfully saved to the clipboard."
+	else
+		folder="~/Pictures/Screenshots"
+		filename="$(date '+%Y-%m-%d_%H.%M.%S').png"
+		shotgun $2 $3 $folder/$filename
+		message="The screenshot has been successfully saved as $folder/$filename"
+	fi
+	notify-send "Snip" "$message"
+}
+
+case "$1" in
+	full|sel)
+		sel=$(selArea $2)
+		if [ "$2" = "clip" ]; then
+			snipTo clip $sel
+		else
+			snipTo file $sel
+		fi
+		;;
+	*)
+		choice="$(cat << EOF | rofi -dmenu -l 6 -i -p "Screenshot which area?"
+a selected area
+full screen
+a selected area (copy)
+full screen (copy)
+EOF
+		)"
+		case "$choice" in
+			"a selected area"|"a selected area (copy)")
+				sel=$(selArea)
+				if [ "$choice" = "a selected area" ]; then
+					snipTo file $sel
+				else
+					snipTo clip $sel
+				fi
+				;;
+			"full screen"|"full screen (copy)")
+				sel="$(selArea full)"
+				if [ "$choice" = "full screen" ]; then
+					snipTo file $sel
+				else
+					snipTo clip $sel
+				fi
+				;;
+		esac
+		;;
+esac
