@@ -1,0 +1,23 @@
+@import "launcher"
+
+window {
+    children: [inputbar, message, listview];
+}
+message {
+    border: 0 0 1px 0;
+    border-color: #a6e22e;
+    background-color: transparent;
+    children: [textbox];
+}
+textbox {
+    text-color: #f92672;
+    padding: 0 0 0.6em 0.6em;
+    background-color: inherit;
+}
+
+prompt, element-icon {
+    enabled: false;
+}
+inputbar {
+    border: 0;
+}

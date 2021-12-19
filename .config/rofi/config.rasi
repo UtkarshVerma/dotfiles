@@ -3,10 +3,9 @@ configuration {
 	run-list-command: ". rofi-aliases.sh";
 	run-shell-command: "{terminal} -e '{cmd}'";
 	run-command: "/bin/sh -i -c '{cmd}'";
-	font: "monospace 14";
-	show-icons: true;
 	terminal: "rofi-sensible-terminal";
+	show-icons: true;
 	icon-theme: "Papirus-Dark";
 }
 
-@theme "themes/main"
+@theme "themes/launcher"
