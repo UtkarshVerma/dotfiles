@@ -20,5 +20,7 @@ unclutter -noevents &
 clipit -n &
 safeeyes -e &
 dwmblocks &
+dunst &
+asus-fan-daemon &
 
 exec dwm
