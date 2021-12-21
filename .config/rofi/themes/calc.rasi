@@ -21,3 +21,6 @@ prompt, element-icon {
 inputbar {
     border: 0;
 }
+element-text {
+    highlight: none;
+}

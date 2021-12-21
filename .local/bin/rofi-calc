@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rofi -show calc -modi calc -theme calc -no-sort -calc-command "echo -n \"{result}\" | xclip -sel c"

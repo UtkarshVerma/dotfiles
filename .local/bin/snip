@@ -14,15 +14,15 @@ snipTo() {
 	[ -z "$2" ] && return
 
 	if [ "$1" = "clip" ]; then
-		shotgun $2 $3 - | xclip -selection clipboard -t image/png
 		message="The screenshot has been successfully saved to your clipboard."
+		shotgun $2 $3 - | xclip -selection clipboard -t image/png
 	else
-		folder="~/Pictures/Screenshots"
-		filename="$(date '+%Y-%m-%d_%H.%M.%S').png"
-		shotgun $2 $3 $folder/$filename
+		output="~/Pictures/Screenshots/$(date '+%Y-%m-%d_%H.%M.%S').png"
 		message="The screenshot has been successfully saved as $folder/$filename"
+		shotgun $2 $3 "$(echo $output | sed "s|~|$HOME|g")"
 	fi
 
+	[ $? -ne 0 ] && return
 	notify-send -i screenshot "Snip" "$message"
 }
 
