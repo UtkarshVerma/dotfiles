@@ -1,7 +1,0 @@
-#!/bin/sh
-
-cacheFile=/var/cache/fan-mode
-fanFile=/sys/devices/platform/asus-nb-wmi/fan_boost_mode
-
-# Cache current fan-mode value
-[ -r $fanFile ] && echo $(cat $fanFile) > $cacheFile
