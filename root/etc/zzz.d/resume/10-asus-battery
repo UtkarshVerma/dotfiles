@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /etc/zzz.d/asus-battery resume

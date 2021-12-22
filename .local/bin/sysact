@@ -5,9 +5,11 @@ cmds="\
 🔒 Lock		slock
 🚪 Leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
 ♻️ Renew DWM	kill -HUP $(pgrep -u $USER "\bdwm$")
+💤 Sleep	slock loginctl suspend
 🐻 Hibernate	loginctl hibernate
 🔃 Reboot	loginctl reboot
-🖥️ Shutdown	loginctl poweroff"
+🖥️ Shutdown	loginctl powerof
+📺 Display off	xset dpms force off"
 
-choice="$(echo "$cmds" | cut -d'	' -f 1 | rofi -dmenu -i -theme sysact -l 6 -p Choose)" || exit 1
+choice="$(echo "$cmds" | cut -d'	' -f 1 | rofi -dmenu -i -theme sysact -l 8 -p Choose)" || exit 1
 `echo "$cmds" | grep "^$choice	" | cut -d '	' -f2-`

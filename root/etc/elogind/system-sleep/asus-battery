@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Set charge limit for ASUS battery on suspend/resume
+cacheFile="/var/cache/charge-threshold"
+thresholdFile="/sys/class/power_supply/BAT0/charge_control_end_threshold"
+case $1/$2 in
+	pre/*)
+		echo "Caching charge threshold on suspend..."
+		cat $thresholdFile > $cacheFile
+		;;
+  	post/*)
+		echo "Restoring charge threshold on resume..."
+		# Temporary workaround as pre-suspend hooks not working
+		#cat $cacheFile > $thresholdFile
+		echo 60 > $thresholdFile
+		;;
+esac
