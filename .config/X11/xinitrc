@@ -1,10 +1,10 @@
 #!/bin/sh
 
 if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-	eval `dbus-launch --sh-syntax --exit-with-x11`
+    eval "$(dbus-launch --sh-syntax --exit-with-x11)"
 	echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 fi
-eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+eval "$(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)"
 export SSH_AUTH_SOCK
 /usr/libexec/polkit-gnome-authentication-agent-1 &
 
@@ -14,13 +14,13 @@ export SSH_AUTH_SOCK
 ## Startup applications
 feh --no-fehbg --bg-scale --randomize -r ~/Pictures/Wallpapers &
 mpd &
-# mpdas -d
 picom --experimental-backends &
-unclutter -noevents &
+unclutter &
 clipit -n &
 safeeyes -e &
 dwmblocks &
 dunst &
 asus-fan-daemon &
+nm-applet &
 
 exec dwm

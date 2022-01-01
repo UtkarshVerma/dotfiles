@@ -55,5 +55,5 @@ element-text {
 	vertical-align: 0.6;
 }
 element selected {
-	background-color: #2326273f;
+	background-color: #ffffff04;
 }

@@ -1,7 +1,6 @@
 #!/bin/sh
 
 alias \
-	nnn="nnn -e -P p" \
 	ls="ls --color=auto" \
 	grep="grep --color=auto" \
 	fgrep="fgrep --color=auto" \

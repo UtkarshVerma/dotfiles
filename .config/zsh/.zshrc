@@ -42,7 +42,7 @@ compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
 ## Key bindings
 bindkey -e
-bindkey '^[[P' delete-char
+bindkey '^[[3~' delete-char
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
@@ -55,7 +55,7 @@ bindkey '^[[B' history-beginning-search-forward-end
 ZSH_PLUGINS="$XDG_DATA_HOME/zsh/plugins"
 ZSH_THEMES="$XDG_DATA_HOME/zsh/themes"
 
-if [[ ! -d "$ZSH_THEMES/powerlevel10k" ]]; then 
+if [[ ! -d "$ZSH_THEMES/powerlevel10k" ]]; then
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
 	"$ZSH_THEMES/powerlevel10k"
 fi

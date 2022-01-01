@@ -6,7 +6,8 @@ case "$(playerctl status $args 2>&1)" in
 	*)
 		case "$1" in
 			"seek"|"volume")
-				args="position ${2#+}+ $args"
+                dir=$(printf "%.1s" $1)
+                args="position ${2#?}$dir $args"
 				;;
 			"toggle") args="play-pause $args" ;;
 			"prev") args="previous $args" ;;

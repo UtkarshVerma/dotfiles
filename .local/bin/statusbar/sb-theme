@@ -24,11 +24,11 @@ display() {
 			sb-music) color="$color7" ;;
 			sb-disk) color="$color3" ;;
 			sb-memory) color="$color8" ;;
-			sb-loadavg) color="$color5" ;;
+			sb-loadavg) color="$color4" ;;
 			sb-mic) color="$color2" ;;
 			sb-volume) color="$color8" ;;
 			sb-battery) color="$color7" ;;
-			sb-date) color="$color8" ;;
+			sb-date) color="$color5" ;;
 			sb-network) color="$color2" ;;
 			*) color="$color8" ;;
 		esac

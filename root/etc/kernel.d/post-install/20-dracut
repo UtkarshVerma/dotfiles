@@ -11,4 +11,4 @@ if [ ! -x usr/bin/dracut ]; then
 	exit 0
 fi
 
-usr/bin/dracut -q --force --kver ${VERSION} boot/EFI/Void/linux-$(uname -r).efi
+usr/bin/dracut -q --force --kver ${VERSION} boot/EFI/Void/linux-${VERSION}.efi

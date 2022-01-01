@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Enable runtime PM for NVIDIA GPU
+GPU=0000:01:00.0
+echo auto > /sys/bus/pci/devices/$GPU/power/control
+
 # Remove NVIDIA GPU audio device for runtime D3 power management
 GPU_AUDIO=0000:01:00.1
 echo 1 > /sys/bus/pci/devices/$GPU_AUDIO/remove

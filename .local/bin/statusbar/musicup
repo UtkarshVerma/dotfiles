@@ -6,6 +6,9 @@
 dbus-monitor "path=/org/mpris/MediaPlayer2,member=PropertiesChanged" |
 	while read line; do
 		pkill -RTMIN+18 dwmblocks
+
+        # Brave sends too many updates on YouTube song change
+        sleep 0.2
 	done &
 
 count=0;

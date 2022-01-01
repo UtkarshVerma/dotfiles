@@ -8,7 +8,11 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-[ $(pamixer --get-mute) = true ] && echo "婢" && exit
+. sb-theme
+if [ $(pamixer --get-mute) = true ]; then
+	display "婢" "$color2"
+	exit
+fi
 
 vol="$(pamixer --get-volume)"
 
@@ -22,5 +26,4 @@ else
 	icon="奄 "
 fi
 
-. sb-theme
 display "$icon$vol%"
