@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# Set a charging threshold for battery on ASUS laptops.
-echo 60 > /sys/class/power_supply/BAT0/charge_control_end_threshold
-exec chpst -b asus-battery pause

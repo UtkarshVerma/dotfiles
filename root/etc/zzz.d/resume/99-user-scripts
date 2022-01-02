@@ -1,2 +1,0 @@
-#!/bin/sh
-exec /etc/zzz.d/user-script resume

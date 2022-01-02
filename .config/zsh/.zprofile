@@ -6,7 +6,7 @@ export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
 ## Default programs:
 export EDITOR="nvim"
 export TERMINAL="st"
-export BROWSER="brave-bin"
+export BROWSER="brave"
 export READER="zathura"
 
 ## ~/ Clean-up:
@@ -17,7 +17,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
 export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
@@ -54,7 +53,6 @@ export ARDUINO_DIRECTORIES_DOWNLOADS="$ARDUINO_DIRECTORIES_DATA/staging"
 export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
 
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
-export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
 export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
@@ -65,6 +63,7 @@ command -v gem 2>&1 >/dev/null && export PATH="$PATH:$(gem environment gemdir)/b
 ## Look and feel
 export XCURSOR_THEME=Bibata-Modern-Classic
 export QT_STYLE_OVERRIDE=kvantum
+export QT_QPA_PLATFORMTHEME=qt5ct
 export LS_COLORS="$(cat $HOME/.config/lscolors)"
 
 ## Misc
@@ -257,6 +256,6 @@ export GTK_IM_MODULE=xim
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
-# Start X server if not already running
-export DISPLAY=:0.0
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg 2>&1 > /dev/null && exec startx $XINITRC -- vt1 2>&1 > /dev/null
+# Start `gnome-keyring-daemon`
+eval "$(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)"
+export SSH_AUTH_SOCK
