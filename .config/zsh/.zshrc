@@ -28,26 +28,50 @@ setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_FIND_NO_DUPS
 
-## Load widgets
-autoload -U compinit history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-
 ## Initialize completions
+autoload -U compinit 
 fpath=($XDG_DATA_HOME/zsh/completions $fpath)
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
-## Key bindings
+#--------------------------------------------------------------------------------------
+# Key bindings
+#--------------------------------------------------------------------------------------
+# Use emacs key bindings
 bindkey -e
-bindkey '^[[3~' delete-char
-bindkey -M menuselect '^[[Z' reverse-menu-complete
-bindkey '^[[1;5C' forward-word
-bindkey '^[[1;5D' backward-word
-bindkey '^[[A' history-beginning-search-backward-end
-bindkey '^[[B' history-beginning-search-forward-end
+
+bindkey '^[[5~' up-line-or-history			# PageUp: Up a line of history 
+bindkey '^[[6~' down-line-or-history			# PageDown: Down a line of history
+
+# Start typing + Up-Arrow: fuzzy find history forward
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search
+
+# Start typing + Down-Arrow: fuzzy find history backward
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+
+bindkey '^[[H' beginning-of-line			# Home: Go to beginning of line
+bindkey '^[[4~' end-of-line				# End: Go to end of line
+bindkey '^[[Z' reverse-menu-complete			# Shift-Tab: move through the completion menu backwards
+bindkey '^?' backward-delete-char			# Backspace: delete backward
+bindkey '^[[3~' delete-char				# Delete: delete forward
+bindkey '^[[M' kill-word				# Ctrl-Delete: delete whole forward-word
+bindkey '^[[1;5C' forward-word				# Ctrl-RightArrow: move forward one word 
+bindkey '^[[1;5D' backward-word				# Ctrl-LeftArrow: move backward one word
+
+bindkey '\ew' kill-region				# Esc-w: Kill from the cursor to the mark
+bindkey '^r' history-incremental-search-backward	# Ctrl-r: Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
+bindkey ' ' magic-space					# Space: don't do history expansion
+
+# Ctrl-e: Edit the current command line in $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\C-e' edit-command-line
 
 #--------------------------------------------------------------------------------------
 # Install plugins if not present
