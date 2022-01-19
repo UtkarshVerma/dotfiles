@@ -1,37 +1,65 @@
 " Automate Plug installation, if not present
 let autoload_plug_path = stdpath('data') . '/site/autoload/plug.vim'
 if !filereadable(autoload_plug_path)
-	silent execute '!curl -fLo ' . autoload_plug_path . '  --create-dirs 
+	silent execute '!curl -fLo ' . autoload_plug_path . '  --create-dirs
 		\ "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"'
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 unlet autoload_plug_path
 
 call plug#begin()
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-    Plug 'nvim-telescope/telescope.nvim'
+    " My plugins
 
-    Plug 'tpope/vim-commentary'
-
-    Plug 'neovim/nvim-lspconfig'
+    " Completions
     Plug 'hrsh7th/cmp-nvim-lsp'
     Plug 'hrsh7th/cmp-buffer'
     Plug 'hrsh7th/cmp-path'
     Plug 'hrsh7th/cmp-cmdline'
     Plug 'hrsh7th/nvim-cmp'
 
-    Plug 'hrsh7th/cmp-vsnip'
-    Plug 'hrsh7th/vim-vsnip'
+    " Snippets
+    Plug 'saadparwaiz1/cmp_luasnip'
+    Plug 'rafamadriz/friendly-snippets'
+    Plug 'L3MON4D3/LuaSnip'
 
+    " LSP
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'williamboman/nvim-lsp-installer'
+
+    " Telescope
+    Plug 'nvim-lua/popup.nvim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-telescope/telescope-media-files.nvim'
+
+    " Treesitter
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+    " Autopairs
+    Plug 'windwp/nvim-autopairs'
+
+    " Comments
+    Plug 'numToStr/Comment.nvim'
+
+    " Git
+    Plug 'lewis6991/gitsigns.nvim'
+
+    " Nvim Tree
     Plug 'kyazdani42/nvim-web-devicons'
+    Plug 'kyazdani42/nvim-tree.lua'
+
+    " Bufferline
+    Plug 'akinsho/bufferline.nvim'
+    Plug 'moll/vim-bbye'
+
+    " External formatting and linting
+    Plug 'jose-elias-alvarez/null-ls.nvim'
+
+    " Terminal
+    Plug 'akinsho/toggleterm.nvim'
 
     Plug 'vimwiki/vimwiki'
-    Plug 'junegunn/goyo.vim'
-    Plug 'junegunn/limelight.vim'
-
-	Plug 'vim-airline/vim-airline'
 call plug#end()
 
 colorscheme molokai
+highlight Normal guibg=None
