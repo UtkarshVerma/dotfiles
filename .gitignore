@@ -16,7 +16,6 @@
 .config/ncmpcpp/*
 !.config/ncmpcpp/{bindings,config}
 
-.config/nvim/*
-!.config/nvim/init.vim
+.config/nvim/plugged
 
 root/etc/sv/*/supervise

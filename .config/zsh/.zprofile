@@ -34,6 +34,7 @@ export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export CHROME_EXECUTABLE="$BROWSER"
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export GOPATH="$XDG_DATA_HOME/go"
+export HUGO_CACHES_MODULES="$XDG_DATA_HOME/hugo"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export MATLAB_PREFDIR="$XDG_DATA_HOME/matlab/R2020b"
@@ -62,7 +63,6 @@ command -v gem 2>&1 >/dev/null && export PATH="$PATH:$(gem environment gemdir)/b
 
 ## Look and feel
 export XCURSOR_THEME=Bibata-Modern-Classic
-export QT_STYLE_OVERRIDE=kvantum
 export QT_QPA_PLATFORMTHEME=qt5ct
 export LS_COLORS="$(cat $HOME/.config/lscolors)"
 
