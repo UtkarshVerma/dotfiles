@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if [ -f /tmp/record ]; then
+	. sb-theme
+	display ""
+fi

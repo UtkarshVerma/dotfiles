@@ -18,7 +18,7 @@ snipTo() {
 		shotgun $2 $3 - | xclip -selection clipboard -t image/png
 	else
 		output="~/Pictures/Screenshots/$(date '+%Y-%m-%d_%H.%M.%S').png"
-		message="The screenshot has been successfully saved as $folder/$filename"
+		message="The screenshot has been successfully saved as $output"
 		shotgun $2 $3 "$(echo $output | sed "s|~|$HOME|g")"
 	fi
 

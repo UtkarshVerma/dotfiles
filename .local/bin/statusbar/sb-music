@@ -11,13 +11,16 @@ case $BLOCK_BUTTON in
 	5) musicctl seek -5 ;;
 esac
 
-args="-p spotify,%any"
-currentSong="$(playerctl metadata $args --format '{{ title }}{{ default(" - ", artist) }}{{ artist }}' 2>&1)"
+args="-p spotify,mpv,%any"
+artist="$(playerctl metadata $args --format '{{artist}}' 2>&1)"
+[ -n "$artist" ] && currentSong=" - $artist"
+currentSong="$(playerctl metadata $args --format '{{title}}' 2>&1)$currentSong"
+
 if [ $? = 0 ]; then
     [ "$(playerctl status $args 2>&1)" = "Paused" ] && icon=""
 else
     mpc | grep -q "\[paused\]" && icon=""
-    currentSong="$(mpc -f "%title% - %artist%" current)"
+    currentSong="$(mpc -f "%title%[ - %artist%]" current)"
 fi
 
 [ -z "$currentSong" ] && exit

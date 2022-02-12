@@ -1,6 +1,6 @@
 #!/bin/sh
 
-args="-p spotify,%any"
+args="-p spotify,mpv,%any"
 case "$(playerctl status $args 2>&1)" in
 	"No players found"|"Stopped") ;;
 	*)

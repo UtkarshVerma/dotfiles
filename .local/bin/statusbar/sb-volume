@@ -3,8 +3,8 @@
 case $BLOCK_BUTTON in
 	1) setsid -f "$TERMINAL" -e pulsemixer ;;
 	2) pamixer -t ;;
-	4) pamixer -i 1 ;;
-	5) pamixer -d 1 ;;
+	4) pamixer -i 3 ;;
+	5) pamixer -d 3 ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
