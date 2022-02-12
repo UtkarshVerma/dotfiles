@@ -9,6 +9,7 @@ unlet autoload_plug_path
 
 call plug#begin()
     " My plugins
+    Plug 'ferrine/md-img-paste.vim'
 
     " Completions
     Plug 'hrsh7th/cmp-nvim-lsp'
@@ -53,7 +54,7 @@ call plug#begin()
     Plug 'moll/vim-bbye'
 
     " External formatting and linting
-    Plug 'jose-elias-alvarez/null-ls.nvim'
+    " Plug 'jose-elias-alvarez/null-ls.nvim'
 
     " Terminal
     Plug 'akinsho/toggleterm.nvim'
