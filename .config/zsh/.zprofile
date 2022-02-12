@@ -59,7 +59,9 @@ export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
 
 # Add RubyGems to PATH, if installed
-command -v gem 2>&1 >/dev/null && export PATH="$PATH:$(gem environment gemdir)/bin"
+if which ruby >/dev/null && which gem >/dev/null; then
+    export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
 
 ## Look and feel
 export XCURSOR_THEME=Bibata-Modern-Classic
@@ -243,7 +245,7 @@ ex=:\
 "
 
 # nnn config
-export NNN_BMS="h:~;d:~/Downloads;n:~/notes;w:~/Pictures/Wallpapers"
+export NNN_BMS="h:~;d:~/Downloads;n:~/notes/bachelor-6;w:~/Pictures/Wallpapers"
 export NNN_PLUG="f:finder;d:dragdrop;o:fzopen;m:nmount;p:preview-tui;i:imgview"
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
 export NNN_COLORS="#0a1b2c3d;1234"

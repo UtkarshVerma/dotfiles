@@ -13,7 +13,6 @@ HISTSIZE=10000
 SAVEHIST=10000
 [ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
-ZLE_RPROMPT_INDENT=0
 export GPG_TTY=$TTY
 
 ## Enable p10k instant prompt
@@ -101,11 +100,11 @@ fi
 source "$ZSH_THEMES/powerlevel10k/powerlevel10k.zsh-theme"
 source "$ZDOTDIR/.p10k.zsh"
 
-## Source zsh-syntax-highlighting
-source "$ZSH_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-
 ## Source zsh-autosuggestions
 source "$ZSH_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+## Source zsh-syntax-highlighting
+source "$ZSH_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 ## Source common shell configurations
 [[ -f "$XDG_CONFIG_HOME/shellrc" ]] && source "$XDG_CONFIG_HOME/shellrc"
