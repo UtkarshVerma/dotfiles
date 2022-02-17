@@ -60,7 +60,8 @@ call plug#begin()
     Plug 'akinsho/toggleterm.nvim'
 
     Plug 'vimwiki/vimwiki'
+    Plug 'dylanaraps/wal.vim'
 call plug#end()
 
-colorscheme molokai
+colorscheme wal
 highlight Normal guibg=None

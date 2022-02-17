@@ -1,4 +1,14 @@
 {
-    "break": "Lean back at your seat and relax",
-    "plugin": {}
+    "break": "Tightly close your eyes",
+    "plugin": {
+        "healthstats": {
+            "last_screen_time": 3380,
+            "next_reset_time": "2022-02-18 00:00:00",
+            "no_of_breaks": 10,
+            "no_of_cycles": 2,
+            "no_of_skipped_breaks": 9,
+            "safe_eyes_start_time": "2022-02-15 00:00:00",
+            "total_idle_time": 445.035821
+        }
+    }
 }

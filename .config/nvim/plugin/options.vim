@@ -15,7 +15,7 @@ set expandtab tabstop=4 softtabstop=4
 set shiftwidth=4
 set smartindent
 set nowrap
-set termguicolors
+"set termguicolors
 set scrolloff=8 sidescrolloff=8
 set colorcolumn=80
 set signcolumn=yes
