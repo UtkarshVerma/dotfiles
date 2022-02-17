@@ -1,6 +1,6 @@
 #!/bin/sh
 
-setwal -q -n
+setwall -q -n
 xrdb -merge ~/.config/X11/Xresources/main
 
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
