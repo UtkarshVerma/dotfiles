@@ -2,8 +2,6 @@
 	email = utkarshverma@protonmail.com
 	name = Utkarsh Verma
 	signingkey = 817656CF818EFCCC
-[credential]
-	helper = store --file $HOME/.config/git/credentials
 [commit]
 	gpgsign = true
 [pull]
@@ -12,3 +10,5 @@
 	program = gpg2
 [init]
 	defaultBranch = main
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/

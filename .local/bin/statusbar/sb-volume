@@ -15,6 +15,7 @@ if [ $(pamixer --get-mute) = true ]; then
 fi
 
 vol="$(pamixer --get-volume)"
+[ $? -ne 0 ] && exit $?
 
 if [ "$vol" -gt 70 ]; then
 	icon=" "
