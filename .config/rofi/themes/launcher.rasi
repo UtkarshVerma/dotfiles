@@ -1,8 +1,10 @@
+@import "colors"
+
 window {
 	font: "monospace 16";
 	width: env(WIDTH, 40%);
 	transparency: "real";
-	background-color: #1b1d1ecc;
+	background-color: @background;
 	spacing: 0;
 	children: [inputbar, listview];
 }
@@ -11,22 +13,22 @@ inputbar {
 	background-color: transparent;
 	spacing: 0;
 	border: 0 0 1px 0;
-	border-color: #a6e22e;
+	border-color: @color2;
 	children: [prompt, entry, case-indicator];
 }
 prompt, entry, case-indicator {
 	background-color: inherit;
 }
 prompt {
-	text-color: #f92672;
+	text-color: @color1;
 	padding: 0.6em 0 0.6em 0.6em;
 }
 entry {
-	text-color: #ae81ff;
+	text-color: @color5;
 	padding: 0.6em;
 }
 case-indicator {
-	text-color: #e2e22e;
+	text-color: @color3;
 	padding: 0.6em 0.6em 0.6em 0;
 }
 
@@ -49,7 +51,7 @@ element-icon {
 	padding: 0.6em 0 0.6em 0.6em;
 }
 element-text {
-	text-color: #66d9ef;
+	text-color: @color4;
 	highlight: bold underline;
 	padding: 0.6em;
 	vertical-align: 0.6;

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+wallpaper=$(find ~/Pictures/Wallpapers/ -type f | shuf -n 1)
+wal -q -i "$wallpaper" -n
+feh --no-fehbg --bg-scale "$wallpaper" -e
+xrdb -merge ~/.config/X11/Xresources/main
+
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+picom --experimental-backends &
+mpd &
+unclutter &
+parcellite -n &
+safeeyes -e &
+dunst &
+asus-fan-daemon &
+nm-applet &
+
+dwmblocks &
+exec dwm

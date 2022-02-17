@@ -5,12 +5,12 @@ window {
 }
 message {
     border: 0 0 1px 0;
-    border-color: #a6e22e;
+    border-color: @color2;
     background-color: transparent;
     children: [textbox];
 }
 textbox {
-    text-color: #f92672;
+    text-color: @color1;
     padding: 0 0 0.6em 0.6em;
     background-color: inherit;
 }

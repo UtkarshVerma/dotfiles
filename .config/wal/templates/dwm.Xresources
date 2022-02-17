@@ -1,0 +1,64 @@
+st.alpha: {alpha.alpha_dec}
+
+dwm.normfgcolor: {foreground}
+dwm.normbgcolor: {background}
+dwm.normbordercolor: {color15}
+dwm.normfloatcolor: {color15}
+
+dwm.selfgcolor: {color0}
+dwm.selbgcolor: {color0}
+dwm.selbordercolor: {color4}
+dwm.selfloatcolor: {color5}
+
+dwm.titlenormfgcolor: {foreground}
+dwm.titlenormbgcolor: {background}
+dwm.titlenormbordercolor: {color5}
+dwm.titlenormfloatcolor: {color5}
+
+dwm.titleselfgcolor: {foreground}
+dwm.titleselbgcolor: {background}
+dwm.titleselbordercolor: {color5}
+dwm.titleselfloatcolor: {color5}
+
+dwm.tagsnormfgcolor: {foreground}
+!dwm.tagsnormbgcolor: {color0}
+!dwm.tagsnormbordercolor: {color0}
+!dwm.tagsnormfloatcolor: {color0}
+!
+!dwm.tagsselfgcolor: {color0}
+!dwm.tagsselbgcolor: {color0}
+!dwm.tagsselbordercolor: {color0}
+!dwm.tagsselfloatcolor: {color0}
+!
+!dwm.hidnormfgcolor: {color0}
+!dwm.hidnormbgcolor: {color0}
+!dwm.hidnormbordercolor: {color0}
+!dwm.hidnormfloatcolor: {color0}
+!
+!dwm.urgfgcolor: {color0}
+!dwm.urgbgcolor: {color0}
+!dwm.urgbordercolor: {color0}
+!dwm.urgfloatcolor: {color0}
+
+
+dwm.tags.fg1: {color1}
+dwm.tags.fg2: {color2}
+dwm.tags.fg3: {color3}
+dwm.tags.fg4: {color4}
+dwm.tags.fg5: {color5}
+dwm.tags.fg6: {color7}
+dwm.tags.fg7: {color8}
+dwm.tags.fg8: {color3}
+dwm.tags.fg9: {color6}
+dwm.tags.layoutfg: {color5}
+
+dwm.tags.bg1: {background}
+dwm.tags.bg2: {background}
+dwm.tags.bg3: {background}
+dwm.tags.bg4: {background}
+dwm.tags.bg5: {background}
+dwm.tags.bg6: {background}
+dwm.tags.bg7: {background}
+dwm.tags.bg8: {background}
+dwm.tags.bg9: {background}
+dwm.tags.layoutbg: {background}
