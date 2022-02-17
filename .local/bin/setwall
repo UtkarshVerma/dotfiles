@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Parse CLI flags
+QUIET=0
+RELOAD=1;
+while [ $# -gt 0 ]; do
+  case $1 in
+    -q|--quiet) QUIET=1; shift ;;
+    -n|--noreload) RELOAD=0; shift ;;
+    *) shift ;;
+  esac
+done
+
+walArgs="-e -a 90"
+[ $QUIET -ne 0 ] && walArgs="$args -q"
+
+wallpaper="$1"
+[ ! -f "$wallpaper" ] &&
+    wallpaper="$(find ~/Pictures/Wallpapers/ -type f | shuf -n 1)"
+
+wal -i "$wallpaper" $walArgs
+
+if [ $RELOAD -ne 0 ]; then
+    xrdb -merge ~/.config/X11/Xresources/main
+    xdotool key Super_L+Shift_L+F5
+    killall -USR1 st
+    killall dunst; dunst &
+fi
