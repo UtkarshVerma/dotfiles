@@ -10,12 +10,12 @@ esac
 
 . sb-theme
 if [ $(pamixer --get-mute) = true ]; then
-	display "婢" "$color2"
+	display "婢" 1
 	exit
 fi
 
 vol="$(pamixer --get-volume)"
-[ $? -ne 0 ] && exit $?
+[ $? -ne 0 ] && [ -z "$vol" ] && exit 1
 
 if [ "$vol" -gt 70 ]; then
 	icon=" "

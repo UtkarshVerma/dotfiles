@@ -6,6 +6,6 @@ load=$(cut -d ' ' -f1 /proc/loadavg)
 
 . sb-theme
 if [ 1 -eq $(echo "$load > $threshold" | bc) ]; then
-	color=$color2
+	color=1
 fi
 display "$icon$load" $color

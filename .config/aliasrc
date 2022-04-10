@@ -7,7 +7,7 @@ alias \
 	fgrep="fgrep --color=auto" \
 	egrep="egrep --color=auto" \
 	sudo="sudo " \
-	dosbox="dosbox -conf "$XDG_CONFIG_HOME"/dosbox/dosbox.conf" \
+	dosbox="dosbox -conf $XDG_CONFIG_HOME/dosbox/dosbox.conf" \
 	vi="nvim" \
 	xi="sudo xbps-install" \
 	xr="sudo xbps-remove -R" \

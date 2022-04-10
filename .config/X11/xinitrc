@@ -1,6 +1,6 @@
 #!/bin/sh
 
-setwall -q -n
+setwall -q -n -t monokai
 xrdb -merge ~/.config/X11/Xresources/main
 
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
@@ -12,6 +12,7 @@ safeeyes -e &
 dunst &
 asus-fan-daemon &
 nm-applet &
+libinput-gestures &
 
 dwmblocks &
 exec dwm

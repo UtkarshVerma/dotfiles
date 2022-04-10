@@ -4,21 +4,29 @@
 QUIET=0
 RELOAD=1;
 while [ $# -gt 0 ]; do
-  case $1 in
-    -q|--quiet) QUIET=1; shift ;;
-    -n|--noreload) RELOAD=0; shift ;;
-    *) shift ;;
-  esac
+    case $1 in
+        -q|--quiet) QUIET=1; shift ;;
+        -n|--noreload) RELOAD=0; shift ;;
+        -t|--theme) COLORSCHEME="$2"; shift; shift ;;
+        -*) shift ;;
+        *) wallpaper="$1"; shift ;;
+    esac
 done
 
-walArgs="-e -a 90"
+
+walArgs="-e --backend schemer2 -a 90 -n"
 [ $QUIET -ne 0 ] && walArgs="$walArgs -q"
 
-wallpaper="$1"
 [ ! -f "$wallpaper" ] &&
     wallpaper="$(find ~/Pictures/Wallpapers/ -type f | shuf -n 1)"
 
-wal -i "$wallpaper" $walArgs
+if [ -n "$COLORSCHEME" ]; then
+    wal --theme "$COLORSCHEME" $walArgs
+else
+    wal -i "$wallpaper" $walArgs
+fi
+
+feh --no-fehbg --bg-scale "$wallpaper"
 
 if [ $RELOAD -ne 0 ]; then
     xrdb -merge ~/.config/X11/Xresources/main

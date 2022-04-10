@@ -10,18 +10,18 @@ display() {
 		color=$2
 	else
 		case "$(basename $0)" in
-			sb-mail) color=5 ;;
-			sb-music) color=6 ;;
-			sb-disk) color=2 ;;
-			sb-memory) color=7 ;;
-			sb-loadavg) color=3 ;;
-			sb-mic) color=1 ;;
-			sb-record) color=0 ;;
-			sb-volume) color=7 ;;
-			sb-battery) color=6 ;;
-			sb-date) color=4 ;;
-			sb-network) color=1 ;;
-			*) color=7 ;;
+			sb-mail) color=13 ;;
+			sb-music) color=14 ;;
+			sb-disk) color=10 ;;
+			sb-memory) color=15 ;;
+			sb-loadavg) color=11 ;;
+			sb-mic) color=9 ;;
+			sb-record) color=9 ;;
+			sb-volume) color=15 ;;
+			sb-battery) color=14 ;;
+			sb-date) color=12 ;;
+			sb-network) color=9 ;;
+			*) color=15 ;;
 		esac
 	fi
     echo $args "^C$color^$1"

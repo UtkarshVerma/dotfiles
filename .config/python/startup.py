@@ -10,12 +10,21 @@ import atexit
 import os
 import readline
 
-histfile = os.path.join(os.getenv("XDG_CACHE_HOME", os.path.expanduser("~/.cache")), "python", "history")
+histdir = os.path.join(os.getenv("XDG_CACHE_HOME", os.path.expanduser("~/.cache")), "python")
+if not os.path.isdir(histdir):
+    os.mkdir(histdir)
+
+histfile = os.path.join(histdir, "history")
+
 try:
     readline.read_history_file(histfile)
-    # default history len is -1 (infinite), which may grow unruly
-    readline.set_history_length(1000)
+    h_len = readline.get_current_history_length()
 except FileNotFoundError:
-    pass
+    open(histfile, 'wb').close()
+    h_len = 0
 
-atexit.register(readline.write_history_file, histfile)
+def save(prev_h_len, histfile):
+    new_h_len = readline.get_current_history_length()
+    readline.set_history_length(1000)
+    readline.append_history_file(new_h_len - prev_h_len, histfile)
+atexit.register(save, h_len, histfile)

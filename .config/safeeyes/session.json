@@ -1,14 +1,14 @@
 {
-    "break": "Tightly close your eyes",
+    "break": "Blink your eyes",
     "plugin": {
         "healthstats": {
-            "last_screen_time": 3380,
-            "next_reset_time": "2022-02-18 00:00:00",
-            "no_of_breaks": 10,
-            "no_of_cycles": 2,
-            "no_of_skipped_breaks": 9,
-            "safe_eyes_start_time": "2022-02-15 00:00:00",
-            "total_idle_time": 445.035821
+            "last_screen_time": 10687,
+            "next_reset_time": "2022-04-11 00:00:00",
+            "no_of_breaks": 0,
+            "no_of_cycles": 0,
+            "no_of_skipped_breaks": 0,
+            "safe_eyes_start_time": "2022-04-03 00:00:00",
+            "total_idle_time": 0
         }
     }
 }

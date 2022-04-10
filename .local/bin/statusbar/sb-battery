@@ -4,7 +4,7 @@
 # to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
 
 notify() {
-	notify-send -i battery-good-symbolic -h string:x-canonical-private-synchronous:battery "Battery" "$1"
+	notify-send -i battery -h string:x-canonical-private-synchronous:battery "Battery" "$1" -t 4000
 }
 
 case $BLOCK_BUTTON in
@@ -40,15 +40,15 @@ for battery in /sys/class/power_supply/BAT?*; do
 		Discharging)
 			if [ "$capacity" -le 20 ]; then
 				status="$status"
-				color="$color2"
+				color=1
 			fi
 			;;
 		Charging) status="ﮣ$status" ;;
 		"Not charging") status="ﮤ$status" ;;
-		Unknown) status="" ;;
+		Unknown) status=" " ;;
 		*) exit 1 ;;
 	esac
 
 	# Prints the info
-	display -n "$status $capacity%" $color
+	display -n "$status$capacity%" $color
 done && echo

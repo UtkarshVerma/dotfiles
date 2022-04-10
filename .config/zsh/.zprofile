@@ -42,6 +42,7 @@ export MLM_LICENSE_FILE="$XDG_DATA_HOME/matlab/license.lic"
 export MATLAB_LOG_DIR="$XDG_CACHE_HOME/matlab"
 export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME/platformio"
 export PLATFORMIO_CACHE_DIR="$XDG_CACHE_HOME/platformio"
+export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
 
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 
@@ -68,7 +69,7 @@ export XCURSOR_THEME=Bibata-Modern-Classic
 export QT_QPA_PLATFORMTHEME=qt5ct
 
 ## Misc
-export BAT_THEME="Monokai Extended"
+export BAT_THEME="base16"
 export NVIM_LISTEN_ADDRESS=/tmp/nvim
 export AWT_TOOLKIT="MToolkit"
 export LESS=-R
@@ -86,8 +87,8 @@ export LF_ICONS="$(cat $XDG_CONFIG_HOME/lf/icons)"
 export NNN_BMS="h:~;d:~/Downloads;n:~/notes/bachelor-6;w:~/Pictures/Wallpapers"
 export NNN_PLUG="f:finder;d:dragdrop;o:fzopen;m:nmount;p:preview-tui;i:imgview;w:wallpaper"
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
-export NNN_COLORS="#0a1b2c3d;1234"
-export NNN_FCOLORS="c1e2272e006033f7c6d6abc4"
+export NNN_COLORS="#01020304;1234"
+export NNN_FCOLORS="030304020007060801050500"
 
 # Disable Ctrl+Shift+u
 export GTK_IM_MODULE=xim

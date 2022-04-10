@@ -8,7 +8,7 @@ notify() {
         message="The microphone has been muted."
     fi
 
-    notify-send -h string:x-canonical-private-synchronous:mic -i $icon Microphone "$message"
+    notify-send -h string:x-canonical-private-synchronous:mic -i $icon Microphone "$message" -t 1500
 }
 
 pactl set-source-mute @DEFAULT_SOURCE@ toggle
@@ -17,8 +17,6 @@ pactl set-source-mute @DEFAULT_SOURCE@ toggle
 pkill -RTMIN+26 dwmblocks
 
 if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
-    . sb-theme
-    display ""
     notify muted
 else
     notify

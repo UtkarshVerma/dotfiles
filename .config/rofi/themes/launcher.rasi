@@ -13,22 +13,22 @@ inputbar {
 	background-color: transparent;
 	spacing: 0;
 	border: 0 0 1px 0;
-	border-color: @color2;
+	border-color: @color10;
 	children: [prompt, entry, case-indicator];
 }
 prompt, entry, case-indicator {
 	background-color: inherit;
 }
 prompt {
-	text-color: @color1;
+	text-color: @color9;
 	padding: 0.6em 0 0.6em 0.6em;
 }
 entry {
-	text-color: @color5;
+	text-color: @color13;
 	padding: 0.6em;
 }
 case-indicator {
-	text-color: @color3;
+	text-color: @color11;
 	padding: 0.6em 0.6em 0.6em 0;
 }
 
@@ -51,7 +51,7 @@ element-icon {
 	padding: 0.6em 0 0.6em 0.6em;
 }
 element-text {
-	text-color: @color4;
+	text-color: @color12;
 	highlight: bold underline;
 	padding: 0.6em;
 	vertical-align: 0.6;

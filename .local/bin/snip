@@ -23,7 +23,7 @@ snipTo() {
 	fi
 
 	[ $? -ne 0 ] && return
-	notify-send -i screenshot "Snip" "$message"
+	notify-send -i screenshot "Snip" "$message" -t 3000
 }
 
 case "$1" in

@@ -1,4 +1,12 @@
 #!/bin/sh
 
+case $BLOCK_BUTTON in
+    1) 	notify-send -i calendar -h string:x-canonical-private-synchronous:date "This Month" \
+        "$(cal --color=always | sed "s/..7m/<b><span color=\"$(xrdb -get color1)\">/;s/..27m/<\/span><\/b>/")" \
+        # && notify-send "Appointments" "$(calcurse -d3)"
+    ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
 . sb-theme
 display " $(date '+%I:%M %p')"
