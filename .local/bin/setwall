@@ -2,20 +2,25 @@
 
 # Parse CLI flags
 QUIET=0
-RELOAD=1;
+RELOAD=1
+LIGHT=0
+ALPHA=80
 while [ $# -gt 0 ]; do
     case $1 in
-        -q|--quiet) QUIET=1; shift ;;
-        -n|--noreload) RELOAD=0; shift ;;
-        -t|--theme) COLORSCHEME="$2"; shift; shift ;;
-        -*) shift ;;
-        *) wallpaper="$1"; shift ;;
+        -q|--quiet) QUIET=1 ;;
+        -n|--noreload) RELOAD=0 ;;
+        -t|--theme) COLORSCHEME="$2"; shift ;;
+        -l|--light) LIGHT=1 ;;
+        -a|--alpha) ALPHA=$2; shift ;;
+        *) wallpaper="$1" ;;
     esac
+    shift
 done
 
 
-walArgs="-e --backend schemer2 -a 90 -n"
+walArgs="-e --backend schemer2 -a $ALPHA -n"
 [ $QUIET -ne 0 ] && walArgs="$walArgs -q"
+[ $LIGHT -ne 0 ] && walArgs="$walArgs -l"
 
 [ ! -f "$wallpaper" ] &&
     wallpaper="$(find ~/Pictures/Wallpapers/ -type f | shuf -n 1)"

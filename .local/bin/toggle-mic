@@ -1,5 +1,7 @@
  #!/bin/sh
 
+STATUSBAR=${STATUSBAR:-dwmblocks}
+
 notify() {
     icon="mic-unmuted"
     message="The microphone has been unmuted."
@@ -14,7 +16,7 @@ notify() {
 pactl set-source-mute @DEFAULT_SOURCE@ toggle
 [ $? -ne 0 ] && exit
 
-pkill -RTMIN+26 dwmblocks
+pkill -RTMIN+26 $STATUSBAR
 
 if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
     notify muted
