@@ -10,6 +10,8 @@ unlet autoload_plug_path
 call plug#begin()
     " My plugins
     Plug 'ferrine/md-img-paste.vim'
+    Plug 'AlphaTechnolog/pywal.nvim', { 'as': 'pywal' }
+    Plug 'vimwiki/vimwiki'
 
     " Completions
     Plug 'hrsh7th/cmp-nvim-lsp'
@@ -58,8 +60,6 @@ call plug#begin()
 
     " Terminal
     Plug 'akinsho/toggleterm.nvim'
-
-    Plug 'vimwiki/vimwiki'
 call plug#end()
 
 colorscheme molokai
