@@ -21,6 +21,7 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
 export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
 export NPM_CONFIG_CACHE="$NPM_CONFIG_PREFIX"
+export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 
 export LESSHISTFILE="-"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -57,7 +58,7 @@ export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
-export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
+export PATH="$PATH:$PNPM_HOME:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
 
 # Add RubyGems to PATH, if installed
 if which ruby >/dev/null && which gem >/dev/null; then
@@ -69,7 +70,6 @@ export XCURSOR_THEME=Bibata-Modern-Classic
 export QT_QPA_PLATFORMTHEME=qt5ct
 
 ## Misc
-export BAT_THEME="base16"
 export NVIM_LISTEN_ADDRESS=/tmp/nvim
 export AWT_TOOLKIT="MToolkit"
 export LESS=-R
@@ -82,6 +82,7 @@ export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export LF_ICONS="$(cat $XDG_CONFIG_HOME/lf/icons)"
+export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
 
 # nnn config
 export NNN_BMS="h:~;d:~/Downloads;n:~/notes/bachelor-6;w:~/Pictures/Wallpapers"
