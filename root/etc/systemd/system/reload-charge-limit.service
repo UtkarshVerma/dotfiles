@@ -1,0 +1,11 @@
+[Unit]
+Description=Reload battery charge limit
+After=multi-user.target suspend.target hibernate.target hybrid-sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/asusctl -c 60
+
+[Install]
+WantedBy=suspend.target hibernate.target hybrid-sleep.target
+
