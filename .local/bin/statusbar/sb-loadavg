@@ -1,5 +1,9 @@
 #!/bin/sh
 
+case $BLOCK_BUTTON in
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
 icon=" "
 threshold=5
 load=$(cut -d ' ' -f1 /proc/loadavg)

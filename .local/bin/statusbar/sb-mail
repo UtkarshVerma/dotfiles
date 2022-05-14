@@ -17,5 +17,6 @@ else
     [ "$count2" != "null" ] && output="  $count2"
 fi
 
+[ -z "$output" ] && exit
 . sb-theme
 display "$output"

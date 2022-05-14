@@ -1,9 +1,15 @@
 #!/bin/sh
 
-avail=$(df / | awk 'NR==2 {printf "%2.1f", ($4 / 1024 / 1024)}')
-percentUsed=$(df / | awk -F'[^0-9]*' 'NR==2 {print $5}')
-icon=""
+case $BLOCK_BUTTON in
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
 
 . sb-theme
-[ $percentUsed -le 10 ] && color=color2
-display "$icon ${avail}G" $color
+fetchDiskUsage() {
+    avail=$(df $1 | awk 'NR==2 {printf "%2.1f", ($4 / 1024 / 1024)}')
+    percentUsed=$(df $1 | awk -F'[^0-9]*' 'NR==2 {print $5}')
+    [ $percentUsed -le 10 ] && color=color2
+    display "${avail}G" $color
+}
+
+echo "$(display ) $(fetchDiskUsage /)$(display '|')$(fetchDiskUsage /home)"
