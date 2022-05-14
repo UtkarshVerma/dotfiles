@@ -4,7 +4,7 @@
 	<icon>utilities-terminal</icon>
 	<name>Open Terminal Here</name>
 	<unique-id>1611127802999324-1</unique-id>
-	<command>st -d %f</command>
+	<command>dir=%f; [ -f %f ] &amp;&amp; dir=%d; st -d $dir</command>
 	<description>Open terminal in current directory.</description>
 	<patterns>*</patterns>
 	<startup-notify/>
