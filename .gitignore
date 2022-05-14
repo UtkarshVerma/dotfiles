@@ -18,4 +18,6 @@
 
 .config/nvim/plugged
 
+.config/safeeyes/session.json
+
 root/etc/sv/*/supervise
