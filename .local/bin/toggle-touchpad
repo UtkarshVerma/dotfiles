@@ -7,8 +7,8 @@ notify() {
 touchpad=13
 if xinput list-props $touchpad | grep "Device Enabled" | grep -q "1$"; then
 	xinput disable $touchpad
-	notify -i touchpad-disabled-symbolic "Touchpad Off"
+	notify -i touchpad-off "Touchpad Off"
 else
 	xinput enable $touchpad
-	notify -i touchpad-enabled-symbolic "Touchpad On"
+	notify -i touchpad-on "Touchpad On"
 fi

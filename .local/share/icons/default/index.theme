@@ -1,0 +1,10 @@
+[Icon Theme]
+Name=default
+Inherits=Papirus-Dark,Bibata-Modern-Classic
+Directories=scalable
+
+[scalable]
+Size=48
+Type=Scalable
+MinSize=1
+MaxSize=256

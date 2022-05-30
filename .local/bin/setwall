@@ -1,10 +1,26 @@
 #!/bin/sh
 
+colorSway() {
+    local focused="$(palette.sh 12)"
+    local focInac="$(palette.sh 5)"
+    local urgent="$(palette.sh 9)"
+    local placeholder="$(palette.sh 11)"
+    local foreground="$(palette.sh 7)"
+    local background="$(palette.sh 0)"
+
+    swaymsg client.focused $focused $focused $foreground
+    swaymsg client.focused_inactive $focInac $focInac $foreground
+    swaymsg client.unfocused $background $background $foreground
+    swaymsg client.urgent $urgent $urgent $foreground
+    swaymsg client.placeholder $placeholder $placeholder $foreground
+    swaymsg client.background $background
+}
+
 # Parse CLI flags
 QUIET=0
 RELOAD=1
 LIGHT=0
-ALPHA=80
+[ "$XDG_CURRENT_DESKTOP" = "sway" ] && ALPHA=90 || ALPHA=80
 while [ $# -gt 0 ]; do
     case $1 in
         -q|--quiet) QUIET=1 ;;
@@ -17,7 +33,6 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-
 walArgs="-e --backend schemer2 -a $ALPHA -n"
 [ $QUIET -ne 0 ] && walArgs="$walArgs -q"
 [ $LIGHT -ne 0 ] && walArgs="$walArgs -l"
@@ -25,17 +40,35 @@ walArgs="-e --backend schemer2 -a $ALPHA -n"
 [ ! -f "$wallpaper" ] &&
     wallpaper="$(find ~/Pictures/Wallpapers/ -type f | shuf -n 1)"
 
-if [ -n "$COLORSCHEME" ]; then
-    wal --theme "$COLORSCHEME" $walArgs
-else
-    wal -i "$wallpaper" $walArgs
-fi
+[ -n "$COLORSCHEME" ] &&
+    walArgs="$walArgs --theme $COLORSCHEME" ||
+    walArgs="$walArgs -i \"$wallpaper\""
 
-feh --no-fehbg --bg-scale "$wallpaper"
+eval wal $walArgs
+
+if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+    oldPID=$(pgrep -o swaybg)
+    swaybg -i "$wallpaper" -m fill 2>/dev/null &
+    if [ -n "$oldPID" ]; then
+        kill $oldPID
+    fi
+    colorSway
+
+    offset="$(swaymsg -t get_tree | jq -r '.nodes[1].nodes[0].rect | "\(.x)x\(.x)"')"
+    sed --in-place --follow-symlinks "s/offset = .*/offset = $offset/g" ~/.config/dunst/dunstrc
+else
+    feh --no-fehbg --bg-scale "$wallpaper"
+fi
 
 if [ $RELOAD -ne 0 ]; then
     xrdb -merge ~/.config/X11/Xresources/main
-    xdotool key Super_L+Shift_L+F5
+
+    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+        killall -USR2 $STATUSBAR
+    else
+        xdotool key Super_L+Shift_L+F5
+    fi
+
+    pkill dunst; dunst &
     killall -USR1 st
-    killall dunst; dunst &
 fi

@@ -196,7 +196,7 @@
     max_icon_size = 25
 
     # Paths to default icons.
-    icon_path = /home/subaru/.local/share/icons/:/usr/share/icons/Papirus/16x16/status/:/usr/share/icons/Papirus/16x16/devices/:/usr/share/icons/Papirus/16x16/panel/:/usr/share/icons/Papirus/16x16/apps/
+    icon_path = /home/subaru/.local/share/icons/default/scalable/:/usr/share/icons/Papirus/16x16/status/:/usr/share/icons/Papirus/16x16/devices/:/usr/share/icons/Papirus/16x16/panel/:/usr/share/icons/Papirus/16x16/apps/
 
     ### History ###
 

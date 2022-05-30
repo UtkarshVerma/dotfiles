@@ -25,9 +25,10 @@ display() {
 		esac
 	fi
 
-    if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
-        echo $args "<span foreground='$(palette.sh $color)'>$1</span>"
+    body="$(echo $1 | colrm 45)"
+    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+        echo $args "<span foreground='$(palette.sh $color)'>$body</span>"
     else
-        echo $args "^C$color^$1"
+        echo $args "^C$color^$body"
     fi
 }

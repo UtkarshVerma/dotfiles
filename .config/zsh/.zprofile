@@ -8,10 +8,12 @@ export EDITOR="nvim"
 export TERMINAL="st"
 export BROWSER="brave"
 export READER="zathura"
+export STATUSBAR="dwmblocks"
 
 ## ~/ Clean-up:
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_DATA_DIRS="$XDG_DATA_HOME:/usr/local/share:/usr/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
@@ -19,14 +21,12 @@ export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
-export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
-export NPM_CONFIG_CACHE="$NPM_CONFIG_PREFIX"
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 
-export LESSHISTFILE="-"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 
+export ANDROID_HOME="$XDG_DATA_HOME/android"
 export ANDROID_SDK_ROOT="$XDG_DATA_HOME/android-sdk"
 export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
 export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
@@ -55,6 +55,8 @@ export ARDUINO_DIRECTORIES_DATA="$XDG_DATA_HOME/Arduino"
 export ARDUINO_DIRECTORIES_DOWNLOADS="$ARDUINO_DIRECTORIES_DATA/staging"
 export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
 
+
+export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
@@ -66,23 +68,30 @@ if which ruby >/dev/null && which gem >/dev/null; then
 fi
 
 ## Look and feel
-export XCURSOR_THEME=Bibata-Modern-Classic
 export QT_QPA_PLATFORMTHEME=qt5ct
 
 ## Misc
 export NVIM_LISTEN_ADDRESS=/tmp/nvim
 export AWT_TOOLKIT="MToolkit"
-export LESS=-R
-export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
-export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
-export LESS_TERMCAP_me="$(printf '%b' '[0m')"
-export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
-export LESS_TERMCAP_se="$(printf '%b' '[0m')"
-export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
-export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
-export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export LF_ICONS="$(cat $XDG_CONFIG_HOME/lf/icons)"
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
+
+## Colorize `less`
+export LESS="-R"
+export LESSOPEN="| highlight -O ansi %s 2>/dev/null"
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 4; tput rev)
+export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7)
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_mr=$(tput rev)
+export LESS_TERMCAP_mh=$(tput dim)
+export LESS_TERMCAP_ZN=$(tput ssubm)
+export LESS_TERMCAP_ZV=$(tput rsubm)
+export LESS_TERMCAP_ZO=$(tput ssupm)
+export LESS_TERMCAP_ZW=$(tput rsupm)
 
 # nnn config
 export NNN_BMS="h:~;d:~/Downloads;n:~/notes/bachelor-6;w:~/Pictures/Wallpapers"
@@ -98,6 +107,26 @@ export GTK_IM_MODULE=xim
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
+# Sway specific
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    export XDG_CURRENT_DESKTOP="sway"
+    export STATUSBAR="waybar"
+
+    export QT_QPA_PLATFORM="wayland-egl"
+    export QT_WAYLAND_FORCE_DPI="physical"
+    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+    export ECORE_EVAS_ENGINE="wayland_egl"
+    export ELM_ENGINE="wayland_egl"
+
+    export SDL_VIDEODRIVER="wayland"
+fi
+
 # Start `gnome-keyring-daemon`
-eval "$(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)"
-export SSH_AUTH_SOCK
+if [ -z "$GNOME_KEYRING_CONTROL" ]; then
+    eval "$(gnome-keyring-daemon --start)"
+    export SSH_AUTH_SOCK
+fi
+
+# Use dbus session bus created by systemd
+export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"

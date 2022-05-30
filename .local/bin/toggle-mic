@@ -1,7 +1,5 @@
  #!/bin/sh
 
-STATUSBAR=${STATUSBAR:-dwmblocks}
-
 notify() {
     icon="mic-unmuted"
     message="The microphone has been unmuted."

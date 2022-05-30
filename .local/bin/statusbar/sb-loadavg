@@ -4,7 +4,6 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-icon=" "
 threshold=5
 load=$(cut -d ' ' -f1 /proc/loadavg)
 
@@ -12,4 +11,4 @@ load=$(cut -d ' ' -f1 /proc/loadavg)
 if [ 1 -eq $(echo "$load > $threshold" | bc) ]; then
 	color=1
 fi
-display "$icon$load" $color
+display " $load" $color

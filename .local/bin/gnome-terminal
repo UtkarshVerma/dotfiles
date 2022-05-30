@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# This is a workaround for exo-open to open terminal apps
+exec $TERMINAL $@

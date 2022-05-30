@@ -12,6 +12,7 @@ call plug#begin()
     Plug 'ferrine/md-img-paste.vim'
     Plug 'AlphaTechnolog/pywal.nvim', { 'as': 'pywal' }
     Plug 'vimwiki/vimwiki'
+    Plug 'nvim-lualine/lualine.nvim'
 
     " Completions
     Plug 'hrsh7th/cmp-nvim-lsp'

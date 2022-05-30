@@ -1,15 +1,25 @@
 #!/bin/sh
 
-# A dmenu wrapper script for system functions.
-cmds="\
-🔒 Lock		slock
-🚪 Leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
-♻️ Renew DWM	kill -HUP $(pgrep -u $USER "\bdwm$")
-💤 Sleep	slock systemctl suspend
-🐻 Hibernate	systemctl hibernate
-🔃 Reboot	systemctl reboot
-🖥️ Shutdown	systemctl poweroff
-📺 Display off	xset dpms force off"
+if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+	lockCmd="swaylock"
+	logoutCmd="swaymsg exit"
+    reloadCmd="swaymsg reload"
+else
+	lockCmd="slock"
+    logoutCmd="pkill -TERM -u $USER dwm"
+    reloadCmd="pkill -HUP -u $USER dwm"
+	displayOffCmd="xset dpms force off"
+fi
 
-choice="$(echo "$cmds" | cut -d'	' -f 1 | rofi -dmenu -i -theme sysact -l 8 -p Choose)" || exit 1
-`echo "$cmds" | grep "^$choice	" | cut -d '	' -f2-`
+choices="\
+🔒 Lock			$lockCmd
+🚪 Logout		$logoutCmd
+♻️ Reload WM	$reloadCmd
+💤 Sleep		systemctl suspend
+🐻 Hibernate	systemctl hibernate
+🔃 Reboot		systemctl reboot
+💻 Shutdown		systemctl poweroff
+📺 Display off	$displayOffCmd"
+
+choice="$(echo "$choices" | awk -F'\t' '{print $1}' | rofi -dmenu -i -l 8 -theme sysact -p Choose)" || exit 1
+$(echo "$choices" | grep "^$choice" | awk -F'\t' '{print $NF}')

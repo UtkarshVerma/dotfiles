@@ -1,0 +1,60 @@
+#!/bin/sh
+
+selAlpha=0.5
+selColor=$(palette.sh 12)
+
+computeBarGeometry() {
+#     read -r top right bottom left << EOF
+# `swaymsg -t get_bar_config bar-0 | jq -r '.gaps | "\(.top) \(.right) \(.bottom) \(.left)"'`
+# EOF
+#
+    # Assuming same gaps in all directions
+    gap="$(swaymsg -t get_tree | jq -e '.nodes[1].nodes[0].rect | .x')"
+    top=$gap right=$gap bottom=$gap left=$gap
+    read -r gap workspaceYOffset << EOF
+`swaymsg -t get_tree | jq -r '.nodes[1].nodes[0].rect | "\(.x) \(.y)"'`
+EOF
+    outputWidth=$(swaymsg -t get_outputs | jq -r '.[] | select(.active).rect.width')
+
+    height=$(( workspaceYOffset - top - bottom ))
+    width=$(( outputWidth - left - right ))
+
+
+    cat << EOF
+{
+    "x": $left,
+    "y": $top,
+    "width": $width,
+    "height": $height
+}
+EOF
+}
+
+if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+    if [ "$1" = "full" ]; then
+        swaymsg -t get_outputs |
+            jq -r '.[] | select(.active).rect | "\(.x),\(.y) \(.width)x\(.height)"'
+        return
+    fi
+
+    regions="$(swaymsg -t get_tree |
+        jq -r '.nodes[1].nodes[] | .nodes[],.floating_nodes[] | select(.visible).rect')"
+    regions="$regions $(computeBarGeometry) $(swaymsg -t get_outputs | jq -r '.[] | select(.active).rect')"
+    echo $regions |
+        jq -r '"\(.x),\(.y) \(.width)x\(.height)"' |
+        slurp \
+            -b "#00000000" \
+            -B "#00000000" \
+            -c ${selColor}ff \
+            -s $selColor$(echo "scale=0;obase=16; (255 * $selAlpha)/1" | bc) \
+            -w 1
+    return
+fi
+
+if [ "$1" = "full" ]; then
+    res="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'current ')"
+    echo "$res+0+0"
+    return
+fi
+
+slop -l -c "$(hex-to-rgb $selColor),$selAlpha"

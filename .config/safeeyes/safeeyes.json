@@ -16,7 +16,7 @@
     "persist_state": true,
     "plugins": [
         {
-            "enabled": true,
+            "enabled": false,
             "id": "donotdisturb",
             "settings": {
                 "skip_break_windows": "",

@@ -28,7 +28,7 @@ setopt HIST_IGNORE_DUPS
 setopt HIST_FIND_NO_DUPS
 
 ## Initialize completions
-autoload -U compinit 
+autoload -U compinit
 fpath=($XDG_DATA_HOME/zsh/completions $fpath)
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 zstyle ':completion:*' menu select
@@ -41,7 +41,7 @@ compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 # Use emacs key bindings
 bindkey -e
 
-bindkey '^[[5~' up-line-or-history			# PageUp: Up a line of history 
+bindkey '^[[5~' up-line-or-history			# PageUp: Up a line of history
 bindkey '^[[6~' down-line-or-history			# PageDown: Down a line of history
 
 # Start typing + Up-Arrow: fuzzy find history forward
@@ -60,7 +60,7 @@ bindkey '^[[Z' reverse-menu-complete			# Shift-Tab: move through the completion 
 bindkey '^?' backward-delete-char			# Backspace: delete backward
 bindkey '^[[3~' delete-char				# Delete: delete forward
 bindkey '^[[M' kill-word				# Ctrl-Delete: delete whole forward-word
-bindkey '^[[1;5C' forward-word				# Ctrl-RightArrow: move forward one word 
+bindkey '^[[1;5C' forward-word				# Ctrl-RightArrow: move forward one word
 bindkey '^[[1;5D' backward-word				# Ctrl-LeftArrow: move backward one word
 
 bindkey '\ew' kill-region				# Esc-w: Kill from the cursor to the mark

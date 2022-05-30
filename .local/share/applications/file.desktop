@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=File Manager
-Exec=st -e nnn %u
+Exec=terminal -e nnn %u

@@ -3,10 +3,6 @@
 # This loop will update the music statusbar module whenever a command changes the
 # music player's status. mpd and must be running on X's start for this to work.
 
-STATUSBAR=dwmblocks
-[ "$XDG_CURRENT_DESKTOP" = sway ] && STATUSBAR=waybar
-echo $STATUSBAR
-
 dbus-monitor "path=/org/mpris/MediaPlayer2,member=PropertiesChanged" |
 	while read line; do
 		pkill -RTMIN+18 $STATUSBAR

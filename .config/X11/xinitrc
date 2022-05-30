@@ -1,5 +1,7 @@
 #!/bin/sh
 
+systemctl --user import-environment DBUS_SESSION_BUS_ADDRESS
+
 setwall -q -n
 xrdb -merge ~/.config/X11/Xresources/main
 
@@ -13,5 +15,5 @@ dunst &
 asus-fan-daemon &
 nm-applet &
 
-dwmblocks &
+$STATUSBAR &
 exec dwm
