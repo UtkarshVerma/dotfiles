@@ -3,11 +3,12 @@
 <action>
 	<icon>utilities-terminal</icon>
 	<name>Open Terminal Here</name>
+	<submenu></submenu>
 	<unique-id>1611127802999324-1</unique-id>
-	<command>dir=%f; [ -f %f ] &amp;&amp; dir=%d; st -d $dir</command>
+	<command>dir=%f; [ -f %f ] &amp;&amp; dir=%d; DISPLAY=:0 terminal -d $dir</command>
 	<description>Open terminal in current directory.</description>
+	<range></range>
 	<patterns>*</patterns>
-	<startup-notify/>
 	<directories/>
 	<audio-files/>
 	<image-files/>
@@ -18,9 +19,11 @@
 <action>
 	<icon></icon>
 	<name>Paste as File</name>
+	<submenu></submenu>
 	<unique-id>1618422006773669-1</unique-id>
 	<command>clip2file</command>
 	<description>Paste clipboard contents as file.</description>
+	<range></range>
 	<patterns>*</patterns>
 	<directories/>
 </action>

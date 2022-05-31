@@ -110,7 +110,7 @@ export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 # Sway specific
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
     export XDG_CURRENT_DESKTOP="sway"
-    export STATUSBAR="waybar"
+    export STATUSBAR="i3blocks"
 
     export QT_QPA_PLATFORM="wayland-egl"
     export QT_WAYLAND_FORCE_DPI="physical"
