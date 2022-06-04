@@ -1,2 +1,41 @@
 #!/bin/sh
-exec $TERMINAL $@
+
+# This script wraps around my frequently used terminals to provide a uniform
+# interface.
+
+while [ $# -gt 0 ]; do
+    case $1 in
+        -n|--name)
+            shift;
+            case $TERMINAL in
+                alacritty) args="--class $1,Alacritty $args" ;;
+                foot) args="-a $1 $args" ;;
+                st) args="-n $1 $args" ;;
+            esac
+            ;;
+        -d|--dir)
+            shift;
+            case $TERMINAL in
+                alacritty|foot) args="--working-directory $1" ;;
+                st) args="-d $1 $args" ;;
+            esac
+            ;;
+        -g)
+            shift;
+            case $TERMINAL in
+                alacritty)
+                    columns=${1%x*}
+                    lines=${1##*x}
+                    args="$args -o window.dimensions.columns=$columns
+                        -o window.dimensions.lines=$lines"
+                    ;;
+                foot) args="$args -W $1" ;;
+                st) args="$args -g $1" ;;
+            esac
+            ;;
+        *) args="$args $1"
+    esac
+    shift
+done
+
+exec $TERMINAL $args

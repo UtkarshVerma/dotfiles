@@ -1,26 +1,30 @@
 #!/bin/sh
 
 colorSway() {
-    local focused="$(palette.sh 12)"
-    local focInac="$(palette.sh 5)"
-    local urgent="$(palette.sh 9)"
-    local placeholder="$(palette.sh 11)"
-    local foreground="$(palette.sh 7)"
-    local background="$(palette.sh 0)"
+    . ~/.cache/wal/colors.sh
+    local alphaHex=$(echo "($ALPHA*2.55)/1" | bc | xargs printf "%.2x")
+    local background="$background$alphaHex"
 
-    swaymsg client.focused $focused $focused $foreground
-    swaymsg client.focused_inactive $focInac $focInac $foreground
-    swaymsg client.unfocused $background $background $foreground
-    swaymsg client.urgent $urgent $urgent $foreground
-    swaymsg client.placeholder $placeholder $placeholder $foreground
-    swaymsg client.background $background
+    grep '^client.' ~/.config/sway/config.d/theme.conf |
+        while read line; do
+            eval swaymsg $line
+        done
+
+    if [ "$STATUSBAR" != waybar ]; then
+        for bar in $(swaymsg -t get_bar_config | jq -r '.[]'); do
+            grep 'background\|statusline\|_workspace' ~/.config/sway/config.d/swaybar.conf |
+                while read line; do
+                    eval swaymsg bar $bar colors $line
+                done
+        done
+    fi
 }
 
 # Parse CLI flags
 QUIET=0
 RELOAD=1
 LIGHT=0
-[ "$XDG_CURRENT_DESKTOP" = "sway" ] && ALPHA=90 || ALPHA=80
+[ "$XDG_CURRENT_DESKTOP" = sway ] && ALPHA=90 || ALPHA=80
 while [ $# -gt 0 ]; do
     case $1 in
         -q|--quiet) QUIET=1 ;;
@@ -46,16 +50,16 @@ walArgs="-e --backend schemer2 -a $ALPHA -n"
 
 eval wal $walArgs
 
-if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
-    oldPID=$(pgrep -o swaybg)
+if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
+    oldPIDs="$(pgrep swaybg)"
     swaybg -i "$wallpaper" -m fill 2>/dev/null &
-    if [ -n "$oldPID" ]; then
-        kill $oldPID
-    fi
-    colorSway
+    [ -n "$oldPIDs" ] && kill $oldPIDs
 
+    # Update dunst notification offset
     offset="$(swaymsg -t get_tree | jq -r '.nodes[1].nodes[0].rect | "\(.x)x\(.x)"')"
     sed --in-place --follow-symlinks "s/offset = .*/offset = $offset/g" ~/.config/dunst/dunstrc
+
+    colorSway
 else
     feh --no-fehbg --bg-scale "$wallpaper"
 fi
@@ -63,12 +67,19 @@ fi
 if [ $RELOAD -ne 0 ]; then
     xrdb -merge ~/.config/X11/Xresources/main
 
-    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
-        killall -USR2 $STATUSBAR
+    if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
+        if [ "$STATUSBAR" = waybar ]; then
+            killall -USR2 $STATUSBAR
+        else
+            for bar in $(swaymsg -t get_bar_config | jq '.[]'); do
+                swaymsg bar $bar status_command -
+                swaymsg bar $bar status_command $STATUSBAR
+            done
+        fi
     else
         xdotool key Super_L+Shift_L+F5
     fi
 
-    pkill dunst; dunst &
-    killall -USR1 st
+    pkill dunst
+    [ "$TERMINAL" = st ] && killall -USR1 st
 fi

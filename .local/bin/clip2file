@@ -1,7 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 
-args=(-sel c -o)
 filename="Filename"
-xclip -sel c -t TARGETS -o | grep -q image/png && args+=(-t image/png) && filename="image.png"
+if [ "$XDG_SESSION_TYPE" = wayland ]; then
+    cmd="wl-paste"
+    [ "$(wl-paste -l)" = "image/png" ] && cmd="$cmd -t image/png" && filename="image.png"
+else
+    cmd="xclip -sel c -o"
+    xclip -sel c -t TARGETS -o | grep -q image/png && cmd="$cmd -t image/png" && filename="image.png"
+fi
+
 file="$(zenity --entry --title Paste --entry-text "$filename" --text="Filename for clipboard contents:")"
-[ ! -z $file ] && xclip "${args[@]}" > "$file"
+[ -n "$file" ] && $cmd > "$file"

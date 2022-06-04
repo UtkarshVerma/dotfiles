@@ -82,12 +82,14 @@ display() {
     line=($line)
 
     if [ $exit_code == 0 ]; then
-	emoji=${line[0]}
-	notify-send "'$emoji' copied to clipboard."
-        echo -n "${line[0]}" | xclip -sel c
+        emoji=${line[0]}
+        notify-send "'$emoji' copied to clipboard."
+
+        clipCmd="xclip -sel c"
+        [ "$XDG_SESSION_TYPE" = wayland ] && clipCmd="wl-copy"
+        echo -n "${line[0]}" | $clipCmd
     fi
 }
-
 
 # Some simple argparsing
 if [[ "$1" =~ -D|--download ]]; then
