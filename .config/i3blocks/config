@@ -1,22 +1,5 @@
-# List of valid properties:
-#
-# align
-# color
-# command
-# full_text
-# instance
-# interval
-# label
-# min_width
-# name
-# separator
-# separator_block_width
-# short_text
-# signal
-# urgent
-
-# Global properties
 command=sb-$BLOCK_NAME
+separator=false
 separator_block_width=15
 markup=pango
 
@@ -59,4 +42,4 @@ signal=23
 [date]
 interval=1
 signal=24
-separator=0
+separator_block_width=0

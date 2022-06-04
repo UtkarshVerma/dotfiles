@@ -109,22 +109,25 @@ export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
 # Sway specific
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    export TERMINAL="foot"
+
     export XDG_CURRENT_DESKTOP="sway"
     export STATUSBAR="i3blocks"
 
-    export QT_QPA_PLATFORM="wayland-egl"
+    export GDK_BACKEND="wayland"
+    export CLUTTER_BACKEND="wayland"
+    export QT_QPA_PLATFORM="wayland"
+    export SDL_VIDEODRIVER="wayland"
+    export ECORE_EVAS_ENGINE="wayland"
+    export ELM_ENGINE="wayland"
+
     export QT_WAYLAND_FORCE_DPI="physical"
     export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-
-    export ECORE_EVAS_ENGINE="wayland_egl"
-    export ELM_ENGINE="wayland_egl"
-
-    export SDL_VIDEODRIVER="wayland"
 fi
 
-# Start `gnome-keyring-daemon`
-if [ -z "$GNOME_KEYRING_CONTROL" ]; then
-    eval "$(gnome-keyring-daemon --start)"
+# Start gnome-keyring-daemon
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(gnome-keyring-daemon --start 2>/dev/null)"
     export SSH_AUTH_SOCK
 fi
 

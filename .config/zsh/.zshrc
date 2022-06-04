@@ -35,6 +35,19 @@ zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
+# Retain scrollback history on Ctrl+l
+if [[ $TERM =~ "^foot" ]]; then
+    clear-screen-keep-sb() {
+        i=$LINES
+        until [ $i -le 1 ]; do
+            printf '\n'
+            i=$((i-1))
+        done
+        zle .clear-screen
+    }
+    zle -N clear-screen clear-screen-keep-sb
+fi
+
 #--------------------------------------------------------------------------------------
 # Key bindings
 #--------------------------------------------------------------------------------------

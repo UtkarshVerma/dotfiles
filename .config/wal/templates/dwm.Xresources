@@ -1,5 +1,4 @@
-st.alpha: {alpha.alpha_dec}
-dwm.bar.alpha: {alpha.alpha_dec}
+*.alpha: {alpha.alpha_dec}
 dwm.bar.titleselalpha: 0.9
 
 dwm.normfgcolor: {foreground}
