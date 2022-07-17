@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=DWM (X11)
+Exec=zsh --login -c 'startx $XINITRC'

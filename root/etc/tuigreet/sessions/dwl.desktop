@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=DWL (Wayland)
+Exec=/etc/tuigreet/launchers/dwl.sh
