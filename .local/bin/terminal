@@ -8,16 +8,16 @@ while [ $# -gt 0 ]; do
         -n|--name)
             shift;
             case $TERMINAL in
-                alacritty) args="--class $1,Alacritty $args" ;;
-                foot) args="-a $1 $args" ;;
-                st) args="-n $1 $args" ;;
+                alacritty) args="$args --class '$1',Alacritty" ;;
+                foot) args="$args -a '$1'" ;;
+                st) args="$args -n '$1'" ;;
             esac
             ;;
         -d|--dir)
             shift;
             case $TERMINAL in
-                alacritty|foot) args="--working-directory $1" ;;
-                st) args="-d $1 $args" ;;
+                alacritty|foot) args="$args --working-directory '$1'" ;;
+                st) args="$args -d '$1'" ;;
             esac
             ;;
         -g)
@@ -33,9 +33,9 @@ while [ $# -gt 0 ]; do
                 st) args="$args -g $1" ;;
             esac
             ;;
-        *) args="$args $1"
+        *) args="$args '$1'"
     esac
     shift
 done
 
-exec $TERMINAL $args
+eval $TERMINAL $args

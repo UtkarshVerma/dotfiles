@@ -1,12 +1,12 @@
 #!/bin/sh
 
-args="-p spotify,mpv,%any"
+args="-p spotify,mpv,%any -i spotifyd"
 case "$(playerctl status $args 2>&1)" in
 	"No players found"|"Stopped") ;;
 	*)
 		case "$1" in
 			"seek"|"volume")
-                dir=$(printf "%.1s" $1)
+                dir=$(printf "%.1s" $2)
                 args="position ${2#?}$dir $args"
 				;;
 			"toggle") args="play-pause $args" ;;

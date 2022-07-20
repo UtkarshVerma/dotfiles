@@ -10,7 +10,7 @@ colorSway() {
             eval swaymsg $line
         done
 
-    if [ "$STATUSBAR" != waybar ]; then
+    if [ "$STATUSBAR" != "waybar" ]; then
         for bar in $(swaymsg -t get_bar_config | jq -r '.[]'); do
             grep 'background\|statusline\|_workspace' ~/.config/sway/config.d/swaybar.conf |
                 while read line; do
@@ -62,13 +62,12 @@ if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
     colorSway
 else
     feh --no-fehbg --bg-scale "$wallpaper"
+    xrdb -DWINTITLE_ALPHA=$(echo "$ALPHA*0.0085" | bc) -merge ~/.config/X11/Xresources/main
 fi
 
 if [ $RELOAD -ne 0 ]; then
-    xrdb -merge ~/.config/X11/Xresources/main
-
-    if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
-        if [ "$STATUSBAR" = waybar ]; then
+    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+        if [ "$STATUSBAR" = "waybar" ]; then
             killall -USR2 $STATUSBAR
         else
             for bar in $(swaymsg -t get_bar_config | jq '.[]'); do

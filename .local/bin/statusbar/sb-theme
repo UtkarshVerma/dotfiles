@@ -1,7 +1,8 @@
 #!/bin/sh
 
 display() {
-	args=""
+	local args=""
+    local color
 	case $1 in
 		-n) args="-n"; shift ;;
 	esac
@@ -25,10 +26,10 @@ display() {
 		esac
 	fi
 
-    body="$(echo $1 | colrm 45)"
     if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+        local body="$(echo $1 | colrm 45)"
         echo $args "<span foreground='$(palette.sh $color)'>$body</span>"
     else
-        echo $args "^C$color^$body"
+        echo $args "^C$color^$1"
     fi
 }
