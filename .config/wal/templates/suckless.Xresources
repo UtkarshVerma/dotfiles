@@ -1,5 +1,29 @@
+!! dmenu
+dmenu.background: {background}{alpha.alpha_hex}
+dmenu.foreground: {color12}
+dmenu.selbackground: {background}ee
+dmenu.selforeground: {color12}
+dmenu.selhlbackground: {background}ee
+dmenu.selhlforeground: {color12}
+dmenu.outforeground: {color9}
+dmenu.midforeground: {color12}
+dmenu.promptforeground: {color9}
+dmenu.promptbackground: {background}{alpha.alpha_hex}
+dmenu.midbackground: {background}{alpha.alpha_hex}
+
+!! st
 *.alpha: {alpha.alpha_dec}
-dwm.bar.titleselalpha: 0.9
+
+!! slock
+slock.locked: {color0}
+slock.failed: {color9}
+slock.input: {color14}
+slock.capslock: {color11}
+
+!! dwm
+dwm.alphas.*.bg: {alpha.alpha_dec}
+dwm.alphas.titlesel.bg: WINTITLE_ALPHA
+dwm.alphas.norm.border: {alpha.alpha_dec}
 
 dwm.normfgcolor: {foreground}
 dwm.normbgcolor: {background}

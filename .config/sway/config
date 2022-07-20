@@ -1,18 +1,26 @@
 ### Variables
 set $mod Mod4
-set $font pango:monospace 12
+set $gaps 10
 
-gaps inner 10
+font pango:monospace 12
+gaps inner $gaps
 gaps outer 0
 default_border pixel 3
 smart_borders on
 seat * hide_cursor 5000
+seat * xcursor_theme default 32
+exec gsettings set org.gnome.desktop.interface cursor-size 32
 
-font $font
-exec ~/.config/sway/startup
+#focus_on_window_activation focus
+#bindsym $mod+u [urgent="latest"] focus
 
-focus_on_window_activation focus
-bindsym $mod+u [urgent="latest"] focus
+# Startup
+exec setwall -n -q -t monokai && xrdb -merge ~/.config/X11/Xresources/main
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec mpd
+exec asus-fan-daemon
+exec safeeyes
+exec nm-applet --indicator
 
 # Dropdown windows
 for_window [app_id="dropdown_.*"] floating enable,move scratchpad,scratchpad show
@@ -25,6 +33,7 @@ no_focus [title="^screenkey"]
 for_window [title="^screenkey"] floating enabled
 assign [app_id="brave-browser"] 1
 assign [class="Code"] 2
+assign [app_id="Code"] 2
 assign [class="Spotify"] 8
 for_window [class="Spotify"] move to workspace 8, workspace 8
 assign [class="discord"] 9
@@ -124,7 +133,7 @@ input type:touchpad {
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
+    #bindsym $mod+b splith
     bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
@@ -174,6 +183,7 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+bindsym $mod+b bar mode toggle
 bindsym $mod+semicolon workspace prev
 bindsym $mod+apostrophe workspace next
 

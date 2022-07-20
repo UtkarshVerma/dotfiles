@@ -3,11 +3,11 @@
 ## Set PATH
 export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
 
-## Default programs:
+## Default programs
 export EDITOR="nvim"
-export TERMINAL="st"
 export BROWSER="brave"
 export READER="zathura"
+export TERMINAL="st"
 export STATUSBAR="dwmblocks"
 
 ## ~/ Clean-up:
@@ -20,7 +20,10 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
+export NODE_REPL_HISTORY="$XDG_STATE_HOME/node/history"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
+# skipping for nvm
+# export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -33,6 +36,7 @@ export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export CHROME_EXECUTABLE="$BROWSER"
+export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export GOPATH="$XDG_DATA_HOME/go"
 export HUGO_CACHES_MODULES_DIR="$XDG_DATA_HOME/hugo"
@@ -55,7 +59,7 @@ export ARDUINO_DIRECTORIES_DATA="$XDG_DATA_HOME/Arduino"
 export ARDUINO_DIRECTORIES_DOWNLOADS="$ARDUINO_DIRECTORIES_DATA/staging"
 export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
 
-
+export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
@@ -69,6 +73,8 @@ fi
 
 ## Look and feel
 export QT_QPA_PLATFORMTHEME=qt5ct
+export XCURSOR_THEME=default
+export XCURSOR_SIZE=32
 
 ## Misc
 export NVIM_LISTEN_ADDRESS=/tmp/nvim
@@ -100,14 +106,15 @@ export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|l
 export NNN_COLORS="#01020304;1234"
 export NNN_FCOLORS="030304020007060801050500"
 
-# Disable Ctrl+Shift+u
-export GTK_IM_MODULE=xim
+# fcitx
+export GTK_IM_MODULE="fcitx5"
+export QT_IM_MODULE="fcitx5"
+export XMODIFIERS="@im=fcitx5"
 
 # Fix for Java AWT based software (e.g. MATLAB)
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
-# Sway specific
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
     export TERMINAL="foot"
 

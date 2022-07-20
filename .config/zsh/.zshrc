@@ -38,11 +38,7 @@ compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 # Retain scrollback history on Ctrl+l
 if [[ $TERM =~ "^foot" ]]; then
     clear-screen-keep-sb() {
-        i=$LINES
-        until [ $i -le 1 ]; do
-            printf '\n'
-            i=$((i-1))
-        done
+        printf "%$((LINES-1))s" | tr ' ' '\n'
         zle .clear-screen
     }
     zle -N clear-screen clear-screen-keep-sb

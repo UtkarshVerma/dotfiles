@@ -1,6 +1,6 @@
 [Icon Theme]
 Name=default
-Inherits=Papirus-Dark,Bibata-Modern-Classic
+Inherits=Papirus-Dark,capitaine-cursors
 Directories=scalable
 
 [scalable]

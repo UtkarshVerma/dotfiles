@@ -33,7 +33,7 @@
     origin = top-right
 
     # Offset from the origin
-    offset = 10x60
+    offset = 20x80
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
@@ -52,10 +52,10 @@
     progress_bar_height = 10
 
     # Set the frame width of the progress bar
-    progress_bar_frame_width = 1
+    progress_bar_frame_width = 3
 
     # Set the minimum width for the progress bar
-    progress_bar_min_width = 150
+    progress_bar_min_width = 200
 
     # Set the maximum width for the progress bar
     progress_bar_max_width = 300
@@ -294,6 +294,7 @@
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "{background}{alpha.alpha_hex}"
     foreground = "{color13}"
+    highlight = "{color13}"
     timeout = 10
     # Icon for notifications with low urgency, uncomment to enable
     #default_icon = /path/to/icon
@@ -301,6 +302,8 @@
 [urgency_normal]
     background = "{background}{alpha.alpha_hex}"
     foreground = "{color12}"
+    highlight = "{color12}"
+    frame_color = "{color1}"
     timeout = 10
     # Icon for notifications with normal urgency, uncomment to enable
     #default_icon = /path/to/icon
@@ -308,6 +311,7 @@
 [urgency_critical]
     background = "{background}{alpha.alpha_hex}"
     foreground = "{color9}"
+    highlight = "{color9}"
     timeout = 10
     # Icon for notifications with critical urgency, uncomment to enable
     #default_icon = /path/to/icon

@@ -44,3 +44,6 @@ trap nnn_cd EXIT
 if [ -f "$XDG_CONFIG_HOME/aliasrc" ]; then
 	source "$XDG_CONFIG_HOME/aliasrc"
 fi
+
+# NVM
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
