@@ -53,8 +53,8 @@ call plug#begin()
     Plug 'kyazdani42/nvim-tree.lua'
 
     " Bufferline
-    Plug 'akinsho/bufferline.nvim'
-    Plug 'moll/vim-bbye'
+    " Plug 'akinsho/bufferline.nvim'
+    " Plug 'moll/vim-bbye'
 
     " External formatting and linting
     " Plug 'jose-elias-alvarez/null-ls.nvim'

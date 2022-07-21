@@ -6,7 +6,7 @@ set nohlsearch
 set ignorecase smartcase
 set mouse=a
 set noshowmode
-set showtabline=2
+set showtabline=0
 set relativenumber number
 set noerrorbells
 set undodir=/tmp/nvim-undo undofile
