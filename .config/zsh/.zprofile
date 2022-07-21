@@ -9,6 +9,7 @@ export BROWSER="brave"
 export READER="zathura"
 export TERMINAL="st"
 export STATUSBAR="dwmblocks"
+export FILE_MANAGER="lf"
 
 ## ~/ Clean-up:
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -79,7 +80,6 @@ export XCURSOR_SIZE=32
 ## Misc
 export NVIM_LISTEN_ADDRESS=/tmp/nvim
 export AWT_TOOLKIT="MToolkit"
-export LF_ICONS="$(cat $XDG_CONFIG_HOME/lf/icons)"
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
 
 ## Colorize `less`
@@ -98,13 +98,6 @@ export LESS_TERMCAP_ZN=$(tput ssubm)
 export LESS_TERMCAP_ZV=$(tput rsubm)
 export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
-
-# nnn config
-export NNN_BMS="h:~;d:~/Downloads;n:~/notes/bachelor-6;w:~/Pictures/Wallpapers"
-export NNN_PLUG="f:finder;d:dragdrop;o:fzopen;m:nmount;p:preview-tui;i:imgview;w:wallpaper"
-export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
-export NNN_COLORS="#01020304;1234"
-export NNN_FCOLORS="030304020007060801050500"
 
 # fcitx
 export GTK_IM_MODULE="fcitx5"

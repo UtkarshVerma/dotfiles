@@ -187,7 +187,7 @@ bindsym $mod+b bar mode toggle
 bindsym $mod+semicolon workspace prev
 bindsym $mod+apostrophe workspace next
 
-bindsym $mod+e exec terminal -e tmux new-session nnn -a -P p
+bindsym $mod+e exec "terminal -e $FILE_MANAGER"
 bindsym $mod+c exec rofi-calc
 
 # Screenshot/screenrecord bindings
