@@ -1,0 +1,3 @@
+#/bin/sh
+
+exec tmux new-session nnn -a -P p $@

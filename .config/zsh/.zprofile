@@ -6,7 +6,7 @@ export BROWSER="brave"
 export READER="zathura"
 export TERMINAL="st"
 export STATUSBAR="dwmblocks"
-export FILE_MANAGER="tmux new-session nnn -a -P p"
+export FILE_MANAGER="nnnrun"
 
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
     export TERMINAL="foot"
