@@ -119,5 +119,13 @@ zle -N edit-command-line
 bindkey '\C-e' edit-command-line
 
 # Ctrl-o: Open a directory using lf
-(( $+functions[lfcd] )) &>/dev/null &&
-    bindkey -s '\C-o' 'lfcd\C-m'
+case "$FILE_MANAGER" in
+    lf*)
+        (( $+functions[lfcd] )) &>/dev/null &&
+            bindkey -s '\C-o' 'lfcd\C-m'
+        ;;
+    *nnn*)
+        (( $+functions[nnncd] )) &>/dev/null &&
+            bindkey -s '\C-o' 'nnncd\C-m'
+        ;;
+esac

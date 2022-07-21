@@ -1,15 +1,21 @@
 #!/bin/sh
 
-## Set PATH
-export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
-
-## Default programs
+# Default programs
 export EDITOR="nvim"
 export BROWSER="brave"
 export READER="zathura"
 export TERMINAL="st"
 export STATUSBAR="dwmblocks"
-export FILE_MANAGER="lf"
+export FILE_MANAGER="tmux new-session nnn -a -P p"
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    export TERMINAL="foot"
+    export XDG_CURRENT_DESKTOP="sway"
+    export STATUSBAR="i3blocks"
+fi
+
+## Set PATH
+export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
 
 ## ~/ Clean-up:
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -72,15 +78,15 @@ if which ruby >/dev/null && which gem >/dev/null; then
     export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
-## Look and feel
-export QT_QPA_PLATFORMTHEME=qt5ct
-export XCURSOR_THEME=default
-export XCURSOR_SIZE=32
-
 ## Misc
-export NVIM_LISTEN_ADDRESS=/tmp/nvim
+export NVIM_LISTEN_ADDRESS="/tmp/nvim"
 export AWT_TOOLKIT="MToolkit"
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
+
+## Look and feel
+export QT_QPA_PLATFORMTHEME="qt5ct"
+export XCURSOR_THEME="default"
+export XCURSOR_SIZE=32
 
 ## Colorize `less`
 export LESS="-R"
@@ -109,11 +115,6 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-    export TERMINAL="foot"
-
-    export XDG_CURRENT_DESKTOP="sway"
-    export STATUSBAR="i3blocks"
-
     export GDK_BACKEND="wayland"
     export CLUTTER_BACKEND="wayland"
     export QT_QPA_PLATFORM="wayland"
