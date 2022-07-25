@@ -1,0 +1,14 @@
+plugins:
+  - mpdstats
+  - fetchart
+  - discogs
+  - scrub
+  - fetchart
+  - embedart
+  - duplicates
+  - lyrics
+directory: ~/Music/MP3s
+library: ~/.local/share/beets/library.db
+
+import:
+  move: yes
