@@ -1,6 +1,6 @@
 #!/bin/sh
 
-icon=""
+icon="ﱘ"
 pidof -x musicup >/dev/null 2>&1 || musicup >/dev/null 2>&1 &
 
 case $BLOCK_BUTTON in
@@ -18,9 +18,9 @@ artist="$(playerctl metadata $args --format '{{artist}}' 2>&1)"
 currentSong="$(playerctl metadata $args --format '{{title}}' 2>&1)$currentSong"
 
 if [ $? = 0 ]; then
-    [ "$(playerctl status $args 2>&1)" = "Paused" ] && icon=""
+    [ "$(playerctl status $args 2>&1)" = "Paused" ] && icon=""
 else
-    mpc | grep -q "\[paused\]" && icon=""
+    mpc | grep -q "\[paused\]" && icon=""
     currentSong="$(mpc -f "%title%[ - %artist%]" current)"
 fi
 

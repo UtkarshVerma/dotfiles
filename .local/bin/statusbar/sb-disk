@@ -12,4 +12,4 @@ fetchDiskUsage() {
     display "${avail}G" $color
 }
 
-echo "$(display ) $(fetchDiskUsage /)$(display '|')$(fetchDiskUsage /home)"
+echo "$(display ) $(fetchDiskUsage /)$(display '|')$(fetchDiskUsage /home)"
