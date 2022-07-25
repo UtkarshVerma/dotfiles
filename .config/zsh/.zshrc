@@ -2,11 +2,6 @@
 #-------------------------------------------------------------------------------
 # Initialize stuff
 #-------------------------------------------------------------------------------
-XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
-
 # History file
 HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=10000
@@ -15,9 +10,8 @@ SAVEHIST=10000
 
 export GPG_TTY=$TTY
 
-## Enable p10k instant prompt
 if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-	source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 ## Append commands to history after execution
@@ -124,7 +118,7 @@ case "$FILE_MANAGER" in
         (( $+functions[lfcd] )) &>/dev/null &&
             bindkey -s '\C-o' 'lfcd\C-m'
         ;;
-    *nnn*)
+    nnn*)
         (( $+functions[nnncd] )) &>/dev/null &&
             bindkey -s '\C-o' 'nnncd\C-m'
         ;;

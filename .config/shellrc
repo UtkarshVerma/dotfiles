@@ -16,6 +16,3 @@ NNNCD="$XDG_CONFIG_HOME/nnn/nnncd.sh"
 if [ -f "$NNNCD" ]; then
     source "$NNNCD"
 fi
-
-# NVM
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

@@ -18,10 +18,10 @@ fi
 export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
 
 ## ~/ Clean-up:
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_DATA_DIRS="$XDG_DATA_HOME:/usr/local/share:/usr/share"
 export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_DIRS="$XDG_DATA_HOME:/usr/local/share:/usr/share"
+export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
@@ -29,8 +29,7 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node/history"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
-# skipping for nvm
-# export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
+export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -43,7 +42,6 @@ export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export CHROME_EXECUTABLE="$BROWSER"
-export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export GOPATH="$XDG_DATA_HOME/go"
 export HUGO_CACHES_MODULES_DIR="$XDG_DATA_HOME/hugo"
