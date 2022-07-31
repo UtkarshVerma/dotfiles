@@ -6,6 +6,11 @@
 #
 # export PYTHONSTARTUP="${XDG_CONFIG_HOME:-$HOME/.config}/pythonstartup.py"
 
+# Don't do anything for ipython
+import sys
+if hasattr(__builtins__, '__IPYTHON__'):
+    sys.exit()
+
 import atexit
 import os
 import readline

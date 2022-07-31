@@ -16,7 +16,7 @@
 .config/ncmpcpp/*
 !.config/ncmpcpp/{bindings,config}
 
-.config/nvim/plugged
+.config/nvim/plugin
 
 .config/safeeyes/session.json
 
