@@ -1,4 +1,4 @@
-vim.cmd [[
+vim.cmd([[
     fun! TrimWhitespace()
         let l:save = winsaveview()
         keeppatterns %s/\s\+$//e
@@ -15,4 +15,4 @@ vim.cmd [[
 
     " Restore blinking cursor on exit
     autocmd VimLeave,VimSuspend * set guicursor=a:ver2-blinkon1
-]]
+]])

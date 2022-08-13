@@ -1,8 +1,6 @@
 require("options")
 require("keymaps")
 require("plugins")
-
-vim.cmd [[
-    colorscheme molokai
-    highlight Normal guibg=None
-]]
+require("lsp")
+require("completions")
+require("colorscheme")

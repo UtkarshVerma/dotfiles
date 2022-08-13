@@ -2,12 +2,12 @@
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({
-      "git", "clone", "--depth", "1",
-      "https://github.com/wbthomason/packer.nvim", install_path
-  })
-  print "Installing Packer. Close and re-open Neovim"
-  vim.cmd "packadd packer.nvim"
+    packer_bootstrap = fn.system({
+        "git", "clone", "--depth", "1",
+        "https://github.com/wbthomason/packer.nvim", install_path
+    })
+    print "Installing Packer. Close and re-open Neovim"
+    vim.cmd "packadd packer.nvim"
 end
 
 -- Autocommand to reload Neovim whenever plugins/init.lua is updated
@@ -35,76 +35,62 @@ packer.init({
 
 -- Plugins
 packer.startup(function(use)
-    use "wbthomason/packer.nvim"    -- Have Packer manage itself
+    use "wbthomason/packer.nvim" -- Have Packer manage itself
 
-    -- Note-taking
+    -- My plugins
+    use "lewis6991/impatient.nvim"
+    use "dinhhuy258/git.nvim"
     use "vimwiki/vimwiki"
-    --" My plugins
-  --"Plug "ferrine/md-img-paste.vim"
-
-  --" Completions
-  --Plug "hrsh7th/nvim-cmp"
-  --Plug "hrsh7th/cmp-buffer"
-  --Plug "hrsh7th/cmp-path"
-  --Plug "hrsh7th/cmp-nvim-lua"
-  --Plug "hrsh7th/cmp-nvim-lsp"
-
-  --" Snippets
-  --" Plug "saadparwaiz1/cmp_luasnip"
-  --" Plug "rafamadriz/friendly-snippets"
-  --" Plug "L3MON4D3/LuaSnip"
-  --"
-  --" " LSP
-  --" Plug "neovim/nvim-lspconfig"
-  --" Plug "williamboman/nvim-lsp-installer"
-  --"
-  --" " Telescope
-  --" Plug "nvim-lua/popup.nvim"
-  --" Plug "nvim-lua/plenary.nvim"
-  --" Plug "nvim-telescope/telescope.nvim"
-  --" Plug "nvim-telescope/telescope-media-files.nvim"
+    --"Plug "ferrine/md-img-paste.vim"
 
     -- Treesitter and companion plugins
-    use {
-        "nvim-treesitter/nvim-treesitter",
-        run = ":TSUpdate"
-    } 
-    use "p00f/nvim-ts-rainbow"      -- Rainbow brackets
+    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
+    use "nvim-treesitter/playground"
+    use "p00f/nvim-ts-rainbow" -- Rainbow brackets
     use "windwp/nvim-autopairs"
+    use "windwp/nvim-ts-autotag"
     use "numToStr/Comment.nvim"
 
     use "lewis6991/gitsigns.nvim"
+    use "akinsho/bufferline.nvim"
+    use "norcalli/nvim-colorizer.lua"
     use "nvim-lualine/lualine.nvim"
+    use "lukas-reineke/indent-blankline.nvim"
+    use "goolord/alpha-nvim"
+    use "UtkarshVerma/molokai.nvim"
+    -- use "folke/which-key.nvim"
 
-  --" " Nvim Tree
-  --" Plug "kyazdani42/nvim-web-devicons"
-  --" Plug "kyazdani42/nvim-tree.lua"
-  --"
-  --" " Bufferline
-  --" " Plug "akinsho/bufferline.nvim"
-  --" " Plug "moll/vim-bbye"
-  --"
-  --" " External formatting and linting
-  --" " Plug "jose-elias-alvarez/null-ls.nvim"
-  --"
-  --" " Terminal
-  --" Plug "akinsho/toggleterm.nvim"
+    -- Telescope
+    use "kyazdani42/nvim-web-devicons"
+    use "nvim-lua/plenary.nvim"
+    use "nvim-telescope/telescope.nvim"
+    use "nvim-telescope/telescope-file-browser.nvim"
+
+    -- LSP
+    use "williamboman/mason.nvim"
+    use "williamboman/mason-lspconfig.nvim"
+    use "neovim/nvim-lspconfig"
+    use "glepnir/lspsaga.nvim"
+    use "jose-elias-alvarez/null-ls.nvim"
+
+    -- Completions
+    use "L3MON4D3/LuaSnip"
+    use "onsails/lspkind-nvim"
+    use "hrsh7th/cmp-buffer"
+    use "hrsh7th/cmp-nvim-lsp"
+    use "hrsh7th/nvim-cmp"
 
     -- Automatically set up config after cloning Packer
     if packer_bootstrap then
-        require("packer").sync()
+        packer.sync()
     end
 end)
 
 -- Load plugin configs
-local configs = {
-    "autopairs",
-    "comment",
-    "gitsigns",
-    "lualine",
-    "treesitter"
-}
-
-for _, config in ipairs(configs) do
-    require("plugins." .. config)
+local paths = vim.api.nvim_get_runtime_file("lua/plugins/*.lua", true)
+for _, path in ipairs(paths) do
+    local config = path:gsub(".*/lua/(.*)%.lua", "%1")
+    if config ~= "plugins/init" then
+        require(config)
+    end
 end

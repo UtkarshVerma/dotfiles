@@ -2,7 +2,7 @@ local options = {
     fileencoding = "utf-8",
     backup = false,
     swapfile = false,
-    clipboard = "unnamedplus",  -- Use the system clipboard
+    clipboard = "unnamedplus", -- Use the system clipboard
 
     -- Completion options
     completeopt = {
@@ -11,13 +11,12 @@ local options = {
         "noselect"
     },
 
-    hlsearch = false,           -- Don't highlight matches for previous search
-    ignorecase = true,          -- Do case-insensitive search
-    smartcase = true,           -- Do case-sensitive search if query has upper-case letters
+    hlsearch = false, -- Don't highlight matches for previous search
+    ignorecase = true, -- Do case-insensitive search
+    smartcase = true, -- Do case-sensitive search if query has upper-case letters
 
-    mouse = "a",                -- Enable mouse support
+    mouse = "a", -- Enable mouse support
     showmode = false,
-    showtabline = 0,
 
     number = true,
     relativenumber = true,
@@ -53,5 +52,5 @@ local options = {
 }
 
 for k, v in pairs(options) do
-	vim.opt[k] = v
+    vim.opt[k] = v
 end

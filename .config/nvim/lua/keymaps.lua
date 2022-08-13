@@ -25,8 +25,8 @@ keymap("n", "<c-right>", ":vertical resize +2<cr>", opts)
 ]]
 
 -- Navigate buffers
-keymap("n", "<s-l>", ":bnext<cr>", opts)
-keymap("n", "<s-h>", ":bnext<cr>", opts)
+--[[ keymap("n", "<s-l>", ":bnext<cr>", opts)
+keymap("n", "<s-h>", ":bnext<cr>", opts) ]]
 
 -- Stay in indent mode
 keymap("v", "<", "<gv", opts)
