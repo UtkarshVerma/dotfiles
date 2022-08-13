@@ -10,7 +10,7 @@ esac
 
 . sb-theme
 if [ "$(pamixer --get-mute)" = true ]; then
-	display " " 1
+	display " " 1
 	exit
 fi
 
