@@ -60,8 +60,6 @@ packer.startup(function(use)
     use "UtkarshVerma/molokai.nvim"
     -- use "folke/which-key.nvim"
 
-    use "dstein64/vim-startuptime"
-
     -- Telescope
     use "kyazdani42/nvim-web-devicons"
     use "nvim-lua/plenary.nvim"
