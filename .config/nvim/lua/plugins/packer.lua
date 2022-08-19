@@ -58,12 +58,11 @@ packer.startup(function(use)
     use "lukas-reineke/indent-blankline.nvim"
     use "goolord/alpha-nvim"
     use "UtkarshVerma/molokai.nvim"
+    use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons" }
     -- use "folke/which-key.nvim"
 
     -- Telescope
-    use "kyazdani42/nvim-web-devicons"
-    use "nvim-lua/plenary.nvim"
-    use "nvim-telescope/telescope.nvim"
+    use { "nvim-telescope/telescope.nvim", requires = "nvim-lua/plenary.nvim" }
     use "nvim-telescope/telescope-file-browser.nvim"
 
     -- LSP
