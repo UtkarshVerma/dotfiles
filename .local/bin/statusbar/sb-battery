@@ -42,8 +42,8 @@ for battery in /sys/class/power_supply/BAT?*; do
 			fi
 			;;
 		Charging) status="ﮣ$status" ;;
-		"Not charging") status=" $status " ;;
-		Unknown) status="屢 " ;;
+		"Not charging") status="屢 " ;;
+		Unknown) status=" $status" ;;
 		*) exit 1 ;;
 	esac
 

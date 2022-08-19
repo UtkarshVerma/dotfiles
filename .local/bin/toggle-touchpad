@@ -16,12 +16,12 @@ if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
     exit
 fi
 
-touchpad=13
-if xinput list-props $touchpad | grep "Device Enabled" | grep -q "1$"; then
-    xinput disable $touchpad
+touchpadID=$(xinput list | grep Touchpad | cut -d'=' -f2 | cut -f1)
+if xinput list-props $touchpadID | grep "Device Enabled" | grep -q "1$"; then
+    xinput disable $touchpadID
     notify off
     exit
 fi
 
-xinput enable $touchpad
+xinput enable $touchpadID
 notify on
