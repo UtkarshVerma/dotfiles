@@ -1,15 +1,23 @@
 #!/bin/sh
 
-if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
-	lockCmd="swaylock"
-	logoutCmd="swaymsg exit"
-    reloadCmd="swaymsg reload"
-else
-	lockCmd="slock"
-    logoutCmd="pkill -TERM -u $USER dwm"
-    reloadCmd="pkill -HUP -u $USER dwm"
-	displayOffCmd="xset dpms force off"
-fi
+case "$XDG_CURRENT_DESKTOP" in
+    "sway")
+        lockCmd="swaylock"
+	    logoutCmd="swaymsg exit"
+        reloadCmd="swaymsg reload"
+        ;;
+    "Hyprland")
+        lockCmd="swaylock"
+        logoutCmd="hyprctl dispatch exit placebo"
+        reloadCmd="hyprctl reload"
+        ;;
+    *)
+        lockCmd="slock"
+        logoutCmd="pkill -TERM -u $USER dwm"
+        reloadCmd="pkill -HUP -u $USER dwm"
+        displayOffCmd="xset dpms force off"
+        ;;
+esac
 
 choices="\
 🔒 Lock			$lockCmd

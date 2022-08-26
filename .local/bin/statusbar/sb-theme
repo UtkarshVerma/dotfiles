@@ -26,10 +26,16 @@ display() {
 		esac
 	fi
 
-    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
-        local body="$(echo $1 | colrm 45)"
-        echo $args "<span foreground='$(palette.sh $color)'>$body</span>"
-    else
-        echo $args "^C$color^$1"
-    fi
+    case "$STATUSBAR" in
+        "i3blocks")
+            local body="$(echo $1 | colrm 45)"
+            echo $args "<span foreground='$(palette.sh $color)'>$body</span>"
+            ;;
+        "eww")
+            echo $args "$1"
+            ;;
+        "dwmblocks")
+            echo $args "^C$color^$1"
+            ;;
+    esac
 }

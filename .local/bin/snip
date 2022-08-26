@@ -6,7 +6,8 @@ snipTo() {
 
     snipCmd=shotgun
     clipCmd="xclip -selection clipboard -target image/png"
-    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+
+    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
         snipCmd="grim"
         clipCmd="wl-copy --type image/png"
     fi
@@ -15,7 +16,7 @@ snipTo() {
 		message="The screenshot has been successfully saved to your clipboard."
         output="-"
 	else
-		output="~/Pictures/Screenshots/$(date '+%Y-%m-%d_%H.%M.%S').png"
+		output="~/pictures/screenshots/$(date '+%Y-%m-%d_%H.%M.%S').png"
 		message="The screenshot has been successfully saved as $output"
         clipCmd="true"
 	fi

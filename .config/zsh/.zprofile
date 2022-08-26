@@ -5,13 +5,16 @@ export EDITOR="nvim"
 export BROWSER="brave"
 export READER="zathura"
 export TERMINAL="st"
-export STATUSBAR="dwmblocks"
 export FILE_MANAGER="nnnrun"
+
+case "$XDG_CURRENT_DESKTOP" in
+    "sway") export STATUSBAR="i3blocks" ;;
+    "Hyprland") export STATUSBAR="eww" ;;
+    *) export STATUSBAR="dwmblocks" ;;
+esac
 
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
     export TERMINAL="foot"
-    export XDG_CURRENT_DESKTOP="sway"
-    export STATUSBAR="i3blocks"
 fi
 
 ## Set PATH
@@ -113,6 +116,14 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    export LIBVA_DRIVER_NAME="nvidia"
+    export GBM_BACKEND="nvidia-drm"
+    export __GLX_VENDOR_LIBRARY_NAME="nvidia"
+    export MOZ_ENABLE_WAYLAND=1
+
+    export WLR_NO_HARDWARE_CURSORS=1
+    export WLR_BACKEND="vulkan"
+
     export GDK_BACKEND="wayland"
     export CLUTTER_BACKEND="wayland"
     export QT_QPA_PLATFORM="wayland"

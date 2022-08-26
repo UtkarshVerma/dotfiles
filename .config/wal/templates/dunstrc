@@ -393,9 +393,20 @@
 #    summary = "*script*"
 #    script = dunst_test.sh
 
+[system]
+    category = "system"
+    fullscreen = show
+    timeout = 2
+
+[cpu-profile]
+    appname = "Fan Mode"
+    fullscreen = show
+    timeout = 2
+
 [brave-ads]
     desktop_entry = "brave-browser"
     history_ignore = yes
+    timeout = 1
 
 #[stack-volumes]
 #    appname = "some_volume_notifiers"

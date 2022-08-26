@@ -42,7 +42,7 @@ walArgs="-e --backend schemer2 -a $ALPHA -n"
 [ $LIGHT -ne 0 ] && walArgs="$walArgs -l"
 
 [ ! -f "$wallpaper" ] &&
-    wallpaper="$(find ~/Pictures/Wallpapers/ -type f | shuf -n 1)"
+    wallpaper="$(find ~/pictures/wallpapers/ -type f | shuf -n 1)"
 
 [ -n "$COLORSCHEME" ] &&
     walArgs="$walArgs --theme $COLORSCHEME" ||

@@ -41,6 +41,8 @@ packer.startup(function(use)
     use "lewis6991/impatient.nvim"
     use "dinhhuy258/git.nvim"
     use "vimwiki/vimwiki"
+    use "elkowar/yuck.vim"
+    use "gpanders/nvim-parinfer"
     --"Plug "ferrine/md-img-paste.vim"
 
     -- Treesitter and companion plugins
@@ -71,6 +73,9 @@ packer.startup(function(use)
     use "neovim/nvim-lspconfig"
     use "glepnir/lspsaga.nvim"
     use "jose-elias-alvarez/null-ls.nvim"
+
+    -- DAP
+    use 'mfussenegger/nvim-dap'
 
     -- Completions
     use "L3MON4D3/LuaSnip"

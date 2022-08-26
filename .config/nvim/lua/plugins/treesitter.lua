@@ -12,7 +12,8 @@ configs.setup({
         "markdown",
         "go",
         "lua",
-        "bash"
+        "bash",
+        "commonlisp"
     },
     sync_install = false, -- Don't install parsers synchronously
     ignore_install = {}, -- List of parsers to ignore installing

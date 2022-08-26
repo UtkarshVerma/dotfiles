@@ -4,7 +4,7 @@ notify() {
     icon="touchpad-$1"
     message="The touchpad input has been"
     [ "$1" = on ] && message="$message enabled." || message="$message disabled."
-	notify-send -h string:x-canonical-private-synchronous:touchpad -i "$icon" Touchpad "$message"
+	notify-send -h string:x-canonical-private-synchronous:touchpad -c system -i "$icon" Touchpad "$message"
 }
 
 if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then

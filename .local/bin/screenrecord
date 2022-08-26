@@ -7,9 +7,9 @@ recordRegion() {
 	[ -z "$1" ] && return
 
     file="$(date '+%Y-%m-%d_%H.%M.%S').mp4"
-    path="$HOME/Videos/Recordings/$file"
+    path="$HOME/videos/recordings/$file"
 
-    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
+    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
         wf-recorder -f "$path" -g "$1" >/tmp/record.log 2>&1 &
     else
         read -r W H X Y << EOF

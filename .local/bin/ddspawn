@@ -1,27 +1,64 @@
 #!/bin/sh
 
-# This script simplifies dropdown windows in Sway.
+# This script simplifies dropdown windows in Hyprland and Sway.
 # Shows/hides a scratchpad of a given name, if it doesn't exist, creates it.
 # Usage:
 #     ddspawn notes -c st -n %s -e nvim -c VimwikiIndex
+
+getWindowMeta() {
+    local windowMeta
+    case "$XDG_CURRENT_DESKTOP" in
+        "Hyprland")
+            windowMeta="$(hyprctl clients -j |
+                jq -r ".[] | select(.class == \"$1\")")"
+            ;;
+        "sway")
+            windowMeta=$(swaymsg -t get_tree |
+                jq -r ".nodes[].nodes[] | .nodes[],.floating_nodes[] |
+                    select((.app_id == \"$instance\") or
+                    ((.window_properties // empty).instance == \"$1\"))")
+            ;;
+    esac
+    echo "$windowMeta"
+}
+
+toggleWindow() {
+	echo "Window detected."
+    case "$XDG_CURRENT_DESKTOP" in
+        "Hyprland")
+            local windowAddress="$(echo "$1" | jq -r ".address")"
+            if echo "$1" | grep -q "special"; then
+                local workspace="$(hyprctl monitors -j | jq ".[] | select(.focused).activeWorkspace.id")"
+                hyprctl dispatch movetoworkspace "$workspace,address:$windowAddress" >/dev/null
+            else
+                hyprctl dispatch movetoworkspace "special,address:$windowAddress" >/dev/null
+            fi
+            ;;
+        "sway")
+            if echo "$1" | jq -r ".app_id == null" >/dev/null 2>&1; then
+                swaymsg "[instance=$instance] scratchpad show"
+            else
+                swaymsg "[app_id=$instance] scratchpad show"
+            fi
+            ;;
+    esac
+}
+
+spawnWindow() {
+	echo "Window not detected... spawning."
+    case "$XDG_CURRENT_DESKTOP" in
+        "Hyprland") hyprctl dispatch exec "$1" >/dev/null ;;
+        "sway") swaymsg "exec $1" ;;
+    esac
+}
 
 instance="dropdown_$1"
 while [ "$1" != "-c" ]; do shift; done; shift
 cmd="$(printf "$*" $instance)"
 
-windowMeta=$(swaymsg -t get_tree |
-    jq -r -e ".nodes[].nodes[] | .nodes[],.floating_nodes[] |
-        select((.app_id == \"$instance\") or
-            ((.window_properties // empty).instance == \"$instance\"))")
-if [ $? -eq 0 ]; then
-	echo "Window detected."
-
-    if echo $windowMeta | jq -r -e ".app_id == null" >/dev/null 2>&1; then
-        swaymsg "[instance=$instance] scratchpad show"
-    else
-        swaymsg "[app_id=$instance] scratchpad show"
-    fi
+windowMeta="$(getWindowMeta "$instance")"
+if [ -n "$windowMeta" ]; then
+    toggleWindow "$windowMeta"
 else
-	echo "Window not detected... spawning."
-    swaymsg "exec $cmd"
+    spawnWindow "$cmd"
 fi
