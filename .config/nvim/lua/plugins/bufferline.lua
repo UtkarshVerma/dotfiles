@@ -24,9 +24,9 @@ if status_ok then
         tab_selected = { fg = active_tab_fg, bg = active_tab_bg },
         tab_close = { fg = tab_fg, bg = tab_bg },
         close_button = { fg = tab_fg, bg = tab_bg },
-        close_button_visible = { fg = tab_fg, bg = tab_bg },
+        close_button_visible = { fg = active_tab_fg, bg = active_tab_bg },
         close_button_selected = { fg = active_tab_fg, bg = active_tab_bg },
-        buffer_visible = { fg = tab_fg, bg = tab_bg },
+        buffer_visible = { fg = active_tab_fg, bg = active_tab_bg },
         buffer_selected = { fg = active_tab_fg, bg = active_tab_bg, bold = false, italic = false },
         -- numbers = {
         --     fg = '<colour-value-here>',
@@ -121,7 +121,7 @@ if status_ok then
         --     italic = true,
         -- },
         modified = { fg = tab_fg, bg = tab_bg },
-        modified_visible = { fg = tab_fg, bg = tab_bg },
+        modified_visible = { fg = active_tab_fg, bg = active_tab_bg },
         modified_selected = { fg = active_tab_fg, bg = active_tab_bg },
         -- duplicate_selected = {
         --     fg = '<colour-value-here>',
