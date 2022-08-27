@@ -4,13 +4,6 @@ local options = {
     swapfile = false,
     clipboard = "unnamedplus", -- Use the system clipboard
 
-    -- Completion options
-    completeopt = {
-        "menuone",
-        "noinsert",
-        "noselect"
-    },
-
     hlsearch = false, -- Don't highlight matches for previous search
     ignorecase = true, -- Do case-insensitive search
     smartcase = true, -- Do case-sensitive search if query has upper-case letters
@@ -25,10 +18,6 @@ local options = {
     -- Preserve undo history for files
     undodir = "/tmp/nvim-undo",
     undofile = true,
-
-    -- Force new splits below/right of current buffer
-    splitbelow = true,
-    splitright = true,
 
     -- Set tab width to 4 and expand tabs to spaces
     expandtab = true,

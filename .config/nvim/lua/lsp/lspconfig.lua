@@ -23,4 +23,4 @@ lspconfig.sumneko_lua.setup({
 lspconfig.pyright.setup({})
 lspconfig.bashls.setup({})
 lspconfig.gopls.setup({})
-lspconfig.clangd.setup({}) -- formatting is handled by null-ls
+lspconfig.clangd.setup({})

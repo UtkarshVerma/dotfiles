@@ -41,9 +41,6 @@ packer.startup(function(use)
     use "lewis6991/impatient.nvim"
     use "dinhhuy258/git.nvim"
     use "vimwiki/vimwiki"
-    use "elkowar/yuck.vim"
-    use "gpanders/nvim-parinfer"
-    --"Plug "ferrine/md-img-paste.vim"
 
     -- Treesitter and companion plugins
     use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
@@ -54,12 +51,12 @@ packer.startup(function(use)
     use "numToStr/Comment.nvim"
 
     use "lewis6991/gitsigns.nvim"
-    use "akinsho/bufferline.nvim"
+    use { "akinsho/bufferline.nvim", tag = "v2.*", requires = "kyazdani42/nvim-web-devicons" }
     use "norcalli/nvim-colorizer.lua"
     use "nvim-lualine/lualine.nvim"
     use "lukas-reineke/indent-blankline.nvim"
     use "goolord/alpha-nvim"
-    use "UtkarshVerma/molokai.nvim"
+    use { "UtkarshVerma/molokai.nvim", requires = "kyazdani42/nvim-web-devicons" }
     use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons" }
     -- use "folke/which-key.nvim"
 

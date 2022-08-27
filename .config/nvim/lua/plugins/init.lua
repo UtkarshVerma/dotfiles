@@ -1,16 +1,25 @@
-require("plugins.impatient") -- has to be at the top
-require("plugins.packer")
-require("plugins.alpha")
-require("plugins.autopairs")
-require("plugins.autotag")
-require("plugins.bufferline")
-require("plugins.colorizer")
-require("plugins.comment")
-require("plugins.git")
-require("plugins.gitsigns")
-require("plugins.indentline")
-require("plugins.lualine")
-require("plugins.telescope")
-require("plugins.treesitter")
-require("plugins.vimwiki")
-require("plugins.web-devicons")
+local plugins = {
+    "impatient", -- has to be at the top
+    "alpha",
+    "autopairs",
+    "autotag",
+    "bufferline",
+    "colorizer",
+    "comment",
+    "git",
+    "gitsigns",
+    "indentline",
+    "lualine",
+    "packer",
+    "telescope",
+    "treesitter",
+    "vimwiki",
+    "web-devicons"
+}
+
+for _, plugin in ipairs(plugins) do
+    local status_ok, _ = pcall(require, "plugins." .. plugin)
+    if not status_ok then
+        vim.notify("error: could not load plugin " .. plugin .. "!")
+    end
+end
