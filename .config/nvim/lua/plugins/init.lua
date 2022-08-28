@@ -8,7 +8,7 @@ local plugins = {
     "comment",
     "git",
     "gitsigns",
-    "indentline",
+    "indent-blankline",
     "lualine",
     "packer",
     "telescope",

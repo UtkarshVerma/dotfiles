@@ -15,6 +15,10 @@ local options = {
     relativenumber = true,
     errorbells = false,
 
+    -- Force splits right and below
+    splitbelow = true,
+    splitright = true,
+
     -- Preserve undo history for files
     undodir = "/tmp/nvim-undo",
     undofile = true,

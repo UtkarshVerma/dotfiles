@@ -51,7 +51,7 @@ packer.startup(function(use)
     use "numToStr/Comment.nvim"
 
     use "lewis6991/gitsigns.nvim"
-    use { "akinsho/bufferline.nvim", tag = "v2.*", requires = "kyazdani42/nvim-web-devicons" }
+    use { "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" }
     use "norcalli/nvim-colorizer.lua"
     use "nvim-lualine/lualine.nvim"
     use "lukas-reineke/indent-blankline.nvim"

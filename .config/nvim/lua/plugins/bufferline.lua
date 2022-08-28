@@ -3,15 +3,14 @@ if not status_ok then
     return
 end
 
-local highlights
+local highlights = {}
 status_ok, _ = pcall(require, "molokai")
 if status_ok then
     local c = require("molokai.colors")
-    local util = require("molokai.util")
 
     local accent = c.cyan
-    local fg = util.darken(c.fg, 0.8)
-    local bg = util.lighten(c.bg, 0.95)
+    local fg = c.fg_alt
+    local bg = c.bg_float
     local tab_fg = fg
     local tab_bg = bg
     local active_tab_fg = accent
@@ -180,11 +179,3 @@ bufferline.setup({
     },
     highlights = highlights
 })
-
-local keymap = vim.keymap.set
-local opts = {
-    noremap = true,
-    silent = true
-}
-
-keymap("n", "<c-w>", ":bdelete<cr>", opts)

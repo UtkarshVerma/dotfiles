@@ -14,8 +14,8 @@ local fb_actions = telescope.extensions.file_browser.actions
 telescope.setup({
     defaults = {
         mappings = {
-            n = {
-                ["q"] = actions.close
+            i = {
+                ["<esc>"] = actions.close
             }
         },
         extensions = {
@@ -45,7 +45,10 @@ local opts = {
     noremap = true,
     silent = true
 }
-keymap("n", "<leader>f",
+
+keymap("i", "<c-p>", "<esc><cmd>lua require('telescope.builtin').find_files({ no_ignore = false, hidden = true })<cr>",
+    opts)
+keymap("n", "<c-p>",
     "<cmd>lua require('telescope.builtin').find_files({ no_ignore = false, hidden = true })<cr>", opts)
 keymap("n", "<leader>r",
     "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
