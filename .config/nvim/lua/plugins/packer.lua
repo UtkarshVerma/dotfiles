@@ -69,7 +69,8 @@ packer.startup(function(use)
     use "williamboman/mason-lspconfig.nvim"
     use "neovim/nvim-lspconfig"
     use "glepnir/lspsaga.nvim"
-    use "jose-elias-alvarez/null-ls.nvim"
+    use "ray-x/lsp_signature.nvim"
+    -- use "jose-elias-alvarez/null-ls.nvim"
 
     -- DAP
     use 'mfussenegger/nvim-dap'
@@ -78,6 +79,7 @@ packer.startup(function(use)
     use "L3MON4D3/LuaSnip"
     use "onsails/lspkind-nvim"
     use "hrsh7th/cmp-buffer"
+    use "saadparwaiz1/cmp_luasnip"
     use "hrsh7th/cmp-nvim-lsp"
     use "hrsh7th/nvim-cmp"
 

@@ -1,2 +1,7 @@
 require("completions.cmp")
-require("completions.lspkind")
+
+vim.opt.completeopt = {
+    "menuone",
+    "noinsert",
+    "noselect"
+}

@@ -3,45 +3,38 @@ if not status_ok then
     return
 end
 
-local status_ok, lspkind = pcall(require, "lspkind")
-if not status_ok then
-    return
-end
-
-local status_ok, luasnip = pcall(require, "luasnip")
-if not status_ok then
-    return
-end
-
-cmp.setup({
-    snippet = {
-        expand = function(args)
-            luasnip.lsp_expand(args.body)
-        end
-    },
+local opts = {
     mapping = cmp.mapping.preset.insert({
         ["<c-d>"] = cmp.mapping.scroll_docs(-4),
         ["<c-f>"] = cmp.mapping.scroll_docs(4),
         ["<c-space>"] = cmp.mapping.complete(),
         ["<c-e>"] = cmp.mapping.close(),
-        ["<cr>"] = cmp.mapping.confirm({
+        ["<tab>"] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
             select = true
-        })
+        }),
+        ["<cr>"] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = false
+        }),
     }),
     sources = cmp.config.sources({
         { name = "nvim_lsp" },
+        { name = "luasnip" },
         { name = "buffer" }
     }),
-    formatting = {
-        format = lspkind.cmp_format({
-            wirth_text = false,
-            maxwidth = 50
-        })
-    }
-})
+}
 
-vim.cmd([[
-    set completeopt=menuone,noinsert,noselect
-    highlight! default link CmpItemKind CmpItemMenuDefault
-]])
+local plugins = {
+    "lspkind",
+    "luasnip"
+}
+for _, plugin in ipairs(plugins) do
+    local plugin_opts = require("completions." .. plugin)
+    for k, v in pairs(plugin_opts) do
+        opts[k] = v
+    end
+end
+
+cmp.setup(opts)
+vim.cmd("highlight! default link CmpItemKind CmpItemMenuDefault")

@@ -4,17 +4,31 @@ if not status_ok then
 end
 
 lspsaga.init_lsp_saga({
-    server_filetype_map = {}
+    server_filetype_map = {},
+
+    rename_action_quit = "<esc>", -- quit rename action using escape
+    rename_in_select = false, -- don't select word while renaming symbol
+
+    code_action_icon = " ",
+    code_action_lightbulb = {
+        virtual_text = false,
+    },
 })
 
+local keymap = vim.keymap.set
 local opts = {
     noremap = true,
     silent = true
 }
 
-vim.keymap.set("n", "<c-j>", "<cmd>Lspsaga diagnostic_jump_next<cr>", opts)
-vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<cr>", opts)
-vim.keymap.set("n", "gd", "<cmd>Lspsaga lsp_finder<cr>", opts)
-vim.keymap.set("i", "<c-k>", "<cmd>Lspsaga signature_helper<cr>", opts)
-vim.keymap.set("n", "gp", "<cmd>Lspsaga preview_definition<cr>", opts)
-vim.keymap.set("n", "gr", "<cmd>Lspsaga rename<cr>", opts)
+keymap("n", "<leader>ca", "<cmd>Lspsaga code_action<cr>", opts)
+keymap("v", "<leader>ca", "<cmd><c-u>Lspsaga range_code_action<cr>", opts)
+
+keymap("n", "gr", "<cmd>Lspsaga rename<cr>", opts)
+keymap("n", "gd", "<cmd>Lspsaga preview_definition<cr>", opts)
+
+keymap("n", "<leader>cd", "<cmd>Lspsaga show_line_diagnostics<cr>", opts)
+keymap("n", "<leader>cd", "<cmd>Lspsaga show_cursor_diagnostics<cr>", opts)
+
+keymap("n", "<leader>o", "<cmd>LSoutlineToggle<cr>", opts)
+keymap("n", "K", "<cmd>Lspsaga hover_doc<cr>", opts)

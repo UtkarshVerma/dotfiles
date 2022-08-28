@@ -15,7 +15,10 @@ lspconfig.sumneko_lua.setup({
             },
             workspace = {
                 -- Make the server aware of Neovim runtime files
-                library = vim.api.nvim_get_runtime_file("", true)
+                library = {
+                    -- [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                    -- [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+                }
             }
         }
     }
@@ -23,4 +26,8 @@ lspconfig.sumneko_lua.setup({
 lspconfig.pyright.setup({})
 lspconfig.bashls.setup({})
 lspconfig.gopls.setup({})
-lspconfig.clangd.setup({})
+lspconfig.clangd.setup({
+    -- Auto-format only if .clang-format exists
+    cmd = { "clangd", "--fallback-style=none" },
+    on_attach = on_attach
+})
