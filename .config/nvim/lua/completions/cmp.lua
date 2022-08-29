@@ -18,6 +18,14 @@ local opts = {
             select = false
         }),
     }),
+    window = {
+        completion = {
+            winhighlight = "Normal:Pmenu,CursorLine:PmenuSel,Search:None"
+        },
+        documentation = {
+            winhighlight = "NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder"
+        }
+    },
     sources = cmp.config.sources({
         { name = "nvim_lsp" },
         { name = "luasnip" },
@@ -37,4 +45,3 @@ for _, plugin in ipairs(plugins) do
 end
 
 cmp.setup(opts)
-vim.cmd("highlight! default link CmpItemKind CmpItemMenuDefault")

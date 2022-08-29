@@ -3,7 +3,7 @@ if not status_ok then
     return
 end
 
-local on_attach = require("lsp/common").on_attach
+local on_attach = require("lsp.common").on_attach
 
 lspconfig.sumneko_lua.setup({
     on_attach = on_attach,
@@ -16,8 +16,8 @@ lspconfig.sumneko_lua.setup({
             workspace = {
                 -- Make the server aware of Neovim runtime files
                 library = {
-                    -- [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-                    -- [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
                 }
             }
         }

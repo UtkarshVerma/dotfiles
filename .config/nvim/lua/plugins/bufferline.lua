@@ -6,27 +6,28 @@ end
 local highlights = {}
 status_ok, _ = pcall(require, "molokai")
 if status_ok then
-    local c = require("molokai.colors")
+    local c = require("molokai.colors").setup()
+    local cfg = require("molokai.config")
 
     local accent = c.cyan
     local fg = c.fg_alt
-    local bg = c.bg_float
+    local bg = c.bg_popup
     local tab_fg = fg
     local tab_bg = bg
     local active_tab_fg = accent
-    local active_tab_bg = c.none
+    local active_tab_bg = cfg.transparent and c.none or c.bg
 
     highlights = {
-        fill = { fg = fg, bg = bg },
-        background = { fg = tab_fg, bg = tab_bg },
-        tab = { fg = tab_fg, bg = tab_bg },
-        tab_selected = { fg = active_tab_fg, bg = active_tab_bg },
-        tab_close = { fg = tab_fg, bg = tab_bg },
-        close_button = { fg = tab_fg, bg = tab_bg },
-        close_button_visible = { fg = active_tab_fg, bg = active_tab_bg },
+        fill                  = { fg = fg, bg = bg },
+        background            = { fg = tab_fg, bg = tab_bg },
+        tab                   = { fg = tab_fg, bg = tab_bg },
+        tab_selected          = { fg = active_tab_fg, bg = active_tab_bg },
+        tab_close             = { fg = tab_fg, bg = tab_bg },
+        close_button          = { fg = tab_fg, bg = tab_bg },
+        close_button_visible  = { fg = active_tab_fg, bg = active_tab_bg },
         close_button_selected = { fg = active_tab_fg, bg = active_tab_bg },
-        buffer_visible = { fg = active_tab_fg, bg = active_tab_bg },
-        buffer_selected = { fg = active_tab_fg, bg = active_tab_bg, bold = false, italic = false },
+        buffer_visible        = { fg = active_tab_fg, bg = active_tab_bg },
+        buffer_selected       = { fg = active_tab_fg, bg = active_tab_bg, bold = false, italic = false },
         -- numbers = {
         --     fg = '<colour-value-here>',
         --     bg = '<colour-value-here>',
@@ -119,9 +120,9 @@ if status_ok then
         --     bold = true,
         --     italic = true,
         -- },
-        modified = { fg = tab_fg, bg = tab_bg },
-        modified_visible = { fg = active_tab_fg, bg = active_tab_bg },
-        modified_selected = { fg = active_tab_fg, bg = active_tab_bg },
+        modified              = { fg = tab_fg, bg = tab_bg },
+        modified_visible      = { fg = active_tab_fg, bg = active_tab_bg },
+        modified_selected     = { fg = active_tab_fg, bg = active_tab_bg },
         -- duplicate_selected = {
         --     fg = '<colour-value-here>',
         --     bg = '<colour-value-here>'
@@ -137,9 +138,9 @@ if status_ok then
         --     bg = '<colour-value-here>'
         --     italic = true
         -- },
-        separator = { fg = bg, bg = bg },
-        separator_selected = { fg = bg, bg = active_tab_bg },
-        separator_visible = { fg = bg, bg = active_tab_bg },
+        separator             = { fg = bg, bg = bg },
+        separator_selected    = { fg = bg, bg = active_tab_bg },
+        separator_visible     = { fg = bg, bg = active_tab_bg },
 
         indicator_selected = { fg = accent, bg = active_tab_bg },
         -- pick_selected = {
