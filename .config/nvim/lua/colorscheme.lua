@@ -1,8 +1,6 @@
-vim.g.molokai_transparent = true
 -- vim.g.molokai_dev = true
-vim.g.molokai_dark_float = true
-vim.g.molokai_dark_sidebar = true
-
+vim.g.molokai_transparent       = true
+vim.g.molokai_transparent_float = true
 
 local status_ok, _ = pcall(vim.cmd, "colorscheme molokai")
 if not status_ok then

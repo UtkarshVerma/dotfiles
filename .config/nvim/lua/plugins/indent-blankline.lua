@@ -45,8 +45,7 @@ indent_blankline.setup({
     show_trailing_blankline_indent = false,
     use_treesitter = true,
     char = "▏",
-    show_current_context = true,
-    show_end_of_line = true
+    show_current_context = true
 })
 
 vim.opt.list = true
