@@ -1,7 +1,7 @@
 local keymap = vim.keymap.set
 local opts = {
-    noremap = true,
-    silent = true
+	noremap = true,
+	silent = true,
 }
 
 -- Remap leader as space key
@@ -28,12 +28,12 @@ keymap("n", "<c-]>", ">>", opts)
 keymap("n", "<c-[>", "<<", opts)
 
 -- Move text up and down and return to the same mode
-keymap("n", "<a-up>", "<cmd>m .-2<cr>==", opts)
-keymap("n", "<a-down>", "<cmd>m .+1<cr>==", opts)
-keymap("i", "<a-up>", "<cmd>m .-2<cr>==gi", opts)
-keymap("i", "<a-down>", "<cmd>m .+1<cr>==gi", opts)
-keymap("v", "<a-down>", "<cmd>m '>+1><cr>gv=gv", opts)
+keymap("n", "<a-up>", "<cmd>m .-2<cr>", opts)
+keymap("n", "<a-down>", "<cmd>m .+1<cr>", opts)
+keymap("i", "<a-up>", "<cmd>m .-2<cr>", opts)
+keymap("i", "<a-down>", "<cmd>m .+1<cr>", opts)
 keymap("v", "<a-up>", "<cmd>m '<-2<cr>gv=gv", opts)
+keymap("v", "<a-down>", "<cmd>m '>+1><cr>gv=gv", opts)
 
 -- Preserve copied content on paste
 keymap("v", "p", "_dP", opts)

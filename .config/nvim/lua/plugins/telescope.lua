@@ -46,10 +46,10 @@ local opts = {
     silent = true
 }
 
-keymap("i", "<c-p>", "<esc><cmd>lua require('telescope.builtin').find_files({ no_ignore = false, hidden = true })<cr>",
+keymap("i", "<c-p>", "<esc><cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>",
     opts)
 keymap("n", "<c-p>",
-    "<cmd>lua require('telescope.builtin').find_files({ no_ignore = false, hidden = true })<cr>", opts)
+    "<cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>", opts)
 keymap("n", "<leader>r",
     "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
 keymap("n", "<leader>b",

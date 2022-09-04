@@ -5,7 +5,7 @@ end
 
 comment.setup({
     mappings = {
-        basic = false,
+        basic = true,
         extra = false,
         extended = false
     }

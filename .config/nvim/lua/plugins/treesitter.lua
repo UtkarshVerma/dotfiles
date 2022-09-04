@@ -11,6 +11,7 @@ configs.setup({
         "rust",
         "markdown",
         "go",
+        "latex",
         "lua",
         "bash",
         "commonlisp"

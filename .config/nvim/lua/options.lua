@@ -41,7 +41,9 @@ local options = {
     termguicolors = true,
     colorcolumn = "80",
     signcolumn = "yes",
-    cursorline = true
+    cursorline = true,
+
+    updatetime = 750
 }
 
 for k, v in pairs(options) do
