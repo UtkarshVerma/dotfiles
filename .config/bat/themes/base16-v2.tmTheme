@@ -70,7 +70,7 @@
                 <key>name</key>
                 <string>String</string>
                 <key>scope</key>
-                <string>string</string>
+                <string>string,punctuation.definition.string</string>
                 <key>settings</key>
                 <dict>
                     <key>foreground</key>
@@ -81,7 +81,7 @@
                 <key>name</key>
                 <string>Punctuation</string>
                 <key>scope</key>
-                <string>punctuation.definition.string, punctuation.definition.variable, punctuation.definition.string, punctuation.definition.parameters, punctuation.definition.string, punctuation.definition.array</string>
+                <string>punctuation.definition.parameters, punctuation.definition.array</string>
                 <key>settings</key>
                 <dict>
                     <key>foreground</key>
@@ -107,7 +107,7 @@
                 <key>settings</key>
                 <dict>
                     <key>foreground</key>
-                    <string>#07000000</string>
+                    <string>#01000000</string>
                 </dict>
             </dict>
             <dict>
@@ -125,11 +125,11 @@
                 <key>name</key>
                 <string>Variables</string>
                 <key>scope</key>
-                <string>variable</string>
+                <string>variable,punctuation.definition.variable</string>
                 <key>settings</key>
                 <dict>
                     <key>foreground</key>
-                    <string>#07000000</string>
+                    <string>#05000000</string>
                 </dict>
             </dict>
             <dict>
