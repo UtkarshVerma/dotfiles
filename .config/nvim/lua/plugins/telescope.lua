@@ -54,8 +54,8 @@ keymap("n", "<leader>r",
     "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
 keymap("n", "<leader>b",
     "<cmd>lua require('telescope.builtin').buffers()<cr>", opts)
-keymap("n", "<leader>t",
-    "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
+-- keymap("n", "<leader>t",
+--     "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
 keymap("n", "<leader><leader>",
     "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
 keymap("n", "<leader>e",

@@ -25,7 +25,7 @@ keymap("n", "<leader>ca", "<cmd>Lspsaga code_action<cr>", opts)
 keymap("v", "<leader>ca", "<cmd><c-u>Lspsaga range_code_action<cr>", opts)
 
 keymap("n", "gr", "<cmd>Lspsaga rename<cr>", opts)
-keymap("n", "gd", "<cmd>Lspsaga preview_definition<cr>", opts)
+keymap("n", "gd", "<cmd>Lspsaga peek_definition<cr>", opts)
 
 keymap("n", "<leader>cd", "<cmd>Lspsaga show_line_diagnostics<cr>", opts)
 keymap("n", "<leader>cd", "<cmd>Lspsaga show_cursor_diagnostics<cr>", opts)

@@ -14,3 +14,6 @@
 	insteadOf = https://github.com/
 [safe]
 	directory = /media/stuff/Software/QEMU/Windows 10
+	directory = /media/stuff/Academics/Notes/vimwiki
+	directory = /media/stuff/Academics/Resume/utkarshverma.github.io
+	directory = /media/stuff/Academics/Resume/hugo-yami

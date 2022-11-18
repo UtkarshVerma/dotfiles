@@ -2,6 +2,7 @@
 
 alias \
     ls="ls --color=auto" \
+    ll="ls -l" \
     grep="grep --color=auto" \
     fgrep="fgrep --color=auto" \
     egrep="egrep --color=auto" \

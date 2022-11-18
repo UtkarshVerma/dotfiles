@@ -13,7 +13,9 @@ local plugins = {
     "packer",
     "telescope",
     "treesitter",
+    "vimtex",
     "vimwiki",
+    "vim-table-mode",
     "web-devicons"
 }
 

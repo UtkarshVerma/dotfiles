@@ -4,7 +4,7 @@ if not status_ok then
 end
 
 null_ls.setup({
-	on_init = function(client, _)
+    on_init = function(client, _)
 		client.offset_encoding = "utf-8"
 	end,
 	sources = {

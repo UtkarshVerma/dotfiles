@@ -1,8 +1,11 @@
 local keymap = vim.keymap.set
 local opts = {
-	noremap = true,
-	silent = true,
+    noremap = true,
+    silent = true,
 }
+
+-- Save with Ctrl+s
+keymap({ "n", "v", "i" }, "<c-s>", "<cmd>w<cr>", opts)
 
 -- Remap leader as space key
 keymap("", "<space>", "<nop>", opts)
@@ -22,6 +25,7 @@ keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
 -- Single line indentation
+keymap({ "n", "v", "i" }, "<esc>", "<esc>", opts) -- This is necessary as <c-]> is remapped
 keymap("i", "<c-]>", "<c-t>", opts)
 keymap("i", "<c-[>", "<c-d>", opts)
 keymap("n", "<c-]>", ">>", opts)
