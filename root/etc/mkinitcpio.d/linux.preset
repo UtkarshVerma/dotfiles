@@ -6,13 +6,11 @@ ALL_microcode=(/boot/*-ucode.img)
 
 PRESETS=('default' 'fallback')
 
-#default_config="/etc/mkinitcpio.conf"
-default_image="/boot/initramfs-linux.img"
-default_efi_image="/boot/EFI/Linux/archlinux-linux.efi"
+#default_image="/boot/initramfs-linux.img"
+default_uki="/boot/EFI/Linux/archlinux-linux.efi"
 default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
 
-#fallback_config="/etc/mkinitcpio.conf"
-fallback_image="/boot/initramfs-linux-fallback.img"
-fallback_efi_image="/boot/EFI/Linux/archlinux-linux-fallback.efi"
+#fallback_image="/boot/initramfs-linux-fallback.img"
+fallback_uki="/boot/EFI/Linux/archlinux-linux-fallback.efi"
 fallback_options="-S autodetect --splash /usr/share/systemd/bootctl/splash-arch.bmp"
 
