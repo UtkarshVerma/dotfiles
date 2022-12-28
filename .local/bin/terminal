@@ -33,9 +33,9 @@ while [ -n "$args" ]; do
             shiftArgs
             case "$TERMINAL" in
                 alacritty)
-                    columns=${1%x*}
-                    lines=${1##*x}
-                    set -- "$@" "-o" "window.dimensions.columns=$columns"
+                    columns=${arg%x*}
+                    lines=${arg##*x}
+                    set -- "$@" "-o" "window.dimensions.columns=$columns" \
                         "-o" "window.dimensions.lines=$lines"
                     ;;
                 foot) set -- "$@" "-W" "$arg" ;;
