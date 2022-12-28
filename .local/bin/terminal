@@ -1,41 +1,51 @@
 #!/bin/sh
-
 # This script wraps around my frequently used terminals to provide a uniform
 # interface.
 
-while [ $# -gt 0 ]; do
-    case $1 in
+shiftArgs() {
+    arg="${args%%"$IFS"*}"
+    args="${args#"$arg$IFS"}"
+}
+
+IFS="
+"
+args="$*$IFS"
+set --
+while [ -n "$args" ]; do
+    shiftArgs
+    case "$arg" in
         -n|--name)
-            shift;
-            case $TERMINAL in
-                alacritty) args="$args --class '$1',Alacritty" ;;
-                foot) args="$args -a '$1'" ;;
-                st) args="$args -n '$1'" ;;
+            shiftArgs
+            case "$TERMINAL" in
+                alacritty) set -- "$@" "--class" "$arg,Alacritty" ;;
+                foot) set -- "$@" "-a" "$arg" ;;
+                st) set -- "$@" "-n" "$arg" ;;
             esac
             ;;
         -d|--dir)
-            shift;
-            case $TERMINAL in
-                alacritty|foot) args="$args --working-directory '$1'" ;;
-                st) args="$args -d '$1'" ;;
+            shiftArgs
+            case "$TERMINAL" in
+                alacritty|foot) set -- "$@" "--working-directory" "$arg" ;;
+                st) set -- "$@" "-d" "$arg" ;;
             esac
             ;;
         -g)
-            shift;
-            case $TERMINAL in
+            shiftArgs
+            case "$TERMINAL" in
                 alacritty)
                     columns=${1%x*}
                     lines=${1##*x}
-                    args="$args -o window.dimensions.columns=$columns
-                        -o window.dimensions.lines=$lines"
+                    set -- "$@" "-o" "window.dimensions.columns=$columns"
+                        "-o" "window.dimensions.lines=$lines"
                     ;;
-                foot) args="$args -W $1" ;;
-                st) args="$args -g $1" ;;
+                foot) set -- "$@" "-W" "$arg" ;;
+                st) set -- "$@" "-g" "$arg" ;;
             esac
             ;;
-        *) args="$args '$1'"
+
+        *) set -- "$@" "$arg"
     esac
-    shift
 done
 
-eval $TERMINAL $args
+[ -z "$1" ] && exec "$TERMINAL"
+exec "$TERMINAL" "$@"
