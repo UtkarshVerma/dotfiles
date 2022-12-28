@@ -1,10 +1,9 @@
-#!/usr/bin/bash
-#
+#!/bin/sh
 #   Use rofi to pick emoji because that's what this
 #   century is about apparently...
 #
 #   Requirements:
-#     rofi, xclip, curl, xmllint
+#     rofi, xclip/wl-copy curl, xmllint
 #
 #   Usage:
 #     1. Download all emoji
@@ -24,86 +23,67 @@
 #     https://gist.github.com/Tadly/0741821d3694deaec1ee454a95c591fa
 
 # Where to save the emojis file.
-EMOJI_FILE="$HOME/.cache/emojis.txt"
+EMOJI_FILE="$XDG_CACHE_HOME/emojis"
 
 # Urls of emoji to download.
 # You can remove what you don't need.
-URLS=(
-    'https://emojipedia.org/people/'
-    'https://emojipedia.org/nature/'
-    'https://emojipedia.org/food-drink/'
-    'https://emojipedia.org/activity/'
-    'https://emojipedia.org/travel-places/'
-    'https://emojipedia.org/objects/'
-    'https://emojipedia.org/symbols/'
-    'https://emojipedia.org/flags/'
-)
-
-
-notify() {
-    if  [ "$(command -v notify-send)" ]; then
-        notify-send "$1" "$2"
-    fi
-}
-
+URLS="https://emojipedia.org/people/ \
+    https://emojipedia.org/nature/ \
+    https://emojipedia.org/food-drink/ \
+    https://emojipedia.org/activity/ \
+    https://emojipedia.org/travel-places/ \
+    https://emojipedia.org/objects/ \
+    https://emojipedia.org/symbols/ \
+    https://emojipedia.org/flags/"
 
 download() {
-    notify `basename "$0"` 'Downloading all emoji for your pleasure'
+    notify-send "$(basename "$0")" "Downloading all emojis for your pleasure"
+    echo > "$EMOJI_FILE"
 
-    echo "" > "$EMOJI_FILE"
-
-    for url in "${URLS[@]}"; do
+    for url in $URLS; do
         echo "Downloading: $url"
+        local emojis
 
         # Download the list of emoji and remove all the junk around it
-        emojis=$(curl -s "$url" | \
-                 xmllint --html \
-                         --xpath '//ul[@class="emoji-list"]' - 2>/dev/null)
-
-        # Get rid of starting/closing ul tags
-        emojis=$(echo "$emojis" | head -n -1 | tail -n +1)
-
-        # Extract the emoji and its description
-        emojis=$(echo "$emojis" | \
-                 sed -rn 's/.*<span class="emoji">(.*)<\/span> (.*)<\/a><\/li>/\1 \2/p')
+        emojis="$(curl -s "$url" |
+                    xmllint --html --xpath '//span[@class="emoji"]/..' - 2>/dev/null |
+                    sed -rn 's|.*<span class="emoji">(.*)</span> (.*)</a>.*|\1 \2|p')"
 
         echo "$emojis" >> "$EMOJI_FILE"
     done
 
-    notify `basename "$0"` "We're all set!"
+    notify-send "$(basename "$0")" "We're all set!"
 }
 
-
 display() {
-    emoji=$(cat "$EMOJI_FILE" | grep -v '#' | grep -v '^[[:space:]]*$')
-    line=$(echo "$emoji" | rofi -dmenu -i -p emoji -no-show-icons $@)
-    exit_code=$?
-
-    line=($line)
-
-    if [ $exit_code == 0 ]; then
-        emoji=${line[0]}
+    local clipCmd emoji emojis line
+    emojis="$(grep -v '#' < "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
+    line=$(echo "$emojis" | rofi -dmenu -i -p emoji -no-show-icons)
+    if [ $? -eq 0 ]; then
+        emoji="${line%%[[:space]]*}"
         notify-send "'$emoji' copied to clipboard."
 
-        clipCmd="xclip -sel c"
+        local clipCmd="xclip -sel c"
         [ "$XDG_SESSION_TYPE" = wayland ] && clipCmd="wl-copy"
-        echo -n "${line[0]}" | $clipCmd
+        echo -n "$emoji" | $clipCmd
     fi
 }
 
 # Some simple argparsing
-if [[ "$1" =~ -D|--download ]]; then
-    download
-    exit 0
-elif [[ "$1" =~ -h|--help ]]; then
-    echo "usage: $0 [-D|--download]"
-    exit 0
-fi
+case "$1" in
+    -D|--download)
+        download
+        exit
+    ;;
+    -h|--help)
+        echo "usage: $0 [-D|--download]"
+        exit
+    ;;
+esac
 
 # Download all emoji if they don't exist yet
 if [ ! -f "$EMOJI_FILE" ]; then
     download
 fi
 
-# display displays :)
 display

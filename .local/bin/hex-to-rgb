@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 j=2
 color="$(echo $1 | tr '[:lower:]' '[:upper:]')"
