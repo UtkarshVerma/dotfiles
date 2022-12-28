@@ -82,3 +82,5 @@ fi
 if [[ -f "$XDG_CONFIG_HOME/shellrc" ]]; then
     source "$XDG_CONFIG_HOME/shellrc"
 fi
+
+PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/"~"}"'

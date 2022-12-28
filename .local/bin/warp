@@ -6,13 +6,13 @@ case "$1" in
     on)
         if [ "$serviceStatus" != "active" ]; then
             systemctl start warp-svc
-            sleep .1
+            sleep 1
         fi
-        warp-cli connect 2>&1 >/dev/null
+        warp-cli connect
     ;;
     off)
         if [ "$serviceStatus" = "active" ]; then
-            warp-cli disconnect 2>&1 >/dev/null
+            warp-cli disconnect
             systemctl stop warp-svc
         fi
     ;;
@@ -21,10 +21,3 @@ case "$1" in
         exit 1
     ;;
 esac
-
-sleep .5
-if curl -s https://www.cloudflare.com/cdn-cgi/trace/ | grep -q warp=on; then
-    echo "WARP tunnel active"
-else
-    echo "WARP tunnel inactive"
-fi

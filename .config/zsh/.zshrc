@@ -81,30 +81,31 @@ source "$ZSH_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 # Use emacs key bindings
 bindkey -e
 
-bindkey '^[[5~' up-line-or-history          # PageUp: Up a line of history
-bindkey '^[[6~' down-line-or-history        # PageDown: Down a line of history
+bindkey '\e[5~' up-line-or-history          # PageUp: Up a line of history
+bindkey '\e[6~' down-line-or-history        # PageDown: Down a line of history
 
 # Start typing + Up-Arrow: fuzzy find history forward
 autoload -U up-line-or-beginning-search
 zle -N up-line-or-beginning-search
-bindkey '^[[A' up-line-or-beginning-search
+bindkey '\e[A' up-line-or-beginning-search
 
 # Start typing + Down-Arrow: fuzzy find history backward
 autoload -U down-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey '^[[B' down-line-or-beginning-search
 
-bindkey '^[[H' beginning-of-line        # Home: Go to beginning of line
-bindkey '^[[4~' end-of-line				# End: Go to end of line
-bindkey '^[[Z' reverse-menu-complete	# Shift-Tab: move through the completion menu backwards
-bindkey '^?' backward-delete-char		# Backspace: delete backward
-bindkey '^[[3~' delete-char				# Delete: delete forward
-bindkey '^[[M' kill-word				# Ctrl-Delete: delete whole forward-word
-bindkey '^[[1;5C' forward-word			# Ctrl-RightArrow: move forward one word
-bindkey '^[[1;5D' backward-word			# Ctrl-LeftArrow: move backward one word
+bindkey '\e[H' beginning-of-line        # Home: Go to beginning of line
+bindkey '\e[4~' end-of-line				# End: Go to end of line
+bindkey '\e[Z' reverse-menu-complete	# Shift-Tab: move through the completion menu backwards
+bindkey '\b' backward-delete-char		# Backspace: delete backward
+bindkey '\e[3~' delete-char				# Delete: delete forward
+bindkey '\e[M' kill-word				# Ctrl-Delete: delete whole forward-word
+bindkey '\e[127;5u' backward-kill-word  # Ctrl-Backspace: delete whole word backward
+bindkey '\e[1;5C' forward-word			# Ctrl-RightArrow: move forward one word
+bindkey '\e[1;5D' backward-word			# Ctrl-LeftArrow: move backward one word
 
 bindkey '\ew' kill-region				            # Esc-w: Kill from the cursor to the mark
-bindkey '^r' history-incremental-search-backward	# Ctrl-r: Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
+bindkey '\C-r' history-incremental-search-backward	# Ctrl-r: Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 bindkey ' ' magic-space					            # Space: don't do history expansion
 
 # Ctrl-e: Edit the current command line in $EDITOR
@@ -116,10 +117,10 @@ bindkey '\C-e' edit-command-line
 case "$FILE_MANAGER" in
     lf*)
         (( $+functions[lfcd] )) &>/dev/null &&
-            bindkey -s '\C-o' 'lfcd\C-m'
+            bindkey -s '\C-o' 'lfcd\r'
         ;;
     nnn*)
         (( $+functions[nnncd] )) &>/dev/null &&
-            bindkey -s '\C-o' 'nnncd\C-m'
+            bindkey -s '\C-o' 'nnncd\r'
         ;;
 esac

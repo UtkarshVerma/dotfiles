@@ -10,7 +10,7 @@ fi
 setwall -q -n -t monokai
 
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-picom --experimental-backends &
+picom &
 mpd &
 unclutter &
 parcellite -n &

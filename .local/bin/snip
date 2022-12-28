@@ -22,19 +22,19 @@ snipTo() {
 	fi
 
     shift
-    $snipCmd -g "$*" "$(echo $output | sed "s|~|$HOME|g")" | $clipCmd
+    $snipCmd -g "$*" "$(echo "$output" | sed "s|~|$HOME|g")" | $clipCmd
 
 	[ $? -ne 0 ] && return
-	notify-send -i screenshot "Snip" "$message" -t 3000
+	notify-send -i accessories-screenshot-symbolic "Snip" "$message" -t 3000
 }
 
 case "$1" in
 	full|sel)
-		sel=$(sel-area $1)
+		sel="$(sel-area "$1")"
 		if [ "$2" = "clip" ]; then
-			snipTo clip $sel
+			snipTo clip "$sel"
 		else
-			snipTo file $sel
+			snipTo file "$sel"
 		fi
 		;;
 	*)
@@ -49,17 +49,17 @@ EOF
 			"a selected area"|"a selected area (copy)")
 				sel=$(sel-area)
 				if [ "$choice" = "a selected area" ]; then
-					snipTo file $sel
+					snipTo file "$sel"
 				else
-					snipTo clip $sel
+					snipTo clip "$sel"
 				fi
 				;;
 			"full screen"|"full screen (copy)")
 				sel="$(sel-area full)"
 				if [ "$choice" = "full screen" ]; then
-					snipTo file $sel
+					snipTo file "$sel"
 				else
-					snipTo clip $sel
+					snipTo clip "$sel"
 				fi
 				;;
 		esac

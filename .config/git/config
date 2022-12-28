@@ -2,16 +2,22 @@
 	email = utkarshverma@protonmail.com
 	name = Utkarsh Verma
 	signingkey = 817656CF818EFCCC
+
 [commit]
 	gpgsign = true
+
 [pull]
 	rebase = false
+
 [gpg]
 	program = gpg2
+
 [init]
 	defaultBranch = main
-[url "git@github.com:"]
+
+[url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+
 [safe]
 	directory = /media/stuff/Software/QEMU/Windows 10
 	directory = /media/stuff/Academics/Notes/vimwiki
