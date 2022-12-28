@@ -5,7 +5,7 @@ export EDITOR="nvim"
 export BROWSER="brave"
 export READER="zathura"
 export TERMINAL="st"
-export FILE_MANAGER="nnnrun"
+export FILE_MANAGER="lfrun"
 
 case "$XDG_CURRENT_DESKTOP" in
     "sway") export STATUSBAR="i3blocks" ;;
@@ -56,12 +56,14 @@ export MATLAB_LOG_DIR="$XDG_CACHE_HOME/matlab"
 export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME/platformio"
 export PLATFORMIO_CACHE_DIR="$XDG_CACHE_HOME/platformio"
 export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
-
+export VAGRANT_HOME="$XDG_DATA_HOME/vagrant"
+export VAGRANT_ALIAS_FILE="$XDG_DATA_HOME/vagrant/aliases"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
+export _Z_DATA="$XDG_DATA_HOME/z"
 
 export TEXMFHOME="$XDG_DATA_HOME/texmf"
-export TEXMFVAR="$XDG_CACHE_HOME/texmf"
-export TEXMFCONFIG="$XDG_CONFIG_HOME/texmf"
+export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
+export TEXMFCONFIG="$XDG_CONFIG_HOME/texlive/texmf-config"
 
 export ARDUINO_DIRECTORIES_DATA="$XDG_DATA_HOME/Arduino"
 export ARDUINO_DIRECTORIES_DOWNLOADS="$ARDUINO_DIRECTORIES_DATA/staging"
@@ -86,8 +88,6 @@ export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
 
 ## Look and feel
 export QT_QPA_PLATFORMTHEME="qt5ct"
-export XCURSOR_THEME="default"
-export XCURSOR_SIZE=32
 
 ## Colorize `less`
 export LESS="-R"

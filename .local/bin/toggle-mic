@@ -1,20 +1,19 @@
 #!/bin/sh
 
 notify() {
-    icon="mic-unmuted"
+    icon="audio-input-microphone-symbolic"
     message="The microphone has been unmuted."
     if [ "$1" = "muted" ]; then
-        icon="mic-muted"
+        icon="audio-input-microphone-muted-symbolic"
         message="The microphone has been muted."
     fi
 
-    notify-send -h string:x-canonical-private-synchronous:mic -c system -i $icon Microphone "$message"
+    notify-send -h string:x-canonical-private-synchronous:mic -c system -i "$icon" Microphone "$message"
 }
 
-pactl set-source-mute @DEFAULT_SOURCE@ toggle
-[ $? -ne 0 ] && exit
+pactl set-source-mute @DEFAULT_SOURCE@ toggle || exit
 
-pkill -RTMIN+26 $STATUSBAR
+pkill -RTMIN+26 "$STATUSBAR"
 
 if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
     notify muted

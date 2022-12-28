@@ -4,7 +4,7 @@
 # to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
 
 notify() {
-	notify-send -i battery -h string:x-canonical-private-synchronous:battery "Battery" "$1" -t 4000
+	notify-send -i battery-good-symbolic -h string:x-canonical-private-synchronous:battery "Battery" "$1" -t 4000
 }
 
 case $BLOCK_BUTTON in
