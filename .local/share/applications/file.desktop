@@ -1,4 +1,5 @@
 [Desktop Entry]
-Type=Application
 Name=File Manager
-Exec=terminal -e nnn %u
+Icon=system-file-manager
+Type=Application
+Exec=terminal -e ${FILE_MANAGER} %u
