@@ -9,14 +9,19 @@ fi
 
 setwall -q -n -t monokai
 
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-picom &
-mpd &
-unclutter &
-parcellite -n &
-safeeyes -e &
-asus-fan-daemon &
-nm-applet &
+autostart="\
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+    mpd
+    picom
+    unclutter
+    parcellite -n
+    safeeyes
+    asus-fan-daemon
+    nm-applet
+    $STATUSBAR"
 
-$STATUSBAR &
-exec dwm
+echo "$autostart" | while read -r program; do
+    pidof -s "$program" || $program >"/tmp/$(basename "$program").log" 2>&1 &
+done
+
+exec dwm >/tmp/dwm.log 2>&1

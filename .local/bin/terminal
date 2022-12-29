@@ -3,12 +3,11 @@
 # interface.
 
 shiftArgs() {
-    arg="${args%%"$IFS"*}"
+    arg="${args%%$IFS*}"
     args="${args#"$arg$IFS"}"
 }
 
-IFS="
-"
+IFS="$(printf '\nx')" && IFS="${IFS%x}";
 args="$*$IFS"
 set --
 while [ -n "$args" ]; do
@@ -47,5 +46,5 @@ while [ -n "$args" ]; do
     esac
 done
 
-[ -z "$1" ] && exec "$TERMINAL"
+[ $# -eq 1 ] && exec "$TERMINAL"
 exec "$TERMINAL" "$@"
