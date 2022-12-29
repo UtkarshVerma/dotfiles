@@ -135,11 +135,8 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
     export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 fi
 
-# Start gnome-keyring-daemon
-if [ -z "$SSH_AUTH_SOCK" ]; then
-    eval "$(gnome-keyring-daemon --start 2>/dev/null)"
-    export SSH_AUTH_SOCK
-fi
-
-# Use dbus session bus created by systemd
+# Bus address used by dbus-broker user service on Arch
 export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+
+# Authentication socket used by the gnome-keyring-daemon user service on Arch
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/keyring/ssh"
