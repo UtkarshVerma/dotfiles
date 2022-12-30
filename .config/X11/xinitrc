@@ -9,8 +9,8 @@ fi
 
 setwall -q -n -t monokai
 
+# mpd is started by default by systemd
 autostart="\
-    mpd --no-daemon
     picom
     unclutter
     parcellite -n
@@ -20,7 +20,7 @@ autostart="\
     $STATUSBAR"
 
 echo "$autostart" | while read -r program; do
-    pidof -s "$program" || $program >"/tmp/$(basename "$program").log" 2>&1 &
+    pidof -s "${program%%[[:space:]]*}" || $program >"/tmp/$(basename "$program").log" 2>&1 &
 done
 
 exec dwm >/tmp/dwm.log 2>&1
