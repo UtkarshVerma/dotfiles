@@ -11,10 +11,6 @@ set previewer ~/.config/lf/preview
 set autoquit
 set wrapscroll
 
-cmd startup &{{
-    printf "\033[22t" >/dev/tty     # Cache current window title
-}}
-
 # Custom commands
 cmd on-cd &{{
     # '&' commands run silently in background (which is what we want here),
@@ -118,7 +114,6 @@ cmd bookmark_create ${{
     echo $PWD > $LF_BOOKMARK_PATH/$ans
 }}
 
-startup
 on-cd
 
 map <c-f> $lf -remote "send $id select \"$(fzf)\""
