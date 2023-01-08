@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # This script simplifies dropdown windows in Hyprland and Sway.
 # Shows/hides a scratchpad of a given name, if it doesn't exist, creates it.
 # Usage:

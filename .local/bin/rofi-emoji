@@ -60,7 +60,7 @@ display() {
     emojis="$(grep -v '#' < "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
     line=$(echo "$emojis" | rofi -dmenu -i -p emoji -no-show-icons)
     if [ $? -eq 0 ]; then
-        emoji="${line%%[[:space]]*}"
+        emoji="${line%%[[:space:]]*}"
         notify-send "'$emoji' copied to clipboard."
 
         local clipCmd="xclip -sel c"

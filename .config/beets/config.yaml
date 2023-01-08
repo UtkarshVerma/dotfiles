@@ -1,14 +1,31 @@
+include:
+  - secrets.yaml
+
 plugins:
-  - mpdstats
-  - fetchart
-  - discogs
-  - scrub
+  # - discogs
+  - spotify
+  # - fromfilename
   - fetchart
   - embedart
-  - duplicates
   - lyrics
-directory: ~/Music/MP3s
-library: ~/.local/share/beets/library.db
+  # - lastgenre
+  # - mpdstats
+  - duplicates
+  - scrub
+directory: ~/music
+library: ~/.cache/beets/library.db
+
+spotify:
+  source_weight: 0.0
+
+musicbrainz:
+  enabled: no
+
+lyrics:
+  sources:
+    - lyricwiki
+    - lyrics.com
+    - musixmatch
 
 import:
   move: yes

@@ -11,12 +11,20 @@ set previewer ~/.config/lf/preview
 set autoquit
 set wrapscroll
 
+cmd startup &{{
+    printf "\033[22t" >/dev/tty     # Cache current window title
+}}
+
 # Custom commands
 cmd on-cd &{{
     # '&' commands run silently in background (which is what we want here),
     # but are not connected to stdout.
     # To make sure our escape sequence still reaches stdout we pipe it to /dev/tty
-    printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
+    printf "\033]0;$(pwd | sed "s|$HOME|~|") - lf\007" >/dev/tty
+}}
+
+cmd on-quit &{{
+    printf "\033[23t" >/dev/tty   # Restore cached window title
 }}
 
 cmd open ${{
@@ -110,7 +118,7 @@ cmd bookmark_create ${{
     echo $PWD > $LF_BOOKMARK_PATH/$ans
 }}
 
-# run on-cd once on launch
+startup
 on-cd
 
 map <c-f> $lf -remote "send $id select \"$(fzf)\""

@@ -11,7 +11,9 @@ setwall -q -n -t monokai
 
 # mpd is started by default by systemd
 autostart="\
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
     picom
+    mpd --no-daemon
     unclutter
     parcellite -n
     safeeyes
@@ -20,7 +22,9 @@ autostart="\
     $STATUSBAR"
 
 echo "$autostart" | while read -r program; do
-    pidof -s "${program%%[[:space:]]*}" || $program >"/tmp/$(basename "$program").log" 2>&1 &
+    process="${program%%[[:space:]]*}"
+    process="${process##*/}"
+    pidof -s "$process" || $program >"/tmp/$process.log" 2>&1 &
 done
 
 exec dwm >/tmp/dwm.log 2>&1

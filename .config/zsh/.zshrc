@@ -2,35 +2,30 @@
 #-------------------------------------------------------------------------------
 # Initialize stuff
 #-------------------------------------------------------------------------------
-# History file
-HISTFILE="$XDG_STATE_HOME/zsh/history"
-HISTSIZE=10000
-SAVEHIST=10000
-[ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
-
-export GPG_TTY=$TTY
-
+## Instant prompt
 if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-## Append commands to history after execution
-setopt INC_APPEND_HISTORY
+## History file
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+HISTSIZE=10000000
+SAVEHIST=10000000
+[ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
-setopt SHARE_HISTORY
-setopt HIST_IGNORE_DUPS
-setopt HIST_FIND_NO_DUPS
+export GPG_TTY="$TTY"
 
 ## Initialize completions
 autoload -U compinit
-fpath=($XDG_DATA_HOME/zsh/completions $fpath)
+fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+_comp_options+=(globdots)       # Include hidden files
 
-# Retain scrollback history on Ctrl+l
-if [[ $TERM =~ "^foot" ]]; then
+## Retain scrollback history on Ctrl+l
+if [[ "$TERM" =~ "^foot" ]]; then
     clear-screen-keep-sb() {
         printf "%$((LINES-1))s" | tr ' ' '\n'
         zle .clear-screen
@@ -39,41 +34,39 @@ if [[ $TERM =~ "^foot" ]]; then
 fi
 
 #-------------------------------------------------------------------------------
-# Install plugins if not present
+# Plugins
 #-------------------------------------------------------------------------------
-ZSH_PLUGINS="$XDG_DATA_HOME/zsh/plugins"
-ZSH_THEMES="$XDG_DATA_HOME/zsh/themes"
+plugins=(
+    "https://github.com/romkatv/powerlevel10k"
+    "https://github.com/zsh-users/zsh-autosuggestions"
+    "https://github.com/zsh-users/zsh-syntax-highlighting"
+)
 
-if [[ ! -d "$ZSH_THEMES/powerlevel10k" ]]; then
-	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-	"$ZSH_THEMES/powerlevel10k"
-fi
+for plugin in $plugins; do
+    basename="${plugin##*/}"
+    dir="$XDG_DATA_HOME/zsh/plugins/$basename"
+    if [[ ! -d "$dir" ]]; then
+        git clone --depth=1 "$plugin" "$dir"
+    fi
 
-if [[ ! -d "$ZSH_PLUGINS/zsh-syntax-highlighting" ]]; then
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting \
-	"$ZSH_PLUGINS/zsh-syntax-highlighting"
-fi
-
-if [[ ! -d "$ZSH_PLUGINS/zsh-autosuggestions" ]]; then
-	git clone https://github.com/zsh-users/zsh-autosuggestions \
-	"$ZSH_PLUGINS/zsh-autosuggestions"
-fi
+    source "$dir/$basename".(zsh|zsh-theme)
+done
+unset plugins plugin basename dir
 
 #-------------------------------------------------------------------------------
-# Source initialization scripts
+# Source configurations
 #-------------------------------------------------------------------------------
-## Source powerlevel10k
-source "$ZSH_THEMES/powerlevel10k/powerlevel10k.zsh-theme"
-source "$ZDOTDIR/.p10k.zsh"
+configs=(
+    "$XDG_CONFIG_HOME/shellrc"  # common shell config
+    "$ZDOTDIR/.p10k.zsh"        # p10k config
+)
 
-## Source zsh-autosuggestions
-source "$ZSH_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
-
-## Source zsh-syntax-highlighting
-source "$ZSH_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-
-## Source common shell configurations
-[[ -f "$XDG_CONFIG_HOME/shellrc" ]] && source "$XDG_CONFIG_HOME/shellrc"
+for config in $configs; do
+    if [[ -f "$config" ]]; then
+        source "$config"
+    fi
+done
+unset configs config
 
 #-------------------------------------------------------------------------------
 # Key bindings
