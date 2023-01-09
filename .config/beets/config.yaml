@@ -2,16 +2,15 @@ include:
   - secrets.yaml
 
 plugins:
-  # - discogs
   - spotify
-  # - fromfilename
+  - fromfilename
   - fetchart
   - embedart
   - lyrics
-  # - lastgenre
-  # - mpdstats
+  - lastgenre
   - duplicates
   - scrub
+
 directory: ~/music
 library: ~/.cache/beets/library.db
 
@@ -26,6 +25,9 @@ lyrics:
     - lyricwiki
     - lyrics.com
     - musixmatch
+
+paths:
+  singleton: $artist/$title
 
 import:
   move: yes
