@@ -17,6 +17,7 @@
 !.config/ncmpcpp/{bindings,config}
 
 .config/nvim/plugin
+.config/nvim/lazy-lock.json
 
 .config/safeeyes/session.json
 

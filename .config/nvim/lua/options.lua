@@ -1,49 +1,42 @@
 local options = {
-    fileencoding = "utf-8",
+    hlsearch       = false, -- Don't highlight matches for previous search
+    mouse          = "a", -- Enable mouse mode
+    breakindent    = true, -- Enable break indent
+    undofile       = true, -- Save undo history
+    updatetime     = 250, -- Decrease update time
+    number         = true, -- Enable line numbers
+    relativenumber = true, -- Enable relative numbers
+    signcolumn     = "yes", -- Enable sign column
+
+    -- Case insensitive searching UNLESS /C or capital in search
+    ignorecase = true,
+    smartcase = true,
+
     backup = false,
     swapfile = false,
     clipboard = "unnamedplus", -- Use the system clipboard
 
-    hlsearch = false, -- Don't highlight matches for previous search
-    ignorecase = true, -- Do case-insensitive search
-    smartcase = true, -- Do case-sensitive search if query has upper-case letters
-
-    mouse = "a", -- Enable mouse support
     showmode = false,
-
-    number = true,
-    relativenumber = true,
     errorbells = false,
-
-    -- Force splits right and below
-    splitbelow = true,
-    splitright = true,
-
-    -- Preserve undo history for files
-    undodir = "/tmp/nvim-undo",
-    undofile = true,
-
-    -- Set tab width to 4 and expand tabs to spaces
-    expandtab = true,
-    tabstop = 4,
-    softtabstop = 4,
-    shiftwidth = 4,
-
-    -- Indent following line based on current indentation
-    autoindent = true,
-    smartindent = true,
 
     -- Set scroll offset to 8 lines/characters
     scrolloff = 8,
     sidescrolloff = 8,
 
+    -- Show non-printable characters for ease of use
+    showbreak = "↪ ",
+    list = true,
+    listchars = "tab:» ,eol:↴,extends:⟩,precedes:⟨,nbsp:␣,trail:·",
+
+    tabstop = 4,
+    shiftwidth = 4,
+    expandtab = true,
+
     wrap = false,
+    title = true,
     termguicolors = true,
     colorcolumn = "80",
-    signcolumn = "yes",
     cursorline = true,
-
-    updatetime = 750
 }
 
 for k, v in pairs(options) do

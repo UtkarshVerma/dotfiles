@@ -1,65 +1,43 @@
-local status_ok, telescope = pcall(require, "telescope")
-if not status_ok then
-    return
-end
-
-local actions = require("telescope.actions")
-
-function telescope_buffer_dir()
-    return vim.fn.expand("%:p:h")
-end
-
-local fb_actions = telescope.extensions.file_browser.actions
-
-telescope.setup({
-    defaults = {
-        mappings = {
-            i = {
-                ["<esc>"] = actions.close
-            }
-        },
-        extensions = {
-            file_browser = {
-                theme = "dropdown",
-                -- use telescope instead of netrw
-                hijack_netrw = true,
+return {
+    "nvim-telescope/telescope.nvim",
+    branch = "0.1.x",
+    build = function()
+        pcall(require('nvim-treesitter.install').update { with_sync = true })
+    end,
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        {
+            "nvim-telescope/telescope-fzf-native.nvim",
+            build = "make",
+            cond = vim.fn.executable("make") == 1
+        }
+    },
+    cmd = "Telescope",
+    keys = {
+        { "<leader>?", "<cmd>Telescope oldfiles<cr>", desc = "[?] Find recently opened files" },
+        { "<leader><space>", "<cmd>Telescope buffers<cr>", desc = "[ ] Find existing buffers" },
+        { "<leader>/", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "[/] Fuzzily search in current buffer]" },
+        { "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "[S]earch [F]iles" },
+        { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "[S]earch [H]elp" },
+        { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "[S]earch current [W]ord" },
+        { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "[S]earch by [G]rep" },
+        { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "[S]earch [D]iagnostics" }
+    },
+    config = function()
+        local telescope = require("telescope")
+        local actions = require("telescope.actions")
+        local opts = {
+            defaults = {
                 mappings = {
-                    ["i"] = {
-                        ["<c-w>"] = function() vim.cmd("normal vbd") end
-                    },
-                    ["n"] = {
-                        ["N"] = fb_actions.create,
-                        ["h"] = fb_actions.goto_parent_dir,
-                        ["/"] = function() vim.cmd("startinsert") end
+                    i = {
+                        ["<c-u>"] = false,
+                        ["<c-d>"] = false,
+                        ["<esc>"] = actions.close
                     }
-                }
+                },
             }
         }
-    }
-})
-
-telescope.load_extension("file_browser")
-
-local keymap = vim.keymap.set
-local opts = {
-    noremap = true,
-    silent = true
+        telescope.load_extension("fzf")
+        telescope.setup(opts)
+    end
 }
-
-keymap("i", "<c-p>", "<esc><cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>",
-    opts)
-keymap("n", "<c-p>",
-    "<cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>", opts)
-keymap("n", "<leader>r",
-    "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
-keymap("n", "<leader>b",
-    "<cmd>lua require('telescope.builtin').buffers()<cr>", opts)
--- keymap("n", "<leader>t",
---     "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
-keymap("n", "<leader><leader>",
-    "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
-keymap("n", "<leader>e",
-    "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
-keymap("n", "<leader>s",
-    "<cmd>lua require('telescope').extensions.file_browser.file_browser({ path = '%:p:h', cwd = telescope_buffer_dir(), repect_git_ignore = false, hidden = true, grouped = true, previewer = false, initial_mode = 'normal', layout_config = { height = 40} })<cr>"
-    , opts)
