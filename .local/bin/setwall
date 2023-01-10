@@ -24,7 +24,7 @@ colorSway() {
 QUIET=0
 RELOAD=1
 LIGHT=0
-[ "$XDG_CURRENT_DESKTOP" = sway ] && ALPHA=90 || ALPHA=80
+ALPHA=90
 while [ $# -gt 0 ]; do
     case $1 in
         -q|--quiet) QUIET=1 ;;

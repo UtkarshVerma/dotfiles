@@ -9,3 +9,6 @@
 
 # Use C++ syntax for Arduino .ino files
 --map-syntax "*.ino:C++"
+
+# Use CSS syntax for rofi stylesheets
+--map-syntax "*.rasi:CSS"
