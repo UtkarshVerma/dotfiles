@@ -39,6 +39,11 @@ return {
 				completion = {
 					completeopt = "menuone,noselect",
 				},
+				window = {
+					documentation = {
+						winhighlight = "NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder",
+					},
+				},
 				snippet = {
 					expand = function(args)
 						luasnip.lsp_expand(args.body)
@@ -52,7 +57,7 @@ return {
 						behavior = cmp.ConfirmBehavior.Replace,
 						select = false,
 					}),
-					["<Tab>"] = cmp.mapping(function(fallback)
+					["<tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
 						-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()

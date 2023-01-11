@@ -1,7 +1,7 @@
 local keymap = vim.keymap.set
 local opts = {
-    noremap = true,
-    silent = true,
+	noremap = true,
+	silent = true,
 }
 
 -- Remap leader as space key

@@ -105,16 +105,15 @@ return {
 				"flake8",
 			},
 		},
-		config = function(plugin, opts)
+		config = function(_, opts)
 			require("mason").setup(opts)
 			local mr = require("mason-registry")
 			for _, tool in ipairs(opts.ensure_installed) do
 				local p = mr.get_package(tool)
-				p:install()
 				if not p:is_installed() then
+					p:install()
 				end
 			end
 		end,
 	},
-	{ "j-hui/fidget.nvim", opts = { text = { spinner = "dots" }, window = { blend = 0 } } },
 }

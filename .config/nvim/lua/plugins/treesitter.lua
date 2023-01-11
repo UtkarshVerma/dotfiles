@@ -5,6 +5,7 @@ return {
 	dependencies = {
 		"JoosepAlviste/nvim-ts-context-commentstring",
 		"p00f/nvim-ts-rainbow",
+		"nvim-treesitter/playground",
 	},
 	opts = {
 		sync_install = false,
