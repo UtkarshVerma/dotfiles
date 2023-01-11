@@ -13,6 +13,7 @@ dmenu.midbackground: {background}{alpha.alpha_hex}
 
 !! st
 *.alpha: {alpha.alpha_dec}
+*.cursorColor: {cursor}
 
 !! slock
 slock.locked: {color0}
