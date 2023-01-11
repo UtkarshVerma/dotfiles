@@ -57,9 +57,9 @@ return {
 				{
 					"diff",
 					symbols = {
-						added = icons.git.LineAdded,
-						modified = icons.git.LineModified,
-						removed = icons.git.LineRemoved,
+						added = icons.git.added,
+						modified = icons.git.modified,
+						removed = icons.git.removed,
 					},
 				},
 			},
