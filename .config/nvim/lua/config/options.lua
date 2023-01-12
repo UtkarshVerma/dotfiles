@@ -39,6 +39,7 @@ vim.opt.tabstop = 4 -- Number of spaces tabs count for
 vim.opt.termguicolors = true -- True color support
 vim.opt.timeoutlen = 300
 vim.opt.undofile = true
+vim.opt.undodir = "/tmp/nvim-undodir"
 vim.opt.undolevels = 10000
 vim.opt.updatetime = 200 -- save swap file and trigger CursorHold
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode

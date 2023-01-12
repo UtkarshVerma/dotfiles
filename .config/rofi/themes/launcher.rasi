@@ -57,5 +57,5 @@ element-text {
 	vertical-align: 0.6;
 }
 element selected {
-	background-color: #ffffff04;
+	background-color: @selection;
 }

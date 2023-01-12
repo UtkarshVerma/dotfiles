@@ -18,4 +18,5 @@
 
     background: {background.rgba};
     foreground: {foreground};
+    selection: {foreground}06;
 }}
