@@ -1,62 +1,69 @@
+-- Map leader to space
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.opt.tabstop = 4 -- Number of spaces tabs count for
-vim.opt.shiftwidth = 4 -- Size of an indent
-vim.opt.expandtab = true -- Expand tabs to spaces
-vim.opt.autowrite = true -- enable auto write
-vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
-vim.opt.cmdheight = 1
-vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
-vim.opt.confirm = true -- confirm to save changes before exiting modified buffer
-vim.opt.cursorline = true -- Enable highlighting of the current line
-vim.opt.formatoptions = "jcroqlnt" -- tcqj
-vim.opt.grepformat = "%f:%l:%c:%m"
-vim.opt.grepprg = "rg --vimgrep"
-vim.opt.hidden = true -- Enable modified buffers in background
-vim.opt.ignorecase = true -- Ignore case
-vim.opt.inccommand = "nosplit" -- preview incremental substitute
-vim.opt.joinspaces = false -- No double spaces with join after a dot
-vim.opt.laststatus = 0
-vim.opt.list = true -- Show invisible characters
-vim.opt.listchars = "tab:» ,eol:↴,nbsp:␣,trail:·"
-vim.opt.mouse = "a" -- enable mouse mode
-vim.opt.number = true -- Print line number
-vim.opt.pumblend = 0 -- Popup blend
-vim.opt.pumheight = 10 -- Maximum number of entries in a popup
-vim.opt.relativenumber = true -- Relative line numbers
-vim.opt.scrolloff = 4 -- Lines of context
-vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
-vim.opt.shiftround = true -- Round indent
-vim.opt.showmode = false -- dont show mode since we have a statusline
-vim.opt.sidescrolloff = 8 -- Columns of context
-vim.opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
-vim.opt.smartcase = true -- Don't ignore case with capitals
-vim.opt.smartindent = true -- Insert indents automatically
-vim.opt.spelllang = { "en" }
-vim.opt.splitbelow = true -- Put new windows below current
-vim.opt.splitright = true -- Put new windows right of current
-vim.opt.termguicolors = true -- True color support
-vim.opt.timeoutlen = 300
-vim.opt.undofile = true
-vim.opt.undodir = "/tmp/nvim-undodir"
-vim.opt.undolevels = 10000
-vim.opt.updatetime = 200 -- save swap file and trigger CursorHold
-vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
-vim.go.winminwidth = 5 -- minimum window width
-vim.opt.wrap = false -- Disable line wrap
-vim.opt.hlsearch = false -- Don't highlight matches for previous search
-vim.opt.breakindent = true -- Enable break indent
-vim.opt.backup = false
-vim.opt.swapfile = false
-vim.opt.errorbells = false
-vim.opt.title = true
-vim.opt.colorcolumn = "80"
+-- Fix markdown indentation settings
+vim.g.markdown_recommended_style = 0
 
-if vim.fn.has("nvim-0.9.0") == 1 then
-	vim.opt.splitkeep = "screen"
-	vim.o.shortmess = "filnxtToOFWIcC"
+local options = {
+  tabstop = 4, -- Number of spaces tabs count for
+  shiftwidth = 4, -- Size of an indent
+  expandtab = true, -- Expand tabs to spaces
+  autowrite = true, -- enable auto write
+  clipboard = "unnamedplus", -- sync with system clipboard
+  cmdheight = 1,
+  conceallevel = 3, -- Hide * markup for bold and italic
+  confirm = true, -- confirm to save changes before exiting modified buffer
+  cursorline = true, -- Enable highlighting of the current line
+  formatoptions = "jcroqlnt", -- tcqj
+  grepformat = "%f:%l:%c:%m",
+  grepprg = "rg --vimgrep",
+  hidden = true, -- Enable modified buffers in background
+  ignorecase = true, -- Ignore case
+  inccommand = "nosplit", -- preview incremental substitute
+  joinspaces = false, -- No double spaces with join after a dot
+  laststatus = 0,
+  list = true, -- Show invisible characters
+  listchars = "tab:» ,eol:↴,nbsp:␣,trail:·",
+  mouse = "a", -- enable mouse mode
+  number = true, -- Print line number
+  pumblend = 0, -- Popup blend
+  pumheight = 10, -- Maximum number of entries in a popup
+  relativenumber = true, -- Relative line numbers
+  scrolloff = 4, -- Lines of context
+  sessionoptions = { "buffers", "curdir", "tabpages", "winsize" },
+  shiftround = true, -- Round indent
+  showmode = false, -- dont show mode since we have a statusline
+  sidescrolloff = 8, -- Columns of context
+  signcolumn = "yes", -- Always show the signcolumn, otherwise it would shift the text each time
+  smartcase = true, -- Don't ignore case with capitals
+  smartindent = true, -- Insert indents automatically
+  spelllang = { "en" },
+  splitbelow = true, -- Put new windows below current
+  splitright = true, -- Put new windows right of current
+  termguicolors = true, -- True color support
+  timeoutlen = 300,
+  undofile = true,
+  undodir = "/tmp/nvim-undodir", -- Preserve undo history per reboot
+  undolevels = 10000,
+  updatetime = 200, -- save swap file and trigger CursorHold
+  wildmode = "longest:full,full", -- Command-line completion mode
+  winminwidth = 5, -- minimum window width
+  wrap = false, -- Disable line wrap
+  hlsearch = false, -- Don't highlight matches for previous search
+  breakindent = true, -- Enable break indent
+  backup = false,
+  swapfile = false,
+  errorbells = false,
+  title = true,
+  colorcolumn = "80",
+}
+
+for k, v in pairs(options) do
+  vim.opt[k] = v
 end
 
--- fix markdown indentation settings
-vim.g.markdown_recommended_style = 0
+if vim.fn.has("nvim-0.9.0") == 1 then
+  vim.opt.splitkeep = "screen"
+  vim.o.shortmess = "filnxtToOFWIcC"
+end
