@@ -1,0 +1,82 @@
+#!/bin/sh
+
+newLine="
+"
+
+getBlockDrives() {
+	drives="$(lsblk --noheadings --raw -o label,name,mountpoint |
+		sed 's/\\x20/\//g' |
+		grep -v "/media/stuff")" # /media/stuff is automounted through fstab
+
+	if [ "$1" = "mount" ]; then
+		echo "$drives" | awk '$2~/[[:digit:]]/ && !$3 {sub("/"," ",$1); printf "Disk) %s=/dev/%s\n", $1, $2}'
+		return
+	fi
+
+	echo "$drives" | awk '$2~/[[:digit:]]/ && $3 {sub("/"," ",$1); printf "Disk) %s=/dev/%s\n", $1, $2}'
+}
+
+getMTPDrives() {
+	devices="$(lsusb -v 2>/dev/null |
+		grep -e ^Bus -e mtp -e iManufacturer -e iProduct -e iSerial |
+		grep -B3 mtp |
+		sed 's/^.*[[:digit:]] \(.*\)/\1/g')"
+	ids="$(echo "$devices" |
+		sed -z 's/\([^\n]*\)\n\([^\n]*\)\n\([^\n]*\)\nmtp/\1 \2 \3/g' |
+		tr ' ' '_')"
+
+	for id in $ids; do
+		device="${id#*_}"
+		device="${device%_*}"
+		device="$(echo "$device" | tr '_' ' ')"
+		if [ -d "$XDG_RUNTIME_DIR/gvfs/mtp:host=$id" ]; then
+			mounted="$mounted MTP) $device=mtp://$id$newLine"
+		else
+			unmounted="$unmounted MTP) $device=mtp://$id$newLine"
+		fi
+	done
+
+	if [ "$1" = "mount" ]; then
+		echo "$unmounted"
+		return
+	fi
+
+	echo "$mounted"
+}
+
+prompt() {
+	mtpDrives="$(getMTPDrives "$mode")"
+	drives="$mtpDrives${mtpDrives:+$newLine}$(getBlockDrives "$mode")"
+	if [ -z "$drives" ]; then
+		echo "Nothing to $mode."
+		return
+	fi
+
+	chosen="$(echo "$drives" |
+		cut -d'=' -f1 |
+		rofi -dmenu -i -no-show-icons -p "$mode")" || return 1
+
+	chosenPath="$(echo "$drives" | grep "$chosen" | cut -d'=' -f2)"
+	drive="${chosen#*) }"
+	echo "$chosenPath" >&2
+	if echo "$chosen" | grep -q "MTP"; then
+		[ "$mode" != "mount" ] && arg="-u"
+		if gio mount $arg "$chosenPath"; then
+			echo "\"$drive\" was ${mode}ed successfully."
+			return
+		fi
+		echo "\"$drive\" could not be ${mode}ed."
+		return
+	fi
+
+	if udisksctl "$mode" -b "$chosenPath" >/dev/null 2>&1; then
+		echo "\"$drive($chosenPath)\" was ${mode}ed successfully."
+		return
+	fi
+	echo "\"$drive($chosenPath)\" could not be ${mode}ed."
+}
+
+mode="mount"
+[ "$1" = "-u" ] && mode="unmount"
+
+message="$(prompt "$mode")" && notify-send "MountMate" "$message"
