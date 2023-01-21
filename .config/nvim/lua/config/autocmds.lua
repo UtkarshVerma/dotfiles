@@ -1,4 +1,5 @@
-vim.cmd([[
-    " Restore blinking cursor on exit
-    autocmd VimLeave,VimSuspend * set guicursor= | call chansend(v:stderr, "\x1b[ q")
-]])
+-- Restore default cursor on exit
+vim.api.nvim_create_autocmd(
+  { "VimLeave", "VimSuspend" },
+  { command = "set guicursor= | call chansend(v:stderr, '\x1b[ q')" }
+)
