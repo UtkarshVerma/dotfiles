@@ -2,6 +2,7 @@ return {
   "nvim-treesitter/nvim-treesitter",
   opts = {
     ensure_installed = {
+      "arduino",
       "bash",
       "c",
       "cpp",

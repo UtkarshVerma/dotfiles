@@ -5,13 +5,12 @@ return {
   { "SmiteshP/nvim-navic", enabled = false },
   {
     "lukas-reineke/indent-blankline.nvim",
-    opts = {
-      char = "▏",
-      context_char = "▏",
-      filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
-      show_trailing_blankline_indent = false,
-      show_current_context = true,
-    },
+    opts = function(_, opts)
+      return vim.tbl_deep_extend("force", opts, {
+        char = "▏",
+        context_char = "▏",
+      })
+    end,
   },
   {
     "kevinhwang91/nvim-ufo",

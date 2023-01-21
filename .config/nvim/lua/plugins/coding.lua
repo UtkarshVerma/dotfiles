@@ -1,7 +1,7 @@
 return {
   {
     "hrsh7th/nvim-cmp",
-    opts = function()
+    opts = function(_, opts)
       local has_words_before = function()
         unpack = unpack or table.unpack
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -10,7 +10,7 @@ return {
 
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      return {
+      return vim.tbl_deep_extend("force", opts, {
         completion = {
           completeopt = "menuone,noselect",
         },
@@ -18,11 +18,6 @@ return {
           documentation = {
             winhighlight = "NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder",
           },
-        },
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
         },
         mapping = cmp.mapping.preset.insert({
           ["<c-d>"] = cmp.mapping.scroll_docs(-4),
@@ -55,7 +50,7 @@ return {
             end
           end, { "i", "s" }),
         }),
-      }
+      })
     end,
   },
   {
@@ -89,6 +84,9 @@ return {
         line_up = "<a-up>",
       },
     },
+    config = function(_, opts)
+      require("mini.move").setup(opts)
+    end,
   },
   {
     "smjonas/inc-rename.nvim",

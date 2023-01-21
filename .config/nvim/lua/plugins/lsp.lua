@@ -27,6 +27,7 @@ return {
         pyright = {},
         gopls = {},
         rust_analyzer = {},
+        rome = {},
         jsonls = {},
         sumneko_lua = {
           settings = {
@@ -49,6 +50,7 @@ return {
       local nls = require("null-ls")
       return {
         sources = {
+          nls.builtins.code_actions.shellcheck,
           nls.builtins.diagnostics.markdownlint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
           nls.builtins.diagnostics.shellcheck,
@@ -56,10 +58,10 @@ return {
             -- clangd automatically calls clang-format
             filetypes = { "arduino" },
           }),
-          nls.builtins.formatting.prettierd.with({
-            -- extra_args = { "--prose-wrap", "always" },
-            filetype = { "markdown" },
+          nls.builtins.formatting.deno_fmt.with({
+            filetypes = { "markdown" }, -- only runs `deno fmt` for markdown
           }),
+          nls.builtins.diagnostics.alex,
           nls.builtins.formatting.shfmt,
           nls.builtins.formatting.stylua,
           nls.builtins.formatting.yapf,
@@ -71,6 +73,9 @@ return {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
+        "alex",
+        "deno",
+        "markdownlint",
         "ruff",
         "shellcheck",
         "shfmt",
