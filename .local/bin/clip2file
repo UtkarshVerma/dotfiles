@@ -1,13 +1,23 @@
 #!/bin/sh
+# Utility script to paste clipboard contents to a file.
+# Depends on zenity for opening prompts.
 
+set --
 filename="Filename"
-if [ "$XDG_SESSION_TYPE" = wayland ]; then
-    cmd="wl-paste"
-    [ "$(wl-paste -l)" = "image/png" ] && cmd="$cmd -t image/png" && filename="image.png"
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    set -- wl-paste
+    if [ "$(wl-paste --list-types)" = "image/png" ]; then
+        set -- "$@" --type "image/png"
+        filename="image.png"
+    fi
 else
-    cmd="xclip -sel c -o"
-    xclip -sel c -t TARGETS -o | grep -q image/png && cmd="$cmd -t image/png" && filename="image.png"
+    set -- xclip -selection clipboard -out
+    if "$0" "$@" -target TARGETS | grep --quiet "image/png"; then
+        set -- "$@" -type "image/png"
+        filename="image.png"
+    fi
 fi
 
-file="$(zenity --entry --title Paste --entry-text "$filename" --text="Filename for clipboard contents:")"
-[ -n "$file" ] && $cmd > "$file"
+file="$(zenity --entry --title Paste --entry-text "$filename" \
+    --text="Filename for clipboard contents:")"
+[ -n "$file" ] && exec "$0" "$@" >"$file"

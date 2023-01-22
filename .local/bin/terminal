@@ -3,47 +3,47 @@
 # interface.
 
 shiftArgs() {
-    arg="${args%%$IFS*}"
-    args="${args#"$arg$IFS"}"
+	arg="${args%%"$IFS"*}"
+	args="${args#"$arg$IFS"}"
 }
 
-IFS="$(printf '\nx')" && IFS="${IFS%x}";
+IFS="$(printf '\nx')" && IFS="${IFS%x}"
 args="$*$IFS"
 set --
 while [ -n "$args" ]; do
-    shiftArgs
-    case "$arg" in
-        -n|--name)
-            shiftArgs
-            case "$TERMINAL" in
-                alacritty) set -- "$@" "--class" "$arg,Alacritty" ;;
-                foot) set -- "$@" "-a" "$arg" ;;
-                st) set -- "$@" "-n" "$arg" ;;
-            esac
-            ;;
-        -d|--dir)
-            shiftArgs
-            case "$TERMINAL" in
-                alacritty|foot) set -- "$@" "--working-directory" "$arg" ;;
-                st) set -- "$@" "-d" "$arg" ;;
-            esac
-            ;;
-        -g)
-            shiftArgs
-            case "$TERMINAL" in
-                alacritty)
-                    columns=${arg%x*}
-                    lines=${arg##*x}
-                    set -- "$@" "-o" "window.dimensions.columns=$columns" \
-                        "-o" "window.dimensions.lines=$lines"
-                    ;;
-                foot) set -- "$@" "-W" "$arg" ;;
-                st) set -- "$@" "-g" "$arg" ;;
-            esac
-            ;;
+	shiftArgs
+	case "$arg" in
+	-n | --name)
+		shiftArgs
+		case "$TERMINAL" in
+		alacritty) set -- "$@" "--class" "$arg,Alacritty" ;;
+		foot) set -- "$@" "-a" "$arg" ;;
+		st) set -- "$@" "-n" "$arg" ;;
+		esac
+		;;
+	-d | --dir)
+		shiftArgs
+		case "$TERMINAL" in
+		alacritty | foot) set -- "$@" "--working-directory" "$arg" ;;
+		st) set -- "$@" "-d" "$arg" ;;
+		esac
+		;;
+	-g)
+		shiftArgs
+		case "$TERMINAL" in
+		alacritty)
+			columns=${arg%x*}
+			lines=${arg##*x}
+			set -- "$@" "-o" "window.dimensions.columns=$columns" \
+				"-o" "window.dimensions.lines=$lines"
+			;;
+		foot) set -- "$@" "-W" "$arg" ;;
+		st) set -- "$@" "-g" "$arg" ;;
+		esac
+		;;
 
-        *) set -- "$@" "$arg"
-    esac
+	*) set -- "$@" "$arg" ;;
+	esac
 done
 
 [ $# -eq 1 ] && exec "$TERMINAL"

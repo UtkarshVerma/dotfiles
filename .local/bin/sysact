@@ -1,9 +1,10 @@
 #!/bin/sh
+# This script opens a dropdown menu containing system actions.
 
 case "$XDG_CURRENT_DESKTOP" in
     "sway")
         lockCmd="swaylock"
-	    logoutCmd="swaymsg exit"
+        logoutCmd="swaymsg exit"
         reloadCmd="swaymsg reload"
         ;;
     "Hyprland")
@@ -30,4 +31,4 @@ choices="\
 📺 Display off	$displayOffCmd"
 
 choice="$(echo "$choices" | awk -F'\t' '{print $1}' | rofi -dmenu -i -l 8 -theme sysact -p Choose)" || exit 1
-$(echo "$choices" | grep "^$choice" | awk -F'\t' '{print $NF}')
+exec $(echo "$choices" | grep "^$choice" | awk -F'\t' '{print $NF}')

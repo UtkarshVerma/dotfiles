@@ -1,13 +1,14 @@
 #!/bin/sh
+# Displays unread mail count for my email addresses.
+
+set -e
 
 # Exit if no internet.
-wget --spider -q http://example.com || exit 1
+wget --spider -q http://example.com
 
 # Display the count, if non-zero.
 count1="$(qgmail request users.labels.get me INBOX | jq .messagesUnread)"
 count2="$(qgmail --token ~/.cache/qgmail/college_token.json request users.labels.get me INBOX | jq .messagesUnread)"
-
-[ $? -gt 0 ] && exit
 
 output=""
 if [ "$count1" != "null" ]; then

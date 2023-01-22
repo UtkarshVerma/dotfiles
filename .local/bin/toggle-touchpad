@@ -1,17 +1,20 @@
 #!/bin/sh
+# Simple script to toggle the touchpad.
 
 notify() {
     icon="touchpad-$1-symbolic"
-    message="The touchpad input has been"
-    [ "$1" = enabled ] && message="$message enabled." || message="$message disabled."
-	notify-send -h string:x-canonical-private-synchronous:touchpad -c system -i "$icon" Touchpad "$message"
+    message="The touchpad input has been ${1}."
+    notify-send -h string:x-canonical-private-synchronous:touchpad -c system \
+        -i "$icon" Touchpad "$message"
 }
 
 if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
     swaymsg input type:touchpad events toggle enabled disabled
 
     swaymsg -t get_inputs type:touchpad |
-        jq -e '.[] | select(.type? == "touchpad") | .libinput.send_events == "enabled"' >/dev/null 2>&1
+        jq -e '.[] | select(.type? == "touchpad") |
+            .libinput.send_events == "enabled"' >/dev/null 2>&1
+
     if [ $? -eq 0 ]; then
         notify enabled
     else
@@ -20,7 +23,7 @@ if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
     exit
 fi
 
-touchpadID=$(xinput list | grep Touchpad | cut -d'=' -f2 | cut -f1)
+touchpadID="$(xinput list | grep Touchpad | cut -d'=' -f2 | cut -f1)"
 if xinput list-props "$touchpadID" | grep "Device Enabled" | grep -q "1$"; then
     xinput disable "$touchpadID"
     notify disabled

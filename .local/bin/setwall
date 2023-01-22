@@ -1,20 +1,22 @@
 #!/bin/sh
+# This script wraps around pywal to configure colorscheme uniformly across all
+# my applications.
 
 colorSway() {
     . ~/.cache/wal/colors.sh
-    local alphaHex=$(echo "($ALPHA*2.55)/1" | bc | xargs printf "%.2x")
-    local background="$background$alphaHex"
+    alphaHex=$(echo "($ALPHA*2.55)/1" | bc | xargs printf "%.2x")
+    background="$background$alphaHex"
 
     grep '^client.' ~/.config/sway/config.d/theme.conf |
-        while read line; do
-            eval swaymsg $line
+        while read -r line; do
+            eval swaymsg "$line"
         done
 
     if [ "$STATUSBAR" != "waybar" ]; then
         for bar in $(swaymsg -t get_bar_config | jq -r '.[]'); do
             grep 'background\|statusline\|_workspace' ~/.config/sway/config.d/swaybar.conf |
-                while read line; do
-                    eval swaymsg bar $bar colors $line
+                while read -r line; do
+                    eval swaymsg bar "$bar" colors "$line"
                 done
         done
     fi
@@ -27,28 +29,37 @@ LIGHT=0
 ALPHA=90
 while [ $# -gt 0 ]; do
     case $1 in
-        -q|--quiet) QUIET=1 ;;
-        -n|--noreload) RELOAD=0 ;;
-        -t|--theme) COLORSCHEME="$2"; shift ;;
-        -l|--light) LIGHT=1 ;;
-        -a|--alpha) ALPHA=$2; shift ;;
+        -q | --quiet) QUIET=1 ;;
+        -n | --noreload) RELOAD=0 ;;
+        -t | --theme)
+            COLORSCHEME="$2"
+            shift
+            ;;
+        -l | --light) LIGHT=1 ;;
+        -a | --alpha)
+            ALPHA=$2
+            shift
+            ;;
         *) wallpaper="$1" ;;
     esac
     shift
 done
 
-walArgs="-e --backend schemer2 -a $ALPHA -n"
-[ $QUIET -ne 0 ] && walArgs="$walArgs -q"
-[ $LIGHT -ne 0 ] && walArgs="$walArgs -l"
+set --
+set -- -e --backend schemer2 -a "$ALPHA" -n
+[ $QUIET -ne 0 ] && set -- "$@" -q
+[ $LIGHT -ne 0 ] && set -- "$@" -l
 
 [ ! -f "$wallpaper" ] &&
     wallpaper="$(find ~/pictures/wallpapers/ -type f | shuf -n 1)"
 
-[ -n "$COLORSCHEME" ] &&
-    walArgs="$walArgs --theme $COLORSCHEME" ||
-    walArgs="$walArgs -i \"$wallpaper\""
+if [ -n "$COLORSCHEME" ]; then
+    set -- "$@" --theme "$COLORSCHEME"
+else
+    set -- "$@" -i "$wallpaper"
+fi
 
-eval wal $walArgs
+wal "$@"
 
 if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
     oldPIDs="$(pgrep swaybg)"
@@ -62,17 +73,17 @@ if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
     colorSway
 else
     feh --no-fehbg --bg-scale "$wallpaper"
-    xrdb -DWINTITLE_ALPHA=$(echo "$ALPHA*0.0085" | bc) -merge ~/.config/X11/Xresources/main
+    xrdb -DWINTITLE_ALPHA="$(echo "$ALPHA*0.0085" | bc)" -merge ~/.config/X11/Xresources/main
 fi
 
 if [ $RELOAD -ne 0 ]; then
     if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
         if [ "$STATUSBAR" = "waybar" ]; then
-            killall -USR2 $STATUSBAR
+            killall -USR2 "$STATUSBAR"
         else
             for bar in $(swaymsg -t get_bar_config | jq '.[]'); do
-                swaymsg bar $bar status_command -
-                swaymsg bar $bar status_command $STATUSBAR
+                swaymsg bar "$bar" status_command -
+                swaymsg bar "$bar" status_command "$STATUSBAR"
             done
         fi
     else
@@ -80,5 +91,5 @@ if [ $RELOAD -ne 0 ]; then
     fi
 
     pkill dunst
-    [ "$TERMINAL" = st ] && killall -USR1 st
+    [ "$TERMINAL" = "st" ] && killall -USR1 st
 fi

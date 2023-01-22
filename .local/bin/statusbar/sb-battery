@@ -1,52 +1,53 @@
 #!/bin/sh
-
 # Prints all batteries, their percentage remaining and an emoji corresponding
 # to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
 
 notify() {
-	notify-send -i battery-good-symbolic -h string:x-canonical-private-synchronous:battery "Battery" "$1" -t 4000
+    notify-send -i battery-good-symbolic \
+        -h string:x-canonical-private-synchronous:battery \
+        "Battery" "$1" -t 4000
 }
 
-case $BLOCK_BUTTON in
-	1) notify "$(acpi -b | awk -F ': |, ' '{printf "%s\n%s\n", $2, $4}')" ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+case "$BLOCK_BUTTON" in
+    1) notify "$(acpi -b | awk -F ': |, ' '{printf "%s\n%s\n", $2, $4}')" ;;
+    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme
 
 # Loop through all attached batteries and format the info
 for battery in /sys/class/power_supply/BAT?*; do
-	# If non-first battery, print a space separator.
-	[ -n "${capacity+x}" ] && printf " "
+    # If non-first battery, print a space separator.
+    [ -n "${capacity+x}" ] && printf " "
 
-	capacity="$(cat "$battery/capacity" 2>&1)"
-	if [ "$capacity" -gt 90 ]; then
-		status=" "
-	elif [ "$capacity" -gt 60 ]; then
-		status=" "
-	elif [ "$capacity" -gt 40 ]; then
-		status=" "
-	elif [ "$capacity" -gt 10 ]; then
-		status=" "
-	else
-		status=" "
-	fi
+    capacity="$(cat "$battery/capacity" 2>&1)"
+    if [ "$capacity" -gt 90 ]; then
+        status=" "
+    elif [ "$capacity" -gt 60 ]; then
+        status=" "
+    elif [ "$capacity" -gt 40 ]; then
+        status=" "
+    elif [ "$capacity" -gt 10 ]; then
+        status=" "
+    else
+        status=" "
+    fi
 
-	# Sets up the status and capacity
-	case "$(cat "$battery/status" 2>&1)" in
-		Full) status=" " ;;
-		Discharging)
-			if [ "$capacity" -le 20 ]; then
-				status="$status"
-				color=1
-			fi
-			;;
-		Charging) status="ﮣ$status" ;;
-		"Not charging") status="屢 " ;;
-		Unknown) status=" $status" ;;
-		*) exit 1 ;;
-	esac
+    # Sets up the status and capacity
+    case "$(cat "$battery/status" 2>&1)" in
+        Full) status=" " ;;
+        Discharging)
+            if [ "$capacity" -le 20 ]; then
+                status="$status"
+                color=1
+            fi
+            ;;
+        Charging) status="ﮣ$status" ;;
+        "Not charging") status="屢 " ;;
+        Unknown) status=" $status" ;;
+        *) exit 1 ;;
+    esac
 
-	# Prints the info
-	display -n "$status$capacity%" $color
+    # Prints the info
+    display "$status$capacity%" "$color"
 done && echo

@@ -1,28 +1,28 @@
 #!/bin/sh
 
 case $BLOCK_BUTTON in
-	1) setsid -f "$TERMINAL" -e pulsemixer ;;
-	2) pamixer -t ;;
-	4) pamixer -i 3 ;;
-	5) pamixer -d 3 ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    1) setsid -f "$TERMINAL" -e pulsemixer ;;
+    2) pamixer -t ;;
+    4) pamixer -i 3 ;;
+    5) pamixer -d 3 ;;
+    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme
 if [ "$(pamixer --get-mute)" = true ]; then
-	display " " 1
-	exit
+    display " " 9
+    exit
 fi
 
 vol="$(pamixer --get-volume)"
 [ $? -ne 0 ] && [ -z "$vol" ] && exit 1
 
 if [ "$vol" -gt 40 ]; then
-	icon=" "
+    icon=" "
 elif [ "$vol" -gt 15 ]; then
-	icon=" "
+    icon=" "
 else
-	icon=" "
+    icon=" "
 fi
 
 display "$icon$vol%"

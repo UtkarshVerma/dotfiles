@@ -1,15 +1,16 @@
 #!/bin/sh
+# Display currently playing music metadata.
 
 icon="ﱘ"
 pidof -x musicup >/dev/null 2>&1 || musicup >/dev/null 2>&1 &
 
 case "$BLOCK_BUTTON" in
-	1) musicctl prev ;;
-	2) musicctl toggle ;;
-	3) musicctl next ;;
-	4) musicctl seek +5 ;;
-	5) musicctl seek -5 ;;
-	6) terminal -e "$EDITOR" "$0" ;;
+    1) musicctl prev ;;
+    2) musicctl toggle ;;
+    3) musicctl next ;;
+    4) musicctl seek +5 ;;
+    5) musicctl seek -5 ;;
+    6) terminal -e "$EDITOR" "$0" ;;
 esac
 
 args="-p spotify,mpv,%any"

@@ -38,18 +38,18 @@ URLS="https://emojipedia.org/people/ \
 
 download() {
     notify-send "$(basename "$0")" "Downloading all emojis for your pleasure"
-    echo > "$EMOJI_FILE"
+    echo >"$EMOJI_FILE"
 
     for url in $URLS; do
         echo "Downloading: $url"
         local emojis
 
         # Download the list of emoji and remove all the junk around it
-        emojis="$(curl -s "$url" |
-                    xmllint --html --xpath '//span[@class="emoji"]/..' - 2>/dev/null |
-                    sed -rn 's|.*<span class="emoji">(.*)</span> (.*)</a>.*|\1 \2|p')"
+        emojis="$(curl -s "$url" \
+            | xmllint --html --xpath '//span[@class="emoji"]/..' - 2>/dev/null \
+            | sed -rn 's|.*<span class="emoji">(.*)</span> (.*)</a>.*|\1 \2|p')"
 
-        echo "$emojis" >> "$EMOJI_FILE"
+        echo "$emojis" >>"$EMOJI_FILE"
     done
 
     notify-send "$(basename "$0")" "We're all set!"
@@ -57,7 +57,7 @@ download() {
 
 display() {
     local clipCmd emoji emojis line
-    emojis="$(grep -v '#' < "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
+    emojis="$(grep -v '#' <"$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
     line=$(echo "$emojis" | rofi -dmenu -i -p emoji -no-show-icons)
     if [ $? -eq 0 ]; then
         emoji="${line%%[[:space:]]*}"
@@ -71,14 +71,14 @@ display() {
 
 # Some simple argparsing
 case "$1" in
-    -D|--download)
+    -D | --download)
         download
         exit
-    ;;
-    -h|--help)
+        ;;
+    -h | --help)
         echo "usage: $0 [-D|--download]"
         exit
-    ;;
+        ;;
 esac
 
 # Download all emoji if they don't exist yet

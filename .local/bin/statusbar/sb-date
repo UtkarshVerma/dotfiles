@@ -1,11 +1,12 @@
 #!/bin/sh
+# Displays the current time in HH:MM:SS (AM|PM)
 
 case $BLOCK_BUTTON in
-    1) 	notify-send -i office-calendar-symbolic -h string:x-canonical-private-synchronous:date "This Month" \
-        "$(cal --color=always | sed "s/..7m/<b><span color=\"$(palette.sh 1)\">/;s/..27m/<\/span><\/b>/")" \
-        # && notify-send "Appointments" "$(calcurse -d3)"
-    ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    1)
+        notify-send -i office-calendar-symbolic -h string:x-canonical-private-synchronous:date "This Month" \
+            "$(cal --color=always | sed "s/..7m/<b><span color=\"$(palette.sh 1)\">/;s/..27m/<\/span><\/b>/")"
+        ;;
+    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme

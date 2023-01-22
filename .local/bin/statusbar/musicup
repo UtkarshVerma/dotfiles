@@ -1,21 +1,21 @@
 #!/bin/sh
-
 # This loop will update the music statusbar module whenever a command changes the
 # music player's status. mpd and must be running on X's start for this to work.
 
 dbus-monitor "path=/org/mpris/MediaPlayer2,member=PropertiesChanged" |
-	while read line; do
-		pkill -RTMIN+18 $STATUSBAR
+    while read -r; do
+        pkill -RTMIN+18 "$STATUSBAR"
 
         # Brave sends too many updates on YouTube song change
         sleep 0.2
-	done &
+    done &
 
-count=0;
+count=0
 while [ $count -lt 3 ]; do
-	if mpc idle >/dev/null; then
-		pkill -RTMIN+18 $STATUSBAR
-	else
-		(( count++ )); sleep $count
-	fi
+    if mpc idle >/dev/null; then
+        pkill -RTMIN+18 "$STATUSBAR"
+    else
+        ( (count++))
+        sleep $count
+    fi
 done &

@@ -1,4 +1,6 @@
 #!/bin/bash
 # Wrapper script for java to suppress the "Picked up _JAVA_OPTIONS:" line
-export PATH="$(getconf PATH)"
+
+PATH="$(getconf PATH)"
+export PATH
 java "$@" 2> >(grep -v "^Picked up _JAVA_OPTIONS:" >&2)
