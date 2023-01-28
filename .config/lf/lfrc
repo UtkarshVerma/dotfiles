@@ -7,7 +7,7 @@ set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
 set drawbox
 set ratios 2:3
 set cleaner ~/.config/lf/cleaner
-set previewer ~/.config/lf/preview
+set previewer ~/.config/lf/previewer
 set autoquit
 set wrapscroll
 
@@ -30,8 +30,8 @@ cmd open ${{
         text/*|application/json|inode/x-empty) $EDITOR $fx;;
 	image/x-xcf) setsid -f gimp $f >/dev/null 2>&1 ;;
 	image/svg+xml) display -- $f ;;
-	image/*) rotdir $f | grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\|tif\|ico\)\(_large\)*$" |
-		setsid -f sxiv -aio 2>/dev/null | while read -r file; do
+	image/*)
+		sxiv . -F $f -ao 2>/dev/null | while read -r file; do
 			[ -z "$file" ] && continue
 			lf -remote "send select \"$file\""
 			lf -remote "send toggle"

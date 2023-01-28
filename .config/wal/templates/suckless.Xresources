@@ -11,6 +11,10 @@ dmenu.promptforeground: {color9}
 dmenu.promptbackground: {background}{alpha.alpha_hex}
 dmenu.midbackground: {background}{alpha.alpha_hex}
 
+!! sxiv
+window.background: {background}
+window.foreground: {foreground}
+
 !! st
 *.alpha: {alpha.alpha_dec}
 *.cursorColor: {cursor}
