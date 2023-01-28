@@ -32,12 +32,9 @@ return {
         sumneko_lua = {
           settings = {
             Lua = {
-              workspace = {
-                checkThirdParty = false,
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
+              format = { enable = false },
+              workspace = { checkThirdParty = false },
+              completion = { callSnippet = "Replace" },
             },
           },
         },
@@ -51,26 +48,40 @@ return {
       return {
         sources = {
           nls.builtins.code_actions.shellcheck,
+          nls.builtins.diagnostics.alex,
           nls.builtins.diagnostics.markdownlint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
           nls.builtins.diagnostics.shellcheck,
+          nls.builtins.formatting.shfmt.with({
+            extra_args = { "--indent", 4, "--case-indent" },
+          }),
+          nls.builtins.diagnostics.yamllint.with({
+            extra_args = {
+              "-d",
+              "{extends: default, rules: {document-start: {present: false}}}",
+            },
+          }),
           nls.builtins.formatting.clang_format.with({
             -- clangd automatically calls clang-format
             filetypes = { "arduino" },
           }),
           nls.builtins.formatting.deno_fmt.with({
-            filetypes = { "markdown" }, -- only runs `deno fmt` for markdown
+            filetypes = { "markdown" },
+            extra_args = { "--options-line-width", 79 },
           }),
-          nls.builtins.diagnostics.alex,
-          nls.builtins.formatting.shfmt,
           nls.builtins.formatting.stylua,
           nls.builtins.formatting.yapf,
+          nls.builtins.formatting.yamlfmt,
         },
       }
     end,
   },
   {
     "williamboman/mason.nvim",
+    keys = {
+      { "<leader>cm", false },
+      { "<leader>m", "<cmd>Mason<cr>" },
+    },
     opts = {
       ensure_installed = {
         "alex",
@@ -81,6 +92,8 @@ return {
         "shfmt",
         "stylua",
         "yapf",
+        "yamlfmt",
+        "yamllint",
       },
     },
   },

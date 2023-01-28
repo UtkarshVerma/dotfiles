@@ -3,16 +3,16 @@
 # It mimics the CLI arguments of mpc.
 
 exec >/dev/null 2>&1
-if playerctl status; then
-    set -- --player=spotify,mpv,%any
+args="--player=spotify,mpv,%any"
+if status="$(playerctl $args status)" && [ "$status" != "Stopped" ]; then
     case "$1" in
-        "seek" | "volume") set -- "$1" "${2#?}${2%%[[:digit:]]*}" ;;
-        "toggle") set -- "$@" play-pause ;;
-        "prev") set -- "$@" previous ;;
-        *) set -- "$@" "$1" ;;
+        seek | volume) set -- "$1" "${2#?}${2%%[[:digit:]]*}" ;;
+        toggle) set -- play-pause ;;
+        prev) set -- previous ;;
+        current) set -- status ;;
     esac
 
-    exec playerctl "$@"
+    exec playerctl $args "$@"
 fi
 
 exec mpc "$@"

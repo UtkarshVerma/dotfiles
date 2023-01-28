@@ -146,23 +146,11 @@ return {
 
   {
     "echasnovski/mini.comment",
-    dependencies = "JoosepAlviste/nvim-ts-context-commentstring",
-    opts = {
-      mappings = {
-        comment = "gc",
-        comment_line = "gcc",
-        textobject = "gc",
-      },
-      hooks = {
-        pre = function()
-          require("ts_context_commentstring.internal").update_commentstring({})
-        end,
-      },
+    keys = {
+      "gcc",
+      "gc",
+      { "<c-/>", "gcc", mode = "n", remap = true },
+      { "<c-/>", "gc", mode = "v", remap = true },
     },
-    config = function(_, opts)
-      vim.keymap.set("n", "<c-/>", opts.mappings.comment_line, { remap = true, desc = "Comment line" })
-      vim.keymap.set("v", "<c-/>", opts.mappings.comment, { remap = true, desc = "Comment selection" })
-      require("mini.comment").setup(opts)
-    end,
   },
 }

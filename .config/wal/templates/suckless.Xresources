@@ -14,6 +14,7 @@ dmenu.midbackground: {background}{alpha.alpha_hex}
 !! st
 *.alpha: {alpha.alpha_dec}
 *.cursorColor: {cursor}
+*.font: monospace:size=16
 
 !! slock
 slock.locked: {color0}

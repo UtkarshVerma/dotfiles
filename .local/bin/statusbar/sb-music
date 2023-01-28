@@ -1,9 +1,6 @@
 #!/bin/sh
 # Display currently playing music metadata.
 
-icon="ﱘ"
-pidof -x musicup >/dev/null 2>&1 || musicup >/dev/null 2>&1 &
-
 case "$BLOCK_BUTTON" in
     1) musicctl prev ;;
     2) musicctl toggle ;;
@@ -13,16 +10,14 @@ case "$BLOCK_BUTTON" in
     6) terminal -e "$EDITOR" "$0" ;;
 esac
 
-args="-p spotify,mpv,%any"
-artist="$(playerctl metadata $args --format '{{artist}}' 2>&1)"
-[ -n "$artist" ] && currentSong=" - $artist"
-currentSong="$(playerctl metadata $args --format '{{title}}' 2>&1)$currentSong"
-
-if [ $? = 0 ]; then
-    [ "$(playerctl status $args 2>&1)" = "Paused" ] && icon=""
+set -- --player spotify,mpv,%any
+icon="ﱘ"
+if status="$(playerctl "$@" status 2>&1)" && [ "$status" != "Stopped" ]; then
+    [ "$status" = "Paused" ] && icon=""
+    currentSong="$(playerctl "$@" metadata --format "{{title}} - {{artist}}")"
 else
-    mpc | grep -q "\[paused\]" && icon=""
-    currentSong="$(mpc -f "%title%[ - %artist%]" current)"
+    [ "$(mpc status "%state%")" = "paused" ] && icon=""
+    currentSong="$(mpc current -f "%title%[ - %artist%]")"
 fi
 
 [ -z "$currentSong" ] && exit

@@ -9,6 +9,8 @@ return {
       return vim.tbl_deep_extend("force", opts, {
         char = "▏",
         context_char = "▏",
+        char_priority = 30,
+        show_current_context = true,
       })
     end,
   },

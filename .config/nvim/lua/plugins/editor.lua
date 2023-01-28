@@ -1,7 +1,7 @@
 return {
   {
     "NMAC427/guess-indent.nvim",
-    event = "BufReadPost",
+    event = { "BufReadPre" },
     config = true,
   },
   { "RRethy/vim-illuminate", enabled = false },
@@ -19,8 +19,7 @@ return {
   },
   {
     "echasnovski/mini.bufremove",
-    -- stylua: ignore
-    keys = function (_, keys)
+    keys = function(_, keys)
       return vim.list_extend({
         { "<c-w>", "<leader>bd", desc = "Delete Buffer", remap = true },
       }, keys)

@@ -12,10 +12,5 @@ return {
       },
     },
   },
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "molokai",
-    },
-  },
+  { "LazyVim/LazyVim", opts = { colorscheme = "molokai" } },
 }

@@ -5,9 +5,9 @@ newLine="
 "
 
 getBlockDrives() {
-    drives="$(lsblk --noheadings --raw -o label,name,mountpoint \
-        | sed 's/\\x20/\//g' \
-        | grep -v "/media/stuff")" # /media/stuff is automounted through fstab
+    drives="$(lsblk --noheadings --raw -o label,name,mountpoint |
+        sed 's/\\x20/\//g' |
+        grep -v "/media/stuff")" # /media/stuff is automounted through fstab
 
     if [ "$1" = "mount" ]; then
         echo "$drives" | awk '$2~/[[:digit:]]/ && !$3 {sub("/"," ",$1); printf "Disk) %s=/dev/%s\n", $1, $2}'
@@ -18,13 +18,13 @@ getBlockDrives() {
 }
 
 getMTPDrives() {
-    devices="$(lsusb -v 2>/dev/null \
-        | grep -e ^Bus -e mtp -e iManufacturer -e iProduct -e iSerial \
-        | grep -B3 mtp \
-        | sed 's/^.*[[:digit:]] \(.*\)/\1/g')"
-    ids="$(echo "$devices" \
-        | sed -z 's/\([^\n]*\)\n\([^\n]*\)\n\([^\n]*\)\nmtp/\1 \2 \3/g' \
-        | tr ' ' '_')"
+    devices="$(lsusb -v 2>/dev/null |
+        grep -e ^Bus -e mtp -e iManufacturer -e iProduct -e iSerial |
+        grep -B3 mtp |
+        sed 's/^.*[[:digit:]] \(.*\)/\1/g')"
+    ids="$(echo "$devices" |
+        sed -z 's/\([^\n]*\)\n\([^\n]*\)\n\([^\n]*\)\nmtp/\1 \2 \3/g' |
+        tr ' ' '_')"
 
     for id in $ids; do
         device="${id#*_}"
@@ -45,39 +45,46 @@ getMTPDrives() {
     echo "$mounted"
 }
 
+notify() {
+    icon="media-mount-symbolic"
+    [ $mode = "unmount" ] && icon="media-eject-symbolic"
+
+    notify-send -i "$icon" \
+        -h string:x-canonical-private-synchronous:mountmate \
+        "MountMate" "$1" -t 4000
+}
+
 prompt() {
     mtpDrives="$(getMTPDrives "$mode")"
     drives="$mtpDrives${mtpDrives:+$newLine}$(getBlockDrives "$mode")"
     if [ -z "$drives" ]; then
-        echo "Nothing to $mode."
+        notify "Nothing to $mode."
         return
     fi
 
-    chosen="$(echo "$drives" \
-        | cut -d'=' -f1 \
-        | rofi -dmenu -i -no-show-icons -p "$mode")" || return 1
+    chosen="$(echo "$drives" |
+        cut -d'=' -f1 |
+        rofi -dmenu -i -no-show-icons -p "$mode")" || return 1
 
     chosenPath="$(echo "$drives" | grep "$chosen" | cut -d'=' -f2)"
     drive="${chosen#*) }"
-    echo "$chosenPath" >&2
     if echo "$chosen" | grep -q "MTP"; then
         [ "$mode" != "mount" ] && arg="-u"
         if gio mount $arg "$chosenPath"; then
-            echo "\"$drive\" was ${mode}ed successfully."
+            notify "\"$drive\" was ${mode}ed successfully."
             return
         fi
-        echo "\"$drive\" could not be ${mode}ed."
+        notify "\"$drive\" could not be ${mode}ed."
         return
     fi
 
     if udisksctl "$mode" -b "$chosenPath" >/dev/null 2>&1; then
-        echo "\"$drive($chosenPath)\" was ${mode}ed successfully."
+        notify "\"$drive($chosenPath)\" was ${mode}ed successfully."
         return
     fi
-    echo "\"$drive($chosenPath)\" could not be ${mode}ed."
+    notify "\"$drive($chosenPath)\" could not be ${mode}ed."
 }
 
 mode="mount"
 [ "$1" = "-u" ] && mode="unmount"
-
-message="$(prompt "$mode")" && notify-send "MountMate" "$message"
+prompt "$mode"
