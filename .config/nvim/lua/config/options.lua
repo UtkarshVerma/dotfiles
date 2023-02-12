@@ -4,7 +4,23 @@ local options = {
   colorcolumn = "80",
   errorbells = false,
   guifont = "monospace",
-  listchars = "tab:» ,eol:↴,nbsp:␣,trail:·",
+  listchars = {
+    tab = "» ",
+    eol = "↴",
+    nbsp = "␣",
+    trail = "·",
+  },
+  foldcolumn = "0", -- Don't show the foldcolumn
+  foldenable = true,
+  fillchars = {
+    eob = " ", -- suppress ~ at EndOfBuffer
+    diff = "╱", -- alternatives = ⣿ ░ ─
+    msgsep = " ", -- alternatives: ‾ ─
+    fold = " ",
+    foldopen = "▾",
+    foldsep = " ",
+    foldclose = "▸",
+  },
   pumblend = 0, -- Popup blend
   shiftwidth = 4, -- Size of an indent
   swapfile = false,

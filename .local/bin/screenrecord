@@ -35,7 +35,7 @@ if [ -f "$pidFile" ]; then
     kill -INT "$pid"
     wait "$pid"
 
-    notify-send -i screenshot "Record" "The recording has been successfully saved as $file."
+    notify-send -i view-list-video-symbolic "Record" "The recording has been successfully saved as $file."
     rm "$pidFile"
 else
     # Start recording

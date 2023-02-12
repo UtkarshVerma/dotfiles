@@ -21,6 +21,9 @@ require("lazy").setup({
     lazy = true,
     version = false, -- always use the latest git commit
   },
+  ui = {
+    border = "rounded",
+  },
   install = { colorscheme = { "molokai" } },
   checker = { enabled = false }, -- automatically check for plugin updates
   performance = {

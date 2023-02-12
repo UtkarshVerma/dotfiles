@@ -1,17 +1,13 @@
-local border = {
-  { "┌", "FloatBorder" },
-  { "─", "FloatBorder" },
-  { "┐", "FloatBorder" },
-  { "│", "FloatBorder" },
-  { "┘", "FloatBorder" },
-  { "─", "FloatBorder" },
-  { "└", "FloatBorder" },
-  { "│", "FloatBorder" },
-}
 local handlers = {
-  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
-  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
+  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" }),
+  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" }),
 }
+
+local dictionary = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
+local words = {}
+for word in io.open(dictionary, "r"):lines() do
+  table.insert(words, word)
+end
 
 return {
   {
@@ -31,6 +27,15 @@ return {
         clangd = {
           -- Auto-format only if .clang-format exists
           cmd = { "clangd", "--fallback-style=none" },
+        },
+        ltex = {
+          settings = {
+            ltex = {
+              dictionary = {
+                ["en-US"] = words,
+              },
+            },
+          },
         },
         lemminx = {
           settings = {
@@ -104,6 +109,9 @@ return {
       { "<leader>m", "<cmd>Mason<cr>" },
     },
     opts = {
+      ui = {
+        border = "rounded",
+      },
       ensure_installed = {
         "alex",
         "deno",

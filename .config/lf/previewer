@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TMPDIR="${TMPDIR:-/tmp}"
+TMPDIR="$XDG_CACHE_HOME"
 LF_PREVIEWDIR="${LF_PREVIEWDIR:-$TMPDIR/lf/previews}"
 LF_PREVIEWWIDTH="${LF_PREVIEWWIDTH:-1000}"
 LF_PREVIEWHEIGHT="${LF_PREVIEWHEIGHT:-560}"
@@ -99,13 +99,13 @@ generate_preview() {
             font) fontpreview -i "$3" -o "$LF_PREVIEWDIR/$3.jpg" ;;
             image)
                 if exists convert; then
-                    convert "$3" -flatten -resize "$LF_PREVIEWWIDTH"x"$LF_PREVIEWHEIGHT"\> "$LF_PREVIEWDIR/$3.jpg"
+                    convert "$3" -flatten -resize "$LF_PREVIEWWIDTH"x"$LF_PREVIEWHEIGHT"\> "$LF_PREVIEWDIR/$3.jpg" >/dev/null 2>&1
                 else
                     image_preview "$1" "$2" "$3"
                 fi
                 ;;
             office)
-                libreoffice --convert-to jpg "$3" --outdir "$LF_PREVIEWDIR/${3%/*}"
+                libreoffice --convert-to jpg "$3" --outdir "$LF_PREVIEWDIR/${3%/*}" >/dev/null 2>&1
                 filename="$(printf "%s" "${3##*/}" | cut -d. -f1)"
                 mv "$LF_PREVIEWDIR/${3%/*}/$filename.jpg" "$LF_PREVIEWDIR/$3.jpg"
                 ;;

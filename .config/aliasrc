@@ -1,19 +1,20 @@
 #!/bin/sh
 
 alias \
-	ls="ls --color=auto" \
-	ll="ls -l" \
-	grep="grep --color=auto" \
-	fgrep="fgrep --color=auto" \
-	egrep="egrep --color=auto" \
-	dosbox="dosbox -conf $XDG_CONFIG_HOME/dosbox/dosbox.conf" \
-	ncdu="ncdu --color dark" \
-	open="xdg-open" \
-	vi="nvim" \
-	xi="sudo xbps-install" \
-	xr="sudo xbps-remove -R" \
-	xq="xbps-query"
+    cmatrix="unimatrix -n -s 96 -l o" \
+    ls="ls --color=auto" \
+    ll="ls -l" \
+    grep="grep --color=auto" \
+    fgrep="fgrep --color=auto" \
+    egrep="egrep --color=auto" \
+    dosbox="dosbox -conf $XDG_CONFIG_HOME/dosbox/dosbox.conf" \
+    ncdu="ncdu --color dark" \
+    open="xdg-open" \
+    vi="nvim" \
+    xi="sudo xbps-install" \
+    xr="sudo xbps-remove -R" \
+    xq="xbps-query"
 
 viw() {
-	vi "$(which "$@")"
+    vi "$(which "$@")"
 }

@@ -7,12 +7,12 @@
 getWindowMeta() {
     case "$XDG_CURRENT_DESKTOP" in
         "Hyprland")
-            windowMeta="$(hyprctl clients -j \
-                | jq -r ".[] | select(.class == \"$1\")")"
+            windowMeta="$(hyprctl clients -j |
+                jq -r ".[] | select(.class == \"$1\")")"
             ;;
         "sway")
-            windowMeta=$(swaymsg -t get_tree \
-                | jq -r ".nodes[].nodes[] | .nodes[],.floating_nodes[] |
+            windowMeta=$(swaymsg -t get_tree |
+                jq -r ".nodes[].nodes[] | .nodes[],.floating_nodes[] |
                     select((.app_id == \"$instance\") or
                     ((.window_properties // empty).instance == \"$1\"))")
             ;;
@@ -26,8 +26,8 @@ toggleWindow() {
         "Hyprland")
             windowAddress="$(echo "$1" | jq -r ".address")"
             if echo "$1" | grep --quiet "special"; then
-                workspace="$(hyprctl monitors -j \
-                    | jq ".[] | select(.focused).activeWorkspace.id")"
+                workspace="$(hyprctl monitors -j |
+                    jq ".[] | select(.focused).activeWorkspace.id")"
                 hyprctl dispatch movetoworkspace "$workspace,address:$windowAddress" >/dev/null
             else
                 hyprctl dispatch movetoworkspace "special,address:$windowAddress" >/dev/null
@@ -52,9 +52,9 @@ spawnWindow() {
 }
 
 instance="dropdown_$1"
-while [ "$1" != "-c" ]; do shift; done
+while [ $# -gt 1 ] && [ "$1" != "-c" ]; do shift; done
 shift
-cmd="$(printf "$*" "$instance")"
+cmd="$(printf "%s %s" "$*" "$instance")"
 
 windowMeta="$(getWindowMeta "$instance")"
 if [ -n "$windowMeta" ]; then

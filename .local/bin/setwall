@@ -61,20 +61,23 @@ fi
 
 wal "$@"
 
-if [ "$XDG_CURRENT_DESKTOP" = sway ]; then
-    oldPIDs="$(pgrep swaybg)"
-    swaybg -i "$wallpaper" -m fill 2>/dev/null &
-    [ -n "$oldPIDs" ] && kill $oldPIDs
+case "$XDG_CURRENT_DESKTOP" in
+    sway)
+        oldPIDs="$(pgrep swaybg)"
+        swaybg -i "$wallpaper" -m fill 2>/dev/null &
+        [ -n "$oldPIDs" ] && kill $oldPIDs
 
-    # Update dunst notification offset
-    offset="$(swaymsg -t get_tree | jq -r '.nodes[1].nodes[0].rect | "\(.x)x\(.x)"')"
-    sed --in-place --follow-symlinks "s/offset = .*/offset = $offset/g" ~/.config/dunst/dunstrc
+        # Update dunst notification offset
+        offset="$(swaymsg -t get_tree | jq -r '.nodes[1].nodes[0].rect | "\(.x)x\(.x)"')"
+        sed --in-place --follow-symlinks "s/offset = .*/offset = $offset/g" ~/.config/dunst/dunstrc
 
-    colorSway
-else
-    feh --no-fehbg --bg-scale "$wallpaper"
-    xrdb -DWINTITLE_ALPHA="$(echo "$ALPHA*0.0085" | bc)" -merge ~/.config/X11/Xresources/main
-fi
+        colorSway
+        ;;
+    *)
+        feh --no-fehbg --bg-scale "$wallpaper"
+        xrdb -DWINTITLE_ALPHA="$(echo "$ALPHA*0.0085" | bc)" -merge ~/.config/X11/Xresources/main
+        ;;
+esac
 
 if [ $RELOAD -ne 0 ]; then
     if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then

@@ -3,7 +3,8 @@
 scripts="$XDG_CONFIG_HOME/aliasrc
     $XDG_CONFIG_HOME/lf/lfcd.sh
     $XDG_CONFIG_HOME/nnn/nnncd.sh
-    /usr/share/z/z.sh"
+    /usr/share/z/z.sh
+    /opt/ros/noetic/setup.sh"
 
 echo "$scripts" | while read -r script; do
     if [ -f "$script" ]; then
