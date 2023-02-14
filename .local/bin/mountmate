@@ -6,15 +6,20 @@ newLine="
 
 getBlockDrives() {
     drives="$(lsblk --noheadings --raw -o label,name,mountpoint |
-        sed 's/\\x20/\//g' |
-        grep -v "/media/stuff")" # /media/stuff is automounted through fstab
+        grep -v nvme0n1p5)" # automounted using fstab
 
     if [ "$1" = "mount" ]; then
-        echo "$drives" | awk '$2~/[[:digit:]]/ && !$3 {sub("/"," ",$1); printf "Disk) %s=/dev/%s\n", $1, $2}'
+        echo "$drives" |
+            awk '$2~/[[:digit:]]/ && !$3 {
+                printf "%s=/dev/%s\n", $1, $2
+            }'
         return
     fi
 
-    echo "$drives" | awk '$2~/[[:digit:]]/ && $3 {sub("/"," ",$1); printf "Disk) %s=/dev/%s\n", $1, $2}'
+    echo "$drives" |
+        awk '$2~/[[:digit:]]/ && $3 {
+            printf "%s=%s\n", $1, $3
+        }'
 }
 
 getMTPDrives() {
@@ -31,9 +36,9 @@ getMTPDrives() {
         device="${device%_*}"
         device="$(echo "$device" | tr '_' ' ')"
         if [ -d "$XDG_RUNTIME_DIR/gvfs/mtp:host=$id" ]; then
-            mounted="$mounted MTP) $device=mtp://$id$newLine"
+            mounted="${mounted}$device=mtp://$id$newLine"
         else
-            unmounted="$unmounted MTP) $device=mtp://$id$newLine"
+            unmounted="${unmounted}$device=mtp://$id$newLine"
         fi
     done
 
@@ -57,32 +62,32 @@ notify() {
 prompt() {
     mtpDrives="$(getMTPDrives "$mode")"
     drives="$mtpDrives${mtpDrives:+$newLine}$(getBlockDrives "$mode")"
+    drives="$(echo "$drives" | sed 's|\\x20| |g')"
     if [ -z "$drives" ]; then
         notify "Nothing to $mode."
         return
     fi
-
     chosen="$(echo "$drives" |
-        cut -d'=' -f1 |
+        awk -F'=' '{ printf "%-20s -> %s\n", $1, $2 }' |
         rofi -dmenu -i -no-show-icons -p "$mode")" || return 1
 
-    chosenPath="$(echo "$drives" | grep "$chosen" | cut -d'=' -f2)"
-    drive="${chosen#*) }"
-    if echo "$chosen" | grep -q "MTP"; then
-        [ "$mode" != "mount" ] && arg="-u"
-        if gio mount $arg "$chosenPath"; then
-            notify "\"$drive\" was ${mode}ed successfully."
-            return
-        fi
-        notify "\"$drive\" could not be ${mode}ed."
+    chosenPath=${chosen#*-> }
+    drive="$(echo "$drives" | grep "$chosenPath" | cut -d'=' -f2)"
+    echo "|$drive,$chosenPath|"
+
+    if [ "$mode" != "mount" ]; then
+        args="-u"
+    elif ! echo "$chosen" | grep -q "mtp://"; then
+        args="-d"
+    fi
+
+    # shellcheck disable=2086
+    if gio mount $args "$chosenPath"; then
+        notify "\"$drive\" was ${mode}ed successfully."
         return
     fi
 
-    if udisksctl "$mode" -b "$chosenPath" >/dev/null 2>&1; then
-        notify "\"$drive($chosenPath)\" was ${mode}ed successfully."
-        return
-    fi
-    notify "\"$drive($chosenPath)\" could not be ${mode}ed."
+    notify "\"$drive\" could not be ${mode}ed."
 }
 
 mode="mount"
