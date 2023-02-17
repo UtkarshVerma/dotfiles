@@ -3,7 +3,7 @@ return {
   { "catppuccin", enabled = false },
   {
     "UtkarshVerma/molokai.nvim",
-    dir = "~/github/molokai.nvim",
+    dir = "~/git/molokai.nvim",
     opts = {
       transparent = true,
       styles = {

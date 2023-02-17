@@ -7,8 +7,6 @@ vim.keymap.del("n", "<c-up>")
 vim.keymap.del("n", "<c-down>")
 vim.keymap.del("n", "<c-left>")
 vim.keymap.del("n", "<c-right>")
-vim.keymap.del({ "n", "v", "i" }, "<a-j>")
-vim.keymap.del({ "n", "v", "i" }, "<a-k>")
 vim.keymap.del("n", "[b")
 vim.keymap.del("n", "]b")
 vim.keymap.del("n", "<leader>bb")
@@ -17,6 +15,8 @@ vim.keymap.del("n", "<leader>`")
 local Util = require("lazyvim.util")
 
 -- Better up/down
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set("n", "<down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.keymap.set("n", "<up>", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 

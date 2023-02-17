@@ -10,7 +10,6 @@ fi
 [ "$(supergfxctl -g)" = "hybrid" ] && autorandr -c >/dev/null 2>&1
 setwall -q -n -t molokai
 
-# mpd is started by default by systemd
 autostart="\
     /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
     picom
@@ -22,6 +21,8 @@ autostart="\
     asus-fan-daemon
     nm-applet
     $STATUSBAR"
+
+calcurse --daemon
 
 echo "$autostart" | while read -r program; do
     process="${program%%[[:space:]]*}"

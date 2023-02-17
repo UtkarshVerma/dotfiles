@@ -1,15 +1,9 @@
 !! dmenu
-dmenu.background: {background}{alpha.alpha_hex}
-dmenu.foreground: {color12}
-dmenu.selbackground: {background}ee
-dmenu.selforeground: {color12}
-dmenu.selhlbackground: {background}ee
-dmenu.selhlforeground: {color12}
-dmenu.outforeground: {color9}
-dmenu.midforeground: {color12}
-dmenu.promptforeground: {color9}
-dmenu.promptbackground: {background}{alpha.alpha_hex}
-dmenu.midbackground: {background}{alpha.alpha_hex}
+dmenu.font: monospace:size=13
+dmenu.background: {background}
+dmenu.foreground: {foreground}
+dmenu.selbackground: {color13}
+dmenu.selforeground: {background}
 
 !! sxiv
 window.background: {background}
@@ -38,8 +32,8 @@ dwm.normfloatcolor: {color15}
 
 dwm.selfgcolor: {color0}
 dwm.selbgcolor: {color0}
-dwm.selbordercolor: {color12}
-dwm.selfloatcolor: {color13}
+dwm.selbordercolor: {color13}
+dwm.selfloatcolor: {color12}
 
 dwm.titlenormfgcolor: {foreground}
 dwm.titlenormbgcolor: {background}

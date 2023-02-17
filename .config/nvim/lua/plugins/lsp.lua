@@ -49,12 +49,13 @@ return {
         rust_analyzer = {},
         rome = {},
         jsonls = {},
-        sumneko_lua = {
+        lua_ls = {
           settings = {
             Lua = {
               format = { enable = false },
               workspace = { checkThirdParty = false },
               completion = { callSnippet = "Replace" },
+              telemetry = { enable = false },
             },
           },
         },

@@ -58,30 +58,30 @@ return {
     keys = function(plugin, _)
       local opts = require("lazy.core.plugin").values(plugin, "opts", false)
       return {
-        opts.mappings.left,
-        opts.mappings.right,
-        opts.mappings.down,
-        opts.mappings.up,
+        { opts.mappings.left, mode = "v" },
+        { opts.mappings.right, mode = "v" },
+        { opts.mappings.down, mode = "v" },
+        { opts.mappings.up, mode = "v" },
 
-        { opts.mappings.line_left, mode = "v" },
-        { opts.mappings.line_right, mode = "v" },
-        { opts.mappings.line_down, mode = "v" },
-        { opts.mappings.line_up, mode = "v" },
+        opts.mappings.line_left,
+        opts.mappings.line_right,
+        opts.mappings.line_down,
+        opts.mappings.line_up,
       }
     end,
     opts = {
       mappings = {
         -- Visual selection mappings
-        left = "<a-left>",
-        right = "<a-right>",
-        down = "<a-down>",
-        up = "<a-up>",
+        left = "<a-h>",
+        right = "<a-l>",
+        down = "<a-j>",
+        up = "<a-k>",
 
         -- Normal mode mappings
-        line_left = "<a-left>",
-        line_right = "<a-right>",
-        line_down = "<a-down>",
-        line_up = "<a-up>",
+        line_left = "<a-h>",
+        line_right = "<a-l>",
+        line_down = "<a-j>",
+        line_up = "<a-k>",
       },
     },
     config = function(_, opts)
