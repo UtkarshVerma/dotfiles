@@ -1,24 +1,25 @@
-.config/git/*
-!.config/git/config
+/.config/git/*
+!/.config/git/config
 
-.config/gnupg/*
-!.config/gnupg/gpg-agent.conf
+/.config/gnupg/*
+!/.config/gnupg/gpg-agent.conf
 
-.config/gtk-2.0/*
-!.config/gtk-2.0/gtkrc
+/.config/gtk-2.0/*
+!/.config/gtk-2.0/gtkrc
 
-.config/gtk-3.0/*
-!.config/gtk-3.0/settings.ini
+/.config/gtk-3.0/*
+!/.config/gtk-3.0/settings.ini
 
-.config/mpd/*
-!.config/mpd/mpd.conf
+/.config/mpd/*
+!/.config/mpd/mpd.conf
 
-.config/ncmpcpp/*
-!.config/ncmpcpp/{bindings,config}
+/.config/ncmpcpp/*
+!/.config/ncmpcpp/{bindings,config}
 
-.config/nvim/plugin
-.config/nvim/lazy-lock.json
+/.config/nvim/plugin
+/.config/nvim/lazy-lock.json
 
-.config/safeeyes/session.json
+/.config/safeeyes/session.json
+/.config/calcurse/caldav
 
-root/etc/sv/*/supervise
+/root/etc/sv/*/supervise
