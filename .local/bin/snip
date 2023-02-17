@@ -38,7 +38,7 @@ case "$1" in
         ;;
     *)
         choice="$(
-            cat <<EOF | rofi -dmenu -l 6 -i -p "Screenshot which area?"
+            cat <<EOF | dmenu -l 6 -i -p "Screenshot which area?"
 a selected area
 full screen
 a selected area (copy)

@@ -1,5 +1,5 @@
 #!/bin/sh
-# This script allows hassle-free management of disk and MTP mounts using rofi.
+# This script allows hassle-free management of disk and MTP mounts using dmenu.
 
 newLine="
 "
@@ -69,7 +69,7 @@ prompt() {
     fi
     chosen="$(echo "$drives" |
         awk -F'=' '{ printf "%-20s -> %s\n", $1, $2 }' |
-        rofi -dmenu -i -no-show-icons -p "$mode")" || return 1
+        dmenu -i -l 10 -p "$mode")" || return 1
 
     chosenPath=${chosen#*-> }
     drive="$(echo "$drives" | grep "$chosenPath" | cut -d'=' -f2)"

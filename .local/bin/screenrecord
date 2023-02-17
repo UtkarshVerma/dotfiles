@@ -16,14 +16,14 @@ recordRegion() {
         read -r W H X Y <<EOF
 $(echo "$1" | tr 'x+' ' ')
 EOF
-        args="-f x11grab -s ${W}x${H} -r 60 -i $DISPLAY+$X,$Y"
+        set -- -f x11grab -s "${W}x${H}" -r 60 -i "$DISPLAY+$X,$Y"
 
         # Use NVENC if GPU is in "compute" mode
         if [ "$(supergfxctl -g)" = "compute" ]; then
-            args="$args -c:v h264_nvenc"
+            set -- "$@" -c:v h264_nvenc
         fi
 
-        ffmpeg $args "$path" >/tmp/record.log 2>&1 &
+        ffmpeg "$@" "$path" >/tmp/record.log 2>&1 &
     fi
 
     echo "file=$file;pid=$!" >"$pidFile"
@@ -31,7 +31,9 @@ EOF
 
 if [ -f "$pidFile" ]; then
     # Stop recording if PID file exists
+    # shellcheck disable=1090
     . "$pidFile"
+    # shellcheck disable=2154
     kill -INT "$pid"
     wait "$pid"
 

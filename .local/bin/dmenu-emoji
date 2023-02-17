@@ -1,16 +1,16 @@
 #!/bin/sh
-#   Use rofi to pick emoji because that's what this
+#   Use dmenu to pick emoji because that's what this
 #   century is about apparently...
 #
 #   Requirements:
-#     rofi, xclip/wl-copy curl, xmllint
+#     dmenu, xclip/wl-copy curl, xmllint
 #
 #   Usage:
 #     1. Download all emoji
-#        $ rofi-emoji --download
+#        $ dmenu-emoji --download
 #
 #     2. Run it!
-#        $ rofi-emoji
+#        $ dmenu-emoji
 #
 #   Notes:
 #     * You'll need a emoji font like "Noto Emoji" or "EmojiOne".
@@ -25,7 +25,7 @@
 # Where to save the emojis file.
 EMOJI_FILE="$XDG_CACHE_HOME/emojis"
 
-# Urls of emoji to download.
+# URLs of emoji to download.
 # You can remove what you don't need.
 URLS="https://emojipedia.org/people/ \
     https://emojipedia.org/nature/ \
@@ -36,36 +36,38 @@ URLS="https://emojipedia.org/people/ \
     https://emojipedia.org/symbols/ \
     https://emojipedia.org/flags/"
 
+notify() {
+    notify-send -i emoji-people-symbolic -t 1500 \
+        -h string:x-canonical-private-synchronous:emojis \
+        "Emoji Prompt" "$@"
+}
+
 download() {
-    notify-send "$(basename "$0")" "Downloading all emojis for your pleasure"
-    echo >"$EMOJI_FILE"
+    notify "Downloading all emojis for your pleasure"
 
     for url in $URLS; do
         echo "Downloading: $url"
-        local emojis
 
         # Download the list of emoji and remove all the junk around it
-        emojis="$(curl -s "$url" \
-            | xmllint --html --xpath '//span[@class="emoji"]/..' - 2>/dev/null \
-            | sed -rn 's|.*<span class="emoji">(.*)</span> (.*)</a>.*|\1 \2|p')"
+        emojis="$(curl -s "$url" |
+            xmllint --html --xpath '//span[@class="emoji"]/..' - 2>/dev/null |
+            sed -rn 's|.*<span class="emoji">(.*)</span> (.*)</a>.*|\1 \2|p')"
 
         echo "$emojis" >>"$EMOJI_FILE"
     done
 
-    notify-send "$(basename "$0")" "We're all set!"
+    notify "We're all set!"
 }
 
 display() {
-    local clipCmd emoji emojis line
-    emojis="$(grep -v '#' <"$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
-    line=$(echo "$emojis" | rofi -dmenu -i -p emoji -no-show-icons)
-    if [ $? -eq 0 ]; then
+    emojis="$(grep -v '#' "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
+    if line=$(echo "$emojis" | dmenu -l 10 -i -p emoji); then
         emoji="${line%%[[:space:]]*}"
-        notify-send "'$emoji' copied to clipboard."
+        notify "'$emoji' copied to clipboard."
 
-        local clipCmd="xclip -sel c"
+        clipCmd="xclip -sel c"
         [ "$XDG_SESSION_TYPE" = wayland ] && clipCmd="wl-copy"
-        echo -n "$emoji" | $clipCmd
+        echo "$emoji" | $clipCmd
     fi
 }
 

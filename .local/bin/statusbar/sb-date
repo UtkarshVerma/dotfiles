@@ -1,11 +1,21 @@
 #!/bin/sh
 # Displays the current time in HH:MM:SS (AM|PM)
 
+notify() {
+    notify-send -i office-calendar-symbolic \
+        -h string:x-canonical-private-synchronous:"$1" "$@"
+}
+
 case $BLOCK_BUTTON in
     1)
-        notify-send -i office-calendar-symbolic -h string:x-canonical-private-synchronous:date "This Month" \
-            "$(cal --color=always | sed "s/..7m/<b><span color=\"$(palette.sh 1)\">/;s/..27m/<\/span><\/b>/")"
+        notify "This Month" "$(cal --color=always |
+            sed "s|..7m|<span color='$(palette.sh 1)'>|;s|..27m|</span>|")"
+        appointments="$(calcurse -d3 \
+            --format-apt "• <i>%S - %E</i>\n  <span foreground='$(palette.sh 6)'>%m</span>\n" \
+            --format-event "• <span foreground='$(palette.sh 6)'>%m</span>\n")"
+        [ -n "$appointments" ] && notify "Appointments" "$appointments"
         ;;
+    2) setsid -f "$TERMINAL" -e calcurse ;;
     6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 

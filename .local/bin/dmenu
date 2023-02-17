@@ -1,0 +1,32 @@
+#!/bin/sh
+# dmenu wrapper to ensure the menu overlaps the statusbar
+
+scriptDir="${0%/*}"
+binary="${0##*/}"
+IFS=":"
+for dir in $PATH; do
+    [ "$dir" = "$scriptDir" ] && continue
+    [ -x "$dir/$binary" ] && break
+done
+unset IFS
+
+set -- "$@" -o "$(xrdb -get dmenu.alpha)"
+
+barGeometry="$(xwininfo -root -tree |
+    grep '("dwm" "dwm")' | awk '{print $(NF - 1)}')"
+
+height="${barGeometry#*x}"
+height="${height%%+*}"
+set -- "$@" -h "$height"
+
+width="${barGeometry%x*}"
+set -- "$@" -W "$width"
+
+xOffset="${barGeometry#*+}"
+xOffset="${xOffset%+*}"
+set -- "$@" -X "$xOffset"
+
+yOffset="${barGeometry##*+}"
+set -- "$@" -Y "$yOffset"
+
+exec "$dir/$binary" "$@"

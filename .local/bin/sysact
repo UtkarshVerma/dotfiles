@@ -5,17 +5,14 @@ case "$XDG_CURRENT_DESKTOP" in
     "sway")
         lockCmd="swaylock"
         logoutCmd="swaymsg exit"
-        reloadCmd="swaymsg reload"
         ;;
     "Hyprland")
         lockCmd="swaylock"
         logoutCmd="hyprctl dispatch exit placebo"
-        reloadCmd="hyprctl reload"
         ;;
     *)
         lockCmd="slock"
         logoutCmd="pkill -TERM -u $USER dwm"
-        reloadCmd="pkill -HUP -u $USER dwm"
         displayOffCmd="xset dpms force off"
         ;;
 esac
@@ -23,12 +20,11 @@ esac
 choices="\
 🔒 Lock			$lockCmd
 🚪 Logout		$logoutCmd
-♻️ Reload WM	$reloadCmd
 💤 Sleep		systemctl suspend
 🐻 Hibernate	systemctl hibernate
 🔃 Reboot		systemctl reboot
 💻 Shutdown		systemctl poweroff
 📺 Display off	$displayOffCmd"
 
-choice="$(echo "$choices" | awk -F'\t' '{print $1}' | rofi -dmenu -i -l 8 -theme sysact -p Choose)" || exit 1
+choice="$(echo "$choices" | awk -F'\t' '{print $1}' | dmenu -i -l 8 -p Choose)" || exit 1
 exec $(echo "$choices" | grep "^$choice" | awk -F'\t' '{print $NF}')
