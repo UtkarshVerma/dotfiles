@@ -1,10 +1,10 @@
 #!/bin/sh
 # Displays unread mail count for my email addresses.
 
-set -e
-
-# Exit if no internet
-wget --spider -q http://example.com
+# Keep retrying until internet is there
+while ! wget --spider -q http://example.com; do
+    sleep 10
+done
 
 tokens="token.json college_token.json work_token.json"
 icons=" : : "

@@ -71,7 +71,7 @@ unset configs config
 #-------------------------------------------------------------------------------
 # Key bindings
 #-------------------------------------------------------------------------------
-bindkey -v  # Use vim bindings
+bindkey -e  # Use emacs bindings
 
 bindkey '\e[5~' up-line-or-history          # PageUp: Up a line of history
 bindkey '\e[6~' down-line-or-history        # PageDown: Down a line of history

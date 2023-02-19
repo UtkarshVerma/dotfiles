@@ -74,11 +74,11 @@ return {
       local nls = require("null-ls")
       return {
         sources = {
-          nls.builtins.code_actions.shellcheck,
+          -- nls.builtins.code_actions.shellcheck,
           nls.builtins.diagnostics.alex,
           nls.builtins.diagnostics.markdownlint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
-          nls.builtins.diagnostics.shellcheck,
+          -- nls.builtins.diagnostics.shellcheck,
           nls.builtins.formatting.shfmt.with({
             extra_args = { "--indent", 4, "--case-indent" },
           }),
@@ -115,6 +115,7 @@ return {
       },
       ensure_installed = {
         "alex",
+        "bash-language-server",
         "deno",
         "markdownlint",
         "ruff",

@@ -18,13 +18,13 @@ case "$XDG_CURRENT_DESKTOP" in
 esac
 
 choices="\
-🔒 Lock			$lockCmd
-🚪 Logout		$logoutCmd
-💤 Sleep		systemctl suspend
-🐻 Hibernate	systemctl hibernate
-🔃 Reboot		systemctl reboot
-💻 Shutdown		systemctl poweroff
-📺 Display off	$displayOffCmd"
+🔒 Lock:$lockCmd
+🚪 Logout:$logoutCmd
+💤 Sleep:systemctl suspend
+🐻 Hibernate:systemctl hibernate
+🔃 Reboot:systemctl reboot
+💻 Shutdown:systemctl poweroff
+📺 Display off:$displayOffCmd"
 
-choice="$(echo "$choices" | awk -F'\t' '{print $1}' | dmenu -i -l 8 -p Choose)" || exit 1
-exec $(echo "$choices" | grep "^$choice" | awk -F'\t' '{print $NF}')
+choice="$(echo "$choices" | cut -d':' -f1 | dmenu -i -p "Action:")" || exit 1
+exec $(echo "$choices" | grep "^$choice" | cut -d':' -f2)

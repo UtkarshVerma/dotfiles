@@ -1,5 +1,5 @@
 #!/bin/sh
-# dmenu wrapper to ensure the menu overlaps the statusbar
+# dmenu wrapper to ensure that the menu overlaps the statusbar
 
 scriptDir="${0%/*}"
 binary="${0##*/}"
@@ -10,10 +10,14 @@ for dir in $PATH; do
 done
 unset IFS
 
-set -- "$@" -o "$(xrdb -get dmenu.alpha)"
+for arg in "$@"; do
+    case "$arg" in
+        -w | -h) exec "$dir/$binary" "$@" ;;
+    esac
+done
 
 barGeometry="$(xwininfo -root -tree |
-    grep '("dwm" "dwm")' | awk '{print $(NF - 1)}')"
+    grep '("dwm" "dwm")' | head -1 | awk '{ print $(NF - 1) }')"
 
 height="${barGeometry#*x}"
 height="${height%%+*}"

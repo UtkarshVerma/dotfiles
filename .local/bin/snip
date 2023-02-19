@@ -37,14 +37,12 @@ case "$1" in
         fi
         ;;
     *)
-        choice="$(
-            cat <<EOF | dmenu -l 6 -i -p "Screenshot which area?"
-a selected area
-full screen
-a selected area (copy)
-full screen (copy)
-EOF
-        )"
+        choices="Selection
+Entire screen
+Selection (copy)
+Entire Screen (copy)
+"
+        choice="$(echo "$choices" | dmenu -i -p "Screenshot:")"
         case "$choice" in
             "a selected area" | "a selected area (copy)")
                 sel=$(sel-area)

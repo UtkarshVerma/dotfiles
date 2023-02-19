@@ -1,9 +1,10 @@
 !! dmenu
 dmenu.font: monospace:size=13
-dmenu.background: {background}
+dmenu.background: {background}{alpha.alpha_hex}
 dmenu.foreground: {foreground}
-dmenu.selbackground: {color13}
+dmenu.selbackground: {color13}{alpha.alpha_hex}
 dmenu.selforeground: {background}
+dmenu.bordercolor: {color13}{alpha.alpha_hex}
 
 !! sxiv
 window.background: {background}

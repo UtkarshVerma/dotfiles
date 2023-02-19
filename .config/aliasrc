@@ -1,6 +1,7 @@
 #!/bin/sh
 
 alias \
+    activate="source venv/bin/activate" \
     cmatrix="unimatrix -n -s 96 -l o" \
     ls="ls --color=auto" \
     ll="ls -l" \

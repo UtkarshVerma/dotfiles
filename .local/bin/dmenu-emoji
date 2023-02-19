@@ -1,26 +1,10 @@
 #!/bin/sh
-#   Use dmenu to pick emoji because that's what this
-#   century is about apparently...
+# Displays a list of emojis to be selected from using dmenu.
 #
-#   Requirements:
-#     dmenu, xclip/wl-copy curl, xmllint
-#
-#   Usage:
-#     1. Download all emoji
-#        $ dmenu-emoji --download
-#
-#     2. Run it!
-#        $ dmenu-emoji
-#
-#   Notes:
-#     * You'll need a emoji font like "Noto Emoji" or "EmojiOne".
-#     * Confirming an item will automatically paste it WITHOUT
-#       writing it to your clipboard.
-#     * Ctrl+C will copy it to your clipboard WITHOUT pasting it.
-#
-#   Credits:
-#     This script is a slightly modified version of:
-#     https://gist.github.com/Tadly/0741821d3694deaec1ee454a95c591fa
+# This script takes inspiration from:
+#   https://gist.github.com/Tadly/0741821d3694deaec1ee454a95c591fa
+
+set -e
 
 # Where to save the emojis file.
 EMOJI_FILE="$XDG_CACHE_HOME/emojis"
@@ -59,33 +43,32 @@ download() {
     notify "We're all set!"
 }
 
-display() {
-    emojis="$(grep -v '#' "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
-    if line=$(echo "$emojis" | dmenu -l 10 -i -p emoji); then
-        emoji="${line%%[[:space:]]*}"
-        notify "'$emoji' copied to clipboard."
-
-        clipCmd="xclip -sel c"
-        [ "$XDG_SESSION_TYPE" = wayland ] && clipCmd="wl-copy"
-        echo "$emoji" | $clipCmd
-    fi
-}
-
 # Some simple argparsing
 case "$1" in
-    -D | --download)
-        download
-        exit
+    -c | --copy)
+        MUST_COPY=1
         ;;
     -h | --help)
-        echo "usage: $0 [-D|--download]"
+        echo "usage: $0 [-c|--copy, -h|--help]"
         exit
         ;;
 esac
 
-# Download all emoji if they don't exist yet
+# Download all emojis if they don't exist yet
 if [ ! -f "$EMOJI_FILE" ]; then
     download
+    exit
 fi
 
-display
+emojis="$(grep -v '#' "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
+if line="$(echo "$emojis" | dmenu -l 8 -i -p "Emoji:")"; then
+    emoji="${line%%[[:space:]]*}"
+
+    if [ "$MUST_COPY" -gt 0 ]; then
+        printf "%s" "$emoji" | xclip -sel clipboard &&
+            notify "'$emoji' copied to clipboard."
+        exit
+    fi
+
+    xdotool type "$emoji"
+fi
