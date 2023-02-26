@@ -1,65 +1,48 @@
 #!/bin/sh
 # This script provides a hassle-free way of taking screenshots.
 
+set -e
+screenshotsDir="$(xdg-user-dir PICTURES)/screenshots"
+
 snipTo() {
-    # Selection was cancelled
-    [ -z "$2" ] && return 1
-
-    snipCmd=shotgun
-    clipCmd="xclip -selection clipboard -target image/png"
-
-    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-        snipCmd="grim"
-        clipCmd="wl-copy --type image/png"
-    fi
-
     if [ "$1" = "clip" ]; then
         message="The screenshot has been successfully saved to your clipboard."
         output="-"
     else
-        output="~/pictures/screenshots/$(date '+%Y-%m-%d_%H.%M.%S').png"
-        message="The screenshot has been successfully saved as $output"
-        clipCmd="true"
+        # shellcheck disable=2088
+        output="$screenshotsDir/$(date '+%Y-%m-%d_%H.%M.%S').png"
+        message="The screenshot has been successfully saved as \
+            $(echo "$output" | sed "s|$HOME|~|")."
     fi
 
-    shift
-    $snipCmd -g "$*" "$(echo "$output" | sed "s|~|$HOME|g")" | $clipCmd || return 1
+    shotgun -g "$2" "$output" | xclip -sel c -target image/png
     notify-send -i accessories-screenshot-symbolic "Snip" "$message" -t 3000
 }
 
 case "$1" in
     full | sel)
-        sel="$(sel-area "$1")"
-        if [ "$2" = "clip" ]; then
-            snipTo clip "$sel"
-        else
-            snipTo file "$sel"
-        fi
+        region="$1"
+        mode="$2"
         ;;
     *)
-        choices="Selection
-Entire screen
-Selection (copy)
-Entire Screen (copy)
-"
-        choice="$(echo "$choices" | dmenu -i -p "Screenshot:")"
+        choices="\
+🎣 Selection
+💻 Entire Screen
+🎣 Selection (Copy)
+💻 Entire Screen (Copy)"
+
+        choice="$(echo "$choices" | dmenu -i -p "Screenshot:")" || exit
         case "$choice" in
-            "a selected area" | "a selected area (copy)")
-                sel=$(sel-area)
-                if [ "$choice" = "a selected area" ]; then
-                    snipTo file "$sel"
-                else
-                    snipTo clip "$sel"
-                fi
-                ;;
-            "full screen" | "full screen (copy)")
-                sel="$(sel-area full)"
-                if [ "$choice" = "full screen" ]; then
-                    snipTo file "$sel"
-                else
-                    snipTo clip "$sel"
-                fi
-                ;;
+            *Selection*) region="sel" ;;
+            *) region="full" ;;
+        esac
+
+        case "$choice" in
+            *Copy*) mode="clip" ;;
+            *) mode="file" ;;
         esac
         ;;
 esac
+
+sel="$(sel-area "$region")"
+snipTo "$mode" "$sel"

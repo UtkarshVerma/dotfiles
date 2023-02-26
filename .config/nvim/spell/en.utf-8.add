@@ -3,3 +3,8 @@ IMU
 Jetson
 NVIDIA
 STM32
+IDEs
+STM32CubeIDE
+STM
+submodule
+openocd

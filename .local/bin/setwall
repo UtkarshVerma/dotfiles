@@ -2,32 +2,12 @@
 # This script wraps around pywal to configure colorscheme uniformly across all
 # my applications.
 
-colorSway() {
-    . ~/.cache/wal/colors.sh
-    alphaHex=$(echo "($ALPHA*2.55)/1" | bc | xargs printf "%.2x")
-    background="$background$alphaHex"
-
-    grep '^client.' ~/.config/sway/config.d/theme.conf |
-        while read -r line; do
-            eval swaymsg "$line"
-        done
-
-    if [ "$STATUSBAR" != "waybar" ]; then
-        for bar in $(swaymsg -t get_bar_config | jq -r '.[]'); do
-            grep 'background\|statusline\|_workspace' ~/.config/sway/config.d/swaybar.conf |
-                while read -r line; do
-                    eval swaymsg bar "$bar" colors "$line"
-                done
-        done
-    fi
-}
-
 # Parse CLI flags
 QUIET=0
 RELOAD=1
 LIGHT=0
 ALPHA=90
-while [ $# -gt 0 ]; do
+while [ "$#" -gt 0 ]; do
     case $1 in
         -q | --quiet) QUIET=1 ;;
         -n | --noreload) RELOAD=0 ;;
@@ -47,8 +27,8 @@ done
 
 set --
 set -- -e --backend schemer2 -a "$ALPHA" -n
-[ $QUIET -ne 0 ] && set -- "$@" -q
-[ $LIGHT -ne 0 ] && set -- "$@" -l
+[ "$QUIET" -ne 0 ] && set -- "$@" -q
+[ "$LIGHT" -ne 0 ] && set -- "$@" -l
 
 [ ! -f "$wallpaper" ] &&
     wallpaper="$(find ~/pictures/wallpapers/ -type f | shuf -n 1)"
@@ -60,39 +40,12 @@ else
 fi
 
 wal "$@"
-
-case "$XDG_CURRENT_DESKTOP" in
-    sway)
-        oldPIDs="$(pgrep swaybg)"
-        swaybg -i "$wallpaper" -m fill 2>/dev/null &
-        [ -n "$oldPIDs" ] && kill $oldPIDs
-
-        # Update dunst notification offset
-        offset="$(swaymsg -t get_tree | jq -r '.nodes[1].nodes[0].rect | "\(.x)x\(.x)"')"
-        sed --in-place --follow-symlinks "s/offset = .*/offset = $offset/g" ~/.config/dunst/dunstrc
-
-        colorSway
-        ;;
-    *)
-        feh --no-fehbg --bg-scale "$wallpaper"
-        xrdb -DWINTITLE_ALPHA="$(echo "$ALPHA*0.0085" | bc)" -merge ~/.config/X11/Xresources/main
-        ;;
-esac
+feh --no-fehbg --bg-scale "$wallpaper"
+xrdb -DWINTITLE_ALPHA="$(echo "$ALPHA*0.0085" | bc)" \
+    -merge ~/.config/X11/Xresources/main
 
 if [ $RELOAD -ne 0 ]; then
-    if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
-        if [ "$STATUSBAR" = "waybar" ]; then
-            killall -USR2 "$STATUSBAR"
-        else
-            for bar in $(swaymsg -t get_bar_config | jq '.[]'); do
-                swaymsg bar "$bar" status_command -
-                swaymsg bar "$bar" status_command "$STATUSBAR"
-            done
-        fi
-    else
-        xdotool key Super_L+Shift_L+F5
-    fi
-
+    xdotool key Super_L+Shift_L+F5
     pkill dunst
     [ "$TERMINAL" = "st" ] && killall -USR1 st
 fi

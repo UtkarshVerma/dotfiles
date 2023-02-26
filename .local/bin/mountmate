@@ -5,20 +5,24 @@ newLine="
 "
 
 getBlockDrives() {
-    drives="$(lsblk --noheadings --raw -o label,name,mountpoint |
+    drives="$(lsblk --noheadings --raw -o rm,label,name,mountpoint |
         grep -v nvme0n1p5)" # automounted using fstab
+
+    removableDrives="$(echo "$drives" | grep "^1" | sed 's|^1|🧳|')"
+    diskDrives="$(echo "$drives" | grep -v "^1" | sed 's|^0|🗄|')"
+    drives="$removableDrives$newLine$diskDrives"
 
     if [ "$1" = "mount" ]; then
         echo "$drives" |
-            awk '$2~/[[:digit:]]/ && !$3 {
-                printf "%s=/dev/%s\n", $1, $2
-            }'
+            awk '$3~/[[:digit:]]/ && !$4 {
+            printf "%s=%s=/dev/%s\n", $1, $2, $3
+        }'
         return
     fi
 
     echo "$drives" |
-        awk '$2~/[[:digit:]]/ && $3 {
-            printf "%s=%s\n", $1, $3
+        awk '$3~/[[:digit:]]/ && $4 {
+            printf "%s=%s=%s\n", $1, $2, $4
         }'
 }
 
@@ -31,14 +35,15 @@ getMTPDrives() {
         sed -z 's/\([^\n]*\)\n\([^\n]*\)\n\([^\n]*\)\nmtp/\1 \2 \3/g' |
         tr ' ' '_')"
 
+    icon="📱"
     for id in $ids; do
         device="${id#*_}"
         device="${device%_*}"
         device="$(echo "$device" | tr '_' ' ')"
         if [ -d "$XDG_RUNTIME_DIR/gvfs/mtp:host=$id" ]; then
-            mounted="${mounted}$device=mtp://$id$newLine"
+            mounted="${mounted}$icon=$device=mtp://$id$newLine"
         else
-            unmounted="${unmounted}$device=mtp://$id$newLine"
+            unmounted="${unmounted}$icon=$device=mtp://$id$newLine"
         fi
     done
 
@@ -52,7 +57,7 @@ getMTPDrives() {
 
 notify() {
     icon="media-mount-symbolic"
-    [ $mode = "unmount" ] && icon="media-eject-symbolic"
+    [ "$mode" != "mount" ] && icon="media-eject-symbolic"
 
     notify-send -i "$icon" \
         -h string:x-canonical-private-synchronous:mountmate \
@@ -67,27 +72,33 @@ prompt() {
         notify "Nothing to $mode."
         return
     fi
-    chosen="$(echo "$drives" |
-        awk -F'=' '{ printf "%-20s -> %s\n", $1, $2 }' |
-        dmenu -i -l 10 -p "$mode")" || return 1
 
-    chosenPath=${chosen#*-> }
-    drive="$(echo "$drives" | grep "$chosenPath" | cut -d'=' -f2)"
-    echo "|$drive,$chosenPath|"
+    prompt="Mount:"
+    [ "$mode" != "mount" ] && prompt="Unmount:"
+
+    chosen="$(echo "$drives" |
+        awk -F'=' '{ printf "%s %s\n", $1, $2 }' |
+        dmenu -i -p "$prompt")" || return 1
+
+    chosen="${chosen#* }"
+    chosenMeta="$(echo "$drives" | grep "$chosen")"
+    chosenPath="${chosenMeta##*=}"
+    chosenLabel="${chosenMeta%=*}"
+    chosenLabel="${chosenLabel#*=}"
 
     if [ "$mode" != "mount" ]; then
         args="-u"
-    elif ! echo "$chosen" | grep -q "mtp://"; then
+    elif ! echo "$chosenMeta" | grep -q "mtp://"; then
         args="-d"
     fi
 
     # shellcheck disable=2086
     if gio mount $args "$chosenPath"; then
-        notify "\"$drive\" was ${mode}ed successfully."
+        notify "\"$chosenLabel\" has been ${mode}ed successfully."
         return
     fi
 
-    notify "\"$drive\" could not be ${mode}ed."
+    notify "\"$chosenLabel\" could not be ${mode}ed."
 }
 
 mode="mount"

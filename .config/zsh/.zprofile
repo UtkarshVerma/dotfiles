@@ -6,16 +6,7 @@ export BROWSER="brave"
 export READER="zathura"
 export TERMINAL="st"
 export FILE_MANAGER="lfrun"
-
-case "$XDG_CURRENT_DESKTOP" in
-    "sway") export STATUSBAR="i3blocks" ;;
-    "Hyprland") export STATUSBAR="eww" ;;
-    *) export STATUSBAR="dwmblocks" ;;
-esac
-
-if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-    export TERMINAL="foot"
-fi
+export STATUSBAR="dwmblocks"
 
 ## Set PATH
 export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
@@ -60,6 +51,7 @@ export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
 export VAGRANT_HOME="$XDG_DATA_HOME/vagrant"
 export VAGRANT_ALIAS_FILE="$XDG_DATA_HOME/vagrant/aliases"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
+export W3M_DIR="$XDG_DATA_HOME/w3m"
 export _Z_DATA="$XDG_DATA_HOME/z"
 
 export TEXMFHOME="$XDG_DATA_HOME/texmf"
@@ -75,7 +67,7 @@ export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 
-export PATH="$PATH:$PNPM_HOME:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
+export PATH="$PATH:$PNPM_HOME:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:$PLATFORMIO_CORE_DIR/penv/bin"
 
 # Add RubyGems to PATH, if installed
 if which ruby >/dev/null && which gem >/dev/null; then
@@ -115,26 +107,6 @@ export XMODIFIERS="@im=fcitx5"
 # Fix for Java AWT based software (e.g. MATLAB)
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
-
-if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-    export LIBVA_DRIVER_NAME="nvidia"
-    export GBM_BACKEND="nvidia-drm"
-    export __GLX_VENDOR_LIBRARY_NAME="nvidia"
-    export MOZ_ENABLE_WAYLAND=1
-
-    export WLR_NO_HARDWARE_CURSORS=1
-    export WLR_BACKEND="vulkan"
-
-    export GDK_BACKEND="wayland"
-    export CLUTTER_BACKEND="wayland"
-    export QT_QPA_PLATFORM="wayland"
-    export SDL_VIDEODRIVER="wayland"
-    export ECORE_EVAS_ENGINE="wayland"
-    export ELM_ENGINE="wayland"
-
-    export QT_WAYLAND_FORCE_DPI="physical"
-    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-fi
 
 # Bus address used by dbus-broker user service on Arch
 export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"

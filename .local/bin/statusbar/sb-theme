@@ -22,15 +22,11 @@ display() {
     fi
 
     case "$STATUSBAR" in
-        "i3blocks")
-            body="$(echo "$1" | colrm 45)"
-            echo "<span foreground='$(palette.sh "$color")'>$body</span>"
-            ;;
-        "eww")
-            echo "$1"
-            ;;
         "dwmblocks")
             echo "^C$color^$1"
+            ;;
+        *)
+            echo "$1"
             ;;
     esac
 }

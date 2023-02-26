@@ -2,7 +2,7 @@
 # Utility script to get the geometry of a selected region.
 
 selAlpha=0.5
-selColor=$(palette.sh 12)
+selColor="$(xrdb -get color12)"
 
 hexToRGB() {
     color="$(echo "${1#?}" | tr '[:lower:]' '[:upper:]')"
@@ -18,74 +18,8 @@ hexToRGB() {
     done
 }
 
-computeBarGeometry() {
-    # Assuming same gaps in all directions
-    gap="$(swaymsg -t get_tree | jq -e '.nodes[1].nodes[0].rect | .x')"
-    top=$gap right=$gap bottom=$gap left=$gap read -r gap workspaceYOffset <<EOF
-$(swaymsg -t get_tree | jq -r '.nodes[1].nodes[0].rect | "\(.x) \(.y)"')
-EOF
-    outputWidth=$(swaymsg -t get_outputs | jq -r '.[] | select(.active).rect.width')
-
-    height=$((workspaceYOffset - top - bottom))
-    width=$((outputWidth - left - right))
-
-    cat <<EOF
-{
-    "x": $left,
-    "y": $top,
-    "width": $width,
-    "height": $height
-}
-EOF
-}
-
-if [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
-    if [ "$1" = "full" ]; then
-        swaymsg -t get_outputs |
-            jq -r '.[] | select(.active).rect | "\(.x),\(.y) \(.width)x\(.height)"'
-        exit
-    fi
-
-    regions="$(swaymsg -t get_tree |
-        jq -r '.nodes[1].nodes[] | .nodes[],.floating_nodes[] | select(.visible).rect')"
-    regions="$regions $(computeBarGeometry) $(swaymsg -t get_outputs | jq -r '.[] | select(.active).rect')"
-    echo "$regions" |
-        jq -r '"\(.x),\(.y) \(.width)x\(.height)"' |
-        slurp \
-            -b "#00000000" \
-            -B "#00000000" \
-            -c "${selColor}ff" \
-            -s "$selColor$(echo "scale=0;obase=16; (255 * $selAlpha)/1" | bc)" \
-            -w 1
-    exit
-elif [ "$XDG_CURRENT_DESKTOP" = "Hyprland" ]; then
-    activeMonitor="$(hyprctl monitors -j | jq -r ".[] | select(.focused)")"
-    if [ "$1" = "full" ]; then
-        echo "$activeMonitor" | jq -r '"\(.x),\(.y) \(.width)x\(.height)"'
-        exit
-    fi
-
-    activeWindow="$(hyprctl activewindow)"
-    workspace="$(echo "$activeWindow" | grep "workspace" | cut -d' ' -f2)"
-    monitor="$(echo "$activeWindow" | grep "monitor" | cut -d' ' -f2)"
-    regions="$(hyprctl clients -j |
-        jq -r ".[] | select((.workspace.id == $workspace) and (.monitor == $monitor))")"
-    regions="$regions
-        $(echo "$activeMonitor" |
-        jq -r '{ at: [.x, .y], size: [.width, .height] }')"
-    echo "$regions" |
-        jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
-        slurp \
-            -b "#00000000" \
-            -B "#00000000" \
-            -c "${selColor}ff" \
-            -s "$selColor$(echo "scale=0;obase=16; (255 * $selAlpha)/1" | bc)" \
-            -w 1
-    exit
-fi
-
 if [ "$1" = "full" ]; then
-    res="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'current ')"
+    res="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'curent ')"
     echo "$res+0+0"
     exit
 fi

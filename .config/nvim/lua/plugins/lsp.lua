@@ -24,6 +24,11 @@ return {
             "arduino:avr:mega",
           },
         },
+        bashls = {
+          cmd_env = {
+            INCLUDE_ALL_WORKSPACE_SYMBOLS = true,
+          },
+        },
         clangd = {
           -- Auto-format only if .clang-format exists
           cmd = { "clangd", "--fallback-style=none" },
@@ -74,14 +79,10 @@ return {
       local nls = require("null-ls")
       return {
         sources = {
-          -- nls.builtins.code_actions.shellcheck,
+          nls.builtins.code_actions.shellcheck,
           nls.builtins.diagnostics.alex,
           nls.builtins.diagnostics.markdownlint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
-          -- nls.builtins.diagnostics.shellcheck,
-          nls.builtins.formatting.shfmt.with({
-            extra_args = { "--indent", 4, "--case-indent" },
-          }),
           nls.builtins.diagnostics.yamllint.with({
             extra_args = {
               "-d",
@@ -95,6 +96,9 @@ return {
           nls.builtins.formatting.deno_fmt.with({
             filetypes = { "markdown" },
             extra_args = { "--options-line-width", 79 },
+          }),
+          nls.builtins.formatting.shfmt.with({
+            extra_args = { "--indent", 4, "--case-indent" },
           }),
           nls.builtins.formatting.stylua,
           nls.builtins.formatting.yapf,
@@ -122,9 +126,9 @@ return {
         "shellcheck",
         "shfmt",
         "stylua",
-        "yapf",
         "yamlfmt",
         "yamllint",
+        "yapf",
       },
     },
   },

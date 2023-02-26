@@ -1,0 +1,40 @@
+#!/bin/sh
+
+cpuProfiles="\
+💤 Quiet
+💻 Balanced
+💨 Performance"
+
+gpuProfiles="\
+💻 Integrated
+🔮 Vfio
+🚀 Hybrid"
+
+notify() {
+    icon="freon-fan-symbolic"
+    [ "$mode" = "GPU" ] && icon="freon-gpu-temperature-symbolic"
+    notify-send -i "$icon" "$mode Mode" "Switched to $profile mode." -t 2000
+}
+
+mode="CPU"
+profiles="$cpuProfiles"
+active="$(asusctl profile -p | cut -d' ' -f4)"
+if [ "$1" = "-g" ]; then
+    mode="GPU"
+    profiles="$gpuProfiles"
+    active="$(supergfxctl -g)"
+fi
+
+preselect="$(echo "$profiles" | grep -n -i "$active" | cut -d':' -f1)"
+preselect="$((preselect - 1))"
+prompt="$mode Profile:"
+if choice="$(echo "$profiles" | dmenu -i -ps "$preselect" -p "$prompt")"; then
+    profile="${choice##* }"
+    profile="$(echo "$profile" | tr '[:upper:]' '[:lower:]')"
+
+    if [ "$mode" = "CPU" ]; then
+        asusctl profile -P "$profile" && notify
+    fi
+
+    supergfxctl -m "$profile" && notify
+fi

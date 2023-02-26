@@ -1,30 +1,16 @@
 #!/bin/sh
 # This script opens a dropdown menu containing system actions.
 
-case "$XDG_CURRENT_DESKTOP" in
-    "sway")
-        lockCmd="swaylock"
-        logoutCmd="swaymsg exit"
-        ;;
-    "Hyprland")
-        lockCmd="swaylock"
-        logoutCmd="hyprctl dispatch exit placebo"
-        ;;
-    *)
-        lockCmd="slock"
-        logoutCmd="pkill -TERM -u $USER dwm"
-        displayOffCmd="xset dpms force off"
-        ;;
-esac
+set -e
 
 choices="\
-🔒 Lock:$lockCmd
-🚪 Logout:$logoutCmd
+🔒 Lock:slock
+🚪 Logout:pkill -TERM -u $USER dwm
 💤 Sleep:systemctl suspend
 🐻 Hibernate:systemctl hibernate
 🔃 Reboot:systemctl reboot
-💻 Shutdown:systemctl poweroff
-📺 Display off:$displayOffCmd"
+🔌 Shutdown:systemctl poweroff
+💻 Display off:xset dpms force off"
 
-choice="$(echo "$choices" | cut -d':' -f1 | dmenu -i -p "Action:")" || exit 1
+choice="$(echo "$choices" | cut -d':' -f1 | dmenu -i -p "Action:")"
 exec $(echo "$choices" | grep "^$choice" | cut -d':' -f2)

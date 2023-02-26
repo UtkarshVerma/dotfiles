@@ -2,42 +2,45 @@
 # This script provides a hassle-free way of taking screen recordings.
 
 pidFile="/tmp/record"
+logFile="/tmp/record.log"
+recordingsDir="$(xdg-user-dir VIDEOS)/recordings"
 
 recordRegion() {
     # Selection was cancelled
     [ -z "$1" ] && return 1
 
-    file="$(date '+%Y-%m-%d_%H.%M.%S').mp4"
-    path="$HOME/videos/recordings/$file"
+    width="${1%%x*}"
+    height="${1#*x}"
+    height="${height%%+*}"
+    xOffset="${1#*+}"
+    xOffset="${xOffset%%+*}"
+    yOffset="${1##*+}"
 
-    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-        wf-recorder -f "$path" -g "$1" >/tmp/record.log 2>&1 &
-    else
-        read -r W H X Y <<EOF
-$(echo "$1" | tr 'x+' ' ')
-EOF
-        set -- -f x11grab -s "${W}x${H}" -r 60 -i "$DISPLAY+$X,$Y"
+    set -- -f x11grab -r 60 -s "${width}x${height}" \
+        -i "$DISPLAY+$xOffset,$yOffset"
 
-        # Use NVENC if GPU is in "compute" mode
-        if [ "$(supergfxctl -g)" = "compute" ]; then
-            set -- "$@" -c:v h264_nvenc
-        fi
-
-        ffmpeg "$@" "$path" >/tmp/record.log 2>&1 &
+    # Use NVENC if GPU is in "compute" mode
+    if [ "$(supergfxctl -g)" = "compute" ]; then
+        set -- "$@" -c:v h264_nvenc
     fi
 
+    file="$(date '+%Y-%m-%d_%H.%M.%S').mp4"
+    set -- "$@" "$recordingsDir/$file"
+
+    ffmpeg "$@" >"$logFile" 2>&1 &
     echo "file=$file;pid=$!" >"$pidFile"
 }
 
+# Stop recording if PID file exists
 if [ -f "$pidFile" ]; then
-    # Stop recording if PID file exists
     # shellcheck disable=1090
     . "$pidFile"
     # shellcheck disable=2154
     kill -INT "$pid"
     wait "$pid"
 
-    notify-send -i view-list-video-symbolic "Record" "The recording has been successfully saved as $file."
+    notify-send -i view-list-video-symbolic \
+        "Record" "The recording has been successfully saved as $file."
     rm "$pidFile"
 else
     # Start recording

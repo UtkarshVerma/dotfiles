@@ -9,10 +9,10 @@ notify() {
 case $BLOCK_BUTTON in
     1)
         notify "This Month" "$(cal --color=always |
-            sed "s|..7m|<span color='$(palette.sh 1)'>|;s|..27m|</span>|")"
+            sed "s|..7m|<span color='$(xrdb -get color1)'>|;s|..27m|</span>|")"
         appointments="$(calcurse -d3 \
-            --format-apt "• <i>%S - %E</i>\n  <span foreground='$(palette.sh 6)'>%m</span>\n" \
-            --format-event "• <span foreground='$(palette.sh 6)'>%m</span>\n")"
+            --format-apt "• <i>%S - %E</i>\n  <span foreground='$(xrdb -get color6)'>%m</span>\n" \
+            --format-event "• <span foreground='$(xrdb -get color6)'>%m</span>\n")"
         [ -n "$appointments" ] && notify "Appointments" "$appointments"
         ;;
     2) setsid -f "$TERMINAL" -e calcurse ;;
