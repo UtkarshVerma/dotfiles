@@ -26,9 +26,9 @@ case "$1" in
         ;;
     *)
         choices="\
-🎣 Selection
+🖱 Selection
 💻 Entire Screen
-🎣 Selection (Copy)
+🖱 Selection (Copy)
 💻 Entire Screen (Copy)"
 
         choice="$(echo "$choices" | dmenu -i -p "Screenshot:")" || exit

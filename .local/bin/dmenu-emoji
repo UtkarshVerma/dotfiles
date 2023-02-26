@@ -8,17 +8,7 @@ set -e
 
 # Where to save the emojis file.
 EMOJI_FILE="$XDG_CACHE_HOME/emojis"
-
-# URLs of emoji to download.
-# You can remove what you don't need.
-URLS="https://emojipedia.org/people/ \
-    https://emojipedia.org/nature/ \
-    https://emojipedia.org/food-drink/ \
-    https://emojipedia.org/activity/ \
-    https://emojipedia.org/travel-places/ \
-    https://emojipedia.org/objects/ \
-    https://emojipedia.org/symbols/ \
-    https://emojipedia.org/flags/"
+URL="https://unicode.org/emoji/charts/emoji-list.html"
 
 notify() {
     notify-send -i emoji-people-symbolic -t 1500 \
@@ -27,18 +17,12 @@ notify() {
 }
 
 download() {
-    notify "Downloading all emojis for your pleasure"
+    notify "Downloading emojis for your pleasure"
 
-    for url in $URLS; do
-        echo "Downloading: $url"
-
-        # Download the list of emoji and remove all the junk around it
-        emojis="$(curl -s "$url" |
-            xmllint --html --xpath '//span[@class="emoji"]/..' - 2>/dev/null |
-            sed -rn 's|.*<span class="emoji">(.*)</span> (.*)</a>.*|\1 \2|p')"
-
-        echo "$emojis" >>"$EMOJI_FILE"
-    done
+    # Scrape emoji metadata from the webpage
+    curl -s "$URL" |
+        xmllint --html --xpath '//td[@class="andr"]/a/img/@title' - 2>/dev/null |
+        sed 's/^ title="\(U+[0-9,A-Z]* \)*\([^ ]*\) \(.*\)"/\2 \u\3/; s/\&amp;/and/' >"$EMOJI_FILE"
 
     notify "We're all set!"
 }
