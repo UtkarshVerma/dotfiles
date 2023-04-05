@@ -3,16 +3,27 @@
 scripts="$XDG_CONFIG_HOME/aliasrc
     $XDG_CONFIG_HOME/lf/lfcd.sh
     /usr/share/z/z.sh
-    /opt/ros/noetic/setup.sh"
+    /opt/ros/noetic/setup.sh
+    /usr/bin/virtualenvwrapper_lazy.sh"
 
 echo "$scripts" | while read -r script; do
     if [ -f "$script" ]; then
-        source "$script"
+        # shellcheck disable=1090
+        . "$script"
     fi
 done
 
 se() {
-    scripts="$(find ~/.local/bin/ -type l | grep -v /bin/statusbar)
-$(find ~/.local/bin/statusbar/ -type f)"
-    echo "$scripts" | fzf | xargs -r "$EDITOR"
+    cat <<EOF | fzf | xargs -r "$EDITOR"
+$(find ~/.local/bin/ -type l | grep -v /bin/statusbar)
+$(find ~/.local/bin/statusbar/ -type f)
+EOF
+}
+
+dpaste() {
+    if url="$(curl --silent --form 'format=url' --form 'content=<-' \
+        https://dpaste.org/api/)"; then
+        printf "%s" "$url" | xclip -selection clipboard &&
+            echo "URL \"$url\" copied to clipboard."
+    fi
 }

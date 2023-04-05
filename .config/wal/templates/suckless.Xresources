@@ -13,7 +13,7 @@ window.foreground: {foreground}
 !! st
 *.alpha: {alpha.alpha_dec}
 *.cursorColor: {cursor}
-*.font: monospace:size=16
+*.font: monospace:size=14
 
 !! slock
 slock.locked: {color0}

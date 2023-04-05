@@ -1,14 +1,19 @@
 #!/bin/sh
 
 alias \
-    activate="source venv/bin/activate" \
+    cat="bat" \
+    cbcopy="xclip -selection clipboard" \
+    cbpaste="xclip -selection clipboard -out" \
     cmatrix="unimatrix -n -s 96 -l o" \
-    ls="ls --color=auto" \
-    ll="ls -l" \
-    grep="grep --color=auto" \
-    fgrep="fgrep --color=auto" \
-    egrep="egrep --color=auto" \
+    diff="diff --color=auto" \
+    docker="nerdctl" \
     dosbox="dosbox -conf \$XDG_CONFIG_HOME/dosbox/dosbox.conf" \
+    egrep="egrep --color=auto" \
+    fgrep="fgrep --color=auto" \
+    grep="grep --color=auto" \
+    ll="ls -l" \
+    ls="ls --color=auto" \
     ncdu="ncdu --color dark" \
     open="xdg-open" \
+    tree="tree -a -I .git" \
     vi="nvim"

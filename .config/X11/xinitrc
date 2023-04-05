@@ -22,8 +22,6 @@ autostart="\
     nm-applet
     $STATUSBAR"
 
-calcurse --daemon
-
 echo "$autostart" | while read -r program; do
     process="${program%%[[:space:]]*}"
     process="${process##*/}"

@@ -8,81 +8,86 @@ export TERMINAL="st"
 export FILE_MANAGER="lfrun"
 export STATUSBAR="dwmblocks"
 
-## Set PATH
-export PATH="$HOME/.local/bin:$HOME/.local/bin/statusbar:$PATH"
-
-## ~/ Clean-up:
+# XDG paths
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_DIRS="$XDG_DATA_HOME:/usr/local/share:/usr/share"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
-export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-
-export NODE_REPL_HISTORY="$XDG_STATE_HOME/node/history"
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
-export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
-export PNPM_HOME="$XDG_DATA_HOME/pnpm"
-
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
-
+# ~/ cleanup
+export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$XDG_DATA_HOME/android"
 export ANDROID_SDK_ROOT="$XDG_DATA_HOME/android-sdk"
-export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
-export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
-export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
-export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
-export CHROME_EXECUTABLE="$BROWSER"
-export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
-export GOPATH="$XDG_DATA_HOME/go"
-export HUGO_CACHES_MODULES_DIR="$XDG_DATA_HOME/hugo"
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-export MATLAB_PREFDIR="$XDG_DATA_HOME/matlab/R2020b"
-export MLM_LICENSE_FILE="$XDG_DATA_HOME/matlab/license.lic"
-export MATLAB_LOG_DIR="$XDG_CACHE_HOME/matlab"
-export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME/platformio"
-export PLATFORMIO_CACHE_DIR="$XDG_CACHE_HOME/platformio"
-export ROS_HOME="$XDG_CACHE_HOME/ros"
-export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
-export VAGRANT_HOME="$XDG_DATA_HOME/vagrant"
-export VAGRANT_ALIAS_FILE="$XDG_DATA_HOME/vagrant/aliases"
-export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
-export W3M_DIR="$XDG_DATA_HOME/w3m"
-export _Z_DATA="$XDG_DATA_HOME/z"
-
-export TEXMFHOME="$XDG_DATA_HOME/texmf"
-export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
-export TEXMFCONFIG="$XDG_CONFIG_HOME/texlive/texmf-config"
-
 export ARDUINO_DIRECTORIES_DATA="$XDG_DATA_HOME/Arduino"
 export ARDUINO_DIRECTORIES_DOWNLOADS="$ARDUINO_DIRECTORIES_DATA/staging"
 export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
-
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export CHROME_EXECUTABLE="$BROWSER"
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export GOPATH="$XDG_DATA_HOME/go"
+export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
+export HUGO_CACHES_MODULES_DIR="$XDG_DATA_HOME/hugo"
+export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+export MATLAB_LOG_DIR="$XDG_CACHE_HOME/matlab"
+export MATLAB_PREFDIR="$XDG_DATA_HOME/matlab/R2020b"
+export MLM_LICENSE_FILE="$XDG_DATA_HOME/matlab/license.lic"
+export NODE_REPL_HISTORY="$XDG_STATE_HOME/node/history"
+export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
+export PLATFORMIO_CACHE_DIR="$XDG_CACHE_HOME/platformio"
+export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME/platformio"
+export PNPM_HOME="$XDG_DATA_HOME/pnpm"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
+export ROS_HOME="$XDG_CACHE_HOME/ros"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export TEXMFCONFIG="$XDG_CONFIG_HOME/texlive/texmf-config"
+export TEXMFHOME="$XDG_DATA_HOME/texmf"
+export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
+export VAGRANT_ALIAS_FILE="$XDG_DATA_HOME/vagrant/aliases"
+export VAGRANT_HOME="$XDG_DATA_HOME/vagrant"
+export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
+export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
+export W3M_DIR="$XDG_DATA_HOME/w3m"
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
-export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
-export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
+export _Z_DATA="$XDG_DATA_HOME/z"
 
-export PATH="$PATH:$PNPM_HOME:$NPM_CONFIG_PREFIX/bin:/usr/local/go/bin:$GOPATH/bin:$CARGO_HOME/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:$PLATFORMIO_CORE_DIR/penv/bin"
+# Set PATH
+export PATH="$PNPM_HOME:\
+$NPM_CONFIG_PREFIX/bin:\
+$GOPATH/bin:\
+$CARGO_HOME/bin:\
+$ANDROID_SDK_ROOT/emulator:\
+$ANDROID_SDK_ROOT/platform-tools:\
+$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:\
+$HOME/.local/bin/statusbar:\
+$HOME/.local/bin:\
+$PATH"
 
 # Add RubyGems to PATH, if installed
-if which ruby >/dev/null && which gem >/dev/null; then
+if command -v ruby >/dev/null 2>&1 && command -v gem >/dev/null 2>&1; then
     export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
-## Misc
+# Misc
 export NVIM_LISTEN_ADDRESS="/tmp/nvim"
 export AWT_TOOLKIT="MToolkit"
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
+export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 
-## Look and feel
+# Look and feel
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
-## Colorize `less`
+# Colorize `less`
 export LESS="-R"
 export LESSOPEN="| highlight -O ansi %s 2>/dev/null"
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)

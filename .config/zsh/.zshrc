@@ -105,6 +105,9 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-e' edit-command-line
 
+# Ctrl-f: Open fuzzy finder
+bindkey -s '\C-f' 'fzf\r'
+
 # Ctrl-o: Open a directory using lf
 case "$FILE_MANAGER" in
     lf*)

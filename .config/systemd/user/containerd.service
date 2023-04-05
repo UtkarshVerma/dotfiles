@@ -1,0 +1,23 @@
+[Unit]
+Description=containerd (Rootless)
+
+[Service]
+Environment=PATH=/usr/sbin:/sbin:/usr/sbin:/home/subaru/.local/share/gem/ruby/3.0.0/bin:/home/subaru/.local/bin:/home/subaru/.local/bin/statusbar:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/subaru/.dotnet/tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/subaru/.local/share/pnpm:/home/subaru/.local/share/npm/bin:/usr/local/go/bin:/home/subaru/.local/share/go/bin:/home/subaru/.local/share/cargo/bin:/home/subaru/.local/share/android-sdk/emulator:/home/subaru/.local/share/android-sdk/platform-tools:/home/subaru/.local/share/android-sdk/cmdline-tools/tools/bin:/home/subaru/.local/share/platformio/penv/bin
+Environment=CONTAINERD_ROOTLESS_ROOTLESSKIT_FLAGS=
+ExecStart=/usr/sbin/containerd-rootless.sh
+ExecReload=/bin/kill -s HUP $MAINPID
+TimeoutSec=0
+RestartSec=2
+Restart=always
+StartLimitBurst=3
+StartLimitInterval=60s
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+Delegate=yes
+Type=simple
+KillMode=mixed
+
+[Install]
+WantedBy=default.target

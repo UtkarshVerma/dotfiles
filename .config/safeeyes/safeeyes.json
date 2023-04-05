@@ -87,7 +87,7 @@
             "version": "0.0.2"
         },
         {
-            "enabled": true,
+            "enabled": false,
             "id": "healthstats",
             "settings": {
                 "statistics_reset_cron": "0 0 * * *"

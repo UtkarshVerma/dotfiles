@@ -21,8 +21,11 @@
 [includeIf "gitdir:~/work/"]
     path = ~/work/.gitconfig
 
+[includeIf "gitdir:~/gsoc/"]
+	path = ~/gsoc/.gitconfig
+
 [safe]
-	directory = /media/stuff/Software/QEMU/Windows 10
-	directory = /media/stuff/Academics/Notes/vimwiki
-	directory = /media/stuff/Academics/Resume/utkarshverma.github.io
-	directory = /media/stuff/Academics/Resume/hugo-yami
+	directory = /run/media/subaru/Stuff/Software/QEMU/Windows 10
+	directory = /run/media/subaru/Stuff/Academics/Notes/vimwiki
+	directory = /run/media/subaru/Stuff/Resume/utkarshverma.github.io
+	directory = /run/media/subaru/Stuff/Resume/hugo-yami

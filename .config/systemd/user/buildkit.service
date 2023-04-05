@@ -1,0 +1,15 @@
+[Unit]
+Description=BuildKit (Rootless)
+PartOf=containerd.service
+
+[Service]
+Environment=PATH=/usr/sbin:/sbin:/usr/sbin:/home/subaru/.local/share/gem/ruby/3.0.0/bin:/home/subaru/.local/bin:/home/subaru/.local/bin/statusbar:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/subaru/.dotnet/tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/subaru/.local/share/pnpm:/home/subaru/.local/share/npm/bin:/usr/local/go/bin:/home/subaru/.local/share/go/bin:/home/subaru/.local/share/cargo/bin:/home/subaru/.local/share/android-sdk/emulator:/home/subaru/.local/share/android-sdk/platform-tools:/home/subaru/.local/share/android-sdk/cmdline-tools/tools/bin:/home/subaru/.local/share/platformio/penv/bin
+ExecStart="/usr/bin/containerd-rootless-setuptool.sh" nsenter buildkitd
+ExecReload=/bin/kill -s HUP $MAINPID
+RestartSec=2
+Restart=always
+Type=simple
+KillMode=mixed
+
+[Install]
+WantedBy=default.target
