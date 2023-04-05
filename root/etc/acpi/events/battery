@@ -1,3 +1,3 @@
 # Signal battery block to update charging status on plugging/disconnecting adapter
 event=ac_adapter.*
-action=pkill -RTMIN+23 dwmblocks
+action=pkill -RTMIN+9 dwmblocks

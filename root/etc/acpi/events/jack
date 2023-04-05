@@ -1,3 +1,3 @@
 # Signal audio block to update volume on connecting/disconnecting headphones
 event=jack/.*
-action=pkill -RTMIN+22 dwmblocks
+action=pkill -RTMIN+8 dwmblocks
