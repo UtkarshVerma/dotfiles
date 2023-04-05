@@ -2,4 +2,5 @@
 Name=PDF Reader
 Icon=document-viewer
 Type=Application
-Exec=${READER} %u
+Exec=sh -c 'exec "$READER" %U'
+MimeType=application/pdf;
