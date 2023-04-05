@@ -31,13 +31,14 @@ return {
         },
         clangd = {
           -- Auto-format only if .clang-format exists
-          cmd = { "clangd", "--fallback-style=none" },
+          cmd = { "clangd", "--enable-config", "--clang-tidy", "--fallback-style=none", "--header-insertion=never" },
         },
         ltex = {
           settings = {
             ltex = {
+              language = "en-GB",
               dictionary = {
-                ["en-US"] = words,
+                ["en-GB"] = words,
               },
             },
           },
@@ -49,7 +50,17 @@ return {
             },
           },
         },
-        pyright = {},
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = "workspace",
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
         gopls = {},
         rust_analyzer = {},
         rome = {},
@@ -75,19 +86,15 @@ return {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
+    event = { "BufReadPre" },
+    dependencies = { "jay-babu/mason-null-ls.nvim" },
     opts = function()
       local nls = require("null-ls")
       return {
         sources = {
-          nls.builtins.code_actions.shellcheck,
-          nls.builtins.diagnostics.alex,
-          nls.builtins.diagnostics.markdownlint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
           nls.builtins.diagnostics.yamllint.with({
-            extra_args = {
-              "-d",
-              "{extends: default, rules: {document-start: {present: false}}}",
-            },
+            extra_args = { "-d", "{extends: default, rules: {document-start: {present: false}}}" },
           }),
           nls.builtins.formatting.clang_format.with({
             -- clangd automatically calls clang-format
@@ -97,30 +104,26 @@ return {
             filetypes = { "markdown" },
             extra_args = { "--options-line-width", 79 },
           }),
+          -- nls.builtins.formatting.latexindent,
           nls.builtins.formatting.shfmt.with({
             extra_args = { "--indent", 4, "--case-indent" },
           }),
-          nls.builtins.formatting.stylua,
-          nls.builtins.formatting.yapf,
-          nls.builtins.formatting.yamlfmt,
         },
       }
     end,
   },
   {
-    "williamboman/mason.nvim",
-    keys = {
-      { "<leader>cm", false },
-      { "<leader>m", "<cmd>Mason<cr>" },
+    "jay-babu/mason-null-ls.nvim",
+    dependencies = {
+      "williamboman/mason.nvim",
     },
     opts = {
-      ui = {
-        border = "rounded",
-      },
       ensure_installed = {
         "alex",
-        "bash-language-server",
-        "deno",
+        "clang_format",
+        "deno_fmt",
+        "hadolint",
+        "latexindent",
         "markdownlint",
         "ruff",
         "shellcheck",
@@ -130,6 +133,30 @@ return {
         "yamllint",
         "yapf",
       },
+      handlers = {},
+      automatic_setup = true,
+      automatic_installation = true,
+    },
+  },
+  {
+    "williamboman/mason-lspconfig",
+    event = { "BufReadPre" },
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "williamboman/mason.nvim",
+    },
+    opts = {
+      automatic_installation = true,
+    },
+  },
+  {
+    "williamboman/mason.nvim",
+    keys = {
+      { "<leader>cm", false },
+      { "<leader>m", "<cmd>Mason<cr>" },
+    },
+    opts = {
+      ui = { border = "rounded" },
     },
   },
 }

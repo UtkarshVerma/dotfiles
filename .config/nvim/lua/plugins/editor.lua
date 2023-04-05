@@ -6,8 +6,23 @@ return {
   },
   { "RRethy/vim-illuminate", enabled = false },
   {
+    "max397574/better-escape.nvim",
+    event = { "BufReadPre" },
+    opts = {
+      mapping = { "jk", "jj", "kj" },
+    },
+    config = function(_, opts)
+      require("better_escape").setup(opts)
+    end,
+  },
+  {
     "folke/which-key.nvim",
     opts = function(_, opts)
+      require("which-key").register({
+        ["<leader>d"] = {
+          name = "+debug",
+        },
+      })
       return vim.tbl_deep_extend("force", opts, {
         plugins = {
           presets = {
@@ -18,11 +33,13 @@ return {
     end,
   },
   {
-    "echasnovski/mini.bufremove",
-    keys = function(_, keys)
-      return vim.list_extend({
-        { "<c-w>", "<leader>bd", desc = "Delete Buffer", remap = true },
-      }, keys)
+    "echasnovski/mini.comment",
+    opts = function(_, opts)
+      return vim.tbl_deep_extend("force", opts, {
+        options = {
+          ignore_blank_line = true,
+        },
+      })
     end,
   },
   {

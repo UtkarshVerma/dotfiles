@@ -1,18 +1,19 @@
 return {
+  { "rafamadriz/friendly-snippets", enabled = false },
   {
     "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      local has_words_before = function()
-        unpack = unpack or table.unpack
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-      end
-
+    opts = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      return vim.tbl_deep_extend("force", opts, {
+
+      return {
         completion = {
-          completeopt = "menuone,noselect",
+          completeopt = "menu,menuone,noselect",
+        },
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
         },
         window = {
           documentation = {
@@ -20,22 +21,17 @@ return {
           },
         },
         mapping = cmp.mapping.preset.insert({
-          ["<c-d>"] = cmp.mapping.scroll_docs(-4),
+          ["<c-b>"] = cmp.mapping.scroll_docs(-4),
           ["<c-f>"] = cmp.mapping.scroll_docs(4),
+          ["<c-e>"] = cmp.mapping.abort(),
+          ["<cr>"] = cmp.mapping.confirm({ select = false }),
+          ---@diagnostic disable-next-line: missing-parameter
           ["<c-space>"] = cmp.mapping.complete(),
-          ["<cr>"] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = false,
-          }),
           ["<tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-            -- they way you will only jump inside the snippet region
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
             else
               fallback()
             end
@@ -50,7 +46,22 @@ return {
             end
           end, { "i", "s" }),
         }),
-      })
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "path" },
+          { name = "luasnip" },
+          { name = "buffer", keyword_length = 5 },
+        }),
+        formatting = {
+          format = function(_, item)
+            local icons = require("lazyvim.config").icons.kinds
+            if icons[item.kind] then
+              item.kind = icons[item.kind] .. item.kind
+            end
+            return item
+          end,
+        },
+      }
     end,
   },
   {
@@ -93,57 +104,21 @@ return {
     event = "BufReadPre",
     config = true,
   },
-  { "p00f/nvim-ts-rainbow" },
-  { "echasnovski/mini.pairs", enabled = false },
   {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "hrsh7th/nvim-cmp",
-    },
-    opts = {
-      check_ts = true,
-      ts_config = {
-        lua = { "string", "source" },
-        javascript = { "string", "template_string" },
-        java = false,
-      },
-      disable_filetype = { "TelescopePrompt", "spectre_panel" },
-      ignored_next_char = string.gsub([[ [%w%%%'%[%"%.] ]], "%s+", ""),
-      -- change default fast_wrap
-      fast_wrap = {
-        map = "<M-e>",
-        chars = { "{", "[", "(", '"', "'" },
-        pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
-        offset = 0, -- Offset from pattern match
-        end_key = "$",
-        keys = "qwertyuiopzxcvbnmasdfghjkl",
-        check_comma = true,
-        highlight = "Search",
-        highlight_grey = "Comment",
-      },
-    },
-    config = function(_, opts)
-      local autopairs = require("nvim-autopairs")
-      autopairs.setup(opts)
-      require("nvim-treesitter.configs").setup({ autopairs = { enable = true } })
+    "echasnovski/mini.pairs",
+    opts = function(_, opts)
+      return vim.tbl_deep_extend("force", opts, {
+        mappings = {
+          ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\%(][^%)%a'\"]" },
+          ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\%[][^%]%a'\"]" },
+          ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\%{][^%}%a'\"]" },
 
-      local rule = require("nvim-autopairs.rule")
-      local ts_conds = require("nvim-autopairs.ts-conds")
-
-      -- press % => %% only while inside a comment or string
-      autopairs.add_rules({
-        rule("%", "%", "lua"):with_pair(ts_conds.is_ts_node({ "string", "comment" })),
-        rule("$", "$", "lua"):with_pair(ts_conds.is_not_ts_node({ "function" })),
+          ["'"] = { action = "open", pair = "''", neigh_pattern = "[^%S][^%a]" },
+          ['"'] = { action = "open", pair = '""', neigh_pattern = "[^%S][^%a]" },
+        },
       })
-
-      local cmp = require("cmp")
-      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
   },
-
   {
     "echasnovski/mini.comment",
     keys = {

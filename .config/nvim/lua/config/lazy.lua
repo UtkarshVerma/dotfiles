@@ -17,6 +17,7 @@ require("lazy").setup({
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     { import = "plugins" },
   },
+  change_detection = { enabled = false },
   defaults = {
     lazy = true,
     version = false, -- always use the latest git commit
@@ -25,20 +26,4 @@ require("lazy").setup({
     border = "rounded",
   },
   install = { colorscheme = { "molokai" } },
-  checker = { enabled = false }, -- automatically check for plugin updates
-  performance = {
-    rtp = {
-      -- disable some rtp plugins
-      disabled_plugins = {
-        "gzip",
-        "matchit",
-        "matchparen",
-        "netrwPlugin",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "zipPlugin",
-      },
-    },
-  },
 })
