@@ -10,7 +10,7 @@ snipTo() {
         output="-"
     else
         # shellcheck disable=2088
-        output="$screenshotsDir/$(date '+%Y-%m-%d_%H.%M.%S').png"
+        output="$screenshotsDir/$(date '+%Y-%m-%d_%H-%M-%S').png"
         message="The screenshot has been successfully saved as \
             $(echo "$output" | sed "s|$HOME|~|")."
     fi

@@ -1,0 +1,10 @@
+#!/bin/sh
+# Script to modify the BootNext EFI variable to boot to Windows after reboot.
+# Requires root permissions.
+
+set -e
+
+bootNum="$(efibootmgr | grep "Windows" | head -1 | cut -d'*' -f1)"
+bootNum="${bootNum#Boot}"
+efibootmgr --bootnext "$bootNum"
+reboot

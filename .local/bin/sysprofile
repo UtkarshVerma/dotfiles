@@ -25,6 +25,10 @@ if [ "$1" = "-g" ]; then
     active="$(supergfxctl -g)"
 fi
 
+if [ "$(supergfxctl -g)" = "hybrid" ]; then
+    profiles="$(echo "$profiles" | grep -v Vfio)"
+fi
+
 preselect="$(echo "$profiles" | grep -n -i "$active" | cut -d':' -f1)"
 preselect="$((preselect - 1))"
 prompt="$mode Profile:"

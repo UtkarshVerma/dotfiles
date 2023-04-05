@@ -4,15 +4,14 @@
 newLine="
 "
 
-getBlockDrives() {
-    drives="$(lsblk --noheadings --raw -o rm,label,name,mountpoint |
-        grep -v nvme0n1p5)" # automounted using fstab
+formatBlockDrives() {
+    removableDriveIcon="🧳"
+    diskDriveIcon="🗄"
+    drives="$(echo "$1" | sed -e 's|^1  |1 Unnamed\\x20Drive |' |
+        sed "s|^1|$removableDriveIcon|;s|^0|$diskDriveIcon|")"
+    mode="$2"
 
-    removableDrives="$(echo "$drives" | grep "^1" | sed 's|^1|🧳|')"
-    diskDrives="$(echo "$drives" | grep -v "^1" | sed 's|^0|🗄|')"
-    drives="$removableDrives$newLine$diskDrives"
-
-    if [ "$1" = "mount" ]; then
+    if [ "$mode" = mount ]; then
         echo "$drives" |
             awk '$3~/[[:digit:]]/ && !$4 {
             printf "%s=%s=/dev/%s\n", $1, $2, $3
@@ -22,8 +21,18 @@ getBlockDrives() {
 
     echo "$drives" |
         awk '$3~/[[:digit:]]/ && $4 {
-            printf "%s=%s=%s\n", $1, $2, $4
-        }'
+           printf "%s=%s=%s\n", $1, $2, $4
+       }'
+}
+
+getBlockDrives() {
+    drives="$(lsblk --noheadings --raw -o rm,label,name,mountpoint |
+        grep -v -e nvme0n1p5)" # automounted using fstab
+
+    removableDrives="$(echo "$drives" | grep "^1")"
+    diskDrives="$(echo "$drives" | grep -v "^1")"
+    drives="$removableDrives$newLine$diskDrives"
+    formatBlockDrives "$drives" "$1"
 }
 
 getMTPDrives() {

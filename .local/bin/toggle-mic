@@ -10,7 +10,7 @@ notify() {
 }
 
 pactl set-source-mute @DEFAULT_SOURCE@ toggle || exit 1
-pkill -RTMIN+26 "$STATUSBAR"
+pkill -RTMIN+8 "$STATUSBAR"
 
 if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
     notify muted

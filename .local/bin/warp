@@ -1,11 +1,11 @@
 #!/bin/sh
 # Script for setting up and connecting to Cloudflare VPN.
 
-serviceStatus=$(systemctl is-active warp-svc)
+serviceStatus="$(systemctl is-active warp-svc)"
 case "$1" in
     on)
         if [ "$serviceStatus" != "active" ]; then
-            systemctl start warp-svc
+            sudo -A systemctl start warp-svc
             sleep 1
         fi
         warp-cli connect
@@ -13,7 +13,7 @@ case "$1" in
     off)
         if [ "$serviceStatus" = "active" ]; then
             warp-cli disconnect
-            systemctl stop warp-svc
+            sudo -A systemctl stop warp-svc
         fi
         ;;
     *)

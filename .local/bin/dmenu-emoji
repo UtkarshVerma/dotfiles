@@ -48,7 +48,7 @@ emojis="$(grep -v '#' "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
 if line="$(echo "$emojis" | dmenu -l 8 -i -p "Emoji:")"; then
     emoji="${line%%[[:space:]]*}"
 
-    if [ "$MUST_COPY" -gt 0 ]; then
+    if [ -n "$MUST_COPY" ]; then
         printf "%s" "$emoji" | xclip -sel clipboard &&
             notify "'$emoji' copied to clipboard."
         exit

@@ -10,7 +10,8 @@ choices="\
 🐻 Hibernate:systemctl hibernate
 🔃 Reboot:systemctl reboot
 🔌 Shutdown:systemctl poweroff
-💻 Display off:xset dpms force off"
+💻 Display off:xset dpms force off
+🔃 Reboot (Windows):sudo -A reboot-windows"
 
 choice="$(echo "$choices" | cut -d':' -f1 | dmenu -i -p "Action:")"
-exec $(echo "$choices" | grep "^$choice" | cut -d':' -f2)
+exec $(echo "$choices" | grep "^$choice:" | cut -d':' -f2)

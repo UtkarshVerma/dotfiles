@@ -1,6 +1,35 @@
 #!/bin/sh
 # dmenu wrapper to ensure that the menu overlaps the statusbar
 
+getParentRect() {
+    focusedX="${1#+}"
+    focusedX="${focusedX%+*}"
+    focusedY="${1##*+}"
+
+    for geometry in $2; do
+        x="${geometry#*+}"
+        x="${x%+*}"
+        y="${geometry##*+}"
+        width="${geometry%%x*}"
+        height="${geometry%%+*}"
+        height="${height##*x}"
+
+        if [ "$focusedX" -ge "$x" ] && [ "$focusedX" -le "$((x + width))" ] &&
+            [ "$focusedY" -ge "$y" ] && [ "$focusedY" -le "$((y + height))" ]; then
+            echo "$geometry"
+            return
+        fi
+    done
+}
+
+getBarGeometry() {
+    focusedSystray="$(xwininfo -root -tree | grep 'dwmsystray' | head -1 |
+        awk '{ print $NF }')"
+    geometries="$(xwininfo -root -tree | grep '("dwm" "dwm")' |
+        awk '{ print $(NF - 1) }')"
+    getParentRect "$focusedSystray" "$geometries"
+}
+
 scriptDir="${0%/*}"
 binary="${0##*/}"
 IFS=":"
@@ -12,12 +41,11 @@ unset IFS
 
 for arg in "$@"; do
     case "$arg" in
-        -w | -h) exec "$dir/$binary" "$@" ;;
+        -W | -h | -w) exec "$dir/$binary" "$@" ;;
     esac
 done
 
-barGeometry="$(xwininfo -root -tree |
-    grep '("dwm" "dwm")' | head -1 | awk '{ print $(NF - 1) }')"
+barGeometry="$(getBarGeometry)"
 
 height="${barGeometry#*x}"
 height="${height%%+*}"
@@ -31,6 +59,7 @@ xOffset="${xOffset%+*}"
 set -- "$@" -X "$xOffset"
 
 yOffset="${barGeometry##*+}"
+[ "$yOffset" -lt 0 ] && yOffset="$xOffset"
 set -- "$@" -Y "$yOffset"
 
 exec "$dir/$binary" "$@"

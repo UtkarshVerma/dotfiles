@@ -8,5 +8,5 @@
         sleep 1
     done
 } | while read -r _; do
-    pkill -RTMIN+18 "$STATUSBAR"
+    pkill -RTMIN+2 "$STATUSBAR"
 done

@@ -10,7 +10,7 @@ case $BLOCK_BUTTON in
     1)
         notify "This Month" "$(cal --color=always |
             sed "s|..7m|<span color='$(xrdb -get color1)'>|;s|..27m|</span>|")"
-        appointments="$(calcurse -d3 \
+        appointments="$(calcurse -d1 \
             --format-apt "• <i>%S - %E</i>\n  <span foreground='$(xrdb -get color6)'>%m</span>\n" \
             --format-event "• <span foreground='$(xrdb -get color6)'>%m</span>\n")"
         [ -n "$appointments" ] && notify "Appointments" "$appointments"

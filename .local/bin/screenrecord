@@ -24,7 +24,7 @@ recordRegion() {
         set -- "$@" -c:v h264_nvenc
     fi
 
-    file="$(date '+%Y-%m-%d_%H.%M.%S').mp4"
+    file="$(date '+%Y-%m-%d_%H-%M-%S').mp4"
     set -- "$@" "$recordingsDir/$file"
 
     ffmpeg "$@" >"$logFile" 2>&1 &
@@ -47,4 +47,4 @@ else
     recordRegion "$(sel-area)"
 fi
 
-pkill -RTMIN+27 "$STATUSBAR"
+pkill -RTMIN+7 "$STATUSBAR"
