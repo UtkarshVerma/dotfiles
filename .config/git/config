@@ -24,6 +24,9 @@
 [includeIf "gitdir:~/gsoc/"]
 	path = ~/gsoc/.gitconfig
 
+[includeIf "gitdir:~/remotes"]
+	path = ~/remotes/.gitconfig
+
 [safe]
 	directory = /run/media/subaru/Stuff/Software/QEMU/Windows 10
 	directory = /run/media/subaru/Stuff/Academics/Notes/vimwiki
