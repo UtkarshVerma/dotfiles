@@ -1,25 +1,35 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    dependencies = "nvim-treesitter/playground",
+    dependencies = {
+      "nvim-treesitter/playground",
+      "JoosepAlviste/nvim-ts-context-commentstring",
+    },
     opts = function(_, opts)
       return vim.tbl_deep_extend("force", opts, {
         ensure_installed = {
           "arduino",
           "bash",
+          "bibtex",
           "c",
+          "cmake",
           "cpp",
           "devicetree",
           "dockerfile",
+          "git_config",
+          "git_rebase",
+          "gitattributes",
+          "gitcommit",
+          "gitignore",
           "go",
           "gomod",
           "gowork",
-          "help",
           "html",
           "javascript",
           "json",
           "latex",
           "lua",
+          "make",
           "markdown",
           "markdown_inline",
           "python",
@@ -31,6 +41,14 @@ return {
           "yaml",
         },
         playground = { enable = true },
+        context_commentstring = {
+          enable = true,
+          enable_autocmd = false,
+          config = {
+            c = "// %s",
+            cpp = "// %s",
+          },
+        },
       })
     end,
   },

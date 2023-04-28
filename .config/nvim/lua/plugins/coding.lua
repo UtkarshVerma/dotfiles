@@ -106,6 +106,7 @@ return {
   },
   {
     "echasnovski/mini.pairs",
+    enabled = false,
     opts = function(_, opts)
       return vim.tbl_deep_extend("force", opts, {
         mappings = {
@@ -120,7 +121,29 @@ return {
     end,
   },
   {
+    "windwp/nvim-autopairs",
+    event = "BufReadPre",
+    opts = {
+      check_ts = true,
+      ts_config = { java = false },
+      fast_wrap = {
+        map = "<M-e>",
+        chars = { "{", "[", "(", '"', "'" },
+        pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
+        offset = 0,
+        end_key = "$",
+        keys = "qwertyuiopzxcvbnmasdfghjkl",
+        check_comma = true,
+        highlight = "PmenuSel",
+        highlight_grey = "LineNr",
+      },
+    },
+  },
+  {
     "echasnovski/mini.comment",
+    dependencies = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+    },
     keys = {
       "gcc",
       "gc",

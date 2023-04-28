@@ -61,7 +61,7 @@ return {
         draw = {
           delay = 0,
           animation = require("mini.indentscope").gen_animation.none(),
-          priority = 16,
+          priority = 25,
         },
         options = {
           border = "top",
@@ -77,7 +77,7 @@ return {
       return vim.tbl_deep_extend("force", opts, {
         char = "▏",
         context_char = "▏",
-        char_priority = 15,
+        char_priority = 20,
         use_treesitter = true,
       })
     end,

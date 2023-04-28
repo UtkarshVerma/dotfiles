@@ -7,11 +7,18 @@ vim.api.nvim_create_autocmd(
 -- coreboot development settings
 local coreboot_dir = vim.fn.expand("~") .. "/gsoc/coreboot/coreboot/"
 vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+  pattern = { coreboot_dir .. "*", coreboot_dir .. "*" },
+  callback = function(_)
+    vim.o.tabstop = 8
+    vim.o.shiftwidth = 8
+    vim.o.expandtab = false
+    return true
+  end,
+})
+vim.api.nvim_create_autocmd({ "BufReadPost" }, {
   pattern = { coreboot_dir .. "*.c", coreboot_dir .. "*.h" },
   callback = function(_)
     vim.o.colorcolumn = "97"
-    vim.o.tabstop = 8
-    vim.o.shiftwidth = 8
     vim.opt_local.commentstring = "/*%s*/"
     return true
   end,

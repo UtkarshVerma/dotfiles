@@ -30,10 +30,28 @@ return {
           },
         },
         clangd = {
-          -- Auto-format only if .clang-format exists
-          cmd = { "clangd", "--enable-config", "--clang-tidy", "--fallback-style=none", "--header-insertion=never" },
+          cmd = {
+            "clangd",
+            "--enable-config",
+            "--clang-tidy",
+            "--header-insertion=never",
+
+            -- Resolve standard include paths for cross-compilation targets
+            "--query-driver=/usr/sbin/arm-none-eabi-gcc",
+
+            -- Auto-format only if .clang-format exists
+            "--fallback-style=none",
+          },
+        },
+        neocmake = {},
+        texlab = {},
+        html = {
+          init_options = {
+            provideFormatter = false, -- We'll use prettierd
+          },
         },
         ltex = {
+          enabled = false,
           settings = {
             ltex = {
               language = "en-GB",
@@ -64,7 +82,6 @@ return {
         gopls = {},
         rust_analyzer = {},
         rome = {},
-        jsonls = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -77,6 +94,10 @@ return {
         },
       },
       setup = {
+        html = function(_, opts)
+          opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
+        end,
+
         ["*"] = function(_, opts)
           opts.handlers = handlers
           return false
@@ -87,62 +108,68 @@ return {
   {
     "jose-elias-alvarez/null-ls.nvim",
     event = { "BufReadPre" },
-    dependencies = { "jay-babu/mason-null-ls.nvim" },
     opts = function()
       local nls = require("null-ls")
       return {
         sources = {
+          nls.builtins.code_actions.shellcheck,
+          nls.builtins.diagnostics.alex,
+          nls.builtins.diagnostics.cmake_lint,
+          nls.builtins.diagnostics.markdownlint,
+          nls.builtins.diagnostics.markuplint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
           nls.builtins.diagnostics.yamllint.with({
-            extra_args = { "-d", "{extends: default, rules: {document-start: {present: false}}}" },
+            extra_args = {
+              "-d",
+              "{extends: default, rules: {document-start: {present: false}, line-length: {max: 79}}}",
+            },
           }),
           nls.builtins.formatting.clang_format.with({
             -- clangd automatically calls clang-format
             filetypes = { "arduino" },
           }),
+          nls.builtins.formatting.bibclean,
+          nls.builtins.formatting.cmake_format,
           nls.builtins.formatting.deno_fmt.with({
             filetypes = { "markdown" },
             extra_args = { "--options-line-width", 79 },
           }),
-          -- nls.builtins.formatting.latexindent,
+          nls.builtins.formatting.latexindent.with({
+            -- Disable indent.log generation
+            extra_args = { "-g", "/dev/null" },
+          }),
+          nls.builtins.formatting.rome,
           nls.builtins.formatting.shfmt.with({
             extra_args = { "--indent", 4, "--case-indent" },
+          }),
+          nls.builtins.formatting.stylua,
+          nls.builtins.formatting.prettierd.with({
+            filetypes = { "html" },
+          }),
+          nls.builtins.formatting.yapf,
+          nls.builtins.formatting.yamlfmt.with({
+            extra_args = { "-formatter", "type=basic,retain_line_breaks=true,max_line_length=79" },
           }),
         },
       }
     end,
   },
   {
-    "jay-babu/mason-null-ls.nvim",
-    dependencies = {
-      "williamboman/mason.nvim",
-    },
-    opts = {
-      ensure_installed = {
-        "alex",
-        "clang_format",
-        "deno_fmt",
-        "hadolint",
-        "latexindent",
-        "markdownlint",
-        "ruff",
-        "shellcheck",
-        "shfmt",
-        "stylua",
-        "yamlfmt",
-        "yamllint",
-        "yapf",
-      },
-      handlers = {},
-      automatic_setup = true,
-      automatic_installation = true,
-    },
-  },
-  {
     "williamboman/mason-lspconfig",
     event = { "BufReadPre" },
     dependencies = {
       "neovim/nvim-lspconfig",
+      "williamboman/mason.nvim",
+    },
+    opts = {
+      automatic_installation = true,
+    },
+  },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    event = { "BufReadPre" },
+    dependencies = {
+      "jose-elias-alvarez/null-ls.nvim",
       "williamboman/mason.nvim",
     },
     opts = {
