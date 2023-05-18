@@ -10,7 +10,8 @@ set cleaner ~/.config/lf/cleaner
 set previewer ~/.config/lf/previewer
 set autoquit
 set wrapscroll
-set mouse on
+set mouse
+set cursorpreviewfmt ""
 
 # Custom commands
 cmd on-cd &{{
@@ -26,28 +27,28 @@ cmd on-quit &{{
 
 cmd open ${{
     case $(file --mime-type "$(readlink -f $f)" -b) in
-	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) localc $fx ;;
-	image/vnd.djvu|application/pdf|application/octet-stream|application/postscript) setsid -f zathura $fx >/dev/null 2>&1 ;;
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) localc $fx ;;
+    image/vnd.djvu|application/pdf|application/octet-stream|application/postscript) setsid -f zathura $fx >/dev/null 2>&1 ;;
         text/*|application/json|inode/x-empty) $EDITOR $fx;;
-	image/x-xcf) setsid -f gimp $f >/dev/null 2>&1 ;;
-	image/svg+xml) display -- $f ;;
-	image/*)
-		sxiv . -F $f -ao 2>/dev/null | while read -r file; do
-			[ -z "$file" ] && continue
-			lf -remote "send select \"$file\""
-			lf -remote "send toggle"
-		done &
-		;;
-	audio/*) mpv --audio-display=no $f ;;
-	video/*|application/vnd.rn-realmedia) setsid -f mpv $f -quiet >/dev/null 2>&1 ;;
-	application/pdf|application/vnd.djvu|application/epub*) setsid -f zathura $fx >/dev/null 2>&1 ;;
-	application/pgp-encrypted) $EDITOR $fx ;;
-	application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text) setsid -f lowriter $fx >/dev/null 2>&1 ;;
-	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/octet-stream|application/vnd.oasis.opendocument.spreadsheet|application/vnd.oasis.opendocument.spreadsheet-template) setsid -f localc $fx >/dev/null 2>&1 ;;
-	application/vnd.openxmlformats-officedocument.presentationml.presentation|application/vnd.oasis.opendocument.presentation-template|application/vnd.oasis.opendocument.presentation|application/vnd.ms-powerpoint) setsid -f loimpress $fx >/dev/null 2>&1 ;;
-	application/vnd.oasis.opendocument.graphics|application/vnd.oasis.opendocument.graphics-template) setsid -f lodraw $fx >/dev/null 2>&1 ;;
-	application/vnd.oasis.opendocument.formula) setsid -f lomath $fx >/dev/null 2>&1 ;;
-	application/vnd.oasis.opendocument.database) setsid -f lobase $fx >/dev/null 2>&1 ;;
+    image/x-xcf) setsid -f gimp $f >/dev/null 2>&1 ;;
+    image/svg+xml) display -- $f ;;
+    image/*)
+        sxiv . -F $f -ao 2>/dev/null | while read -r file; do
+            [ -z "$file" ] && continue
+            lf -remote "send select \"$file\""
+            lf -remote "send toggle"
+        done &
+        ;;
+    audio/*) mpv --audio-display=no $f ;;
+    video/*|application/vnd.rn-realmedia) setsid -f mpv $f -quiet >/dev/null 2>&1 ;;
+    application/pdf|application/vnd.djvu|application/epub*) setsid -f zathura $fx >/dev/null 2>&1 ;;
+    application/pgp-encrypted) $EDITOR $fx ;;
+    application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text) setsid -f lowriter $fx >/dev/null 2>&1 ;;
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/octet-stream|application/vnd.oasis.opendocument.spreadsheet|application/vnd.oasis.opendocument.spreadsheet-template) setsid -f localc $fx >/dev/null 2>&1 ;;
+    application/vnd.openxmlformats-officedocument.presentationml.presentation|application/vnd.oasis.opendocument.presentation-template|application/vnd.oasis.opendocument.presentation|application/vnd.ms-powerpoint) setsid -f loimpress $fx >/dev/null 2>&1 ;;
+    application/vnd.oasis.opendocument.graphics|application/vnd.oasis.opendocument.graphics-template) setsid -f lodraw $fx >/dev/null 2>&1 ;;
+    application/vnd.oasis.opendocument.formula) setsid -f lomath $fx >/dev/null 2>&1 ;;
+    application/vnd.oasis.opendocument.database) setsid -f lobase $fx >/dev/null 2>&1 ;;
         *) for f in $fx; do setsid -f $OPENER $f >/dev/null 2>&1; done;;
     esac
 }}
@@ -57,63 +58,53 @@ cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
 cmd drag $dragon-drop --all --and-exit $fx
 
 cmd extract ${{
-	clear; tput cup $(($(tput lines)/3)); tput bold
-	set -f
-	printf "%s\n\t" "$fx"
-	printf "extract?[y/N]"
-	read ans
-	[ $ans = "y" ] && aunpack $fx
-}}
-
-cmd moveto ${{
-	clear; tput cup $(($(tput lines)/3)); tput bold
-	set -f
-	clear; echo "Move to where?"
-	dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
-	for x in $fx; do
-		eval mv -iv \"$x\" \"$dest\"
-	done &&
-	notify-send "🚚 File(s) moved." "File(s) moved to $dest."
-}}
-
-cmd paste ${{
-    set -- $(cat ~/.local/share/lf/files)
-    mode="$1"
-    shift
-    case "$mode" in
-        copy)
-            rsync -av --ignore-existing --progress -- "$@" . |
-            stdbuf -i0 -o0 -e0 tr '\r' '\n' |
-            while IFS= read -r line; do
-                echo "$line"
-            done
-            ;;
-        move) mv -i -- "$@" .;;
-    esac
-    rm ~/.local/share/lf/files
-    lf -remote "send clear"
-}}
-
-cmd copyto ${{
-	clear; tput cup $(($(tput lines)/3)); tput bold
-	set -f
-	clear; echo "Copy to where?"
-	dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
-	for x in $fx; do
-		eval cp -ivr \"$x\" \"$dest\"
-	done &&
-	notify-send "📋 File(s) copied." "File(s) copies to $dest."
-}}
-
-cmd bookmark_jump ${{
-    res="$(cat $LF_BOOKMARK_PATH/$(ls $LF_BOOKMARK_PATH | fzf))"
-    lf -remote "send $id cd \"$res\""
-}}
-
-cmd bookmark_create ${{
+    clear; tput cup $(($(tput lines)/3)); tput bold
+    set -f
+    printf "%s\n\t" "$fx"
+    printf "extract?[y/N]"
     read ans
-    echo $PWD > $LF_BOOKMARK_PATH/$ans
+    [ $ans = "y" ] && aunpack $fx
 }}
+
+# cmd moveto ${{
+#   clear; tput cup $(($(tput lines)/3)); tput bold
+#   set -f
+#   clear; echo "Move to where?"
+#   dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+#   for x in $fx; do
+#       eval mv -iv \"$x\" \"$dest\"
+#   done &&
+#   notify-send "🚚 File(s) moved." "File(s) moved to $dest."
+# }}
+
+# cmd paste ${{
+#     set -- $(cat ~/.local/share/lf/files)
+#     mode="$1"
+#     shift
+#     case "$mode" in
+#         copy)
+#             rsync -av --ignore-existing --progress -- "$@" . |
+#             stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+#             while IFS= read -r line; do
+#                 echo "$line"
+#             done
+#             ;;
+#         move) mv -i -- "$@" .;;
+#     esac
+#     rm ~/.local/share/lf/files
+#     lf -remote "send clear"
+# }}
+
+# cmd copyto ${{
+#   clear; tput cup $(($(tput lines)/3)); tput bold
+#   set -f
+#   clear; echo "Copy to where?"
+#   dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+#   for x in $fx; do
+#       eval cp -ivr \"$x\" \"$dest\"
+#   done &&
+#   notify-send "📋 File(s) copied." "File(s) copies to $dest."
+# }}
 
 cmd bulk_rename ${{
     old="$(mktemp)"
