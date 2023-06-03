@@ -1,6 +1,5 @@
 return {
   { "folke/tokyonight.nvim", enabled = false },
-  { "catppuccin", enabled = false },
   {
     "UtkarshVerma/molokai.nvim",
     dir = "~/git/molokai.nvim",

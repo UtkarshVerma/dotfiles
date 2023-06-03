@@ -25,6 +25,7 @@ return {
           "gomod",
           "gowork",
           "html",
+          "http",
           "javascript",
           "json",
           "latex",

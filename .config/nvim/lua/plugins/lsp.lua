@@ -9,96 +9,108 @@ for word in io.open(dictionary, "r"):lines() do
   table.insert(words, word)
 end
 
+local servers = {
+  arduino_language_server = {
+    cmd = {
+      "arduino-language-server",
+      "-cli-config",
+      (os.getenv("ARDUINO_DIRECTORIES_DATA") or "~/.arduino15") .. "/arduino-cli.yaml",
+      "-fqbn",
+      -- TODO: Remove this hardcode
+      "arduino:avr:mega",
+    },
+  },
+  bashls = {
+    cmd_env = {
+      INCLUDE_ALL_WORKSPACE_SYMBOLS = true,
+    },
+  },
+  clangd = {
+    cmd = {
+      "clangd",
+      "--enable-config",
+      "--clang-tidy",
+      "--header-insertion=never",
+
+      -- Resolve standard include paths for cross-compilation targets
+      "--query-driver=/usr/sbin/arm-none-eabi-gcc",
+
+      -- Auto-format only if .clang-format exists
+      "--fallback-style=none",
+    },
+  },
+  cssls = {},
+  denols = {},
+  tsserver = {},
+  neocmake = {},
+  texlab = {},
+  html = {
+    init_options = {
+      provideFormatter = false, -- We'll use prettierd
+    },
+  },
+  ltex = {
+    enabled = false,
+    settings = {
+      ltex = {
+        language = "en-GB",
+        dictionary = {
+          ["en-GB"] = words,
+        },
+      },
+    },
+  },
+  lemminx = {
+    settings = {
+      xml = {
+        catalogs = { "/etc/xml/catalog" },
+      },
+    },
+  },
+  pyright = {
+    settings = {
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          diagnosticMode = "workspace",
+          useLibraryCodeForTypes = true,
+        },
+      },
+    },
+  },
+  gopls = {},
+  rust_analyzer = {},
+  rome = {},
+  lua_ls = {
+    settings = {
+      Lua = {
+        format = { enable = false },
+        workspace = { checkThirdParty = false },
+        completion = { callSnippet = "Replace" },
+        telemetry = { enable = false },
+      },
+    },
+  },
+}
+
 return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      servers = {
-        arduino_language_server = {
-          cmd = {
-            "arduino-language-server",
-            "-cli-config",
-            (os.getenv("ARDUINO_DIRECTORIES_DATA") or "~/.arduino15") .. "/arduino-cli.yaml",
-            "-fqbn",
-            -- TODO: Remove this hardcode
-            "arduino:avr:mega",
-          },
-        },
-        bashls = {
-          cmd_env = {
-            INCLUDE_ALL_WORKSPACE_SYMBOLS = true,
-          },
-        },
-        clangd = {
-          cmd = {
-            "clangd",
-            "--enable-config",
-            "--clang-tidy",
-            "--header-insertion=never",
-
-            -- Resolve standard include paths for cross-compilation targets
-            "--query-driver=/usr/sbin/arm-none-eabi-gcc",
-
-            -- Auto-format only if .clang-format exists
-            "--fallback-style=none",
-          },
-        },
-        neocmake = {},
-        texlab = {},
-        html = {
-          init_options = {
-            provideFormatter = false, -- We'll use prettierd
-          },
-        },
-        ltex = {
-          enabled = false,
-          settings = {
-            ltex = {
-              language = "en-GB",
-              dictionary = {
-                ["en-GB"] = words,
-              },
-            },
-          },
-        },
-        lemminx = {
-          settings = {
-            xml = {
-              catalogs = { "/etc/xml/catalog" },
-            },
-          },
-        },
-        pyright = {
-          settings = {
-            python = {
-              analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = "workspace",
-                useLibraryCodeForTypes = true,
-              },
-            },
-          },
-        },
-        gopls = {},
-        rust_analyzer = {},
-        rome = {},
-        lua_ls = {
-          settings = {
-            Lua = {
-              format = { enable = false },
-              workspace = { checkThirdParty = false },
-              completion = { callSnippet = "Replace" },
-              telemetry = { enable = false },
-            },
-          },
-        },
-      },
+      servers = servers,
       setup = {
         html = function(_, opts)
           opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
         end,
+        cssls = function(_, opts)
+          opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
+        end,
 
-        ["*"] = function(_, opts)
+        ["*"] = function(server, opts)
+          if not servers[server] then
+            return true
+          end
+
           opts.handlers = handlers
           return false
         end,
@@ -113,10 +125,10 @@ return {
       return {
         sources = {
           nls.builtins.code_actions.shellcheck,
+          nls.builtins.code_actions.eslint_d,
           nls.builtins.diagnostics.alex,
           nls.builtins.diagnostics.cmake_lint,
           nls.builtins.diagnostics.markdownlint,
-          nls.builtins.diagnostics.markuplint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
           nls.builtins.diagnostics.yamllint.with({
             extra_args = {
@@ -125,7 +137,7 @@ return {
             },
           }),
           nls.builtins.formatting.clang_format.with({
-            -- clangd automatically calls clang-format
+            -- clangd automatically calls clang-format for C/C++ files
             filetypes = { "arduino" },
           }),
           nls.builtins.formatting.bibclean,
@@ -139,12 +151,15 @@ return {
             extra_args = { "-g", "/dev/null" },
           }),
           nls.builtins.formatting.rome,
+          nls.builtins.formatting.rustfmt.with({
+            extra_args = { "--edition", 2021 },
+          }),
           nls.builtins.formatting.shfmt.with({
             extra_args = { "--indent", 4, "--case-indent" },
           }),
           nls.builtins.formatting.stylua,
           nls.builtins.formatting.prettierd.with({
-            filetypes = { "html" },
+            filetypes = { "html", "scss", "css", "jsonc" },
           }),
           nls.builtins.formatting.yapf,
           nls.builtins.formatting.yamlfmt.with({

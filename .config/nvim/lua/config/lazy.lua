@@ -27,5 +27,5 @@ require("lazy").setup({
   ui = {
     border = "rounded",
   },
-  install = { colorscheme = { "molokai" } },
+  install = { colorscheme = { "molokai", "catppuccin" } },
 })

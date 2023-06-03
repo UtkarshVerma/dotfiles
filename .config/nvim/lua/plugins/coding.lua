@@ -2,6 +2,9 @@ return {
   { "rafamadriz/friendly-snippets", enabled = false },
   {
     "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-emoji",
+    },
     opts = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
@@ -50,6 +53,7 @@ return {
           { name = "nvim_lsp" },
           { name = "path" },
           { name = "luasnip" },
+          { name = "emoji" },
           { name = "buffer", keyword_length = 5 },
         }),
         formatting = {

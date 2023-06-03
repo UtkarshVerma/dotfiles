@@ -23,3 +23,11 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
     return true
   end,
 })
+
+-- Disable diagnostics for .env file
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = ".env",
+  callback = function(args)
+    vim.diagnostic.disable(args.buf)
+  end,
+})

@@ -60,16 +60,6 @@ return {
   },
   { "RRethy/vim-illuminate", enabled = false },
   {
-    "max397574/better-escape.nvim",
-    event = { "BufReadPre" },
-    opts = {
-      mapping = { "jk", "jj", "kj" },
-    },
-    config = function(_, opts)
-      require("better_escape").setup(opts)
-    end,
-  },
-  {
     "folke/which-key.nvim",
     opts = function(_, opts)
       require("which-key").register({
