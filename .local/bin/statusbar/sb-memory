@@ -6,4 +6,4 @@ case $BLOCK_BUTTON in
 esac
 
 . sb-theme
-display " $(free --mebi | awk 'NR==2 {printf ("%2.2fGiB\n", ($3 / 1024))}')"
+display " $(free --mebi | awk 'NR==2 {printf ("%2.2fGiB\n", ($3 / 1024))}')"

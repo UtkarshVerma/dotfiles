@@ -11,12 +11,13 @@ case "$BLOCK_BUTTON" in
 esac
 
 set -- --player spotify,mpv,%any
-icon="ﱘ"
+icon=""
+pausedIcon=""
 if status="$(playerctl "$@" status 2>&1)" && [ "$status" != "Stopped" ]; then
-    [ "$status" = "Paused" ] && icon=""
+    [ "$status" = "Paused" ] && icon="$pausedIcon"
     currentSong="$(playerctl "$@" metadata --format "{{title}} - {{artist}}")"
 else
-    [ "$(mpc status "%state%")" = "paused" ] && icon=""
+    [ "$(mpc status "%state%")" = "paused" ] && icon="$pausedIcon"
     currentSong="$(mpc current -f "%title%[ - %artist%]")"
 fi
 

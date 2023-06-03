@@ -1,0 +1,20 @@
+#!/bin/sh
+
+typeit=0
+if [ "$1" = "--type" ]; then
+    typeit=1
+    shift
+fi
+
+choice=$(gopass list --flat | dmenu "$@")
+
+[ -n "$choice" ] || exit
+
+if [ $typeit -eq 0 ]; then
+    gopass show -c "$choice" 2>/dev/null
+else
+    gopass show --password "$choice" | {
+        IFS= read -r pass
+        printf %s "$pass"
+    } | xdotool type --clearmodifiers --file -
+fi
