@@ -22,6 +22,7 @@ export ANDROID_SDK_ROOT="$XDG_DATA_HOME/android-sdk"
 export ARDUINO_DIRECTORIES_DATA="$XDG_DATA_HOME/Arduino"
 export ARDUINO_DIRECTORIES_DOWNLOADS="$ARDUINO_DIRECTORIES_DATA/staging"
 export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
+export BUN_HOME="$XDG_DATA_HOME/bun"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export CHROME_EXECUTABLE="$BROWSER"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
@@ -40,6 +41,7 @@ export MLM_LICENSE_FILE="$XDG_DATA_HOME/matlab/license.lic"
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node/history"
 export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npmrc"
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
 export PLATFORMIO_CACHE_DIR="$XDG_CACHE_HOME/platformio"
 export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME/platformio"
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
@@ -52,9 +54,9 @@ export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
 export VAGRANT_ALIAS_FILE="$XDG_DATA_HOME/vagrant/aliases"
 export VAGRANT_HOME="$XDG_DATA_HOME/vagrant"
 export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
-export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
 export W3M_DIR="$XDG_DATA_HOME/w3m"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -64,6 +66,7 @@ export _Z_DATA="$XDG_DATA_HOME/z"
 # Set PATH
 export PATH="$PNPM_HOME:\
 $NPM_CONFIG_PREFIX/bin:\
+$BUN_HOME/bin:\
 $GOPATH/bin:\
 $CARGO_HOME/bin:\
 $ANDROID_SDK_ROOT/emulator:\

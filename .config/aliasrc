@@ -16,4 +16,5 @@ alias \
     ncdu="ncdu --color dark" \
     open="xdg-open" \
     tree="tree -a -I .git" \
-    vi="nvim"
+    vi="nvim" \
+    yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
