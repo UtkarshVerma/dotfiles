@@ -10,16 +10,6 @@ for word in io.open(dictionary, "r"):lines() do
 end
 
 local servers = {
-  arduino_language_server = {
-    cmd = {
-      "arduino-language-server",
-      "-cli-config",
-      (os.getenv("ARDUINO_DIRECTORIES_DATA") or "~/.arduino15") .. "/arduino-cli.yaml",
-      "-fqbn",
-      -- TODO: Remove this hardcode
-      "arduino:avr:mega",
-    },
-  },
   bashls = {
     cmd_env = {
       INCLUDE_ALL_WORKSPACE_SYMBOLS = true,
@@ -41,7 +31,23 @@ local servers = {
   },
   cssls = {},
   denols = {},
-  tsserver = {},
+  jsonls = {
+    -- lazy-load schemastore when needed
+    on_new_config = function(new_config)
+      new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+      vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+    end,
+    settings = {
+      json = {
+        format = {
+          indentSize = vim.o.shiftwidth,
+          convertTabsToSpaces = vim.o.expandtab,
+          tabSize = vim.o.tabstop,
+        },
+        validate = { enable = true },
+      },
+    },
+  },
   neocmake = {},
   texlab = {},
   html = {
@@ -67,6 +73,16 @@ local servers = {
       },
     },
   },
+  lua_ls = {
+    settings = {
+      Lua = {
+        format = { enable = false },
+        workspace = { checkThirdParty = false },
+        completion = { callSnippet = "Replace" },
+        telemetry = { enable = false },
+      },
+    },
+  },
   pyright = {
     settings = {
       python = {
@@ -80,14 +96,20 @@ local servers = {
   },
   gopls = {},
   rust_analyzer = {},
-  rome = {},
-  lua_ls = {
+  rome = {
+    -- Disable JSON in favour of jsonls
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescript.tsx", "typescriptreact" },
+  },
+  tsserver = {
     settings = {
-      Lua = {
+      typescript = {
         format = { enable = false },
-        workspace = { checkThirdParty = false },
-        completion = { callSnippet = "Replace" },
-        telemetry = { enable = false },
+      },
+      javascript = {
+        format = { enable = false },
+      },
+      completions = {
+        completeFunctionCalls = true,
       },
     },
   },
@@ -96,14 +118,46 @@ local servers = {
 return {
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      { "b0o/SchemaStore.nvim" },
+      { "jose-elias-alvarez/typescript.nvim" },
+    },
     opts = {
       servers = servers,
       setup = {
         html = function(_, opts)
           opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
+          opts.handlers = handlers
         end,
         cssls = function(_, opts)
           opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
+          opts.handlers = handlers
+        end,
+        jsonls = function(_, opts)
+          opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
+          opts.handlers = handlers
+        end,
+        tsserver = function(_, opts)
+          require("lazyvim.util").on_attach(function(client, buffer)
+            if client.name == "tsserver" then
+              vim.keymap.set(
+                "n",
+                "<leader>co",
+                "<cmd>TypescriptOrganizeImports<CR>",
+                { buffer = buffer, desc = "Organize Imports" }
+              )
+              vim.keymap.set(
+                "n",
+                "<leader>cR",
+                "<cmd>TypescriptRenameFile<CR>",
+                { desc = "Rename File", buffer = buffer }
+              )
+            end
+          end)
+
+          opts.handlers = handlers
+          require("typescript").setup({ server = opts })
+          return true
         end,
 
         ["*"] = function(server, opts)
@@ -119,6 +173,9 @@ return {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
+    dependencies = {
+      "jose-elias-alvarez/typescript.nvim",
+    },
     event = { "BufReadPre" },
     opts = function()
       local nls = require("null-ls")
@@ -150,7 +207,10 @@ return {
             -- Disable indent.log generation
             extra_args = { "-g", "/dev/null" },
           }),
-          nls.builtins.formatting.rome,
+          require("typescript.extensions.null-ls.code-actions"),
+          nls.builtins.formatting.rome.with({
+            disabled_filetypes = { "json" },
+          }),
           nls.builtins.formatting.rustfmt.with({
             extra_args = { "--edition", 2021 },
           }),
@@ -159,7 +219,7 @@ return {
           }),
           nls.builtins.formatting.stylua,
           nls.builtins.formatting.prettierd.with({
-            filetypes = { "html", "scss", "css", "jsonc" },
+            filetypes = { "html", "scss", "css" },
           }),
           nls.builtins.formatting.yapf,
           nls.builtins.formatting.yamlfmt.with({

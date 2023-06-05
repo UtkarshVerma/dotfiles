@@ -28,6 +28,7 @@ return {
           "http",
           "javascript",
           "json",
+          "jsonc",
           "latex",
           "lua",
           "make",

@@ -108,20 +108,4 @@ return {
       end,
     },
   },
-  {
-    "stevearc/vim-arduino",
-    ft = "arduino",
-    keys = {
-      { "<leader>aa", "<cmd>ArduinoAttach<CR>", desc = "Attach Arduino" },
-      { "<leader>am", "<cmd>ArduinoVerify<CR>", desc = "Verify Code" },
-      { "<leader>au", "<cmd>ArduinoUpload<CR>", desc = "Upload Code" },
-      { "<leader>ad", "<cmd>ArduinoUploadAndSerial<CR>", desc = "Upload and Debug" },
-      { "<leader>ab", "<cmd>ArduinoChooseBoard<CR>", desc = "Choose Arduino Board" },
-      { "<leader>ap", "<cmd>ArduinoChooseProgrammer<CR>", desc = "Choose Arduino Programmer" },
-    },
-    config = function(_, _)
-      vim.g.arduino_dir = "/usr/share/arduino/"
-      vim.g.arduino_home_dir = os.getenv("ARDUINO_DIRECTORIES_DATA") or "~/.arduino15"
-    end,
-  },
 }

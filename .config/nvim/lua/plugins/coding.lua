@@ -1,17 +1,43 @@
 return {
   { "rafamadriz/friendly-snippets", enabled = false },
   {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    },
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function(_, opts)
+      local copilot_cmp = require("copilot_cmp")
+      copilot_cmp.setup(opts)
+      -- attach cmp source whenever copilot attaches
+      -- fixes lazy-loading issues with the copilot cmp source
+      require("lazyvim.util").on_attach(function(client)
+        if client.name == "copilot" then
+          copilot_cmp._on_insert_enter({})
+        end
+      end)
+    end,
+  },
+
+  {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-emoji",
+      "zbirenbaum/copilot-cmp",
+      "L3MON4D3/LuaSnip",
     },
-    opts = function()
+    opts = function(_, opts)
       local cmp = require("cmp")
       local luasnip = require("luasnip")
 
-      return {
+      return vim.tbl_deep_extend("force", opts, {
         completion = {
-          completeopt = "menu,menuone,noselect",
+          completeopt = "menu,menuone,noinsert",
         },
         snippet = {
           expand = function(args)
@@ -50,9 +76,10 @@ return {
           end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
+          { name = "copilot" },
           { name = "nvim_lsp" },
-          { name = "path" },
           { name = "luasnip" },
+          { name = "path" },
           { name = "emoji" },
           { name = "buffer", keyword_length = 5 },
         }),
@@ -65,7 +92,7 @@ return {
             return item
           end,
         },
-      }
+      })
     end,
   },
   {
@@ -154,5 +181,12 @@ return {
       { "<c-/>", "gcc", mode = "n", remap = true },
       { "<c-/>", "gc", mode = "v", remap = true },
     },
+    opts = function(_, opts)
+      return vim.tbl_deep_extend("force", opts, {
+        options = {
+          ignore_blank_line = true,
+        },
+      })
+    end,
   },
 }
