@@ -1,8 +1,3 @@
-local handlers = {
-  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" }),
-  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" }),
-}
-
 local dictionary = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 local words = {}
 for word in io.open(dictionary, "r"):lines() do
@@ -29,7 +24,17 @@ local servers = {
       "--fallback-style=none",
     },
   },
-  cssls = {},
+  cssls = {
+    capabilities = {
+      textDocument = {
+        completion = {
+          completionItem = {
+            snippetSupport = true,
+          },
+        },
+      },
+    },
+  },
   denols = {},
   jsonls = {
     -- lazy-load schemastore when needed
@@ -47,12 +52,30 @@ local servers = {
         validate = { enable = true },
       },
     },
+    capabilities = {
+      textDocument = {
+        completion = {
+          completionItem = {
+            snippetSupport = true,
+          },
+        },
+      },
+    },
   },
   neocmake = {},
   texlab = {},
   html = {
     init_options = {
       provideFormatter = false, -- We'll use prettierd
+    },
+    capabilities = {
+      textDocument = {
+        completion = {
+          completionItem = {
+            snippetSupport = true,
+          },
+        },
+      },
     },
   },
   ltex = {
@@ -114,148 +137,109 @@ local servers = {
     },
   },
 }
+local setup = {
+  tsserver = function(_, opts)
+    -- TODO:
+    -- require("lazyvim.util").on_attach(function(client, buffer)
+    --   if client.name == "tsserver" then
+    --     vim.keymap.set(
+    --       "n",
+    --       "<leader>co",
+    --       "<cmd>TypescriptOrganizeImports<CR>",
+    --       { buffer = buffer, desc = "Organize Imports" }
+    --     )
+    --     vim.keymap.set("n", "<leader>cR", "<cmd>TypescriptRenameFile<CR>", { desc = "Rename File", buffer = buffer })
+    --   end
+    -- end)
+
+    require("typescript").setup({ server = opts })
+    return true
+  end,
+}
 
 return {
+  { "b0o/SchemaStore.nvim" },
+  { "jose-elias-alvarez/typescript.nvim" },
+  { "folke/neodev.nvim", config = true },
   {
     "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
+    keys = {
+      { "<leader>cl", "<cmd>LspInfo<cr>", desc = "LSP Info" },
+    },
     dependencies = {
-      { "b0o/SchemaStore.nvim" },
-      { "jose-elias-alvarez/typescript.nvim" },
+      "mason-lspconfig.nvim",
+      "SchemaStore.nvim",
+      "typescript.nvim",
+      "neodev.nvim",
     },
     opts = {
       servers = servers,
-      setup = {
-        html = function(_, opts)
-          opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
-          opts.handlers = handlers
-        end,
-        cssls = function(_, opts)
-          opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
-          opts.handlers = handlers
-        end,
-        jsonls = function(_, opts)
-          opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
-          opts.handlers = handlers
-        end,
-        tsserver = function(_, opts)
-          require("lazyvim.util").on_attach(function(client, buffer)
-            if client.name == "tsserver" then
-              vim.keymap.set(
-                "n",
-                "<leader>co",
-                "<cmd>TypescriptOrganizeImports<CR>",
-                { buffer = buffer, desc = "Organize Imports" }
-              )
-              vim.keymap.set(
-                "n",
-                "<leader>cR",
-                "<cmd>TypescriptRenameFile<CR>",
-                { desc = "Rename File", buffer = buffer }
-              )
-            end
-          end)
-
-          opts.handlers = handlers
-          require("typescript").setup({ server = opts })
-          return true
-        end,
-
-        ["*"] = function(server, opts)
-          if not servers[server] then
-            return true
-          end
-
-          opts.handlers = handlers
-          return false
-        end,
+      setup = setup,
+      handlers = {
+        ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" }),
+        ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" }),
       },
     },
-  },
-  {
-    "jose-elias-alvarez/null-ls.nvim",
-    dependencies = {
-      "jose-elias-alvarez/typescript.nvim",
-    },
-    event = { "BufReadPre" },
-    opts = function()
-      local nls = require("null-ls")
-      return {
-        sources = {
-          nls.builtins.code_actions.shellcheck,
-          nls.builtins.code_actions.eslint_d,
-          nls.builtins.diagnostics.alex,
-          nls.builtins.diagnostics.cmake_lint,
-          nls.builtins.diagnostics.markdownlint,
-          nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
-          nls.builtins.diagnostics.yamllint.with({
-            extra_args = {
-              "-d",
-              "{extends: default, rules: {document-start: {present: false}, line-length: {max: 79}}}",
-            },
-          }),
-          nls.builtins.formatting.clang_format.with({
-            -- clangd automatically calls clang-format for C/C++ files
-            filetypes = { "arduino" },
-          }),
-          nls.builtins.formatting.bibclean,
-          nls.builtins.formatting.cmake_format,
-          nls.builtins.formatting.deno_fmt.with({
-            filetypes = { "markdown" },
-            extra_args = { "--options-line-width", 79 },
-          }),
-          nls.builtins.formatting.latexindent.with({
-            -- Disable indent.log generation
-            extra_args = { "-g", "/dev/null" },
-          }),
-          require("typescript.extensions.null-ls.code-actions"),
-          nls.builtins.formatting.rome.with({
-            disabled_filetypes = { "json" },
-          }),
-          nls.builtins.formatting.rustfmt.with({
-            extra_args = { "--edition", 2021 },
-          }),
-          nls.builtins.formatting.shfmt.with({
-            extra_args = { "--indent", 4, "--case-indent" },
-          }),
-          nls.builtins.formatting.stylua,
-          nls.builtins.formatting.prettierd.with({
-            filetypes = { "html", "scss", "css" },
-          }),
-          nls.builtins.formatting.yapf,
-          nls.builtins.formatting.yamlfmt.with({
-            extra_args = { "-formatter", "type=basic,retain_line_breaks=true,max_line_length=79" },
-          }),
-        },
+    config = function(_, opts)
+      local capabilites =
+        vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), opts.capabilities or {})
+
+      local global_server_opts = {
+        capabilites = capabilites,
+        handlers = opts.handlers or {},
       }
+
+      local function setup(server, server_opts)
+        if opts.setup[server] then
+          if opts.setup[server](server, server_opts) then
+            return
+          end
+        end
+
+        if opts.setup["*"] then
+          if opts.setup["*"](server, server_opts) then
+            return
+          end
+        end
+
+        require("lspconfig")[server].setup(vim.tbl_deep_extend("force", global_server_opts, server_opts))
+      end
+
+      for server, server_opts in pairs(opts.servers) do
+        setup(server, server_opts)
+      end
     end,
   },
   {
-    "williamboman/mason-lspconfig",
-    event = { "BufReadPre" },
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "williamboman/mason.nvim",
+    "jose-elias-alvarez/null-ls.nvim",
+    keys = {
+      { "<leader>cn", "<cmd>NullLsInfo<cr>", desc = "Null LS Info" },
     },
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "mason.nvim" },
     opts = {
       automatic_installation = true,
     },
   },
   {
     "jay-babu/mason-null-ls.nvim",
-    event = { "BufReadPre" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "jose-elias-alvarez/null-ls.nvim",
-      "williamboman/mason.nvim",
+      "mason.nvim",
+      "null-ls.nvim",
     },
     opts = {
       automatic_installation = true,
+      handlers = {},
     },
   },
   {
     "williamboman/mason.nvim",
     keys = {
-      { "<leader>cm", false },
-      { "<leader>m", "<cmd>Mason<cr>" },
+      { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" },
     },
     opts = {
       ui = { border = "rounded" },

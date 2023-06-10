@@ -1,25 +1,70 @@
 return {
   {
     "folke/noice.nvim",
-    opts = function(_, opts)
-      return vim.tbl_deep_extend("force", opts, {
-        views = {
-          mini = {
-            win_options = {
-              winblend = 0,
-            },
+    event = "VeryLazy",
+    -- stylua: ignore
+    keys = {
+      { "<s-enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
+      { "<leader>snl", function() require("noice").cmd("last") end, desc = "Noice Last Message" },
+      { "<leader>snh", function() require("noice").cmd("history") end, desc = "Noice History" },
+      { "<leader>sna", function() require("noice").cmd("all") end, desc = "Noice All" },
+      { "<leader>snd", function() require("noice").cmd("dismiss") end, desc = "Dismiss All" },
+      { "<c-f>", function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end, silent = true, expr = true, desc = "Scroll forward", mode = {"i", "n", "s"} },
+      { "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, desc = "Scroll backward", mode = {"i", "n", "s"}},
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      {
+        "which-key.nvim",
+        opts = function(_, opts)
+          opts.defaults["<leader>sn"] = { name = "+noice" }
+        end,
+      },
+    },
+    opts = {
+      cmdline = {
+        view = "cmdline",
+        format = {
+          cmdline = { icon = "  " },
+          search_down = { icon = "  󰄼" },
+          search_up = { icon = "  " },
+          lua = { icon = "  " },
+        },
+      },
+      lsp = {
+        progress = { enabled = true },
+        hover = { enabled = false },
+        signature = { enabled = false },
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true,
+        },
+      },
+
+      routes = {
+        {
+          filter = {
+            event = "msg_show",
+            find = "%d+L, %d+B",
           },
         },
-        lsp = {
-          progress = {
-            view = "mini",
-          },
-        },
-      })
-    end,
+      },
+    },
   },
   {
     "rcarriga/nvim-notify",
+    dependencies = { "noice.nvim" },
+    keys = {
+      {
+        "<leader>un",
+        function()
+          require("notify").dismiss({ silent = true, pending = true })
+        end,
+        desc = "Dismiss all Notifications",
+      },
+    },
     opts = {
       render = function(bufnr, notif, highlights)
         local base = require("notify.render.base")
@@ -52,60 +97,63 @@ return {
         })
       end,
       stages = "static",
-    },
-  },
-  {
-    "echasnovski/mini.indentscope",
-    opts = function(_, opts)
-      return vim.tbl_deep_extend("force", opts, {
-        draw = {
-          delay = 0,
-          animation = require("mini.indentscope").gen_animation.none(),
-          priority = 25,
-        },
-        options = {
-          border = "top",
-          try_as_border = false,
-        },
-        symbol = "▏",
-      })
-    end,
-  },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    opts = function(_, opts)
-      return vim.tbl_deep_extend("force", opts, {
-        char = "▏",
-        context_char = "▏",
-        char_priority = 20,
-        use_treesitter = true,
-      })
-    end,
-  },
-  {
-    "kevinhwang91/nvim-ufo",
-    event = "BufReadPost",
-    dependencies = {
-      "kevinhwang91/promise-async",
-      "nvim-treesitter/nvim-treesitter",
-    },
-    init = function()
-      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-      vim.o.foldlevelstart = 99
-    end,
-    opts = {
-      preview = {
-        mappings = {
-          scrollB = "<C-b>",
-          scrollF = "<C-f>",
-          scrollU = "<C-u>",
-          scrollD = "<C-d>",
-        },
-      },
-      provider_selector = function(_, filetype, buftype)
-        return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
-          or { "treesitter", "indent" } -- if file opened, try to use treesitter if available
+      timeout = 3000,
+      max_height = function()
+        return math.floor(vim.o.lines * 0.75)
       end,
+      max_width = function()
+        return math.floor(vim.o.columns * 0.75)
+      end,
+    },
+  },
+  {
+    "stevearc/dressing.nvim",
+    lazy = true,
+    init = function()
+      ---@diagnostic disable-next-line: duplicate-set-field
+      vim.ui.select = function(...)
+        require("lazy").load({ plugins = { "dressing.nvim" } })
+        return vim.ui.select(...)
+      end
+      ---@diagnostic disable-next-line: duplicate-set-field
+      vim.ui.input = function(...)
+        require("lazy").load({ plugins = { "dressing.nvim" } })
+        return vim.ui.input(...)
+      end
+    end,
+  },
+  {
+    "utilyre/barbecue.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      "SmiteshP/nvim-navic",
+      "nvim-tree/nvim-web-devicons",
+    },
+    opts = {
+      attach_navic = false,
+      theme = "auto",
+      include_buftypes = { "" },
+      exclude_filetypes = { "gitcommit", "Trouble", "toggleterm" },
+      show_modified = false,
+      kinds = require("config").icons.kinds,
+    },
+  },
+  {
+    "petertriho/nvim-scrollbar",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      set_highlights = false,
+      excluded_filetypes = {
+        "prompt",
+        "TelescopePrompt",
+        "noice",
+        "neo-tree",
+        "dashboard",
+        "lazy",
+        "mason",
+        "DressingInput",
+        "",
+      },
     },
   },
 }
