@@ -142,7 +142,6 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
     dependencies = {
-      "mrbjarksen/neo-tree-diagnostics.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
@@ -209,6 +208,7 @@ return {
       window = {
         width = 40,
         mappings = {
+          ["<space>"] = false,
           ["<1-LeftMouse>"] = "open",
           ["l"] = "child_or_open",
           ["h"] = "parent_or_close",

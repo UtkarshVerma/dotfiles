@@ -5,10 +5,6 @@ local util = require("util")
 
 local config = {
   float = true,
-  -- separator_icon = { left = "", right = " " },
-  -- thin_separator_icon = { left = "", right = " " },
-  -- separator_icon = { left = "█", right = "█" },
-  -- thin_separator_icon = { left = " ", right = " " },
   separator_icon = { left = "█", right = "█" },
   thin_separator_icon = { left = " ", right = " " },
 }
@@ -52,7 +48,7 @@ local function generate(palette)
   return {
     SLGitIcon = {
       bg = float and palette.float_background or palette.statusbar_bg,
-      fg = palette.white,
+      fg = palette.green,
     },
     SLBranchName = {
       bg = float and palette.float_background or palette.statusbar_bg,
@@ -242,14 +238,14 @@ components.filetype = {
       -- 
       filetype_str = "ToggleTerm " .. vim.api.nvim_buf_get_var(0, "toggle_number")
     elseif str == "TelescopePrompt" then
-      filetype_str = ""
+      filetype_str = " "
     elseif str == "neo-tree" or str == "neo-tree-popup" then
       if prev_filetype == "" then
         return
       end
       filetype_str = prev_filetype
     elseif str == "help" then
-      filetype_str = ""
+      filetype_str = " "
     elseif vim.tbl_contains(ui_filetypes, str) then
       return
     else
@@ -264,6 +260,23 @@ components.filetype = {
     return left_sep .. filetype_hl .. right_sep
   end,
 }
+
+local function configure(opts)
+  local statusline_hl = util.get_highlight_value("StatusLine")
+  local palette = {
+    float_background = util.get_highlight_value("Pmenu").background,
+    editor_bg = util.get_highlight_value("Normal").background or "NONE",
+    statusbar_bg = statusline_hl.background or "#000000",
+    statusbar_fg = statusline_hl.foreground or "#505050",
+  }
+  local groups = generate(palette)
+  draw(groups)
+
+  -- Clear theme if float ortherwhise, make it auto
+  opts.options.theme = config.float and { normal = { c = { bg = palette.editor_bg } } } or "auto"
+
+  return opts
+end
 
 return {
   {
@@ -306,20 +319,15 @@ return {
       extensions = {},
     },
     config = function(_, opts)
-      local statusline_hl = util.get_highlight_value("StatusLine")
-      local palette = {
-        float_background = util.get_highlight_value("Pmenu").background,
-        editor_bg = util.get_highlight_value("Normal").background or "NONE",
-        statusbar_bg = statusline_hl.background or "#000000",
-        statusbar_fg = statusline_hl.foreground or "#505050",
-      }
-      local groups = generate(palette)
-      draw(groups)
+      local lualine = require("lualine")
+      lualine.setup(configure(opts))
 
-      -- clear theme if float ortherwhise, make it auto
-      opts.options.theme = config.float and { normal = { c = { bg = palette.editor_bg } } } or "auto"
-
-      require("lualine").setup(opts)
+      -- Reload on colorscheme change
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        callback = function()
+          lualine.setup(configure(opts))
+        end,
+      })
     end,
   },
 }

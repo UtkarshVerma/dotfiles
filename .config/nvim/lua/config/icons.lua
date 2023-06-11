@@ -53,7 +53,7 @@ local icons = {
     },
   },
   git = {
-    added = " ",
+    added = "",
     modified = "",
     removed = "",
     renamed = "➜",

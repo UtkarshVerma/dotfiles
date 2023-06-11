@@ -16,7 +16,6 @@ require("config").setup()
 require("lazy").setup({
   spec = {
     { import = "plugins" },
-    { import = "plugins.extras.supertab" },
     { import = "plugins.extras.copilot" },
   },
   change_detection = { enabled = false },

@@ -73,7 +73,7 @@ return {
       { "<leader>sR", "<cmd>Telescope resume<cr>", desc = "Resume" },
       { "<leader>sw", telescope("grep_string"), desc = "Word (root dir)" },
       { "<leader>sW", telescope("grep_string", { cwd = false }), desc = "Word (cwd)" },
-      { "<leader>uC", telescope("colorscheme", { enable_preview = true }), desc = "Colorscheme with preview" },
+      { "<leader>uc", telescope("colorscheme", { enable_preview = true }), desc = "Colorscheme with preview" },
       {
         "<leader>ss",
         telescope("lsp_document_symbols", {

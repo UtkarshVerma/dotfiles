@@ -101,7 +101,13 @@ local servers = {
       Lua = {
         format = { enable = false },
         workspace = { checkThirdParty = false },
-        completion = { callSnippet = "Replace" },
+        completion = {
+          callSnippet = "Replace",
+
+          -- we alrady use cmp-buffer
+          workspaceWord = false,
+          showWord = "Disable",
+        },
         telemetry = { enable = false },
       },
     },
@@ -139,18 +145,15 @@ local servers = {
 }
 local setup = {
   tsserver = function(_, opts)
-    -- TODO:
-    -- require("lazyvim.util").on_attach(function(client, buffer)
-    --   if client.name == "tsserver" then
-    --     vim.keymap.set(
-    --       "n",
-    --       "<leader>co",
-    --       "<cmd>TypescriptOrganizeImports<CR>",
-    --       { buffer = buffer, desc = "Organize Imports" }
-    --     )
-    --     vim.keymap.set("n", "<leader>cR", "<cmd>TypescriptRenameFile<CR>", { desc = "Rename File", buffer = buffer })
-    --   end
-    -- end)
+    opts.on_attach = function(_, buffer)
+      vim.keymap.set(
+        "n",
+        "<leader>co",
+        "<cmd>TypescriptOrganizeImports<CR>",
+        { buffer = buffer, desc = "Organize Imports" }
+      )
+      vim.keymap.set("n", "<leader>cR", "<cmd>TypescriptRenameFile<CR>", { desc = "Rename File", buffer = buffer })
+    end
 
     require("typescript").setup({ server = opts })
     return true
@@ -176,10 +179,6 @@ return {
     opts = {
       servers = servers,
       setup = setup,
-      handlers = {
-        ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" }),
-        ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" }),
-      },
     },
     config = function(_, opts)
       local capabilites =
@@ -187,7 +186,6 @@ return {
 
       local global_server_opts = {
         capabilites = capabilites,
-        handlers = opts.handlers or {},
       }
 
       local function setup(server, server_opts)
@@ -241,8 +239,6 @@ return {
     keys = {
       { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" },
     },
-    opts = {
-      ui = { border = "rounded" },
-    },
+    opts = {},
   },
 }

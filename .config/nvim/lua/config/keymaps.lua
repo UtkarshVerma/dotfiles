@@ -1,3 +1,5 @@
+local Util = require("lazy.core.util")
+
 local function map(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts)
 end
@@ -135,6 +137,18 @@ vim.keymap.set("v", "p", "_dP", { silent = true, noremap = true })
 
 
 -- diagnostics
+local function toggle_diagnostics(bufnr)
+  if vim.diagnostic.is_disabled(bufnr) then
+    vim.diagnostic.enable(bufnr)
+    Util.info("Enabled diagnostics", { title = "Diagnostics" })
+  else
+    vim.diagnostic.disable(bufnr)
+    Util.warn("Disabled diagnostics", { title = "Diagnostics" })
+  end
+end
+
+
+--
 local function diagnostic_goto(next, severity)
   local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
@@ -152,6 +166,7 @@ map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error"  })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning"  })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning"  })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics"  })
+map("n", "<leader>ud", toggle_diagnostics, { desc = "Toggle Diagnostics", silent = true, remap = false })
 
 -- LSP
 map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration"  })

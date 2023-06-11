@@ -15,16 +15,28 @@ function M.setup()
   --   })
   -- else
   -- load them now so they affect the opened buffers
+
   M.load("autocmds")
   M.load("keymaps")
 end
--- end
 
 function M.load(name)
-  local ok, err = pcall(require, "config." .. name)
-  if not ok then
-    vim.notify("Error loading " .. name .. ": " .. err, vim.log.levels.ERROR)
+  local Util = require("lazy.core.util")
+  local function _load(mod)
+    Util.try(function()
+      require(mod)
+    end, {
+      msg = "Failed loading " .. mod,
+      on_error = function(msg)
+        local info = require("lazy.core.cache").find(mod)
+        if info == nil or (type(info) == "table" and #info == 0) then
+          return
+        end
+        Util.error(msg)
+      end,
+    })
   end
+  _load("config." .. name)
 end
 
 M.icons = require("config.icons")

@@ -111,7 +111,6 @@ return {
       require("mini.ai").setup(opts)
       -- register all text objects with which-key
       if require("lazy.core.config").plugins["which-key.nvim"] then
-        ---@type table<string, string|table>
         local i = {
           [" "] = "Whitespace",
           ['"'] = 'Balanced "',
@@ -156,12 +155,13 @@ return {
   },
   {
     "windwp/nvim-autopairs",
+    dependencies = { "nvim-cmp" },
     event = "VeryLazy",
     opts = {
       check_ts = true,
       ts_config = { java = false },
       fast_wrap = {
-        map = "<M-e>",
+        map = "<m-e>",
         chars = { "{", "[", "(", '"', "'" },
         pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
         offset = 0,
@@ -172,5 +172,12 @@ return {
         highlight_grey = "LineNr",
       },
     },
+    config = function(_, opts)
+      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      local cmp = require("cmp")
+      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
+      require("nvim-autopairs").setup(opts)
+    end,
   },
 }

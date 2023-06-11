@@ -1,3 +1,5 @@
+local util = require("util")
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -31,11 +33,14 @@ local options = {
   swapfile = false,
   tabstop = 4, -- Number of spaces tabs count for
   title = true,
+  titlestring = "%(%t - %)%(%{substitute(getcwd(), '^.*/', '', '')} - %)NVIM",
+  titlelen = 50,
+
   undodir = "/tmp/nvim-undodir", -- Preserve undo history per reboot
 
   autowrite = true, -- Enable auto write
   clipboard = "unnamedplus", -- Sync with system clipboard
-  completeopt = { "menu", "menuone", "noselect" },
+  completeopt = { "menuone", "noselect", "preview" },
   conceallevel = 3, -- Hide * markup for bold and italic
   confirm = true, -- Confirm to save changes before exiting modified buffer
   cursorline = true, -- Enable highlighting of the current line
@@ -63,7 +68,7 @@ local options = {
   splitbelow = true, -- Put new windows below current
   splitright = true, -- Put new windows right of current
   termguicolors = true, -- True color support
-  timeoutlen = 100,
+  timeoutlen = 300,
   undofile = true,
   undolevels = 10000,
   updatetime = 200, -- Save swap file and trigger CursorHold
@@ -86,14 +91,22 @@ vim.filetype.add({
 })
 
 vim.diagnostic.config({
-  underline = true,
-  update_in_insert = false,
   virtual_text = {
     spacing = 4,
     source = "if_many",
     prefix = "●",
   },
+  -- disable virtual text
+  virtual_lines = false,
+  update_in_insert = true,
+  underline = true,
   severity_sort = true,
+  float = {
+    focusable = false,
+    style = "minimal",
+    source = "if_many",
+    border = util.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
+  },
 })
 
 for name, icon in pairs(require("config").icons.diagnostics) do

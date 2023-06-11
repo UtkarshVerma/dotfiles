@@ -33,7 +33,7 @@ return {
               -- desc_hi = "String",
               key = "s",
               key_hl = "DashboardSession",
-              action = "lua require('persistence').load({last = true})",
+              action = "lua require('persistence').load()",
             },
             -- {
             --   icon = "   ",

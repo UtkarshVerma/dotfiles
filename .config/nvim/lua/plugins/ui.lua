@@ -152,6 +152,7 @@ return {
         "lazy",
         "mason",
         "DressingInput",
+        "cmp_docs",
         "",
       },
     },

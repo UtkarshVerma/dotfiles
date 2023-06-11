@@ -21,16 +21,19 @@ M.on_attach = function(on_attach)
   })
 end
 
-M.get_highlight_value = function(group)
-  local found, hl = pcall(vim.api.nvim_get_hl_by_name, group, true)
-  if not found then
-    return {}
+function M.get_highlight_value(name)
+  local hl = vim.api.nvim_get_hl(0, { name = name })
+  local fg = hl and hl.fg or hl.foreground
+  local bg = hl and hl.bg or hl.background
+
+  local function to_rgb(color)
+    return string.format("#%06x", color)
   end
-  local hl_config = {}
-  for key, value in pairs(hl) do
-    _, hl_config[key] = pcall(string.format, "#%02x", value)
-  end
-  return hl_config
+
+  return {
+    foreground = fg and to_rgb(fg),
+    background = bg and to_rgb(bg),
+  }
 end
 
 M.get_root = function()
