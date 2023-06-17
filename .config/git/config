@@ -21,10 +21,10 @@
 [includeIf "gitdir:~/work/"]
     path = ~/work/.gitconfig
 
-[includeIf "gitdir:~/gsoc/"]
-	path = ~/gsoc/.gitconfig
+[includeIf "gitdir:~/gsoc/rtems/"]
+	path = ~/gsoc/rtems/.gitconfig
 
-[includeIf "gitdir:~/remotes"]
+[includeIf "gitdir:~/remotes/"]
 	path = ~/remotes/.gitconfig
 
 [safe]

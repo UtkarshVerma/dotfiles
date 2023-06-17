@@ -68,6 +68,12 @@ for config in $configs; do
 done
 unset configs config
 
+# Add direnv hook for loading project-specific configurations, if present
+if command -v direnv >/dev/null 2>&1; then
+    export DIRENV_LOG_FORMAT=""             # Silence direnv
+    eval "$(direnv hook zsh)"
+fi
+
 #-------------------------------------------------------------------------------
 # Key bindings
 #-------------------------------------------------------------------------------

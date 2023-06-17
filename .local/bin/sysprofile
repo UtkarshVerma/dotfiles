@@ -23,10 +23,10 @@ if [ "$1" = "-g" ]; then
     mode="GPU"
     profiles="$gpuProfiles"
     active="$(supergfxctl -g)"
-fi
 
-if [ "$(supergfxctl -g)" = "hybrid" ]; then
-    profiles="$(echo "$profiles" | grep -v Vfio)"
+    if [ "$active" = "Hybrid" ]; then
+        profiles="$(echo "$profiles" | grep -v Vfio)"
+    fi
 fi
 
 preselect="$(echo "$profiles" | grep -n -i "$active" | cut -d':' -f1)"
@@ -34,10 +34,10 @@ preselect="$((preselect - 1))"
 prompt="$mode Profile:"
 if choice="$(echo "$profiles" | dmenu -i -ps "$preselect" -p "$prompt")"; then
     profile="${choice##* }"
-    profile="$(echo "$profile" | tr '[:upper:]' '[:lower:]')"
 
     if [ "$mode" = "CPU" ]; then
         asusctl profile -P "$profile" && notify
+        exit
     fi
 
     supergfxctl -m "$profile" && notify
