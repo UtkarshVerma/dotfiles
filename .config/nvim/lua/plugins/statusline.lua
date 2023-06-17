@@ -46,10 +46,6 @@ local function generate(palette)
   palette.magenta = util.get_highlight_value("Statement").foreground or "#ff00ff"
   palette.green = util.get_highlight_value("healthSuccess").foreground or "#00ff00"
   return {
-    SLGitIcon = {
-      bg = float and palette.float_background or palette.statusbar_bg,
-      fg = palette.green,
-    },
     SLBranchName = {
       bg = float and palette.float_background or palette.statusbar_bg,
       fg = palette.green,
@@ -116,31 +112,25 @@ end
 
 local components = {}
 
-local prev_branch = ""
-local git_icon = hl_str(icons.git.logo, "SLGitIcon", "SLBranchName")
 components.branch = {
   "branch",
   icons_enabled = false,
-  icon = git_icon,
   colored = false,
   fmt = function(str)
-    if vim.bo.filetype == "toggleterm" then
-      str = prev_branch
-    elseif str == "" or str == nil then
-      return hl_str(config.separator_icon.left, "SLSeparator")
-        .. hl_str("No VCS", "SLBranchName", "SLSeparator")
-        .. hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
+    local icon = icons.git.logo
+
+    if str == "" or str == nil then
+      str = "No VCS"
+      icon = ""
     end
-    prev_branch = str
-    return hl_str(config.separator_icon.left, "SLSeparator")
-      .. hl_str(git_icon, "SLGitIcon")
-      .. hl_str(truncate(str, 10), "SLBranchName")
+
+    return hl_str(config.separator_icon.left, "SLSeparator", "SLBranchName")
+      .. table.concat({ icon, truncate(str, 10) }, " ")
       .. hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
   end,
 }
 
 components.position = function()
-  -- print(vim.inspect(config.separator_icon))
   local current_line = vim.fn.line(".")
   local current_column = vim.fn.col(".")
   local left_sep = hl_str(config.separator_icon.left, "SLSeparator")

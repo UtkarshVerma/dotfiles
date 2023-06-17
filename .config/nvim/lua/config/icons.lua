@@ -52,6 +52,10 @@ local icons = {
       bottom_left = "▀",
     },
   },
+  indent = {
+    inactive = "│",
+    active = "│",
+  },
   git = {
     added = "",
     modified = "",

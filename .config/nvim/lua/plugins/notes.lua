@@ -20,4 +20,23 @@ return {
       }
     end,
   },
+  {
+    "nvim-neorg/neorg",
+    cmd = "Neorg",
+    build = ":Neorg sync-parsers",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      load = {
+        ["core.defaults"] = {}, -- Loads default behaviour
+        ["core.concealer"] = {}, -- Adds pretty icons to your documents
+        ["core.dirman"] = {
+          config = {
+            workspaces = {
+              gsoc = "~/notes/gsoc",
+            },
+          },
+        },
+      },
+    },
+  },
 }

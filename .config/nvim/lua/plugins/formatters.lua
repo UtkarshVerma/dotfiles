@@ -1,16 +1,14 @@
 local Util = require("lazy.core.util")
 
-local config = {}
-
 local function toggle()
-  if vim.b.autoformat == false then
-    vim.b.autoformat = nil
-    config.autoformat = true
-  else
-    config.autoformat = not config.autoformat
+  -- Format on save by default
+  if vim.b.autoformat == nil then
+    vim.b.autoformat = true
   end
 
-  if config.autoformat then
+  vim.b.autoformat = not vim.b.autoformat
+
+  if vim.b.autoformat then
     Util.info("Enabled format on save", { title = "Format" })
   else
     Util.warn("Disabled format on save", { title = "Format" })
@@ -55,11 +53,11 @@ local function get_formatters(bufnr)
 end
 
 local function format()
-  local buf = vim.api.nvim_get_current_buf()
   if vim.b.autoformat == false then
     return
   end
 
+  local buf = vim.api.nvim_get_current_buf()
   local formatters = get_formatters(buf)
   local client_ids = vim.tbl_map(function(client)
     return client.id
@@ -121,9 +119,7 @@ return {
     init = function(_)
       vim.api.nvim_create_autocmd("BufWritePre", {
         group = vim.api.nvim_create_augroup("FormatOnSave", {}),
-        callback = function()
-          format()
-        end,
+        callback = format,
       })
 
       vim.keymap.set("n", "<leader>uf", toggle, { desc = "Toggle autoformat" })

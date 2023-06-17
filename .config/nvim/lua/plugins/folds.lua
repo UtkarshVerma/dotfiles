@@ -1,3 +1,5 @@
+local icons = require("config").icons
+
 return {
   {
     "echasnovski/mini.indentscope",
@@ -13,7 +15,7 @@ return {
           border = "top",
           try_as_border = false,
         },
-        symbol = "▏",
+        symbol = icons.indent.active,
       }
     end,
     config = function(_, opts)
@@ -35,8 +37,8 @@ return {
         "toggleterm",
         "lazyterm",
       },
-      char = "▏",
-      context_char = "▏",
+      char = icons.indent.inactive,
+      context_char = icons.indent.active,
       char_priority = 20,
       use_treesitter = true,
     },

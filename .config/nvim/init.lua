@@ -23,7 +23,7 @@ require("lazy").setup({
     lazy = true,
     version = false, -- always use the latest git commit
   },
-  install = { colorscheme = { "molokai", "catppuccin" } },
+  install = { colorscheme = { "monokai-pro", "catppuccin", "molokai" } },
   performance = {
     rtp = {
       -- disable some rtp plugins

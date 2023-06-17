@@ -9,13 +9,11 @@ return {
 
       return vim.tbl_deep_extend("force", opts, {
         sources = {
-          nls.builtins.code_actions.eslint_d,
           nls.builtins.code_actions.shellcheck,
           require("typescript.extensions.null-ls.code-actions"),
 
           nls.builtins.diagnostics.alex,
           nls.builtins.diagnostics.cmake_lint,
-          nls.builtins.diagnostics.markdownlint,
           nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
           nls.builtins.diagnostics.yamllint.with({
             extra_args = {

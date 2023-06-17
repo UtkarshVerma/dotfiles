@@ -35,7 +35,6 @@ local servers = {
       },
     },
   },
-  denols = {},
   jsonls = {
     -- lazy-load schemastore when needed
     on_new_config = function(new_config)
@@ -112,6 +111,7 @@ local servers = {
       },
     },
   },
+  marksman = {},
   pyright = {
     settings = {
       python = {
@@ -125,10 +125,6 @@ local servers = {
   },
   gopls = {},
   rust_analyzer = {},
-  rome = {
-    -- Disable JSON in favour of jsonls
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescript.tsx", "typescriptreact" },
-  },
   tsserver = {
     settings = {
       typescript = {
@@ -230,6 +226,7 @@ return {
       "null-ls.nvim",
     },
     opts = {
+      automatic_setup = false,
       automatic_installation = true,
       handlers = {},
     },

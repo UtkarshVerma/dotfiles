@@ -67,8 +67,9 @@ return {
       })
 
       return {
+        preselect = cmp.PreselectMode.None,
         completion = {
-          completeopt = "menuone,noselect, preview",
+          completeopt = "menuone,noselect,preview",
         },
         snippet = {
           expand = function(args)
@@ -131,7 +132,7 @@ return {
             local icons = require("config").icons.kinds
             item.kind = icons[item.kind]
             local sources = {
-              nvim_lsp = "Lsp",
+              nvim_lsp = "LSP",
               nvim_lua = "Lua",
               luasnip = "Snippet",
               buffer = "Buffer",

@@ -85,6 +85,9 @@ end
 vim.opt.shortmess:append({ C = true, W = true, I = true, c = true })
 
 vim.filetype.add({
+  filename = {
+    wscript = "python",
+  },
   extension = {
     dto = "devicetree",
   },
