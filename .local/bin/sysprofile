@@ -7,6 +7,7 @@ cpuProfiles="\
 
 gpuProfiles="\
 💻 Integrated
+🧮 NvidiaNoModeset
 🔮 Vfio
 🚀 Hybrid"
 
@@ -17,10 +18,12 @@ notify() {
 }
 
 mode="CPU"
-profiles="$cpuProfiles"
-active="$(asusctl profile -p | cut -d' ' -f4)"
-if [ "$1" = "-g" ]; then
-    mode="GPU"
+[ "$1" = "-g" ] && mode="GPU"
+
+if [ "$mode" = "CPU" ]; then
+    profiles="$cpuProfiles"
+    active="$(asusctl profile -p | cut -d' ' -f4)"
+else
     profiles="$gpuProfiles"
     active="$(supergfxctl -g)"
 
@@ -32,13 +35,15 @@ fi
 preselect="$(echo "$profiles" | grep -n -i "$active" | cut -d':' -f1)"
 preselect="$((preselect - 1))"
 prompt="$mode Profile:"
-if choice="$(echo "$profiles" | dmenu -i -ps "$preselect" -p "$prompt")"; then
-    profile="${choice##* }"
 
-    if [ "$mode" = "CPU" ]; then
-        asusctl profile -P "$profile" && notify
-        exit
-    fi
+choice="$(echo "$profiles" | dmenu -i -ps "$preselect" -p "$prompt")"
+[ ! "$choice" ] && exit 1
 
-    supergfxctl -m "$profile" && notify
-fi
+profile="${choice##* }"
+
+if [ "$mode" = "CPU" ]; then
+    asusctl profile -P "$profile"
+else
+    echo "$profile"
+    supergfxctl -m "$profile"
+fi && notify

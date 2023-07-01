@@ -27,7 +27,7 @@ formatBlockDrives() {
 
 getBlockDrives() {
     drives="$(lsblk --noheadings --raw -o rm,label,name,mountpoint |
-        grep -v -e nvme0n1p5)" # automounted using fstab
+        grep -v -e nvme0n1p5 -e sda4)" # automounted using fstab
 
     removableDrives="$(echo "$drives" | grep "^1")"
     diskDrives="$(echo "$drives" | grep -v "^1")"
