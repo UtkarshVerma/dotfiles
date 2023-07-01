@@ -1,9 +1,3 @@
-local dictionary = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
-local words = {}
-for word in io.open(dictionary, "r"):lines() do
-  table.insert(words, word)
-end
-
 local servers = {
   bashls = {
     cmd_env = {
@@ -62,7 +56,6 @@ local servers = {
     },
   },
   neocmake = {},
-  texlab = {},
   html = {
     init_options = {
       provideFormatter = false, -- We'll use prettierd
@@ -73,17 +66,6 @@ local servers = {
           completionItem = {
             snippetSupport = true,
           },
-        },
-      },
-    },
-  },
-  ltex = {
-    enabled = false,
-    settings = {
-      ltex = {
-        language = "en-GB",
-        dictionary = {
-          ["en-GB"] = words,
         },
       },
     },
@@ -111,7 +93,6 @@ local servers = {
       },
     },
   },
-  marksman = {},
   pyright = {
     settings = {
       python = {
@@ -162,6 +143,7 @@ return {
   { "folke/neodev.nvim", config = true },
   {
     "neovim/nvim-lspconfig",
+    version = false,
     event = { "BufReadPre", "BufNewFile" },
     keys = {
       { "<leader>cl", "<cmd>LspInfo<cr>", desc = "LSP Info" },
@@ -172,10 +154,12 @@ return {
       "typescript.nvim",
       "neodev.nvim",
     },
-    opts = {
-      servers = servers,
-      setup = setup,
-    },
+    opts = function(_, opts)
+      return vim.tbl_deep_extend("force", opts, {
+        servers = servers,
+        setup = setup,
+      })
+    end,
     config = function(_, opts)
       local capabilites =
         vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), opts.capabilities or {})
@@ -228,7 +212,6 @@ return {
     opts = {
       automatic_setup = false,
       automatic_installation = true,
-      handlers = {},
     },
   },
   {

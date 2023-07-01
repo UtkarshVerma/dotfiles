@@ -16,7 +16,6 @@ return {
       vim.keymap.del({ "x", "o" }, "X")
     end,
   },
-
   {
     "ggandor/flit.nvim",
     keys = {

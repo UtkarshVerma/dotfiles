@@ -13,7 +13,7 @@ return {
         },
         options = {
           border = "top",
-          try_as_border = false,
+          try_as_border = true,
         },
         symbol = icons.indent.active,
       }
@@ -30,6 +30,7 @@ return {
         "help",
         "dashboard",
         "neo-tree",
+        "norg",
         "Trouble",
         "lazy",
         "mason",

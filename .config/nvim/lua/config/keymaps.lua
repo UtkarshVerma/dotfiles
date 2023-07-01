@@ -1,5 +1,3 @@
-local Util = require("lazy.core.util")
-
 local function map(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts)
 end
@@ -74,15 +72,10 @@ map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 
-
--- stylua: ignore start
-
 -- toggle options
--- map("n", "<leader>uf", require("lazyvim.plugins.lsp.format").toggle, { desc = "Toggle format on Save" })
 -- map("n", "<leader>us", function() Util.toggle("spell") end, { desc = "Toggle Spelling" })
 -- map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle Word Wrap" })
 -- map("n", "<leader>ul", function() Util.toggle("relativenumber", true) Util.toggle("number") end, { desc = "Toggle Line Numbers" })
--- map("n", "<leader>ud", Util.toggle_diagnostics, { desc = "Toggle Diagnostics" })
 -- local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 -- map("n", "<leader>uc", function() Util.toggle("conceallevel", false, {0, conceallevel}) end, { desc = "Toggle Conceal" })
 --
@@ -128,27 +121,24 @@ map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 
-
 -- TODO:
 -- vim.keymap.set("n", "<c-s-t>", "<cmd>e #<cr>", { desc = "Switch to other buffer" })
 
 -- Preserve copied content on paste
 vim.keymap.set("v", "p", "_dP", { silent = true, noremap = true })
 
-
--- diagnostics
 local function toggle_diagnostics(bufnr)
+  local opts = { title = "Diagnostics" }
+
   if vim.diagnostic.is_disabled(bufnr) then
     vim.diagnostic.enable(bufnr)
-    Util.info("Enabled diagnostics", { title = "Diagnostics" })
+    vim.notify("Enabled diagnostics", vim.log.levels.INFO, opts)
   else
     vim.diagnostic.disable(bufnr)
-    Util.warn("Disabled diagnostics", { title = "Diagnostics" })
+    vim.notify("Disabled diagnostics", vim.log.levels.WARN, opts)
   end
 end
 
-
---
 local function diagnostic_goto(next, severity)
   local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
@@ -159,29 +149,29 @@ end
 
 map("n", "[q", vim.cmd.cprev, { desc = "Prev quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
-map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic"  })
-map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic"  })
-map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error"  })
-map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error"  })
-map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning"  })
-map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning"  })
-map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics"  })
+map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
+map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
+map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
+map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
+map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
+map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 map("n", "<leader>ud", toggle_diagnostics, { desc = "Toggle Diagnostics", silent = true, remap = false })
 
 -- LSP
-map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration"  })
-map("n", "K", vim.lsp.buf.hover, { desc = "Hover"  })
+map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
+map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
 map("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-map("i", "<c-k>", vim.lsp.buf.signature_help, {desc = "Signature Help" })
-map({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action"  })
-map("n", "<leader>cA", function ()
+map("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+map("n", "<leader>cA", function()
   vim.lsp.buf.code_action({
-      context = {
-        only = {
-          "source",
-        },
-        diagnostics = map()
+    context = {
+      only = {
+        "source",
       },
+      diagnostics = map(),
+    },
   })
 end, {
   desc = "Source Action",

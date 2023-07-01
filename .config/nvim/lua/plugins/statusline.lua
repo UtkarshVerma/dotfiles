@@ -244,8 +244,6 @@ components.filetype = {
     end
     local left_sep = hl_str(config.separator_icon.left, "SLSeparator")
     local right_sep = hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
-    -- Upper case first character
-    filetype_str = filetype_str:gsub("%a", string.upper, 1)
     local filetype_hl = hl_str(filetype_str, "SLFiletype", "SLFiletype")
     return left_sep .. filetype_hl .. right_sep
   end,

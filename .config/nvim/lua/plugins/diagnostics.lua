@@ -7,21 +7,22 @@ return {
     opts = function(_, opts)
       local nls = require("null-ls")
 
-      return vim.tbl_deep_extend("force", opts, {
-        sources = {
-          nls.builtins.code_actions.shellcheck,
-          require("typescript.extensions.null-ls.code-actions"),
+      opts.sources = opts.sources or {}
+      vim.list_extend(opts.sources, {
+        nls.builtins.code_actions.shellcheck,
+        require("typescript.extensions.null-ls.code-actions"),
 
-          nls.builtins.diagnostics.alex,
-          nls.builtins.diagnostics.cmake_lint,
-          nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", 79 } }),
-          nls.builtins.diagnostics.yamllint.with({
-            extra_args = {
-              "-d",
-              "{extends: default, rules: {document-start: {present: false}, line-length: {max: 79}}}",
-            },
-          }),
-        },
+        nls.builtins.diagnostics.cmake_lint,
+        nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", vim.o.colorcolumn - 1 } }),
+        nls.builtins.diagnostics.yamllint.with({
+          extra_args = {
+            "-d",
+            string.format(
+              "{extends: default, rules: {document-start: disable, line-length: {max: %d}}}",
+              vim.o.colorcolumn - 1
+            ),
+          },
+        }),
       })
     end,
   },

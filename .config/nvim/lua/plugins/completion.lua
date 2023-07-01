@@ -1,16 +1,11 @@
-local function has_words_before()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
 return {
   {
     "L3MON4D3/LuaSnip",
     build = "make install_jsregexp",
     opts = {
       history = true,
-      delete_check_events = "TextChanged",
+      region_check_events = "CursorHold,InsertLeave,InsertEnter",
+      delete_check_events = "TextChanged,InsertEnter",
     },
   },
   {
@@ -80,10 +75,8 @@ return {
           ["<tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
+            elseif luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
             else
               fallback()
             end
@@ -112,10 +105,6 @@ return {
           ["<c-b>"] = cmp.mapping.scroll_docs(-4),
           ["<c-f>"] = cmp.mapping.scroll_docs(4),
           ["<c-e>"] = cmp.mapping.abort(),
-          ["<esc>"] = cmp.mapping(function(fallback)
-            luasnip.unlink_current()
-            fallback()
-          end),
         }),
 
         sources = cmp.config.sources({

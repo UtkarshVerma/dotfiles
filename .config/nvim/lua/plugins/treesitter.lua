@@ -1,6 +1,10 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    version = false,
+    dependencies = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+    },
     event = { "BufReadPost", "BufNewFile" },
     build = ":TSUpdate",
     keys = {
@@ -54,7 +58,6 @@ return {
         "vim",
         "yaml",
       },
-      playground = { enable = true },
       context_commentstring = {
         enable = true,
         enable_autocmd = false,
@@ -70,6 +73,7 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    version = false,
     init = function()
       -- PERF: no need to load the plugin, if we only need its queries for mini.ai
       local plugin = require("lazy.core.config").spec.plugins["nvim-treesitter"]

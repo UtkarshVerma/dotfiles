@@ -17,11 +17,12 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
     { import = "plugins.extras.copilot" },
+    { import = "plugins.extras.flash" },
   },
   change_detection = { enabled = false },
   defaults = {
     lazy = true,
-    version = false, -- always use the latest git commit
+    version = "*",
   },
   install = { colorscheme = { "monokai-pro", "catppuccin", "molokai" } },
   performance = {

@@ -3,6 +3,9 @@ local util = require("util")
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+-- Fix markdown indentation settings
+vim.g.markdown_recommended_style = 0
+
 local options = {
   backup = false,
   breakindent = true, -- Enable break indent
@@ -81,7 +84,6 @@ for k, v in pairs(options) do
 end
 vim.opt.shortmess:append({ C = true, W = true, I = true, c = true })
 vim.opt.formatoptions:remove({ "c", "r", "o" })
-vim.opt.whichwrap:append({ ["<"] = true, [">"] = true }) -- Wrap movement between lines using arrow keys
 
 vim.filetype.add({
   filename = {

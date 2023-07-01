@@ -19,6 +19,7 @@ return {
       {
         "which-key.nvim",
         opts = function(_, opts)
+          opts.defaults = opts.defaults or {}
           opts.defaults["<leader>sn"] = { name = "+noice" }
         end,
       },
@@ -166,6 +167,12 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     opts = {
       set_highlights = false,
+      handlers = {
+        cursor = false,
+        diagnostic = false,
+        gitsigns = false,
+        handle = true,
+      },
       excluded_filetypes = {
         "prompt",
         "TelescopePrompt",

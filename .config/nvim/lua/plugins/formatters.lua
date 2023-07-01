@@ -80,40 +80,43 @@ return {
     "null-ls.nvim",
     opts = function(_, opts)
       local nls = require("null-ls")
-      return vim.tbl_deep_extend("force", opts, {
-        sources = {
-          nls.builtins.formatting.clang_format.with({
-            -- clangd automatically calls clang-format for C/C++ files
-            filetypes = { "arduino" },
-          }),
-          nls.builtins.formatting.bibclean,
-          nls.builtins.formatting.cmake_format,
-          nls.builtins.formatting.deno_fmt.with({
-            filetypes = { "markdown" },
-            extra_args = { "--options-line-width", 79 },
-          }),
-          nls.builtins.formatting.latexindent.with({
-            -- Disable indent.log generation
-            extra_args = { "-g", "/dev/null" },
-          }),
-          nls.builtins.formatting.rome.with({
-            disabled_filetypes = { "json" },
-          }),
-          nls.builtins.formatting.rustfmt.with({
-            extra_args = { "--edition", 2021 },
-          }),
-          nls.builtins.formatting.shfmt.with({
-            extra_args = { "--indent", 4, "--case-indent" },
-          }),
-          nls.builtins.formatting.stylua,
-          nls.builtins.formatting.prettierd.with({
-            filetypes = { "html", "scss", "css" },
-          }),
-          nls.builtins.formatting.yapf,
-          nls.builtins.formatting.yamlfmt.with({
-            extra_args = { "-formatter", "type=basic,retain_line_breaks=true,max_line_length=79" },
-          }),
-        },
+
+      opts.sources = opts.sources or {}
+      opts.sources = vim.list_extend(opts.sources, {
+        nls.builtins.formatting.clang_format.with({
+          -- clangd automatically calls clang-format for C/C++ files
+          filetypes = { "arduino" },
+        }),
+        nls.builtins.formatting.bibclean,
+        nls.builtins.formatting.cmake_format,
+        nls.builtins.formatting.deno_fmt.with({
+          filetypes = { "markdown" },
+          extra_args = { "--options-line-width", vim.o.colorcolumn - 1 },
+        }),
+        nls.builtins.formatting.latexindent.with({
+          -- Disable indent.log generation
+          extra_args = { "-g", "/dev/null" },
+        }),
+        nls.builtins.formatting.rome.with({
+          disabled_filetypes = { "json" },
+        }),
+        nls.builtins.formatting.rustfmt.with({
+          extra_args = { "--edition", 2021 },
+        }),
+        nls.builtins.formatting.shfmt.with({
+          extra_args = { "--indent", 4, "--case-indent" },
+        }),
+        nls.builtins.formatting.stylua,
+        nls.builtins.formatting.prettierd.with({
+          filetypes = { "html", "scss", "css" },
+        }),
+        nls.builtins.formatting.yapf,
+        nls.builtins.formatting.yamlfmt.with({
+          extra_args = {
+            "-formatter",
+            string.format("type=basic,retain_line_breaks=true,max_line_length=%d", vim.o.colorcolumn - 1),
+          },
+        }),
       })
     end,
     init = function(_)
@@ -122,7 +125,7 @@ return {
         callback = format,
       })
 
-      vim.keymap.set("n", "<leader>uf", toggle, { desc = "Toggle autoformat" })
+      vim.keymap.set("n", "<leader>uf", toggle, { desc = "Toggle Autoformat" })
     end,
   },
 }

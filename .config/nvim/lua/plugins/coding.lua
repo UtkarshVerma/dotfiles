@@ -1,5 +1,13 @@
 return {
   {
+    "kylechui/nvim-surround",
+    event = "VeryLazy",
+    config = function(_, opts)
+      require("nvim-surround").setup(opts)
+    end,
+  },
+  {
+    enabled = false,
     "echasnovski/mini.surround",
     keys = function(plugin, keys)
       -- Populate the keys based on the user's options
@@ -29,6 +37,38 @@ return {
         update_n_lines = "gzn", -- Update `n_lines`
       },
     },
+  },
+  {
+    "echasnovski/mini.trailspace",
+    dependencies = {
+      {
+        "which-key.nvim",
+        opts = function(_, opts)
+          opts.defaults = opts.defaults or {}
+          opts.defaults["<leader>t"] = { name = "+trailspace" }
+        end,
+      },
+    },
+    keys = {
+      {
+        "<leader>tw",
+        function()
+          require("mini.trailspace").trim()
+        end,
+        desc = "Trim trailing whitespaces",
+      },
+      {
+        "<leader>tl",
+        function()
+          require("mini.trailspace").trim_last_lines()
+        end,
+        desc = "Trim trailing lines",
+      },
+    },
+    opts = {},
+    config = function(_, opts)
+      require("mini.trailspace").setup(opts)
+    end,
   },
   {
     "echasnovski/mini.move",
