@@ -17,4 +17,5 @@ alias \
     open="xdg-open" \
     tree="tree -a -I .git" \
     vi="nvim" \
+    vale='vale --config="$XDG_CONFIG_HOME/vale/config.ini"' \
     yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'

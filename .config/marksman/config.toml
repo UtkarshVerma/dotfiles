@@ -1,0 +1,3 @@
+[code_action]
+# Disable "Table of Contents" code action
+toc.enable = false 
