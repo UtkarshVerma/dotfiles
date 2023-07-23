@@ -89,10 +89,8 @@ return {
         }),
         nls.builtins.formatting.bibclean,
         nls.builtins.formatting.cmake_format,
-        nls.builtins.formatting.deno_fmt.with({
-          filetypes = { "markdown" },
-          extra_args = { "--options-line-width", vim.o.colorcolumn - 1 },
-        }),
+
+        nls.builtins.formatting.cbfmt,
         nls.builtins.formatting.latexindent.with({
           -- Disable indent.log generation
           extra_args = { "-g", "/dev/null" },
@@ -108,7 +106,7 @@ return {
         }),
         nls.builtins.formatting.stylua,
         nls.builtins.formatting.prettierd.with({
-          filetypes = { "html", "scss", "css" },
+          filetypes = { "html", "scss", "css", "markdown" },
         }),
         nls.builtins.formatting.yapf,
         nls.builtins.formatting.yamlfmt.with({

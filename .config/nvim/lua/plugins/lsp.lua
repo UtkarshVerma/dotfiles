@@ -5,14 +5,33 @@ local servers = {
     },
   },
   clangd = {
+    capabilities = {
+      textDocument = {
+        completion = {
+          completionItem = {
+            commitCharactersSupport = true,
+            insertReplaceSupport = true,
+            snippetSupport = true,
+            deprecatedSupport = true,
+            labelDetailsSupport = true,
+            preselectSupport = false,
+            resolveSupport = {
+              properties = { "documentation", "detail", "additionalTextEdits" },
+            },
+            tagSupport = {
+              valueSet = { 1 },
+            },
+          },
+        },
+      },
+    },
     cmd = {
       "clangd",
       "--enable-config",
       "--clang-tidy",
-      "--header-insertion=never",
 
       -- Resolve standard include paths for cross-compilation targets
-      "--query-driver=/usr/sbin/arm-none-eabi-gcc",
+      "--query-driver=/usr/sbin/arm-none-eabi-gcc,/usr/sbin/aarch64-linux-gnu-gcc",
 
       -- Auto-format only if .clang-format exists
       "--fallback-style=none",
@@ -77,7 +96,7 @@ local servers = {
       },
     },
   },
-  lua_ls = {
+  sumneko_lua = {
     settings = {
       Lua = {
         format = { enable = false },
@@ -120,6 +139,7 @@ local servers = {
     },
   },
 }
+
 local setup = {
   tsserver = function(_, opts)
     opts.on_attach = function(_, buffer)
@@ -143,7 +163,6 @@ return {
   { "folke/neodev.nvim", config = true },
   {
     "neovim/nvim-lspconfig",
-    version = false,
     event = { "BufReadPre", "BufNewFile" },
     keys = {
       { "<leader>cl", "<cmd>LspInfo<cr>", desc = "LSP Info" },
