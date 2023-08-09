@@ -42,7 +42,7 @@ local options = {
   confirm = true, -- Confirm to save changes before exiting modified buffer
   cursorline = true, -- Enable highlighting of the current line
   expandtab = true, -- Use spaces instead of tabs
-  formatoptions = "jcroqlnt", -- tcqj
+  formatoptions = "jqlnt", -- tcqj
   grepformat = "%f:%l:%c:%m",
   grepprg = "rg, --vimgrep",
   ignorecase = true, -- Ignore case
@@ -80,8 +80,8 @@ for k, v in pairs(options) do
   vim.opt[k] = v
 end
 vim.opt.shortmess:append({ C = true, W = true, I = true, c = true })
-vim.opt.formatoptions:remove({ "c", "r", "o" })
 vim.opt.whichwrap:append({ ["<"] = true, [">"] = true }) -- Wrap movement between lines using arrow keys
+vim.opt.formatoptions:remove({ "c", "r", "o" })
 
 vim.filetype.add({
   filename = {
