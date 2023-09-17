@@ -86,6 +86,7 @@ export NVIM_LISTEN_ADDRESS="/tmp/nvim"
 export AWT_TOOLKIT="MToolkit"
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+export PIPENV_VENV_IN_PROJECT=1
 
 # Look and feel
 export QT_QPA_PLATFORMTHEME="qt5ct"
