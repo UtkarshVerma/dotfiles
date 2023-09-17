@@ -86,3 +86,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
+
+-- RTEMS development settings
+local rtems_dir = vim.fn.expand("~") .. "/gsoc/rtems/kernel"
+vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+  pattern = { rtems_dir .. "*.c", rtems_dir .. "*.h" },
+  callback = function(_)
+    vim.opt_local.commentstring = "/*%s*/"
+    return true
+  end,
+})

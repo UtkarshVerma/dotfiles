@@ -89,6 +89,7 @@ vim.filetype.add({
   },
   extension = {
     dto = "devicetree",
+    def = "c",
   },
 })
 

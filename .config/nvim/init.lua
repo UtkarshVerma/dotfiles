@@ -17,7 +17,7 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
     { import = "plugins.extras.copilot" },
-    { import = "plugins.extras.flash" },
+    -- { import = "plugins.extras.flash" },
   },
   change_detection = { enabled = false },
   defaults = {

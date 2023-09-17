@@ -1,7 +1,6 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
     dependencies = {
       "JoosepAlviste/nvim-ts-context-commentstring",
     },
@@ -62,10 +61,10 @@ return {
       context_commentstring = {
         enable = true,
         enable_autocmd = false,
-        config = {
-          c = "// %s",
-          cpp = "// %s",
-        },
+        -- config = {
+        --   c = "// %s",
+        --   cpp = "// %s",
+        -- },
       },
     },
     config = function(_, opts)

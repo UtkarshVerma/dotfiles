@@ -74,7 +74,11 @@ local servers = {
       },
     },
   },
-  neocmake = {},
+  neocmake = {
+    capabilities = {
+      documentFormattingProvider = false, -- We'll use cmake_format
+    },
+  },
   html = {
     init_options = {
       provideFormatter = false, -- We'll use prettierd
