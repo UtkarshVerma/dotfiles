@@ -1,7 +1,7 @@
 [user]
-	email = utkarshverma@protonmail.com
+	email = utkarsh@bitbanged.com
 	name = Utkarsh Verma
-	signingkey = 817656CF818EFCCC
+	signingkey = 7A4885A7162BDF20
 
 [commit]
 	gpgsign = true
