@@ -2,9 +2,7 @@ return {
   {
     "kylechui/nvim-surround",
     event = "VeryLazy",
-    config = function(_, opts)
-      require("nvim-surround").setup(opts)
-    end,
+    opts = {},
   },
   {
     enabled = false,
@@ -66,9 +64,6 @@ return {
       },
     },
     opts = {},
-    config = function(_, opts)
-      require("mini.trailspace").setup(opts)
-    end,
   },
   {
     "echasnovski/mini.move",
@@ -101,9 +96,6 @@ return {
         line_up = "<a-k>",
       },
     },
-    config = function(_, opts)
-      require("mini.move").setup(opts)
-    end,
   },
   {
     "echasnovski/mini.comment",

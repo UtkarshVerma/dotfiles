@@ -2,6 +2,7 @@ return {
   { "folke/tokyonight.nvim", event = "VeryLazy" },
   {
     "catppuccin/nvim",
+    main = "catppuccin",
     event = "VeryLazy",
     opts = {
       integrations = {
@@ -28,10 +29,6 @@ return {
         }
       end,
     },
-    config = function(_, opts)
-      local catppuccin = require("catppuccin")
-      catppuccin.setup(opts)
-    end,
   },
   {
     "loctvl842/monokai-pro.nvim",
