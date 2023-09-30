@@ -3,12 +3,13 @@ local icons = require("config").icons
 return {
   {
     "echasnovski/mini.indentscope",
+    main = "mini.indentscope",
     event = { "BufReadPost", "BufNewFile" },
-    opts = function(_, _)
+    opts = function(plugin, _)
       return {
         draw = {
           delay = 0,
-          animation = require("mini.indentscope").gen_animation.none(),
+          animation = require(plugin.main).gen_animation.none(),
           priority = 25,
         },
         options = {
@@ -18,30 +19,32 @@ return {
         symbol = icons.indent.active,
       }
     end,
-    config = function(_, opts)
-      require("mini.indentscope").setup(opts)
-    end,
   },
   {
     "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
     event = { "BufReadPost", "BufNewFile" },
     opts = {
-      filetype_exclude = {
-        "help",
-        "dashboard",
-        "neo-tree",
-        "norg",
-        "Trouble",
-        "lazy",
-        "mason",
-        "notify",
-        "toggleterm",
-        "lazyterm",
+      exclude = {
+        filetypes = {
+          "help",
+          "dashboard",
+          "neo-tree",
+          "norg",
+          "Trouble",
+          "lazy",
+          "mason",
+          "notify",
+          "toggleterm",
+          "lazyterm",
+        },
       },
-      char = icons.indent.inactive,
-      context_char = icons.indent.active,
-      char_priority = 20,
-      use_treesitter = true,
+      indent = {
+        char = icons.indent.inactive,
+      },
+      scope = {
+        enabled = false,
+      },
     },
   },
   {

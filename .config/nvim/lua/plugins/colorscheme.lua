@@ -93,9 +93,5 @@ return {
         floats = "transparent",
       },
     },
-    config = function(_, opts)
-      local molokai = require("molokai")
-      molokai.setup(opts)
-    end,
   },
 }

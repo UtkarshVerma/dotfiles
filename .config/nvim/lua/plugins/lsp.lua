@@ -105,6 +105,9 @@ local servers = {
       Lua = {
         format = { enable = false },
         workspace = { checkThirdParty = false },
+        diagnostics = {
+          globals = { "vim" },
+        },
         completion = {
           callSnippet = "Replace",
 
@@ -164,7 +167,6 @@ local setup = {
 return {
   { "b0o/SchemaStore.nvim" },
   { "jose-elias-alvarez/typescript.nvim" },
-  { "folke/neodev.nvim", config = true },
   {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
@@ -175,7 +177,6 @@ return {
       "mason-lspconfig.nvim",
       "SchemaStore.nvim",
       "typescript.nvim",
-      "neodev.nvim",
     },
     opts = function(_, opts)
       return vim.tbl_deep_extend("force", opts, {
@@ -183,7 +184,7 @@ return {
         setup = setup,
       })
     end,
-    config = function(_, opts)
+    config = function(plugin, opts)
       local capabilites =
         vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), opts.capabilities or {})
 

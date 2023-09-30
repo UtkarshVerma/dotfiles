@@ -31,7 +31,7 @@ return {
   {
     "NMAC427/guess-indent.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    config = true,
+    opts = {},
   },
   {
     "nvim-pack/nvim-spectre",
@@ -109,6 +109,6 @@ return {
       { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
       { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
     },
-    config = true,
+    opts = {},
   },
 }
