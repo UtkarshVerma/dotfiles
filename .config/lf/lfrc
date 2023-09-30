@@ -77,24 +77,6 @@ cmd extract ${{
 #   notify-send "🚚 File(s) moved." "File(s) moved to $dest."
 # }}
 
-# cmd paste ${{
-#     set -- $(cat ~/.local/share/lf/files)
-#     mode="$1"
-#     shift
-#     case "$mode" in
-#         copy)
-#             rsync -av --ignore-existing --progress -- "$@" . |
-#             stdbuf -i0 -o0 -e0 tr '\r' '\n' |
-#             while IFS= read -r line; do
-#                 echo "$line"
-#             done
-#             ;;
-#         move) mv -i -- "$@" .;;
-#     esac
-#     rm ~/.local/share/lf/files
-#     lf -remote "send clear"
-# }}
-
 # cmd copyto ${{
 #   clear; tput cup $(($(tput lines)/3)); tput bold
 #   set -f
@@ -106,28 +88,46 @@ cmd extract ${{
 #   notify-send "📋 File(s) copied." "File(s) copies to $dest."
 # }}
 
-cmd bulk_rename ${{
-    old="$(mktemp)"
-    new="$(mktemp)"
-    if [ -n "$fs" ]; then
-        fs="$(basename -a $fs)"
-    else
-        fs="$(ls)"
+# cmd bulk_rename ${{
+#     old="$(mktemp)"
+#     new="$(mktemp)"
+#     if [ -n "$fs" ]; then
+#         fs="$(basename -a $fs)"
+#     else
+#         fs="$(ls)"
+#     fi
+#     printf '%s\n' "$fs" >"$old"
+#     printf '%s\n' "$fs" >"$new"
+#     $EDITOR "$new"
+#     [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
+#     paste "$old" "$new" | while IFS= read -r names; do
+#         src="$(printf '%s' "$names" | cut -f1)"
+#         dst="$(printf '%s' "$names" | cut -f2)"
+#         if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
+#             continue
+#         fi
+#         mv -- "$src" "$dst"
+#     done
+#     rm -- "$old" "$new"
+#     lf -remote "send $id unselect"
+# }}
+
+cmd paste %{{
+    mode=$(head -1 ~/.local/share/lf/files)
+    list=$(sed 1d ~/.local/share/lf/files)
+
+    if [ -z $list ]; then
+        exit 1
     fi
-    printf '%s\n' "$fs" >"$old"
-    printf '%s\n' "$fs" >"$new"
-    $EDITOR "$new"
-    [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
-    paste "$old" "$new" | while IFS= read -r names; do
-        src="$(printf '%s' "$names" | cut -f1)"
-        dst="$(printf '%s' "$names" | cut -f2)"
-        if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
-            continue
-        fi
-        mv -- "$src" "$dst"
-    done
-    rm -- "$old" "$new"
-    lf -remote "send $id unselect"
+
+    if [ $mode = "copy" ]; then
+        cp -r $list .
+    elif [ $mode = "move" ]; then
+        mv $list .
+    fi
+
+    lf -remote "send load"
+    lf -remote "send clear"
 }}
 
 on-cd

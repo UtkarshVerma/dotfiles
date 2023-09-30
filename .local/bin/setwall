@@ -31,7 +31,7 @@ set -- -e --backend schemer2 -a "$ALPHA" -n
 [ "$LIGHT" -ne 0 ] && set -- "$@" -l
 
 [ ! -f "$wallpaper" ] &&
-    wallpaper="$(find ~/pictures/wallpapers/ -type f | shuf -n 1)"
+    wallpaper="$(find ~/pictures/wallpapers/ -type f ! -path '*/.git/*' | shuf -n 1)"
 
 if [ -n "$COLORSCHEME" ]; then
     set -- "$@" --theme "$COLORSCHEME"
