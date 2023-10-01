@@ -13,13 +13,13 @@ return {
         require("typescript.extensions.null-ls.code-actions"),
 
         nls.builtins.diagnostics.cmake_lint,
-        nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", vim.o.colorcolumn - 1 } }),
+        nls.builtins.diagnostics.ruff.with({ extra_args = { "--line-length", tonumber(vim.o.colorcolumn) - 1 } }),
         nls.builtins.diagnostics.yamllint.with({
           extra_args = {
             "-d",
             string.format(
               "{extends: default, rules: {document-start: disable, line-length: {max: %d}}}",
-              vim.o.colorcolumn - 1
+              tonumber(vim.o.colorcolumn) - 1
             ),
           },
         }),
