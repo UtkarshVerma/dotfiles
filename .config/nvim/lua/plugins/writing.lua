@@ -8,7 +8,7 @@ return {
     opts = {
       window = {
         backdrop = 0.95,
-        width = tonumber(vim.o.colorcolumn or 80) + 7,
+        width = tonumber(vim.o.colorcolumn or "80") + 7,
         height = 1,
         options = {
           signcolumn = "no",
@@ -70,7 +70,7 @@ return {
   },
 
   {
-    "null-ls.nvim",
+    "none-ls.nvim",
     opts = function(_, opts)
       local nls = require("null-ls")
 

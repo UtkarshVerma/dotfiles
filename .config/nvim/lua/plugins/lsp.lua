@@ -184,7 +184,7 @@ return {
         setup = setup,
       })
     end,
-    config = function(plugin, opts)
+    config = function(_, opts)
       local capabilites =
         vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), opts.capabilities or {})
 
@@ -214,7 +214,7 @@ return {
     end,
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     keys = {
       { "<leader>cn", "<cmd>NullLsInfo<cr>", desc = "Null LS Info" },
     },
@@ -231,7 +231,7 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "mason.nvim",
-      "null-ls.nvim",
+      "none-ls.nvim",
     },
     opts = {
       automatic_setup = false,

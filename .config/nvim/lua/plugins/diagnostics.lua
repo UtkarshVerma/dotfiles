@@ -1,6 +1,6 @@
 return {
   {
-    "null-ls.nvim",
+    "none-ls.nvim",
     dependencies = {
       "typescript.nvim",
     },

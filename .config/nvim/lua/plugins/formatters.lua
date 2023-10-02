@@ -29,19 +29,19 @@ end
 local function get_formatters(bufnr)
   local ft = vim.bo[bufnr].filetype
 
-  -- check if we have any null-ls formatters for the current filetype
-  local null_ls = package.loaded["null-ls"] and require("null-ls.sources").get_available(ft, "NULL_LS_FORTTING") or {}
+  -- check if we have any none-ls formatters for the current filetype
+  local none_ls = package.loaded["null-ls"] and require("null-ls.sources").get_available(ft, "NULL_LS_FORTTING") or {}
 
   local ret = {
     active = {},
     available = {},
-    null_ls = null_ls,
+    null_ls = none_ls,
   }
 
   local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
   for _, client in ipairs(clients) do
     if supports_format(client) then
-      if (#null_ls > 0 and client.name == "null-ls") or #null_ls == 0 then
+      if (#none_ls > 0 and client.name == "null-ls") or #none_ls == 0 then
         table.insert(ret.active, client)
       else
         table.insert(ret.available, client)
@@ -77,7 +77,7 @@ end
 
 return {
   {
-    "null-ls.nvim",
+    "none-ls.nvim",
     opts = function(_, opts)
       local nls = require("null-ls")
 
@@ -95,7 +95,7 @@ return {
           -- Disable indent.log generation
           extra_args = { "-g", "/dev/null" },
         }),
-        nls.builtins.formatting.rome.with({
+        nls.builtins.formatting.biome.with({
           disabled_filetypes = { "json" },
         }),
         nls.builtins.formatting.rustfmt.with({

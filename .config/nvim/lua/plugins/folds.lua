@@ -2,25 +2,6 @@ local icons = require("config").icons
 
 return {
   {
-    "echasnovski/mini.indentscope",
-    main = "mini.indentscope",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = function(plugin, _)
-      return {
-        draw = {
-          delay = 0,
-          animation = require(plugin.main).gen_animation.none(),
-          priority = 25,
-        },
-        options = {
-          border = "top",
-          try_as_border = true,
-        },
-        symbol = icons.indent.active,
-      }
-    end,
-  },
-  {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
     event = { "BufReadPost", "BufNewFile" },
@@ -41,9 +22,11 @@ return {
       },
       indent = {
         char = icons.indent.inactive,
+        highlight = "IndentBlanklineChar",
+        priority = 11,
       },
       scope = {
-        enabled = false,
+        highlight = "IndentBlanklineContextChar",
       },
     },
   },
