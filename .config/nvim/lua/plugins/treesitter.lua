@@ -1,19 +1,105 @@
 return {
   {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "LazyFile",
+    keys = {
+      {
+        "<leader>ut",
+        function()
+          local util = require("util")
+          local tsc = require("treesitter-context")
+          tsc.toggle()
+          if util.inject.get_upvalue(tsc.toggle, "enabled") then
+            util.info("Enabled treesitter context", { title = "Option" })
+          else
+            util.warn("Disabled treesitter context", { title = "Option" })
+          end
+        end,
+        desc = "Toggle treesitter context",
+      },
+    },
+    opts = {
+      mode = "cursor",
+      max_lines = 2,
+    },
+  },
+
+  { "JoosepAlviste/nvim-ts-context-commentstring" },
+
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    config = function()
+      -- When in diff mode, we want to use the default
+      -- vim text objects c & C instead of the treesitter ones.
+      local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
+      local configs = require("nvim-treesitter.configs")
+      for name, fn in pairs(move) do
+        if name:find("goto") == 1 then
+          move[name] = function(q, ...)
+            if vim.wo.diff then
+              local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
+              for key, query in pairs(config or {}) do
+                if q == query and key:find("[%]%[][cC]") then
+                  vim.cmd("normal! " .. key)
+                  return
+                end
+              end
+            end
+            return fn(q, ...)
+          end
+        end
+      end
+    end,
+  },
+
+  {
     "nvim-treesitter/nvim-treesitter",
     main = "nvim-treesitter.configs",
-    dependencies = {
-      "JoosepAlviste/nvim-ts-context-commentstring",
-    },
-    event = { "BufReadPost", "BufNewFile" },
     build = ":TSUpdate",
+    event = { "LazyFile", "VeryLazy" },
+    dependencies = {
+      "nvim-ts-context-commentstring",
+      "nvim-treesitter-textobjects",
+    },
+    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = {
       { "<c-space>", desc = "Increment selection" },
       { "<bs>", desc = "Decrement selection", mode = "x" },
     },
+    ---@type TSConfig
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       highlight = { enable = true },
       indent = { enable = true },
+      ensure_installed = {
+        -- "arduino",
+        -- "bibtex",
+        -- "cmake",
+        -- "devicetree",
+        -- "dockerfile",
+        "git_config",
+        "git_rebase",
+        "gitattributes",
+        "gitcommit",
+        "gitignore",
+        -- "go",
+        -- "gomod",
+        -- "gowork",
+        -- "html",
+        -- "http",
+        -- "json",
+        -- "jsonc",
+        -- "latex",
+        -- "python",
+        -- "regex",
+        -- "rst",
+        -- "rust",
+        -- "scss",
+      },
+      context_commentstring = {
+        enable = true,
+        enable_autocmd = false,
+      },
       incremental_selection = {
         enable = true,
         keymaps = {
@@ -23,70 +109,15 @@ return {
           node_decremental = "<bs>",
         },
       },
-      ensure_installed = {
-        "arduino",
-        "bash",
-        "bibtex",
-        "c",
-        "cmake",
-        "cpp",
-        "devicetree",
-        "dockerfile",
-        "git_config",
-        "git_rebase",
-        "gitattributes",
-        "gitcommit",
-        "gitignore",
-        "go",
-        "gomod",
-        "gowork",
-        "html",
-        "http",
-        "javascript",
-        "json",
-        "jsonc",
-        "latex",
-        "lua",
-        "make",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "regex",
-        "rst",
-        "rust",
-        "scss",
-        "typescript",
-        "vim",
-        "yaml",
-      },
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-        -- config = {
-        --   c = "// %s",
-        --   cpp = "// %s",
-        -- },
+      textobjects = {
+        move = {
+          enable = true,
+          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
+          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
+          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+        },
       },
     },
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    init = function()
-      -- PERF: no need to load the plugin, if we only need its queries for mini.ai
-      local plugin = require("lazy.core.config").spec.plugins["nvim-treesitter"]
-      local opts = require("lazy.core.plugin").values(plugin, "opts", false)
-      local enabled = false
-      if opts.textobjects then
-        for _, mod in ipairs({ "move", "select", "swap", "lsp_interop" }) do
-          if opts.textobjects[mod] and opts.textobjects[mod].enable then
-            enabled = true
-            break
-          end
-        end
-      end
-      if not enabled then
-        require("lazy.core.loader").disable_rtp_plugin("nvim-treesitter-textobjects")
-      end
-    end,
   },
 }

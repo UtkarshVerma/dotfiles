@@ -1,71 +1,16 @@
+local config = require("config")
 local util = require("util")
 
 return {
   {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    -- stylua: ignore
-    keys = {
-      { "<s-enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
-      { "<leader>snl", function() require("noice").cmd("last") end, desc = "Noice Last Message" },
-      { "<leader>snh", function() require("noice").cmd("history") end, desc = "Noice History" },
-      { "<leader>sna", function() require("noice").cmd("all") end, desc = "Noice All" },
-      { "<leader>snd", function() require("noice").cmd("dismiss") end, desc = "Dismiss All" },
-      { "<c-f>", function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end, silent = true, expr = true, desc = "Scroll forward", mode = {"i", "n", "s"} },
-      { "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, desc = "Scroll backward", mode = {"i", "n", "s"}},
-    },
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      {
-        "which-key.nvim",
-        opts = function(_, opts)
-          opts.defaults = opts.defaults or {}
-          opts.defaults["<leader>sn"] = { name = "+noice" }
-        end,
-      },
-    },
-    opts = {
-      cmdline = {
-        view = "cmdline",
-        format = {
-          cmdline = { icon = "  " },
-          search_down = { icon = "  󰄼" },
-          search_up = { icon = "  " },
-          lua = { icon = "  " },
-        },
-      },
-      lsp = {
-        progress = { enabled = true },
-        hover = { enabled = false },
-        signature = { enabled = false },
-        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-        override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true,
-        },
-      },
-
-      routes = {
-        {
-          filter = {
-            event = "msg_show",
-            find = "%d+L, %d+B",
-          },
-        },
-      },
-    },
-  },
-  {
     "rcarriga/nvim-notify",
-    dependencies = { "noice.nvim" },
     keys = {
       {
         "<leader>un",
         function()
           require("notify").dismiss({ silent = true, pending = true })
         end,
-        desc = "Dismiss all Notifications",
+        desc = "Dismiss all notifications",
       },
     },
     opts = {
@@ -107,31 +52,153 @@ return {
       max_width = function()
         return math.floor(vim.o.columns * 0.75)
       end,
-    },
-  },
-  {
-    "stevearc/dressing.nvim",
-    lazy = true,
-    opts = {
-      input = {
-        border = util.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
-        win_options = { winblend = 0 },
-      },
-      select = { telescope = util.telescope_theme("dropdown") },
+      on_open = function(win)
+        vim.api.nvim_win_set_config(win, { zindex = 100 })
+      end,
     },
     init = function()
-      ---@diagnostic disable-next-line: duplicate-set-field
+      -- when noice is not enabled, install notify on VeryLazy
+      if not util.has("noice.nvim") then
+        util.on_very_lazy(function()
+          vim.notify = require("notify")
+        end)
+      end
+    end,
+  },
+
+  {
+    "stevearc/dressing.nvim",
+    opts = {
+      input = {
+        border = util.ui.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
+        win_options = { winblend = 0 },
+      },
+    },
+    init = function()
       vim.ui.select = function(...)
         require("lazy").load({ plugins = { "dressing.nvim" } })
         return vim.ui.select(...)
       end
-      ---@diagnostic disable-next-line: duplicate-set-field
       vim.ui.input = function(...)
         require("lazy").load({ plugins = { "dressing.nvim" } })
         return vim.ui.input(...)
       end
     end,
   },
+
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    keys = {
+      {
+        "<s-enter>",
+        function()
+          require("noice").redirect(vim.fn.getcmdline())
+        end,
+        mode = "c",
+        desc = "Redirect cmdline",
+      },
+      {
+        "<leader>snl",
+        function()
+          require("noice").cmd("last")
+        end,
+        desc = "Noice last message",
+      },
+      {
+        "<leader>snh",
+        function()
+          require("noice").cmd("history")
+        end,
+        desc = "Noice history",
+      },
+      {
+        "<leader>sna",
+        function()
+          require("noice").cmd("all")
+        end,
+        desc = "Noice all",
+      },
+      {
+        "<leader>snd",
+        function()
+          require("noice").cmd("dismiss")
+        end,
+        desc = "Dismiss all",
+      },
+      {
+        "<c-f>",
+        function()
+          if not require("noice.lsp").scroll(4) then
+            return "<c-f>"
+          end
+        end,
+        silent = true,
+        expr = true,
+        desc = "Scroll forward",
+        mode = {
+          "i",
+          "n",
+          "s",
+        },
+      },
+      {
+        "<c-b>",
+        function()
+          if not require("noice.lsp").scroll(-4) then
+            return "<c-b>"
+          end
+        end,
+        silent = true,
+        expr = true,
+        desc = "Scroll backward",
+        mode = {
+          "i",
+          "n",
+          "s",
+        },
+      },
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      {
+        "which-key.nvim",
+        opts = {
+          defaults = {
+            ["<leader>sn"] = { name = "+noice" },
+          },
+        },
+      },
+    },
+    opts = {
+      lsp = {
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true,
+        },
+      },
+      routes = {
+        {
+          filter = {
+            event = "msg_show",
+            any = {
+              { find = "%d+L, %d+B" },
+              { find = "; after #%d+" },
+              { find = "; before #%d+" },
+            },
+          },
+          view = "mini",
+        },
+      },
+      presets = {
+        bottom_search = true,
+        command_palette = true,
+        long_message_to_split = true,
+      },
+    },
+  },
+
   {
     "utilyre/barbecue.nvim",
     event = { "BufReadPost", "BufNewFile" },
@@ -144,7 +211,7 @@ return {
       create_autocmd = false,
       exclude_filetypes = { "gitcommit", "Trouble", "toggleterm" },
       show_modified = false,
-      kinds = require("config").icons.kinds,
+      kinds = config.icons.kinds,
     },
     config = function(_, opts)
       vim.api.nvim_create_autocmd({
@@ -162,6 +229,7 @@ return {
       require("barbecue").setup(opts)
     end,
   },
+
   {
     "petertriho/nvim-scrollbar",
     event = { "BufReadPost", "BufNewFile" },
@@ -187,6 +255,7 @@ return {
       },
     },
   },
+
   {
     "NvChad/nvim-colorizer.lua",
     event = { "BufReadPre", "BufNewFile" },

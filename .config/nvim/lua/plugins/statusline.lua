@@ -38,13 +38,13 @@ end
 
 local function generate(palette)
   local float = config.float
-  palette.yellow = util.get_highlight_value("String").foreground or "#ffff00"
-  palette.white = util.get_highlight_value("Normal").foreground or "#ffffff"
-  palette.red = util.get_highlight_value("DiagnosticError").foreground or "#ff0000"
-  palette.orange = util.get_highlight_value("DiagnosticWarn").foreground or "#ff7700"
-  palette.blue = util.get_highlight_value("DiagnosticHint").foreground or "#00ffff"
-  palette.magenta = util.get_highlight_value("Statement").foreground or "#ff00ff"
-  palette.green = util.get_highlight_value("healthSuccess").foreground or "#00ff00"
+  palette.yellow = util.ui.get_hl("String").fg or "#ffff00"
+  palette.white = util.ui.get_hl("Normal").fg or "#ffffff"
+  palette.red = util.ui.get_hl("DiagnosticError").fg or "#ff0000"
+  palette.orange = util.ui.get_hl("DiagnosticWarn").fg or "#ff7700"
+  palette.blue = util.ui.get_hl("DiagnosticHint").fg or "#00ffff"
+  palette.magenta = util.ui.get_hl("Statement").fg or "#ff00ff"
+  palette.green = util.ui.get_hl("healthSuccess").fg or "#00ff00"
   return {
     SLBranchName = {
       bg = float and palette.float_background or palette.statusbar_bg,
@@ -125,8 +125,8 @@ components.branch = {
     end
 
     return hl_str(config.separator_icon.left, "SLSeparator", "SLBranchName")
-      .. table.concat({ icon, truncate(str, 10) }, " ")
-      .. hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
+        .. table.concat({ icon, truncate(str, 10) }, " ")
+        .. hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
   end,
 }
 
@@ -154,9 +154,9 @@ components.diagnostics = function()
       count[diagnostic.severity] = count[diagnostic.severity] + 1
     end
     return count[vim.diagnostic.severity.ERROR],
-      count[vim.diagnostic.severity.WARN],
-      count[vim.diagnostic.severity.INFO],
-      count[vim.diagnostic.severity.HINT]
+        count[vim.diagnostic.severity.WARN],
+        count[vim.diagnostic.severity.INFO],
+        count[vim.diagnostic.severity.HINT]
   end
 
   local error_count, warn_count, info_count, hint_count = nvim_diagnostic()
@@ -250,12 +250,12 @@ components.filetype = {
 }
 
 local function configure(opts)
-  local statusline_hl = util.get_highlight_value("StatusLine")
+  local statusline_hl = util.ui.get_hl("StatusLine")
   local palette = {
-    float_background = util.get_highlight_value("Pmenu").background,
-    editor_bg = util.get_highlight_value("Normal").background or "NONE",
-    statusbar_bg = statusline_hl.background or "#000000",
-    statusbar_fg = statusline_hl.foreground or "#505050",
+    float_background = util.ui.get_hl("Pmenu").bg,
+    editor_bg = util.ui.get_hl("Normal").bg or "NONE",
+    statusbar_bg = statusline_hl.bg or "#000000",
+    statusbar_fg = statusline_hl.fg or "#505050",
   }
   local groups = generate(palette)
   draw(groups)

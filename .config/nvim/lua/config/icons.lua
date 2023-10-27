@@ -1,4 +1,13 @@
-local icons = {
+---@class config.icons
+local M = {
+  misc = {
+    File = " ",
+    Files = " ",
+    Reload = " ",
+    Lazy = "󰒲 ",
+    Server = " ",
+    Quit = " ",
+  },
   dap = {
     Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
     Breakpoint = " ",
@@ -13,12 +22,12 @@ local icons = {
     Info = " ",
   },
   gitsigns = {
-    add = "┃",
-    change = "┋",
-    delete = "",
-    topdelete = "",
-    changedelete = "┃",
-    untracked = "┃",
+    Add = "┃",
+    Change = "┋",
+    Delete = "",
+    TopDelete = "",
+    ChangeDelete = "┃",
+    Untracked = "┃",
   },
   borders = {
     thin = {
@@ -109,4 +118,4 @@ local icons = {
   },
 }
 
-return icons
+return M

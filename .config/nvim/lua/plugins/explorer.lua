@@ -7,6 +7,7 @@ local function hide_cursor()
     hi Cursor blend=100
   ]])
 end
+
 local function show_cursor()
   vim.cmd([[
     setlocal guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
@@ -121,23 +122,21 @@ end
 
 return {
   {
-    "bufferline.nvim",
-    optional = true,
-    opts = function(_, opts)
-      return vim.tbl_deep_extend("force", opts, {
-        options = {
-          offsets = {
-            {
-              filetype = "neo-tree",
-              text = "EXPLORER",
-              text_align = "center",
-              separator = true, -- set to `true` if clear background of neo-tree
-            },
+    "akinsho/bufferline.nvim",
+    opts = {
+      options = {
+        offsets = {
+          {
+            filetype = "neo-tree",
+            text = "EXPLORER",
+            text_align = "center",
+            separator = true, -- set to `true` if clear background of neo-tree
           },
         },
-      })
-    end,
+      },
+    },
   },
+
   {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
@@ -150,7 +149,7 @@ return {
       {
         "<leader>fe",
         function()
-          require("neo-tree.command").execute({ toggle = true, position = "left", dir = util.get_root() })
+          require("neo-tree.command").execute({ toggle = true, position = "left", dir = util.root.get() })
         end,
         desc = "Explorer (root dir)",
         remap = true,
@@ -165,7 +164,24 @@ return {
         end,
         desc = "Explorer (cwd)",
       },
+      {
+        "<leader>ge",
+        function()
+          require("neo-tree.command").execute({ source = "git_status", toggle = true })
+        end,
+        desc = "Git explorer",
+      },
+      {
+        "<leader>be",
+        function()
+          require("neo-tree.command").execute({ source = "buffers", toggle = true })
+        end,
+        desc = "Buffer explorer",
+      },
     },
+    deactivate = function()
+      vim.cmd([[Neotree close]])
+    end,
     opts = {
       source_selector = {
         winbar = true, -- toggle to show selector on winbar
@@ -179,7 +195,7 @@ return {
         },
       },
       close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
-      popup_border_style = util.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
+      -- popup_border_style = util.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
       commands = commands,
       default_component_configs = {
         indent = {
@@ -241,7 +257,6 @@ return {
       },
     },
     init = function()
-      vim.g.neo_tree_remove_legacy_commands = 1
       if vim.fn.argc() == 1 then
         local stat = vim.loop.fs_stat(vim.fn.argv(0))
         if stat and stat.type == "directory" then
@@ -250,7 +265,7 @@ return {
         end
       end
 
-      local neotree_group = util.augroup("neo-tree_hide_cursor")
+      local neotree_group = vim.api.nvim_create_augroup("neo-tree_hide_cursor", { clear = true })
       vim.api.nvim_create_autocmd({ "FileType" }, {
         pattern = "neo-tree",
         callback = function()
@@ -267,6 +282,27 @@ return {
               show_cursor()
             end,
           })
+        end,
+      })
+    end,
+    config = function(_, opts)
+      local function on_move(data)
+        util.lsp.on_rename(data.source, data.destination)
+      end
+
+      local events = require("neo-tree.events")
+      opts.event_handlers = opts.event_handlers or {}
+      vim.list_extend(opts.event_handlers, {
+        { event = events.FILE_MOVED, handler = on_move },
+        { event = events.FILE_RENAMED, handler = on_move },
+      })
+      require("neo-tree").setup(opts)
+      vim.api.nvim_create_autocmd("TermClose", {
+        pattern = "*lazygit",
+        callback = function()
+          if package.loaded["neo-tree.sources.git_status"] then
+            require("neo-tree.sources.git_status").refresh()
+          end
         end,
       })
     end,

@@ -1,18 +1,14 @@
 return {
   {
-    "kylechui/nvim-surround",
-    event = "VeryLazy",
-    opts = {},
-  },
-  {
     "echasnovski/mini.trailspace",
     dependencies = {
       {
         "which-key.nvim",
-        opts = function(_, opts)
-          opts.defaults = opts.defaults or {}
-          opts.defaults["<leader>t"] = { name = "+trailspace" }
-        end,
+        opts = {
+          defaults = {
+            ["<leader>t"] = { name = "+trailspace" },
+          },
+        },
       },
     },
     keys = {
@@ -33,6 +29,7 @@ return {
     },
     opts = {},
   },
+
   {
     "echasnovski/mini.move",
     keys = function(plugin, _)
@@ -65,33 +62,32 @@ return {
       },
     },
   },
+
   {
     "echasnovski/mini.comment",
-    dependencies = {
-      "JoosepAlviste/nvim-ts-context-commentstring",
-    },
+    dependencies = { "nvim-ts-context-commentstring" },
     keys = {
       "gcc",
       { "gc", mode = { "n", "v" } },
       { "<c-/>", "gcc", mode = "n", remap = true },
       { "<c-/>", "gc", mode = "v", remap = true },
     },
-    opts = function(_, opts)
-      return vim.tbl_deep_extend("force", opts, {
-        options = {
-          custom_commentstring = function()
-            return require("ts_context_commentstring.internal").calculate_commentstring({}) or vim.bo.commentstring
-          end,
-          ignore_blank_line = true,
-        },
-      })
-    end,
+    opts = {
+      options = {
+        custom_commentstring = function()
+          return require("ts_context_commentstring.internal").calculate_commentstring() or vim.bo.commentstring
+        end,
+        ignore_blank_line = true,
+      },
+    },
   },
+
   {
     "echasnovski/mini.ai",
     event = "VeryLazy",
     dependencies = {
       "nvim-treesitter-textobjects",
+      "which-key.nvim",
     },
     opts = function()
       local ai = require("mini.ai")
@@ -110,49 +106,48 @@ return {
     config = function(_, opts)
       require("mini.ai").setup(opts)
       -- register all text objects with which-key
-      if require("lazy.core.config").plugins["which-key.nvim"] then
-        local i = {
-          [" "] = "Whitespace",
-          ['"'] = 'Balanced "',
-          ["'"] = "Balanced '",
-          ["`"] = "Balanced `",
-          ["("] = "Balanced (",
-          [")"] = "Balanced ) including white-space",
-          [">"] = "Balanced > including white-space",
-          ["<lt>"] = "Balanced <",
-          ["]"] = "Balanced ] including white-space",
-          ["["] = "Balanced [",
-          ["}"] = "Balanced } including white-space",
-          ["{"] = "Balanced {",
-          ["?"] = "User Prompt",
-          _ = "Underscore",
-          a = "Argument",
-          b = "Balanced ), ], }",
-          c = "Class",
-          f = "Function",
-          o = "Block, conditional, loop",
-          q = "Quote `, \", '",
-          t = "Tag",
-        }
-        local a = vim.deepcopy(i)
-        for k, v in pairs(a) do
-          a[k] = v:gsub(" including.*", "")
-        end
-
-        local ic = vim.deepcopy(i)
-        local ac = vim.deepcopy(a)
-        for key, name in pairs({ n = "Next", l = "Last" }) do
-          i[key] = vim.tbl_extend("force", { name = "Inside " .. name .. " textobject" }, ic)
-          a[key] = vim.tbl_extend("force", { name = "Around " .. name .. " textobject" }, ac)
-        end
-        require("which-key").register({
-          mode = { "o", "x" },
-          i = i,
-          a = a,
-        })
+      local i = {
+        [" "] = "Whitespace",
+        ['"'] = 'Balanced "',
+        ["'"] = "Balanced '",
+        ["`"] = "Balanced `",
+        ["("] = "Balanced (",
+        [")"] = "Balanced ) including white-space",
+        [">"] = "Balanced > including white-space",
+        ["<lt>"] = "Balanced <",
+        ["]"] = "Balanced ] including white-space",
+        ["["] = "Balanced [",
+        ["}"] = "Balanced } including white-space",
+        ["{"] = "Balanced {",
+        ["?"] = "User Prompt",
+        _ = "Underscore",
+        a = "Argument",
+        b = "Balanced ), ], }",
+        c = "Class",
+        f = "Function",
+        o = "Block, conditional, loop",
+        q = "Quote `, \", '",
+        t = "Tag",
+      }
+      local a = vim.deepcopy(i)
+      for k, v in pairs(a) do
+        a[k] = v:gsub(" including.*", "")
       end
+
+      local ic = vim.deepcopy(i)
+      local ac = vim.deepcopy(a)
+      for key, name in pairs({ n = "Next", l = "Last" }) do
+        i[key] = vim.tbl_extend("force", { name = "Inside " .. name .. " textobject" }, ic)
+        a[key] = vim.tbl_extend("force", { name = "Around " .. name .. " textobject" }, ac)
+      end
+      require("which-key").register({
+        mode = { "o", "x" },
+        i = i,
+        a = a,
+      })
     end,
   },
+
   {
     "windwp/nvim-autopairs",
     dependencies = { "nvim-cmp" },

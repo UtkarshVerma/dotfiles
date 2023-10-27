@@ -1,0 +1,9 @@
+{
+  "extras": [
+    "plugins.extras.flash"
+  ],
+  "news": {
+    "doc/news.txt": "13995"
+  },
+  "version": 2
+}

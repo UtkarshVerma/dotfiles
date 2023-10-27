@@ -1,7 +1,15 @@
-local util = require("util")
-
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
+
+-- Enable auto format
+vim.g.autoformat = true
+
+-- Root dir detection
+-- Each entry can be:
+-- * the name of a detector function like `lsp` or `cwd`
+-- * a pattern or array of patterns like `.git` or `lua`.
+-- * a function with signature `function(buf) -> string|string[]`
+vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" }
 
 local options = {
   backup = false,
@@ -22,9 +30,8 @@ local options = {
     diff = "╱", -- alternatives = ⣿ ░ ─
     msgsep = " ", -- alternatives: ‾ ─
     fold = " ",
-    foldopen = "▾",
-    foldsep = " ",
-    foldclose = "▸",
+    foldopen = "",
+    foldclose = "",
   },
   shiftwidth = 4, -- Size of an indent
   swapfile = false,
@@ -35,14 +42,14 @@ local options = {
 
   undodir = "/tmp/nvim-undodir", -- Preserve undo history per reboot
 
-  autowrite = true, -- Enable auto write
+  -- autowrite = true, -- Enable auto write
   clipboard = "unnamedplus", -- Sync with system clipboard
   completeopt = { "menuone", "noselect", "preview" },
   conceallevel = 3, -- Hide * markup for bold and italic
   confirm = true, -- Confirm to save changes before exiting modified buffer
   cursorline = true, -- Enable highlighting of the current line
   expandtab = true, -- Use spaces instead of tabs
-  formatoptions = "jqlnt", -- tcqj
+  -- formatoptions = "jqlnt", -- tcqj
   grepformat = "%f:%l:%c:%m",
   grepprg = "rg, --vimgrep",
   ignorecase = true, -- Ignore case
@@ -51,10 +58,11 @@ local options = {
   list = true, -- Show some invisible characters (tabs...
   mouse = "a", -- Enable mouse mode
   number = true, -- Print line number
+  pumblend = 10, -- Popup blend
   pumheight = 10, -- Maximum number of entries in a popup
   relativenumber = true, -- Relative line numbers
   scrolloff = 4, -- Lines of context
-  sessionoptions = { "buffers", "curdir", "tabpages", "winsize" },
+  sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp" },
   shiftround = true, -- Round indent
   showmode = false, -- Dont show mode since we have a statusline
   sidescrolloff = 8, -- Columns of context
@@ -74,12 +82,40 @@ local options = {
   wrap = false, -- Disable line wrap
 
   splitkeep = "screen",
+  virtualedit = "block", -- Allow cursor to move where there is no text in visual block mode
 }
+
+local opt = vim.opt
+if vim.fn.has("nvim-0.10") == 1 then
+  opt.smoothscroll = true
+end
+
+-- TODO:
+-- Folding
+-- vim.opt.foldlevel = 99
+-- vim.opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
+
+if vim.fn.has("nvim-0.9.0") == 1 then
+  vim.opt.statuscolumn = [[%!v:lua.require'util'.ui.statuscolumn()]]
+end
+
+-- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
+--if vim.fn.has("nvim-0.10") == 1 then
+--	vim.opt.foldmethod = "expr"
+--	vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+--else
+--	vim.opt.foldmethod = "indent"
+--end
+--
+--vim.o.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
+--
+---- Fix markdown indentation settings
+--vim.g.markdown_recommended_style = 0
 
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
-vim.opt.shortmess:append({ C = true, W = true, I = true, c = true })
+vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
 vim.opt.whichwrap:append({ ["<"] = true, [">"] = true }) -- Wrap movement between lines using arrow keys
 vim.opt.formatoptions:remove({ "c", "r", "o" })
 
@@ -92,27 +128,3 @@ vim.filetype.add({
     def = "c",
   },
 })
-
-vim.diagnostic.config({
-  virtual_text = {
-    spacing = 4,
-    source = "if_many",
-    prefix = "●",
-  },
-  -- disable virtual text
-  virtual_lines = false,
-  update_in_insert = true,
-  underline = true,
-  severity_sort = true,
-  float = {
-    focusable = false,
-    style = "minimal",
-    source = "if_many",
-    border = util.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
-  },
-})
-
-for name, icon in pairs(require("config").icons.diagnostics) do
-  name = "DiagnosticSign" .. name
-  vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-end

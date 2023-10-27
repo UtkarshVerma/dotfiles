@@ -17,10 +17,10 @@ return {
     opts = function(_, opts)
       local util = require("util")
       local colors = {
-        [""] = util.get_highlight_value("Special"),
-        ["Normal"] = util.get_highlight_value("Special"),
-        ["Warning"] = util.get_highlight_value("DiagnosticError"),
-        ["InProgress"] = util.get_highlight_value("DiagnosticWarn"),
+        [""] = util.ui.get_hl("Special"),
+        ["Normal"] = util.ui.get_hl("Special"),
+        ["Warning"] = util.ui.get_hl("DiagnosticError"),
+        ["InProgress"] = util.ui.get_hl("DiagnosticWarn"),
       }
       table.insert(opts.sections.lualine_x, 2, {
         function()

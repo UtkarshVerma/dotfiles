@@ -1,8 +1,13 @@
 return {
-  { "folke/tokyonight.nvim", event = "VeryLazy" },
+  {
+    "folke/tokyonight.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+
   {
     "catppuccin/nvim",
-    main = "catppuccin",
+    name = "catppuccin",
     event = "VeryLazy",
     opts = {
       integrations = {
@@ -18,6 +23,7 @@ return {
       custom_highlights = function(c)
         return {
           ColorColumn = { bg = c.mantle },
+
           -- Mine
           DashboardRecent = { fg = c.pink },
           DashboardProject = { fg = c.blue },
@@ -30,22 +36,22 @@ return {
       end,
     },
   },
+
   {
     "loctvl842/monokai-pro.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     priority = 1000,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       transparent_background = false,
       devicons = true,
-      filter = "spectrum", -- classic | octagon | pro | machine | ristretto | spectrum
+      filter = "spectrum",
       day_night = {
         enable = false,
         day_filter = "classic",
         night_filter = "octagon",
       },
-      inc_search = "background", -- underline | background
-      -- background_clear = { "nvim-tree", "neo-tree", "bufferline" },
+      inc_search = "background",
       background_clear = {},
       plugins = {
         bufferline = {
@@ -55,14 +61,18 @@ return {
           bold = false,
         },
         indent_blankline = {
-          context_highlight = "pro", -- default | pro
+          context_highlight = "pro",
           context_start_underline = false,
         },
       },
       override = function(c)
         return {
           ColorColumn = { bg = c.base.dimmed3 },
-          -- Mine
+
+          IblIndent = { link = "IndentBlanklineChar" },
+          IblScope = { link = "IndentBlanklineContextChar" },
+          IblWhitespace = { link = "IndentBlanklineSpaceChar" },
+
           DashboardRecent = { fg = c.base.magenta },
           DashboardProject = { fg = c.base.blue },
           DashboardConfiguration = { fg = c.base.white },
@@ -78,17 +88,5 @@ return {
       monokai.setup(opts)
       monokai.load()
     end,
-  },
-  {
-    "UtkarshVerma/molokai.nvim",
-    dir = "~/git/molokai.nvim",
-    event = "VeryLazy",
-    opts = {
-      transparent = true,
-      styles = {
-        sidebars = "transparent",
-        floats = "transparent",
-      },
-    },
   },
 }

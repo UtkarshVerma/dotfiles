@@ -1,13 +1,16 @@
 return {
   {
     "L3MON4D3/LuaSnip",
-    build = "make install_jsregexp",
+    build = (not jit.os:find("Windows"))
+        and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build'; make install_jsregexp"
+      or nil,
     opts = {
       history = true,
       region_check_events = "CursorHold,InsertLeave,InsertEnter",
       delete_check_events = "TextChanged,InsertEnter",
     },
   },
+
   {
     "hrsh7th/cmp-nvim-lsp",
     dependencies = {
@@ -21,6 +24,7 @@ return {
       },
     },
   },
+
   {
     "hrsh7th/nvim-cmp",
     version = false,
@@ -30,14 +34,17 @@ return {
       "hrsh7th/cmp-emoji",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
-      "saadparwaiz1/cmp_luasnip",
       "cmp-nvim-lsp",
+      "saadparwaiz1/cmp_luasnip",
       "LuaSnip",
     },
-    opts = function()
+    opts = function(_, _)
+      vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
       local cmp = require("cmp")
+      local defaults = require("cmp.config.default")()
       local luasnip = require("luasnip")
 
+      ---@diagnostic disable-next-line: missing-fields
       cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline({
           ["<cr>"] = cmp.mapping({
@@ -50,6 +57,7 @@ return {
         },
       })
 
+      ---@diagnostic disable-next-line: missing-fields
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline({
           ["<cr>"] = cmp.mapping({
@@ -107,7 +115,6 @@ return {
           ["<c-f>"] = cmp.mapping.scroll_docs(4),
           ["<c-e>"] = cmp.mapping.abort(),
         }),
-
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
           { name = "luasnip" },
@@ -134,8 +141,16 @@ return {
         },
         experimental = {
           ghost_text = true,
+          hl_group = "CmpGhostText",
         },
+        sorting = defaults.sorting,
       }
+    end,
+    config = function(_, opts)
+      for _, source in ipairs(opts.sources) do
+        source.group_index = source.group_index or 1
+      end
+      require("cmp").setup(opts)
     end,
   },
 }

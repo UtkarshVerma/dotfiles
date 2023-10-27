@@ -1,6 +1,4 @@
 return {
-  { "ggandor/leap.nvim", enabled = false },
-  { "ggandor/flit.nvim", enabled = false },
   {
     "folke/flash.nvim",
     event = "VeryLazy",
@@ -21,7 +19,7 @@ return {
         function()
           require("flash").treesitter()
         end,
-        desc = "Flash Treesitter",
+        desc = "Flash treesitter",
       },
       {
         "r",
@@ -29,7 +27,7 @@ return {
         function()
           require("flash").remote()
         end,
-        desc = "Remote Flash",
+        desc = "Remote flash",
       },
       {
         "R",
@@ -37,18 +35,26 @@ return {
         function()
           require("flash").treesitter_search()
         end,
-        desc = "Treesitter Search",
+        desc = "Treesitter search",
+      },
+      {
+        "<c-s>",
+        mode = { "c" },
+        function()
+          require("flash").toggle()
+        end,
+        desc = "Toggle flash search",
       },
     },
   },
+
   {
     "nvim-telescope/telescope.nvim",
-    optional = true,
     opts = function(_, opts)
       local function flash(prompt_bufnr)
         require("flash").jump({
           pattern = "^",
-          highlight = { label = { after = { 0, 0 } } },
+          label = { after = { 0, 0 } },
           search = {
             mode = "search",
             exclude = {
@@ -63,11 +69,9 @@ return {
           end,
         })
       end
+
       opts.defaults = vim.tbl_deep_extend("force", opts.defaults or {}, {
-        mappings = {
-          n = { s = flash },
-          i = { ["<c-s>"] = flash },
-        },
+        mappings = { n = { s = flash }, i = { ["<c-s>"] = flash } },
       })
     end,
   },

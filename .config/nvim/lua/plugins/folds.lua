@@ -4,7 +4,7 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "LazyFile",
     opts = {
       exclude = {
         filetypes = {
@@ -22,14 +22,11 @@ return {
       },
       indent = {
         char = icons.indent.inactive,
-        highlight = "IndentBlanklineChar",
         priority = 11,
-      },
-      scope = {
-        highlight = "IndentBlanklineContextChar",
       },
     },
   },
+
   {
     "kevinhwang91/nvim-ufo",
     event = { "BufReadPost", "BufNewFile" },
@@ -54,6 +51,7 @@ return {
       end,
     },
   },
+
   {
     "luukvbaal/statuscol.nvim",
     event = { "BufReadPost", "BufNewFile" },

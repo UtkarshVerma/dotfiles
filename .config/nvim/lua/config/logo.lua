@@ -1,8 +1,10 @@
+---@class config.logo
 local M = {
   days_of_week = {},
   dragon = {},
 }
 
+---@class config.logo.dragon
 local dragon = {
   night_fury = [[
   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -51,6 +53,7 @@ local dragon = {
   ]],
 }
 
+---@class config.logo.day
 local days_of_week = {
   Monday = [[
 ███╗   ███╗ ██████╗ ███╗   ██╗██████╗  █████╗ ██╗   ██╗
@@ -110,12 +113,13 @@ local days_of_week = {
   ]],
 }
 
-M.days_of_week.generate = function()
+function M.days_of_week.generate()
   local current_day = os.date("%A")
   return vim.split("\n\n\n" .. days_of_week[current_day] .. "\n\n" .. os.date("%Y-%m-%d %H:%M:%S" .. "\n"), "\n")
 end
 
-M.dragon.generate = function(type)
+---@param type "night_fury" | "western_dragon"
+function M.dragon.generate(type)
   return vim.split("\n" .. dragon[type], "\n")
 end
 
