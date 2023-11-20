@@ -102,63 +102,94 @@ return {
   },
 
   {
+    "nvim-cmp",
+    dependencies = { "hrsh7th/cmp-nvim-lsp" },
+    opts = function(_, opts)
+      local cmp = require("cmp")
+
+      table.insert(opts.sources, 1, { name = "nvim_lsp" })
+      opts.sources = cmp.config.sources(opts.sources)
+    end,
+  },
+
+  {
     "neovim/nvim-lspconfig",
     version = false,
-    event = "LazyFile",
-    dependencies = { "mason-lspconfig.nvim" },
-
-    ---@class plugins.lsp.opts
-    opts = {
-      -- options for vim.diagnostic.config()
-      diagnostics = {
-        underline = true,
-        update_in_insert = true,
-        virtual_text = {
-          spacing = 4,
-          source = "if_many",
-          prefix = "●",
-        },
-        virtual_lines = false,
-        severity_sort = true,
-        float = {
-          focusable = false,
-          style = "minimal",
-          source = "if_many",
-          border = util.ui.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
-        },
-      },
-      -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
-      -- Be aware that you also will need to properly configure your LSP server to
-      -- provide the inlay hints.
-      inlay_hints = {
-        enabled = false,
-      },
-      -- add any global capabilities here
-      capabilities = {},
-      -- options for vim.lsp.buf.format
-      -- `bufnr` and `filter` is handled by the formatter, but can be also overridden when specified
-      format = {
-        formatting_options = nil,
-        timeout_ms = nil,
-      },
-      -- LSP Server Settings
-      servers = {},
-      -- you can do any additional lsp server setup here
-      -- return true if you don't want this server to be setup with lspconfig
-      ---@type table<string, fun(server:string, opts:table):boolean?>
-      setup = {
-        -- example to setup with typescript.nvim
-        -- tsserver = function(_, opts)
-        --   require("typescript").setup({ server = opts })
-        --   return true
-        -- end,
-        -- Specify * to use this function as a fallback for any server
-        -- ["*"] = function(server, opts) end,
-      },
+    dependencies = {
+      "mason-lspconfig.nvim",
+      "cmp-nvim-lsp",
     },
+    event = "LazyFile",
+    ---@class plugins.lsp.opts
+    opts = function(_, _)
+      return {
+        -- options for vim.diagnostic.config()
+        diagnostics = {
+          underline = true,
+          update_in_insert = true,
+          virtual_text = {
+            spacing = 4,
+            source = "if_many",
+            prefix = "●",
+          },
+          virtual_lines = false,
+          severity_sort = true,
+          float = {
+            focusable = false,
+            style = "minimal",
+            source = "if_many",
+            border = util.ui.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
+          },
+        },
+        -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
+        -- Be aware that you also will need to properly configure your LSP server to
+        -- provide the inlay hints.
+        inlay_hints = {
+          enabled = false,
+        },
+        -- add any global capabilities here
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        -- options for vim.lsp.buf.format
+        -- `bufnr` and `filter` is handled by the formatter, but can be also overridden when specified
+        format = {
+          formatting_options = nil,
+          timeout_ms = nil,
+        },
+        -- LSP Server Settings
+        servers = {},
+        -- you can do any additional lsp server setup here
+        -- return true if you don't want this server to be setup with lspconfig
+        ---@type table<string, fun(server:string, opts:table):boolean?>
+        setup = {
+          -- example to setup with typescript.nvim
+          -- tsserver = function(_, opts)
+          --   require("typescript").setup({ server = opts })
+          --   return true
+          -- end,
+          -- Specify * to use this function as a fallback for any server
+          -- ["*"] = function(server, opts) end,
+        },
+      }
+    end,
     config = function(_, opts)
       -- setup autoformat
       util.format.register(util.lsp.formatter())
+
+      local is_newline_shown = vim.opt.list:get() and vim.opt.listchars:get()["eol"]
+      if is_newline_shown then
+        local code_lens = vim.lsp.codelens.on_codelens
+        vim.lsp.codelens.on_codelens = function(err, lenses, ctx)
+          if lenses then
+            for i, lens in pairs(lenses) do
+              if lens.command and lens.command.title then
+                lenses[i].command.title = " " .. lens.command.title
+              end
+            end
+          end
+
+          code_lens(err, lenses, ctx)
+        end
+      end
 
       -- setup keymaps
       util.lsp.on_attach(function(client, buffer)
@@ -166,7 +197,6 @@ return {
       end)
 
       local register_capability = vim.lsp.handlers["client/registerCapability"]
-
       vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
         local ret = register_capability(err, res, ctx)
         local client_id = ctx.client_id
@@ -211,9 +241,13 @@ return {
       local capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), opts.capabilities)
 
       local function setup(server)
+        if not servers[server] then
+          return
+        end
+
         local server_opts = vim.tbl_deep_extend("force", {
           capabilities = vim.deepcopy(capabilities),
-        }, servers[server] or {})
+        }, servers[server])
 
         if opts.setup[server] then
           if opts.setup[server](server, server_opts) then
@@ -224,15 +258,12 @@ return {
             return
           end
         end
+
         require("lspconfig")[server].setup(server_opts)
       end
 
       -- get all the servers that are available through mason-lspconfig
-      local have_mason, mlsp = pcall(require, "mason-lspconfig")
-      local all_mslp_servers = {}
-      if have_mason then
-        all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
-      end
+      local all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
 
       local ensure_installed = {} ---@type string[]
       for server, server_opts in pairs(servers) do
@@ -247,9 +278,8 @@ return {
         end
       end
 
-      if have_mason then
-        mlsp.setup({ ensure_installed = ensure_installed, handlers = { setup } })
-      end
+      local mlsp = require("mason-lspconfig")
+      mlsp.setup({ ensure_installed = ensure_installed, handlers = { setup } })
 
       if util.lsp.get_config("denols") and util.lsp.get_config("tsserver") then
         local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")

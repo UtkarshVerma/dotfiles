@@ -4,9 +4,7 @@ return {
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
-    opts = {
-      ensure_installed = {},
-    },
+    opts = {},
     config = function(_, opts)
       require("mason").setup(opts)
       local mr = require("mason-registry")

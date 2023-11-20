@@ -96,12 +96,10 @@ local function icon(config, node, state)
       component_icon = config.folder_closed or "+"
     end
   elseif node.type == "file" or node.type == "terminal" then
-    local success, web_devicons = pcall(require, "nvim-web-devicons")
-    if success then
-      local devicon, hl = web_devicons.get_icon(node.name, node.ext)
-      component_icon = devicon or component_icon
-      highlight = hl or highlight
-    end
+    local web_devicons = require("nvim-web-devicons")
+    local devicon, hl = web_devicons.get_icon(node.name, node.ext)
+    component_icon = devicon or component_icon
+    highlight = hl or highlight
   end
 
   local filtered_by = common.filtered_by(config, node, state)
@@ -141,9 +139,9 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
+      "nui.nvim",
+      "plenary.nvim",
+      "nvim-web-devicons",
     },
     keys = {
       {
@@ -261,7 +259,7 @@ return {
         local stat = vim.loop.fs_stat(vim.fn.argv(0))
         if stat and stat.type == "directory" then
           require("neo-tree")
-          vim.cmd([[set showtabline=0]])
+          vim.opt.showtabline = 0
         end
       end
 

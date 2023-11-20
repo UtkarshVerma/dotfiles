@@ -10,15 +10,6 @@ return {
   },
 
   {
-    "mason.nvim",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "biome",
-      })
-    end,
-  },
-
-  {
     "nvim-lspconfig",
     opts = {
       servers = {

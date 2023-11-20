@@ -18,7 +18,7 @@ return {
     cmd = "Telescope",
     dependencies = {
       "telescope-fzf-native.nvim",
-      "nvim-lua/plenary.nvim",
+      "plenary.nvim",
     },
     keys = {
       { "<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch buffer" },
@@ -50,7 +50,7 @@ return {
       { "<leader>sG", util.telescope.show("live_grep", { cwd = false }), desc = "Grep (cwd)" },
       { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Help pages" },
       { "<leader>sH", "<cmd>Telescope highlights<cr>", desc = "Search highlight groups" },
-      { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Key maps" },
+      { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
       { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man pages" },
       { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Jump to mark" },
       { "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },

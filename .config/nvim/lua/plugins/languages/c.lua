@@ -22,7 +22,7 @@ return {
       servers = {
         clangd = {
           keys = {
-            { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+            { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
           },
           root_dir = function(fname)
             return require("lspconfig.util").root_pattern(
@@ -60,8 +60,9 @@ return {
           },
           cmd = {
             "clangd",
-            "--background-index",
             "--clang-tidy",
+            "--background-index",
+            "--clang-tidy=false",
             "--header-insertion=iwyu",
             "--completion-style=detailed",
             "--function-arg-placeholders",
@@ -105,7 +106,6 @@ return {
         inline = false,
       },
       ast = {
-        --These require codicons (https://github.com/microsoft/vscode-codicons)
         role_icons = {
           type = "",
           declaration = "",

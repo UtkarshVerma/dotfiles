@@ -122,6 +122,7 @@ vim.opt.formatoptions:remove({ "c", "r", "o" })
 vim.filetype.add({
   filename = {
     wscript = "python",
+    ["hugo.work"] = "gowork",
   },
   extension = {
     dto = "devicetree",

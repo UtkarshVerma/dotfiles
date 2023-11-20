@@ -24,10 +24,17 @@ return {
     },
   },
 
-  { "JoosepAlviste/nvim-ts-context-commentstring" },
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    opts = {
+      enable = true,
+      enable_autocmd = false,
+    },
+  },
 
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    commit = "73e44f43c70289c70195b5e7bc6a077ceffddda4", -- NOTE: Rust queries are broken after this
     config = function()
       -- When in diff mode, we want to use the default
       -- vim text objects c & C instead of the treesitter ones.
@@ -58,7 +65,6 @@ return {
     build = ":TSUpdate",
     event = { "LazyFile", "VeryLazy" },
     dependencies = {
-      "nvim-ts-context-commentstring",
       "nvim-treesitter-textobjects",
     },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
@@ -71,35 +77,8 @@ return {
     opts = {
       highlight = { enable = true },
       indent = { enable = true },
-      ensure_installed = {
-        -- "arduino",
-        -- "bibtex",
-        -- "cmake",
-        -- "devicetree",
-        -- "dockerfile",
-        "git_config",
-        "git_rebase",
-        "gitattributes",
-        "gitcommit",
-        "gitignore",
-        -- "go",
-        -- "gomod",
-        -- "gowork",
-        -- "html",
-        -- "http",
-        -- "json",
-        -- "jsonc",
-        -- "latex",
-        -- "python",
-        -- "regex",
-        -- "rst",
-        -- "rust",
-        -- "scss",
-      },
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-      },
+      ensure_installed = {},
+      context_commentstring = {},
       incremental_selection = {
         enable = true,
         keymaps = {

@@ -68,4 +68,15 @@ return {
       require("conform").setup(opts)
     end,
   },
+
+  {
+    "mason.nvim",
+    opts = function(_, opts)
+      local formatters = vim.tbl_flatten(vim.tbl_values(util.opts("conform.nvim").formatters_by_ft))
+      opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, formatters)
+      table.sort(opts.ensure_installed)
+
+      opts.ensure_installed = vim.fn.uniq(opts.ensure_installed)
+    end,
+  },
 }

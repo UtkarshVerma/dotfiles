@@ -41,7 +41,7 @@ return {
     "loctvl842/monokai-pro.nvim",
     lazy = false,
     priority = 1000,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = { "nvim-web-devicons" },
     opts = {
       transparent_background = false,
       devicons = true,
@@ -67,7 +67,9 @@ return {
       },
       override = function(c)
         return {
-          ColorColumn = { bg = c.base.dimmed3 },
+          ColorColumn = { bg = c.base.dimmed5 },
+          NonText = { fg = c.base.dimmed5 },
+          LspCodeLens = { link = "Comment" },
 
           IblIndent = { link = "IndentBlanklineChar" },
           IblScope = { link = "IndentBlanklineContextChar" },

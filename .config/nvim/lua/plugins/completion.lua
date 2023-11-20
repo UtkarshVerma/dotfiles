@@ -12,73 +12,31 @@ return {
   },
 
   {
-    "hrsh7th/cmp-nvim-lsp",
-    dependencies = {
-      {
-        "nvim-lspconfig",
-        opts = function(_, opts)
-          return vim.tbl_deep_extend("force", opts, {
-            capabilities = require("cmp_nvim_lsp").default_capabilities(),
-          })
-        end,
-      },
-    },
-  },
-
-  {
     "hrsh7th/nvim-cmp",
     version = false,
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
+      "saadparwaiz1/cmp_luasnip",
+      "LuaSnip",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-emoji",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
-      "cmp-nvim-lsp",
-      "saadparwaiz1/cmp_luasnip",
-      "LuaSnip",
     },
     opts = function(_, _)
-      vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+      local luasnip = require("luasnip")
       local cmp = require("cmp")
       local defaults = require("cmp.config.default")()
-      local luasnip = require("luasnip")
-
-      ---@diagnostic disable-next-line: missing-fields
-      cmp.setup.cmdline("/", {
-        mapping = cmp.mapping.preset.cmdline({
-          ["<cr>"] = cmp.mapping({
-            c = cmp.mapping.confirm({ select = false }),
-          }),
-        }),
-
-        sources = {
-          { name = "buffer" },
-        },
-      })
-
-      ---@diagnostic disable-next-line: missing-fields
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline({
-          ["<cr>"] = cmp.mapping({
-            c = cmp.mapping.confirm({ select = false }),
-          }),
-        }),
-        sources = cmp.config.sources({
-          { name = "path" },
-          { name = "cmdline" },
-        }),
-      })
 
       return {
         preselect = cmp.PreselectMode.None,
-        completion = {
-          completeopt = "menuone,noselect,preview",
-        },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
           end,
+        },
+        completion = {
+          completeopt = "menuone,noselect,preview",
         },
         mapping = cmp.mapping.preset.insert({
           ["<tab>"] = cmp.mapping(function(fallback)
@@ -116,7 +74,6 @@ return {
           ["<c-e>"] = cmp.mapping.abort(),
         }),
         sources = cmp.config.sources({
-          { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "emoji" },
           { name = "buffer", keyword_length = 5 },
@@ -141,7 +98,7 @@ return {
         },
         experimental = {
           ghost_text = true,
-          hl_group = "CmpGhostText",
+          hl_group = "Comment",
         },
         sorting = defaults.sorting,
       }
@@ -150,7 +107,36 @@ return {
       for _, source in ipairs(opts.sources) do
         source.group_index = source.group_index or 1
       end
-      require("cmp").setup(opts)
+
+      local cmp = require("cmp")
+
+      ---@diagnostic disable-next-line: missing-fields
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline({
+          ["<cr>"] = cmp.mapping({
+            c = cmp.mapping.confirm({ select = false }),
+          }),
+        }),
+
+        sources = {
+          { name = "buffer" },
+        },
+      })
+
+      ---@diagnostic disable-next-line: missing-fields
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline({
+          ["<cr>"] = cmp.mapping({
+            c = cmp.mapping.confirm({ select = false }),
+          }),
+        }),
+        sources = cmp.config.sources({
+          { name = "path" },
+          { name = "cmdline" },
+        }),
+      })
+
+      cmp.setup(opts)
     end,
   },
 }

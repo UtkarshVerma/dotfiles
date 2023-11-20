@@ -4,7 +4,6 @@ local util = require("util")
 local M = {
   icons = require("config.icons"),
   logo = require("config.logo"),
-  json = require("config.json"),
   kind_filter = require("config.kind-filter"),
 }
 
@@ -27,12 +26,7 @@ function M.setup()
       M.load("keymaps")
 
       util.format.setup()
-      util.news.setup()
       util.root.setup()
-
-      vim.api.nvim_create_user_command("Extras", function()
-        util.extras.show()
-      end, { desc = "Manage extras" })
     end,
   })
 end
@@ -73,7 +67,6 @@ function M.init()
   M.load("options")
 
   util.plugin.setup()
-  M.json.load()
 end
 
 return M

@@ -168,40 +168,36 @@ return {
       },
     },
     config = function(_, opts)
-      local util = require("util")
+      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      local cmp = require("cmp")
+      local ts_utils = require("nvim-treesitter.ts_utils")
 
-      if util.has("nvim-cmp") then
-        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-        local cmp = require("cmp")
-        local ts_utils = require("nvim-treesitter.ts_utils")
+      local ts_node_func_parens_disabled = {
+        named_imports = true, -- ecma
+        use_declaration = true, -- rust
+      }
 
-        local ts_node_func_parens_disabled = {
-          named_imports = true, -- ecma
-          use_declaration = true, -- rust
-        }
-
-        local default_handler = cmp_autopairs.filetypes["*"]["("].handler
-        cmp_autopairs.filetypes["*"]["("].handler = function(char, item, bufnr, rules, commit_character)
-          local node_type = ts_utils.get_node_at_cursor():type()
-          if ts_node_func_parens_disabled[node_type] then
-            if item.data then
-              item.data.funcParensDisabled = true
-            else
-              char = ""
-            end
+      local default_handler = cmp_autopairs.filetypes["*"]["("].handler
+      cmp_autopairs.filetypes["*"]["("].handler = function(char, item, bufnr, rules, commit_character)
+        local node_type = ts_utils.get_node_at_cursor():type()
+        if ts_node_func_parens_disabled[node_type] then
+          if item.data then
+            item.data.funcParensDisabled = true
+          else
+            char = ""
           end
-          default_handler(char, item, bufnr, rules, commit_character)
         end
-
-        cmp.event:on(
-          "confirm_done",
-          cmp_autopairs.on_confirm_done({
-            filetypes = {
-              sh = false,
-            },
-          })
-        )
+        default_handler(char, item, bufnr, rules, commit_character)
       end
+
+      cmp.event:on(
+        "confirm_done",
+        cmp_autopairs.on_confirm_done({
+          filetypes = {
+            sh = false,
+          },
+        })
+      )
 
       require("nvim-autopairs").setup(opts)
     end,

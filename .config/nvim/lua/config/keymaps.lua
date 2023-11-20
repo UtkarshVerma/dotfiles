@@ -105,7 +105,7 @@ map("n", "<leader>uL", function() util.toggle.option("relativenumber") end, { de
 map("n", "<leader>ul", util.toggle.number, { desc = "Toggle line numbers" })
 map("n", "<leader>ud", util.toggle.diagnostics, { desc = "Toggle diagnostics" })
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
-map("n", "<leader>uc", function() util.toggle.option("conceallevel", false, {0, conceallevel}) end, { desc = "Toggle Conceal" })
+map("n", "<leader>uc", function() util.toggle.option("conceallevel", false, {0, conceallevel}) end, { desc = "Toggle conceal" })
 if vim.lsp.inlay_hint then
   map("n", "<leader>uh", function() vim.lsp.inlay_hint(0, nil) end, { desc = "Toggle inlay hints" })
 end
@@ -123,9 +123,6 @@ map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
 
 -- Lazy
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
-
--- Editor changelog
-map("n", "<leader>L", function() util.news.neovim() end, { desc = "Neovim changelog" })
 
 -- Floating terminal
 local lazyterm = function() util.terminal.open(nil, { cwd = util.root.get() }) end

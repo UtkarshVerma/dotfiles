@@ -9,16 +9,6 @@ return {
   },
 
   {
-    "mason.nvim",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "shellcheck",
-        "shfmt",
-      })
-    end,
-  },
-
-  {
     "nvim-lspconfig",
     opts = {
       servers = {

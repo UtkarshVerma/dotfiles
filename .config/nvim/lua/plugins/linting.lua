@@ -93,4 +93,25 @@ return {
       })
     end,
   },
+
+  {
+    "mason.nvim",
+    opts = function(_, opts)
+      local renames = {
+        biomejs = "biome",
+      }
+
+      local linters = vim.tbl_flatten(vim.tbl_values(util.opts("nvim-lint").linters_by_ft))
+      for i, linter in pairs(linters) do
+        if renames[linter] then
+          linters[i] = renames[linter]
+        end
+      end
+
+      opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, linters)
+      table.sort(opts.ensure_installed)
+
+      opts.ensure_installed = vim.fn.uniq(opts.ensure_installed)
+    end,
+  },
 }

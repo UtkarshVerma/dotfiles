@@ -9,18 +9,13 @@ return {
   },
 
   {
-    "mason.nvim",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "yamllint",
-        "yamlfmt",
-      })
-    end,
+    "b0o/SchemaStore.nvim",
+    version = false, -- last release is way too old
   },
 
   {
     "nvim-lspconfig",
-    dependencies = { "b0o/SchemaStore.nvim" },
+    dependencies = { "SchemaStore.nvim" },
     opts = {
       servers = {
         yamlls = {

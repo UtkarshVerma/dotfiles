@@ -22,6 +22,7 @@ return {
       },
       indent = {
         char = icons.indent.inactive,
+        tab_char = icons.indent.inactive,
         priority = 11,
       },
     },
@@ -29,7 +30,7 @@ return {
 
   {
     "kevinhwang91/nvim-ufo",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "LazyFile",
     dependencies = { "kevinhwang91/promise-async" },
     init = function()
       vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
@@ -54,7 +55,7 @@ return {
 
   {
     "luukvbaal/statuscol.nvim",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "LazyFile",
     opts = function(_, _)
       local builtin = require("statuscol.builtin")
 

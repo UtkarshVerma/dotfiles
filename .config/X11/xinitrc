@@ -25,7 +25,6 @@ autostart="\
 echo "$autostart" | while read -r program; do
     process="${program%%[[:space:]]*}"
     process="${process##*/}"
-    # shellcheck disable=2086
     pidof -s "$process" || $program >"/tmp/$process.log" 2>&1 &
 done
 

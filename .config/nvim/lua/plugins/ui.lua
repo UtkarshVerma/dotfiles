@@ -160,7 +160,7 @@ return {
       },
     },
     dependencies = {
-      "MunifTanjim/nui.nvim",
+      "nui.nvim",
       {
         "which-key.nvim",
         opts = {
@@ -204,7 +204,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       "SmiteshP/nvim-navic",
-      "nvim-tree/nvim-web-devicons",
+      "nvim-web-devicons",
     },
     opts = {
       attach_navic = false,
@@ -258,7 +258,7 @@ return {
 
   {
     "NvChad/nvim-colorizer.lua",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     opts = {
       filetypes = { "*", "!lazy", "!neo-tree" },
       buftype = { "*", "!prompt", "!nofile" },

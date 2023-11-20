@@ -3,8 +3,18 @@ local icons = require("config").icons
 return {
   {
     "lewis6991/gitsigns.nvim",
+    dependencies = {
+      {
+        "which-key.nvim",
+        opts = {
+          defaults = {
+            ["<leader>gh"] = { name = "+hunks" },
+          },
+        },
+      },
+    },
     cmd = "Gitsigns",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     keys = {
       { "]h", "<cmd>Gitsigns next_hunk<cr>", desc = "Next hunk" },
       { "[h", "<cmd>Gitsigns prev_hunk<cr>", desc = "Previous hunk" },

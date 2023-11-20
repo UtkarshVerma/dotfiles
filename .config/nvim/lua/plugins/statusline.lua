@@ -125,8 +125,8 @@ components.branch = {
     end
 
     return hl_str(config.separator_icon.left, "SLSeparator", "SLBranchName")
-        .. table.concat({ icon, truncate(str, 10) }, " ")
-        .. hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
+      .. table.concat({ icon, truncate(str, 10) }, " ")
+      .. hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
   end,
 }
 
@@ -142,7 +142,11 @@ end
 components.spaces = function()
   local left_sep = hl_str(config.separator_icon.left, "SLSeparator")
   local right_sep = hl_str(config.separator_icon.right, "SLSeparator", "SLSeparator")
-  local str = "Spaces: " .. vim.api.nvim_buf_get_option(0, "shiftwidth")
+
+  local indent_type = vim.api.nvim_buf_get_option(0, "expandtab") and "Spaces" or "Tab"
+  local indent_width = vim.api.nvim_buf_get_option(0, "shiftwidth")
+
+  local str = string.format("%s: %d", indent_type, indent_width)
   return left_sep .. hl_str(str, "SLShiftWidth", "SLShiftWidth") .. right_sep
 end
 
@@ -153,10 +157,11 @@ components.diagnostics = function()
     for _, diagnostic in ipairs(diagnostics) do
       count[diagnostic.severity] = count[diagnostic.severity] + 1
     end
+
     return count[vim.diagnostic.severity.ERROR],
-        count[vim.diagnostic.severity.WARN],
-        count[vim.diagnostic.severity.INFO],
-        count[vim.diagnostic.severity.HINT]
+      count[vim.diagnostic.severity.WARN],
+      count[vim.diagnostic.severity.INFO],
+      count[vim.diagnostic.severity.HINT]
   end
 
   local error_count, warn_count, info_count, hint_count = nvim_diagnostic()

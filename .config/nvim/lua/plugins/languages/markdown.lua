@@ -10,16 +10,6 @@ return {
   },
 
   {
-    "mason.nvim",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "vale",
-        "prettierd",
-      })
-    end,
-  },
-
-  {
     "nvim-lspconfig",
     dependencies = { "barreiroleo/ltex_extra.nvim" },
     opts = {

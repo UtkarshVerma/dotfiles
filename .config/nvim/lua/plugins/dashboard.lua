@@ -4,7 +4,7 @@ return {
   {
     "glepnir/dashboard-nvim",
     event = "VimEnter",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = { "nvim-web-devicons" },
     opts = function(_, _)
       local opts = {
         theme = "doom",
