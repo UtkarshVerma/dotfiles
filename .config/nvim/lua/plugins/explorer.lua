@@ -120,22 +120,6 @@ end
 
 return {
   {
-    "akinsho/bufferline.nvim",
-    opts = {
-      options = {
-        offsets = {
-          {
-            filetype = "neo-tree",
-            text = "EXPLORER",
-            text_align = "center",
-            separator = true, -- set to `true` if clear background of neo-tree
-          },
-        },
-      },
-    },
-  },
-
-  {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
     dependencies = {
@@ -303,6 +287,31 @@ return {
           end
         end,
       })
+    end,
+  },
+
+  {
+    "statuscol.nvim",
+    opts = function(_, opts)
+      opts.ft_ignore = vim.list_extend(opts.ft_ignore or {}, { "neo-tree" })
+    end,
+  },
+
+  {
+    "indent-blankline.nvim",
+    opts = function(_, opts)
+      vim.tbl_deep_extend("force", opts, {
+        exclude = {
+          filetypes = vim.list_extend(vim.tbl_get(opts, "exclude", "filetypes") or {}, { "neo-tree" }),
+        },
+      })
+    end,
+  },
+
+  {
+    "nvim-scrollview",
+    opts = function(_, opts)
+      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "neo-tree" })
     end,
   },
 }

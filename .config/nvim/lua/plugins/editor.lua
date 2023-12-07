@@ -6,6 +6,37 @@ return {
   },
 
   {
+    "echasnovski/mini.bufremove",
+    keys = {
+      {
+        "<leader>bd",
+        function()
+          local bd = require("mini.bufremove").delete
+          if vim.bo.modified then
+            local choice = vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
+            if choice == 1 then -- Yes
+              vim.cmd.write()
+              bd(0)
+            elseif choice == 2 then -- No
+              bd(0, true)
+            end
+          else
+            bd(0)
+          end
+        end,
+        desc = "Delete buffer",
+      },
+      {
+        "<leader>bD",
+        function()
+          require("mini.bufremove").delete(0, true)
+        end,
+        desc = "Delete buffer (force)",
+      },
+    },
+  },
+
+  {
     "nvim-pack/nvim-spectre",
     cmd = "Spectre",
     opts = {
@@ -29,13 +60,18 @@ return {
       { "]]", desc = "Next reference" },
       { "[[", desc = "Prev reference" },
     },
-    opts = {
-      delay = 200,
-      large_file_cutoff = 2000,
-      large_file_overrides = {
-        providers = { "lsp" },
-      },
-    },
+    opts = function(_, opts)
+      local excluded_filetypes = opts.filetypes_denylist or {}
+
+      return {
+        delay = 200,
+        filetypes_denylist = excluded_filetypes,
+        large_file_cutoff = 2000,
+        large_file_overrides = {
+          providers = { "lsp" },
+        },
+      }
+    end,
     config = function(_, opts)
       require("illuminate").configure(opts)
 
@@ -61,8 +97,9 @@ return {
 
   {
     "folke/todo-comments.nvim",
+    dependencies = { "trouble.nvim" },
     cmd = { "TodoTrouble", "TodoTelescope" },
-    event = { "BufReadPost", "BufNewFile" },
+    event = "LazyFile",
     keys = {
       { "]t", "<cmd>lua require('todo-comments').jump_next()<cr>", desc = "Next todo comment" },
       { "[t", "<cmd>lua require('todo-comments').jump_prev()<cr>", desc = "Previous todo comment" },
@@ -72,39 +109,5 @@ return {
       { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/fix/fixme" },
     },
     opts = {},
-  },
-
-  {
-    "folke/trouble.nvim",
-    cmd = { "TroubleToggle", "Trouble" },
-    opts = { use_diagnostic_signs = true },
-    keys = {
-      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document diagnostics (trouble)" },
-      { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace diagnostics (trouble)" },
-      { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location list (trouble)" },
-      { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix list (trouble)" },
-      {
-        "[q",
-        function()
-          if require("trouble").is_open() then
-            require("trouble").previous({ skip_groups = true, jump = true })
-          else
-            vim.cmd.cprev()
-          end
-        end,
-        desc = "Previous trouble/quickfix item",
-      },
-      {
-        "]q",
-        function()
-          if require("trouble").is_open() then
-            require("trouble").next({ skip_groups = true, jump = true })
-          else
-            vim.cmd.cnext()
-          end
-        end,
-        desc = "Next trouble/quickfix item",
-      },
-    },
   },
 }

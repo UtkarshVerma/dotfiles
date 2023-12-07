@@ -275,42 +275,47 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    opts = {
-      options = {
-        icons_enabled = true,
-        component_separators = { left = "", right = "" },
-        section_separators = { left = "", right = "" },
-        disabled_filetypes = {
-          statusline = { "dashboard", "lazy" },
+    opts = function(_, opts)
+      local excluded_filetypes =
+        vim.list_extend(vim.tbl_get(opts, "options", "disabled_filetypes", "statusline") or {}, { "lazy" })
+
+      return {
+        options = {
+          icons_enabled = true,
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
+          disabled_filetypes = {
+            statusline = excluded_filetypes,
+          },
+          ignore_focus = {},
+          always_divide_middle = true,
+          globalstatus = true,
+          refresh = {
+            statusline = 1000,
+            tabline = 1000,
+            -- winbar = 100,
+          },
         },
-        ignore_focus = {},
-        always_divide_middle = true,
-        globalstatus = true,
-        refresh = {
-          statusline = 1000,
-          tabline = 1000,
-          -- winbar = 100,
+        sections = {
+          lualine_a = { components.branch },
+          lualine_b = { components.diagnostics },
+          lualine_c = {},
+          lualine_x = { components.diff },
+          lualine_y = { components.position, components.filetype },
+          lualine_z = { components.spaces, components.mode },
         },
-      },
-      sections = {
-        lualine_a = { components.branch },
-        lualine_b = { components.diagnostics },
-        lualine_c = {},
-        lualine_x = { components.diff },
-        lualine_y = { components.position, components.filetype },
-        lualine_z = { components.spaces, components.mode },
-      },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { "filename" },
-        lualine_x = { "location" },
-        lualine_y = {},
-        lualine_z = {},
-      },
-      tabline = {},
-      extensions = {},
-    },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { "filename" },
+          lualine_x = { "location" },
+          lualine_y = {},
+          lualine_z = {},
+        },
+        tabline = {},
+        extensions = {},
+      }
+    end,
     config = function(_, opts)
       local lualine = require("lualine")
       lualine.setup(configure(opts))

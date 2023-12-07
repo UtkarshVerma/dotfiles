@@ -76,7 +76,7 @@ function M.info(buf)
   end
   util[enabled and "info" or "warn"](
     table.concat(lines, "\n"),
-    { title = "LazyFormat (" .. (enabled and "enabled" or "disabled") .. ")" }
+    { title = "Format (" .. (enabled and "enabled" or "disabled") .. ")" }
   )
 end
 

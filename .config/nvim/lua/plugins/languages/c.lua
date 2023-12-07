@@ -7,13 +7,17 @@ return {
         "cpp",
         "make",
       })
-      opts.context_commentstring = vim.tbl_deep_extend("force", opts.context_commentstring, {
-        config = {
-          c = "// %s",
-          cpp = "// %s",
-        },
-      })
     end,
+  },
+
+  {
+    "nvim-ts-context-commentstring",
+    opts = {
+      languages = {
+        c = "// %s",
+        cpp = "// %s",
+      },
+    },
   },
 
   {
@@ -62,7 +66,6 @@ return {
             "clangd",
             "--clang-tidy",
             "--background-index",
-            "--clang-tidy=false",
             "--header-insertion=iwyu",
             "--completion-style=detailed",
             "--function-arg-placeholders",

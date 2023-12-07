@@ -65,7 +65,14 @@ return {
 
   {
     "echasnovski/mini.comment",
-    dependencies = { "nvim-ts-context-commentstring" },
+    dependencies = {
+      {
+        "nvim-ts-context-commentstring",
+        opts = {
+          enable_autocmd = false,
+        },
+      },
+    },
     keys = {
       "gcc",
       { "gc", mode = { "n", "v" } },
@@ -140,6 +147,7 @@ return {
         i[key] = vim.tbl_extend("force", { name = "Inside " .. name .. " textobject" }, ic)
         a[key] = vim.tbl_extend("force", { name = "Around " .. name .. " textobject" }, ac)
       end
+
       require("which-key").register({
         mode = { "o", "x" },
         i = i,
@@ -150,7 +158,10 @@ return {
 
   {
     "windwp/nvim-autopairs",
-    dependencies = { "nvim-cmp" },
+    dependencies = {
+      "nvim-cmp",
+      "nvim-treesitter",
+    },
     event = "VeryLazy",
     opts = {
       check_ts = true,

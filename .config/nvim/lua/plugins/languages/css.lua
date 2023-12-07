@@ -3,25 +3,17 @@ return {
     "nvim-treesitter",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
-        "html",
+        "css",
+        "scss",
       })
     end,
-  },
-
-  {
-    "windwp/nvim-ts-autotag",
-    event = "InsertEnter",
-    opts = {},
   },
 
   {
     "nvim-lspconfig",
     opts = {
       servers = {
-        html = {
-          init_options = {
-            provideFormatter = false, -- We'll use prettierd
-          },
+        cssls = {
           capabilities = {
             textDocument = {
               completion = {
@@ -40,7 +32,8 @@ return {
     "conform.nvim",
     opts = {
       formatters_by_ft = {
-        html = { "prettierd" },
+        css = { "prettierd" },
+        scss = { "prettierd" },
       },
     },
   },

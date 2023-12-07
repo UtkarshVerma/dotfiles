@@ -11,35 +11,9 @@ return {
 
   {
     "nvim-lspconfig",
-    dependencies = { "barreiroleo/ltex_extra.nvim" },
     opts = {
       servers = {
         marksman = {},
-        texlab = {},
-        ltex = {
-          settings = {
-            ltex = {
-              language = "en-GB",
-              checkFrequency = "save",
-              additionalRules = {
-                enablePickyRules = true,
-                languageModel = "~/.local/share/ltex/ngrams/",
-              },
-            },
-          },
-        },
-      },
-      setup = {
-        ltex = function(_, opts)
-          opts.on_attach = function(_, _)
-            require("ltex_extra").setup({
-              load_langs = { "en-GB" },
-              path = vim.fn.expand("~/.local/state/ltex/"),
-            })
-          end
-
-          return false
-        end,
       },
     },
   },

@@ -166,4 +166,11 @@ return {
       }
     end,
   },
+
+  {
+    "nvim-scrollview",
+    opts = function(_, opts)
+      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "TelescopePrompt" })
+    end,
+  },
 }

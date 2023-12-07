@@ -24,13 +24,7 @@ return {
     },
   },
 
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    opts = {
-      enable = true,
-      enable_autocmd = false,
-    },
-  },
+  { "JoosepAlviste/nvim-ts-context-commentstring" },
 
   {
     "nvim-treesitter/nvim-treesitter-textobjects",

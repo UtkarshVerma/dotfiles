@@ -45,6 +45,8 @@ end
 
 local enabled = true
 function M.diagnostics()
+  local util = require("util")
+
   enabled = not enabled
   if enabled then
     vim.diagnostic.enable()

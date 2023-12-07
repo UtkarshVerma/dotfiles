@@ -5,27 +5,24 @@ return {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
     event = "LazyFile",
-    opts = {
-      exclude = {
-        filetypes = {
-          "help",
-          "dashboard",
-          "neo-tree",
-          "norg",
-          "Trouble",
-          "lazy",
-          "mason",
-          "notify",
-          "toggleterm",
-          "lazyterm",
+    opts = function(_, opts)
+      local excluded_filetypes = vim.list_extend((opts.exclude or {}).filetypes or {}, {
+        "help",
+        "lazy",
+        "lazyterm",
+      })
+
+      return {
+        exclude = {
+          filetypes = excluded_filetypes,
         },
-      },
-      indent = {
-        char = icons.indent.inactive,
-        tab_char = icons.indent.inactive,
-        priority = 11,
-      },
-    },
+        indent = {
+          char = icons.indent.inactive,
+          tab_char = icons.indent.inactive,
+          priority = 11,
+        },
+      }
+    end,
   },
 
   {
@@ -56,12 +53,13 @@ return {
   {
     "luukvbaal/statuscol.nvim",
     event = "LazyFile",
-    opts = function(_, _)
+    opts = function(_, opts)
       local builtin = require("statuscol.builtin")
+      local excluded_filetypes = opts.ft_ignore or {}
 
       return {
         relculright = false,
-        ft_ignore = { "neo-tree" },
+        ft_ignore = excluded_filetypes,
         segments = {
           { text = { builtin.foldfunc }, click = "v:lua.ScFa" }, -- Fold
           { text = { "%s" }, click = "v:lua.ScSa" }, -- Sign

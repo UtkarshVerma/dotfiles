@@ -97,4 +97,38 @@ return {
       require("dashboard").setup(opts)
     end,
   },
+
+  {
+    "indent-blankline.nvim",
+    opts = function(_, opts)
+      vim.tbl_deep_extend("force", opts, {
+        exclude = {
+          filetypes = vim.list_extend(vim.tbl_get(opts, "exclude", "filetypes") or {}, { "dashboard" }),
+        },
+      })
+    end,
+  },
+
+  {
+    "lualine.nvim",
+    opts = function(_, opts)
+      vim.tbl_deep_extend("force", opts, {
+        options = {
+          disabled_filetypes = {
+            statusline = vim.list_extend(
+              vim.tbl_get(opts, "options", "disabled_filetypes", "statusline") or {},
+              { "dashboard" }
+            ),
+          },
+        },
+      })
+    end,
+  },
+
+  {
+    "nvim-scrollview",
+    opts = function(_, opts)
+      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "dashboard" })
+    end,
+  },
 }

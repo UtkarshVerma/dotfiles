@@ -30,10 +30,9 @@ return {
         },
       },
       setup = {
-        yamlls = function(server, opts)
+        yamlls = function(_, opts)
           opts.settings.yaml["schemas"] = require("schemastore").yaml.schemas()
-          require("lspconfig")[server].setup(opts)
-          return true
+          return false
         end,
       },
     },

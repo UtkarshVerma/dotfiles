@@ -139,4 +139,11 @@ return {
       cmp.setup(opts)
     end,
   },
+
+  {
+    "nvim-scrollview",
+    opts = function(_, opts)
+      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "cmp_docs" })
+    end,
+  },
 }
