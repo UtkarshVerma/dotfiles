@@ -14,15 +14,16 @@ echo "$scripts" | while read -r script; do
 done
 
 se() {
-    cat <<EOF | fzf | xargs -r "$EDITOR"
-$(find ~/.local/bin/ -type l | grep -v /bin/statusbar)
-$(find ~/.local/bin/statusbar/ -type f)
+    bin_dir="$HOME/.local/bin"
+    cat <<EOF | sed "s|$bin_dir/||g" | fzf | sed "s|^|$bin_dir/|g" | xargs -r "$EDITOR"
+$(find "$bin_dir/" -type l -xtype f)
+$(find "$bin_dir/statusbar/" -type f)
 EOF
 }
 
 dpaste() {
     if url="$(curl --silent --form 'format=url' --form 'content=<-' \
-        https://dpaste.org/api/)"; then
+        "https://dpaste.org/api/")"; then
         printf "%s" "$url" | xclip -selection clipboard &&
             echo "URL \"$url\" copied to clipboard."
     fi
