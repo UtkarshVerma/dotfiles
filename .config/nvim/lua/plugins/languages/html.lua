@@ -18,6 +18,7 @@ return {
     "nvim-lspconfig",
     opts = {
       servers = {
+        emmet_language_server = {},
         html = {
           init_options = {
             provideFormatter = false, -- We'll use prettierd

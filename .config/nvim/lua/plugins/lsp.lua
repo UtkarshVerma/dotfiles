@@ -114,7 +114,6 @@ return {
 
   {
     "neovim/nvim-lspconfig",
-    version = false,
     dependencies = {
       "mason-lspconfig.nvim",
       "cmp-nvim-lsp",

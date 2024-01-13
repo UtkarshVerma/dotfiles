@@ -72,7 +72,7 @@ return {
 
   {
     "Saecki/crates.nvim",
-    version = false,
+    tag = "stable",
     dependencies = { "plenary.nvim" },
     event = { "BufRead Cargo.toml" },
     opts = {
@@ -85,41 +85,40 @@ return {
   {
     "nvim-lspconfig",
     dependencies = {
-      "rust-tools.nvim",
       "crates.nvim",
     },
     opts = {
       servers = {
-        rust_analyzer = {
-          keys = {
-            { "K", "<cmd>RustHoverActions<cr>", desc = "Hover actions (Rust)" },
-            { "<leader>cR", "<cmd>RustCodeAction<cr>", desc = "Code action (Rust)" },
-            { "<leader>dr", "<cmd>RustDebuggables<cr>", desc = "Run debuggables (Rust)" },
-          },
-          settings = {
-            ["rust-analyzer"] = {
-              cargo = {
-                allFeatures = true,
-                loadOutDirsFromCheck = true,
-                runBuildScripts = true,
-              },
-              -- Add clippy lints for Rust.
-              checkOnSave = {
-                allFeatures = true,
-                command = "clippy",
-                extraArgs = { "--no-deps" },
-              },
-              procMacro = {
-                enable = true,
-                ignored = {
-                  ["async-trait"] = { "async_trait" },
-                  ["napi-derive"] = { "napi" },
-                  ["async-recursion"] = { "async_recursion" },
-                },
-              },
-            },
-          },
-        },
+        -- rust_analyzer = {
+        --   keys = {
+        --     { "K", "<cmd>RustHoverActions<cr>", desc = "Hover actions (Rust)" },
+        --     { "<leader>cR", "<cmd>RustCodeAction<cr>", desc = "Code action (Rust)" },
+        --     { "<leader>dr", "<cmd>RustDebuggables<cr>", desc = "Run debuggables (Rust)" },
+        --   },
+        --   settings = {
+        --     ["rust-analyzer"] = {
+        --       cargo = {
+        --         allFeatures = true,
+        --         loadOutDirsFromCheck = true,
+        --         runBuildScripts = true,
+        --       },
+        --       -- Add clippy lints for Rust.
+        --       checkOnSave = {
+        --         allFeatures = true,
+        --         command = "clippy",
+        --         extraArgs = { "--no-deps" },
+        --       },
+        --       procMacro = {
+        --         enable = true,
+        --         ignored = {
+        --           ["async-trait"] = { "async_trait" },
+        --           ["napi-derive"] = { "napi" },
+        --           ["async-recursion"] = { "async_recursion" },
+        --         },
+        --       },
+        --     },
+        --   },
+        -- },
         taplo = {
           keys = {
             {
@@ -136,14 +135,13 @@ return {
           },
         },
       },
-      setup = {
-        rust_analyzer = function(_, opts)
-          local rust_tools_opts = require("util").opts("rust-tools.nvim")
-          require("rust-tools").setup(vim.tbl_deep_extend("force", rust_tools_opts or {}, { server = opts }))
-          return true
-        end,
-      },
     },
+  },
+
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^3", -- Recommended
+    ft = { "rust" },
   },
 
   {

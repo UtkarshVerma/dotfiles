@@ -50,4 +50,4 @@ for battery in /sys/class/power_supply/BAT?*; do
 
     # Prints the info
     display "$status$capacity%" "$color"
-done && echo
+done

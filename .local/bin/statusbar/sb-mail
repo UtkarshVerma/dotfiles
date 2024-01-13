@@ -2,7 +2,7 @@
 # Displays unread mail count for my email addresses.
 
 # Keep retrying until internet is there
-while ! wget --spider -q http://example.com; do
+while ! wget --spider -q "http://example.com"; do
     sleep 10
 done
 

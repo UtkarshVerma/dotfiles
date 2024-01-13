@@ -33,6 +33,8 @@ if [[ "$TERM" =~ "^foot" ]]; then
     zle -N clear-screen clear-screen-keep-sb
 fi
 
+setopt hist_ignore_all_dups
+
 #-------------------------------------------------------------------------------
 # Plugins
 #-------------------------------------------------------------------------------
@@ -74,26 +76,56 @@ if command -v direnv >/dev/null 2>&1; then
     eval "$(direnv hook zsh)"
 fi
 
+
+#-------------------------------------------------------------------------------
+# Vi mode
+#-------------------------------------------------------------------------------
+export KEYTIMEOUT=1
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select () {
+    case $KEYMAP in
+        vicmd) echo -ne '\e[1 q';;      # block
+        viins|main) echo -ne '\e[5 q';; # beam
+    esac
+}
+zle -N zle-keymap-select
+
+zle-line-init() {
+    # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    zle -K viins
+    echo -ne "\e[5 q"
+}
+zle -N zle-line-init
+
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+
 #-------------------------------------------------------------------------------
 # Key bindings
 #-------------------------------------------------------------------------------
-bindkey -e  # Use emacs bindings
+bindkey -v  # Use vim bindings
 
-bindkey '\e[5~' up-line-or-history          # PageUp: Up a line of history
-bindkey '\e[6~' down-line-or-history        # PageDown: Down a line of history
+# Use vim keys in tab complete menu:
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
 
 # Start typing + Up-Arrow: fuzzy find history forward
 autoload -U up-line-or-beginning-search
 zle -N up-line-or-beginning-search
 bindkey '\e[A' up-line-or-beginning-search
+bindkey -M vicmd "k" up-line-or-beginning-search
 
 # Start typing + Down-Arrow: fuzzy find history backward
 autoload -U down-line-or-beginning-search
 zle -N down-line-or-beginning-search
-bindkey '^[[B' down-line-or-beginning-search
+bindkey '\e[B' down-line-or-beginning-search
+bindkey -M vicmd "j" down-line-or-beginning-search
 
-bindkey '\e[H' beginning-of-line        # Home: Go to beginning of line
-bindkey '\e[4~' end-of-line				# End: Go to end of line
+bindkey '\C-w' backward-kill-word       # Ctrl-w: delete whole word backword
 bindkey '\e[Z' reverse-menu-complete	# Shift-Tab: move through the completion menu backwards
 bindkey '\b' backward-delete-char		# Backspace: delete backward
 bindkey '\e[3~' delete-char				# Delete: delete forward
@@ -102,23 +134,21 @@ bindkey '\e[127;5u' backward-kill-word  # Ctrl-Backspace: delete whole word back
 bindkey '\e[1;5C' forward-word			# Ctrl-RightArrow: move forward one word
 bindkey '\e[1;5D' backward-word			# Ctrl-LeftArrow: move backward one word
 
-bindkey '\ew' kill-region				            # Esc-w: Kill from the cursor to the mark
-bindkey '\C-r' history-incremental-search-backward	# Ctrl-r: Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
-bindkey ' ' magic-space					            # Space: don't do history expansion
+bindkey ' ' magic-space					# Space: don't do history expansion
 
 # Ctrl-e: Edit the current command line in $EDITOR
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-e' edit-command-line
 
-# Ctrl-f: Open fuzzy finder
-bindkey -s '\C-f' 'fzf\r'
+# Ctrl-f: cd fzf-selected directory
+bindkey -s '\C-f' '^ucd "$(dirname "$(fzf)")"\n'
 
 # Ctrl-o: Open a directory using lf
 case "$FILE_MANAGER" in
     lf*)
         (( $+functions[lfcd] )) &>/dev/null &&
-            bindkey -s '\C-o' 'lfcd\r'
+            bindkey -s '\C-o' '^ulfcd\r'
         ;;
     nnn*)
         (( $+functions[nnncd] )) &>/dev/null &&

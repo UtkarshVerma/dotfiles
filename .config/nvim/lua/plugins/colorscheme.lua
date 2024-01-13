@@ -54,12 +54,7 @@ return {
       inc_search = "background",
       background_clear = {},
       plugins = {
-        bufferline = {
-          underline_selected = true,
-          underline_visible = false,
-          underline_fill = false,
-          bold = false,
-        },
+        -- TODO: Can this be moved to the plugin?
         indent_blankline = {
           context_highlight = "pro",
           context_start_underline = false,
