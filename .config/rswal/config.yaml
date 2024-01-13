@@ -1,0 +1,17 @@
+theme: monokai
+
+variables:
+  alpha: 0.85
+
+hooks:
+  - set-wallpaper.sh
+  - update-xrdb.sh
+  - reload-ui.sh
+
+templates:
+  - source: colors.rasi
+    target: ~/.config/rofi/themes/colors.rasi
+  - source: dunstrc
+    target: ~/.config/dunst/dunstrc
+  - source: suckless.xresources
+    target: ~/.config/X11/Xresources/suckless

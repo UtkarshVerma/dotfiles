@@ -1,5 +1,4 @@
 #include "suckless"
-#include "colors"
 
 Xcursor.theme: capitaine-cursors
 Xcursor.size: 32

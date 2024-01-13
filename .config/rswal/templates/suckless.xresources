@@ -1,0 +1,96 @@
+!! dmenu
+dmenu.font: monospace:size=13
+dmenu.background: {{{colors.special.background}}}{{hex (int (mul variables.alpha 255))}}
+dmenu.foreground: {{colors.special.foreground}}
+dmenu.selbackground: {{colors.bright.magenta}}{{hex (int (mul variables.alpha 255))}}
+dmenu.selforeground: {{colors.special.background}}
+dmenu.bordercolor: {{colors.bright.magenta}}{{hex (int (mul variables.alpha 255))}}
+
+
+!! sxiv
+window.background: {{colors.special.background}}
+window.foreground: {{colors.special.foreground}}
+
+
+!! st
+*.alpha: {{variables.alpha}}
+*.cursorColor: {{colors.special.cursor}}
+*.font: monospace:pixelsize=20
+
+*.foreground: {{colors.special.foreground}}
+*.background: {{colors.special.background}}
+
+*.color0: {{colors.normal.black}}
+*.color1: {{colors.normal.red}}
+*.color2: {{colors.normal.green}}
+*.color3: {{colors.normal.yellow}}
+*.color4: {{colors.normal.blue}}
+*.color5: {{colors.normal.magenta}}
+*.color6: {{colors.normal.cyan}}
+*.color7: {{colors.normal.white}}
+
+*.color8: {{colors.bright.black}}
+*.color9: {{colors.bright.red}}
+*.color10: {{colors.bright.green}}
+*.color11: {{colors.bright.yellow}}
+*.color12: {{colors.bright.blue}}
+*.color13: {{colors.bright.magenta}}
+*.color14: {{colors.bright.cyan}}
+*.color15: {{colors.bright.white}}
+
+
+!! slock
+slock.locked: {{colors.normal.black}}
+slock.failed: {{colors.bright.red}}
+slock.input: {{colors.bright.cyan}}
+slock.capslock: {{colors.bright.yellow}}
+
+
+!! dwm
+dwm.alphas.*.bg: {{variables.alpha}}
+dwm.alphas.titlesel.bg: {{mul variables.alpha 0.85}}
+dwm.alphas.norm.border: {{variables.alpha}}
+
+dwm.normfgcolor: {{colors.special.foreground}}
+dwm.normbgcolor: {{colors.special.background}}
+dwm.normbordercolor: {{colors.special.background}}
+dwm.normfloatcolor: {{colors.bright.white}}
+
+dwm.selfgcolor: {{colors.normal.black}}
+dwm.selbgcolor: {{colors.normal.black}}
+dwm.selbordercolor: {{colors.bright.magenta}}
+dwm.selfloatcolor: {{colors.bright.blue}}
+
+dwm.titlenormfgcolor: {{colors.special.foreground}}
+dwm.titlenormbgcolor: {{colors.special.background}}
+dwm.titlenormbordercolor: {{colors.bright.magenta}}
+dwm.titlenormfloatcolor: {{colors.bright.magenta}}
+
+dwm.titleselfgcolor: {{colors.special.foreground}}
+dwm.titleselbgcolor: {{colors.special.background}}
+dwm.titleselbordercolor: {{colors.bright.magenta}}
+dwm.titleselfloatcolor: {{colors.bright.magenta}}
+
+dwm.tagsnormfgcolor: {{colors.special.foreground}}
+
+dwm.tags.fg1: {{colors.bright.red}}
+dwm.tags.fg2: {{colors.bright.green}}
+dwm.tags.fg3: {{colors.bright.yellow}}
+dwm.tags.fg4: {{colors.bright.blue}}
+dwm.tags.fg5: {{colors.bright.magenta}}
+dwm.tags.fg6: {{colors.bright.white}}
+dwm.tags.fg7: {{colors.bright.black}}
+dwm.tags.fg8: {{colors.bright.yellow}}
+dwm.tags.fg9: {{colors.bright.cyan}}
+dwm.tags.layoutfg: {{colors.bright.magenta}}
+
+dwm.tags.bg1: {{colors.special.background}}
+dwm.tags.bg2: {{colors.special.background}}
+dwm.tags.bg3: {{colors.special.background}}
+dwm.tags.bg4: {{colors.special.background}}
+dwm.tags.bg5: {{colors.special.background}}
+dwm.tags.bg6: {{colors.special.background}}
+dwm.tags.bg7: {{colors.special.background}}
+dwm.tags.bg8: {{colors.special.background}}
+dwm.tags.bg9: {{colors.special.background}}
+dwm.tags.layoutbg: {{colors.special.background}}

@@ -9,7 +9,8 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
 fi
 
 [ "$(supergfxctl -g)" = "hybrid" ] && autorandr -c >/dev/null 2>&1
-setwall -q -n -t monokai-pro
+rswal --variables no-reload=1
+setxkbmap -option caps:escape
 
 autostart="\
     /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
