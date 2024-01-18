@@ -4,20 +4,60 @@ local M = {}
 ---@class Formatter
 ---@field name string
 ---@field primary? boolean
----@field format fun(bufnr:number)
----@field sources fun(bufnr:number):string[]
----@field priority number
+---@field format fun(bufnr:integer)
+---@field sources fun(bufnr:integer):string[]
+---@field priority integer
 
-M.formatters = {} ---@type Formatter[]
+---@type Formatter[]
+M.formatters = {}
+
+---@type table<integer, boolean?>
+local buffer_autoformat_map = {}
+
+local global_autoformat = true
+
+---@param formatters Formatter[]
+---@param bufnr? integer
+local function resolve_formatters(formatters, bufnr)
+  local have_primary = false
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+  ---@param formatter Formatter
+  return vim.tbl_map(function(formatter)
+    local sources = formatter.sources(bufnr)
+    local active = #sources > 0 and (not formatter.primary or not have_primary)
+    have_primary = have_primary or (active and formatter.primary) or false
+
+    return setmetatable({
+      active = active,
+      resolved = sources,
+    }, { __index = formatter })
+  end, formatters)
+end
+
+---@param bufnr? integer
+---@return boolean
+local function can_format(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local buffer_autoformat = buffer_autoformat_map[bufnr]
+
+  if buffer_autoformat ~= nil then
+    return buffer_autoformat
+  end
+
+  return global_autoformat
+end
 
 ---@param formatter Formatter
 function M.register(formatter)
   M.formatters[#M.formatters + 1] = formatter
+
   table.sort(M.formatters, function(a, b)
     return a.priority > b.priority
   end)
 end
 
+---@return integer
 function M.formatexpr()
   local util = require("util")
 
@@ -28,41 +68,23 @@ function M.formatexpr()
   return vim.lsp.formatexpr({ timeout_ms = 3000 })
 end
 
----@param buf? number
-function M.resolve(buf)
-  buf = buf or vim.api.nvim_get_current_buf()
-  local have_primary = false
-
-  ---@param formatter Formatter
-  return vim.tbl_map(function(formatter)
-    local sources = formatter.sources(buf)
-    local active = #sources > 0 and (not formatter.primary or not have_primary)
-    have_primary = have_primary or (active and formatter.primary) or false
-    return setmetatable({
-      active = active,
-      resolved = sources,
-    }, { __index = formatter })
-  end, M.formatters)
-end
-
----@param buf? number
-function M.info(buf)
+---@param bufnr? integer
+function M.info(bufnr)
   local util = require("util")
 
-  buf = buf or vim.api.nvim_get_current_buf()
-  local gaf = vim.g.autoformat == nil or vim.g.autoformat
-  local baf = vim.b[buf].autoformat
-  local enabled = M.enabled(buf)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local buffer_autoformat = buffer_autoformat_map[bufnr]
+  local enabled = can_format(bufnr)
   local lines = {
     "# Status",
-    ("- [%s] global **%s**"):format(gaf and "x" or " ", gaf and "enabled" or "disabled"),
+    ("- [%s] global **%s**"):format(global_autoformat and "x" or " ", global_autoformat and "enabled" or "disabled"),
     ("- [%s] buffer **%s**"):format(
       enabled and "x" or " ",
-      baf == nil and "inherit" or baf and "enabled" or "disabled"
+      buffer_autoformat == nil and "inherit" or buffer_autoformat and "enabled" or "disabled"
     ),
   }
   local have = false
-  for _, formatter in ipairs(M.resolve(buf)) do
+  for _, formatter in ipairs(resolve_formatters(M.formatters, bufnr)) do
     if #formatter.resolved > 0 then
       have = true
       lines[#lines + 1] = "\n# " .. formatter.name .. (formatter.active and " ***(active)***" or "")
@@ -80,72 +102,75 @@ function M.info(buf)
   )
 end
 
----@param buf? number
-function M.enabled(buf)
-  buf = (buf == nil or buf == 0) and vim.api.nvim_get_current_buf() or buf
-  local gaf = vim.g.autoformat
-  local baf = vim.b[buf].autoformat
+---@param kind? "buffer" | "global"
+function M.toggle(kind)
+  kind = kind or "global"
+  local bufnr = vim.api.nvim_get_current_buf()
 
-  -- If the buffer has a local value, use that
-  if baf ~= nil then
-    return baf
-  end
-
-  -- Otherwise use the global value if set, or true by default
-  return gaf == nil or gaf
-end
-
----@param buf? boolean
-function M.toggle(buf)
-  if buf then
-    vim.b.autoformat = not M.enabled()
+  if kind == "buffer" then
+    buffer_autoformat_map[bufnr] = not can_format()
   else
-    vim.g.autoformat = not M.enabled()
-    vim.b.autoformat = nil
+    global_autoformat = not can_format()
+    buffer_autoformat_map[bufnr] = nil
   end
+
   M.info()
 end
 
----@param opts? {force?:boolean, buf?:number}
+---@param opts? {force?:boolean, bufnr?:integer}
 function M.format(opts)
   local util = require("util")
 
   opts = opts or {}
-  local buf = opts.buf or vim.api.nvim_get_current_buf()
-  if not ((opts and opts.force) or M.enabled(buf)) then
+  local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
+  local force = opts.force or false
+  if not (force or can_format(bufnr)) then
     return
   end
 
   local done = false
-  for _, formatter in ipairs(M.resolve(buf)) do
+  for _, formatter in ipairs(resolve_formatters(M.formatters, bufnr)) do
     if formatter.active then
       done = true
       util.try(function()
-        return formatter.format(buf)
+        return formatter.format(bufnr)
       end, { msg = "Formatter `" .. formatter.name .. "` failed" })
     end
   end
 
-  if not done and opts and opts.force then
+  if not done and force then
     util.warn("No formatter available", { title = "Editor" })
   end
 end
 
+---@alias Event {buf?: integer}
+
 function M.setup()
-  -- Autoformat autocmd
+  local group = vim.api.nvim_create_augroup("Format", {})
+
   vim.api.nvim_create_autocmd("BufWritePre", {
-    group = vim.api.nvim_create_augroup("Format", {}),
+    group = group,
+
+    ---@param event Event
     callback = function(event)
-      M.format({ buf = event.buf })
+      M.format({ bufnr = event.buf })
     end,
   })
 
-  -- Manual format
+  -- Reset buffer variables on buffer delete
+  vim.api.nvim_create_autocmd("BufDelete", {
+    group = group,
+
+    ---@param event Event
+    callback = function(event)
+      buffer_autoformat_map[event.buf] = nil
+    end,
+  })
+
   vim.api.nvim_create_user_command("Format", function()
     M.format({ force = true })
   end, { desc = "Format selection or buffer" })
 
-  -- Format info
   vim.api.nvim_create_user_command("FormatInfo", function()
     M.info()
   end, { desc = "Show info about the formatters for the current buffer" })

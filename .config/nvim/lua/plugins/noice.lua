@@ -1,5 +1,14 @@
 return {
   {
+    "which-key.nvim",
+    opts = {
+      defaults = {
+        ["<leader>sn"] = { name = "+noice" },
+      },
+    },
+  },
+
+  {
     "folke/noice.nvim",
     event = "VeryLazy",
     keys = {
@@ -72,17 +81,7 @@ return {
         },
       },
     },
-    dependencies = {
-      "nui.nvim",
-      {
-        "which-key.nvim",
-        opts = {
-          defaults = {
-            ["<leader>sn"] = { name = "+noice" },
-          },
-        },
-      },
-    },
+    dependencies = { "nui.nvim" },
     opts = {
       lsp = {
         override = {
@@ -110,12 +109,5 @@ return {
         long_message_to_split = true,
       },
     },
-  },
-
-  {
-    "nvim-scrollview",
-    opts = function(_, opts)
-      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "noice" })
-    end,
   },
 }

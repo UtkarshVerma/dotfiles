@@ -98,7 +98,7 @@ map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Previous warning" })
 
 -- toggle options
 map("n", "<leader>uf", util.format.toggle, { desc = "Toggle auto-format (global)" })
-map("n", "<leader>uF", function() util.format.toggle(true) end, { desc = "Toggle auto-format (buffer)" })
+map("n", "<leader>uF", function() util.format.toggle("buffer") end, { desc = "Toggle auto-format (buffer)" })
 map("n", "<leader>us", function() util.toggle.option("spell") end, { desc = "Toggle spelling" })
 map("n", "<leader>uw", function() util.toggle.option("wrap") end, { desc = "Toggle word wrap" })
 map("n", "<leader>uL", function() util.toggle.option("relativenumber") end, { desc = "Toggle relative line numbers" })

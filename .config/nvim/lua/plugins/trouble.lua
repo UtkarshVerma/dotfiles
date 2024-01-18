@@ -32,22 +32,4 @@ return {
       },
     },
   },
-
-  {
-    "indent-blankline.nvim",
-    opts = function(_, opts)
-      vim.tbl_deep_extend("force", opts, {
-        exclude = {
-          filetypes = vim.list_extend(vim.tbl_get(opts, "exclude", "filetypes") or {}, { "Trouble" }),
-        },
-      })
-    end,
-  },
-
-  {
-    "barbecue.nvim",
-    opts = function(_, opts)
-      opts.exclude_filetypes = vim.list_extend(opts.exclude_filetypes or {}, { "Trouble" })
-    end,
-  },
 }

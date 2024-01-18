@@ -97,27 +97,8 @@ end
 
 return {
   {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "mason.nvim" },
-  },
-
-  {
-    "nvim-cmp",
-    dependencies = { "hrsh7th/cmp-nvim-lsp" },
-    opts = function(_, opts)
-      local cmp = require("cmp")
-
-      table.insert(opts.sources, 1, { name = "nvim_lsp" })
-      opts.sources = cmp.config.sources(opts.sources)
-    end,
-  },
-
-  {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      "mason-lspconfig.nvim",
-      "cmp-nvim-lsp",
-    },
+    dependencies = { "mason-lspconfig.nvim", "cmp-nvim-lsp" },
     event = "LazyFile",
     ---@class plugins.lsp.opts
     opts = function(_, _)

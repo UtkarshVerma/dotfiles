@@ -1,9 +1,11 @@
 local config = require("config")
 local util = require("util")
 
+-- TODO: tidy this and modularize
 return {
   {
     "nvim-telescope/telescope-fzf-native.nvim",
+    dependencies = { "telescope.nvim" },
     build = "make",
     enabled = vim.fn.executable("make") == 1,
     config = function()
@@ -164,13 +166,6 @@ return {
           },
         },
       }
-    end,
-  },
-
-  {
-    "nvim-scrollview",
-    opts = function(_, opts)
-      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "TelescopePrompt" })
     end,
   },
 }

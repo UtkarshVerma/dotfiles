@@ -17,7 +17,6 @@ return {
 
   {
     "nvim-lspconfig",
-    depenedencies = { "SchemaStore.nvim" },
     opts = {
       servers = {
         jsonls = {

@@ -6,37 +6,6 @@ return {
   },
 
   {
-    "echasnovski/mini.bufremove",
-    keys = {
-      {
-        "<leader>bd",
-        function()
-          local bd = require("mini.bufremove").delete
-          if vim.bo.modified then
-            local choice = vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
-            if choice == 1 then -- Yes
-              vim.cmd.write()
-              bd(0)
-            elseif choice == 2 then -- No
-              bd(0, true)
-            end
-          else
-            bd(0)
-          end
-        end,
-        desc = "Delete buffer",
-      },
-      {
-        "<leader>bD",
-        function()
-          require("mini.bufremove").delete(0, true)
-        end,
-        desc = "Delete buffer (force)",
-      },
-    },
-  },
-
-  {
     "nvim-pack/nvim-spectre",
     cmd = "Spectre",
     opts = {
@@ -60,18 +29,16 @@ return {
       { "]]", desc = "Next reference" },
       { "[[", desc = "Prev reference" },
     },
-    opts = function(_, opts)
-      local excluded_filetypes = opts.filetypes_denylist or {}
-
-      return {
-        delay = 200,
-        filetypes_denylist = excluded_filetypes,
-        large_file_cutoff = 2000,
-        large_file_overrides = {
-          providers = { "lsp" },
-        },
-      }
-    end,
+    opts = {
+      delay = 200,
+      filetypes_denylist = {
+        "harpoon",
+      },
+      large_file_cutoff = 2000,
+      large_file_overrides = {
+        providers = { "lsp" },
+      },
+    },
     config = function(_, opts)
       require("illuminate").configure(opts)
 

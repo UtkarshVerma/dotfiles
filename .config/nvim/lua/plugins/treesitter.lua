@@ -28,7 +28,10 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    commit = "73e44f43c70289c70195b5e7bc6a077ceffddda4", -- NOTE: Rust queries are broken after this
+
+    -- NOTE: https://github.com/nvim-treesitter/nvim-treesitter-textobjects/issues/513
+    commit = "73e44f43c70289c70195b5e7bc6a077ceffddda4",
+
     config = function()
       -- When in diff mode, we want to use the default
       -- vim text objects c & C instead of the treesitter ones.
@@ -58,9 +61,7 @@ return {
     main = "nvim-treesitter.configs",
     build = ":TSUpdate",
     event = { "LazyFile", "VeryLazy" },
-    dependencies = {
-      "nvim-treesitter-textobjects",
-    },
+    dependencies = { "nvim-treesitter-textobjects" },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = {
       { "<c-space>", desc = "Increment selection" },

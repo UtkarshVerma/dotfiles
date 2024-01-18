@@ -8,9 +8,10 @@ return {
     end,
   },
 
+  { "barreiroleo/ltex_extra.nvim" },
+
   {
     "nvim-lspconfig",
-    dependencies = { "barreiroleo/ltex_extra.nvim" },
     opts = {
       servers = {
         texlab = {},

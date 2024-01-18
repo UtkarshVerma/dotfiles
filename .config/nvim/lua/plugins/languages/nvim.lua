@@ -1,5 +1,13 @@
 return {
-  { "folke/neodev.nvim", opts = {} },
+  {
+    "nvim-lspconfig",
+    dependencies = {
+      {
+        "folke/neodev.nvim",
+        opts = {},
+      },
+    },
+  },
 
   {
     "nvim-treesitter",
@@ -9,9 +17,4 @@ return {
       })
     end,
   },
-
-  {
-    "nvim-lspconfig",
-    dependencies = { "neodev.nvim" },
-  }
 }

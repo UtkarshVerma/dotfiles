@@ -2,18 +2,17 @@ local util = require("util")
 
 return {
   {
-    "ThePrimeagen/harpoon",
-    dependencies = {
-      "plenary.nvim",
-      {
-        "which-key.nvim",
-        opts = {
-          defaults = {
-            ["<leader>h"] = { name = "+harpoon" },
-          },
-        },
+    "which-key.nvim",
+    opts = {
+      defaults = {
+        ["<leader>h"] = { name = "+harpoon" },
       },
     },
+  },
+
+  {
+    "ThePrimeagen/harpoon",
+    dependencies = { "plenary.nvim" },
     branch = "harpoon2",
     keys = {
       {
@@ -41,15 +40,6 @@ return {
     },
     config = function(_, opts)
       require("harpoon"):setup(opts)
-    end,
-  },
-
-  {
-    "vim-illuminate",
-    opts = function(_, opts)
-      opts.filetypes_denylist = vim.list_extend(opts.filetypes_denylist or {}, {
-        "harpoon",
-      })
     end,
   },
 }

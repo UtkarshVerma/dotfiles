@@ -3,14 +3,16 @@ local util = require("lazy.core.util")
 ---@class util
 local M = {
   format = require("util.format"),
+  inject = require("util.inject"),
+  lsp = require("util.lsp"),
+  lualine = require("util.lualine"),
   plugin = require("util.plugin"),
   root = require("util.root"),
-  lsp = require("util.lsp"),
-  inject = require("util.inject"),
-  ui = require("util.ui"),
+  neo_tree = require("util.neo-tree"),
   telescope = require("util.telescope"),
   terminal = require("util.terminal"),
   toggle = require("util.toggle"),
+  ui = require("util.ui"),
 
   track = util.track,
   try = util.try,

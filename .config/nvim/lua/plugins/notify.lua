@@ -64,15 +64,4 @@ return {
       end
     end,
   },
-
-  {
-    "indent-blankline.nvim",
-    opts = function(_, opts)
-      vim.tbl_deep_extend("force", opts, {
-        exclude = {
-          filetypes = vim.list_extend(vim.tbl_get(opts, "exclude", "filetypes") or {}, { "notify" }),
-        },
-      })
-    end,
-  },
 }

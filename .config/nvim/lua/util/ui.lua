@@ -3,10 +3,10 @@ local M = {}
 
 ---@alias Sign {name:string, text:string, texthl:string, priority:number}
 
--- Returns a list of regular and extmark signs sorted by priority (low to high)
----@return Sign[]
+---Returns a list of regular and extmark signs sorted by priority (low to high)
 ---@param buf number
 ---@param lnum number
+---@return Sign[]
 function M.get_signs(buf, lnum)
   -- Get regular signs
   ---@type Sign[]
@@ -42,9 +42,18 @@ function M.get_signs(buf, lnum)
   return signs
 end
 
----@return Sign?
+function M.fg(name)
+  ---@type {foreground?:number}?
+  ---@diagnostic disable-next-line: deprecated
+  local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name }) or vim.api.nvim_get_hl_by_name(name, true)
+  ---@diagnostic disable-next-line: undefined-field
+  local fg = hl and (hl.fg or hl.foreground)
+  return fg and { fg = string.format("#%06x", fg) } or nil
+end
+
 ---@param buf number
 ---@param lnum number
+---@return Sign?
 function M.get_mark(buf, lnum)
   local marks = vim.fn.getmarklist(buf)
   vim.list_extend(marks, vim.fn.getmarklist())

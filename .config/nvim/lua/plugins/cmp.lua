@@ -1,24 +1,13 @@
 return {
   {
-    "L3MON4D3/LuaSnip",
-    build = (not jit.os:find("Windows"))
-        and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build'; make install_jsregexp"
-      or nil,
-    opts = {
-      history = true,
-      region_check_events = "CursorHold,InsertLeave,InsertEnter",
-      delete_check_events = "TextChanged,InsertEnter",
-    },
-  },
-
-  {
     "hrsh7th/nvim-cmp",
     version = false,
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-      "saadparwaiz1/cmp_luasnip",
       "LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-emoji",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
@@ -74,6 +63,7 @@ return {
           ["<c-e>"] = cmp.mapping.abort(),
         }),
         sources = cmp.config.sources({
+          { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "emoji" },
           { name = "buffer", keyword_length = 5 },
@@ -137,13 +127,6 @@ return {
       })
 
       cmp.setup(opts)
-    end,
-  },
-
-  {
-    "nvim-scrollview",
-    opts = function(_, opts)
-      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "cmp_docs" })
     end,
   },
 }

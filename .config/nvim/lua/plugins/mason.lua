@@ -1,5 +1,10 @@
 return {
   {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "mason.nvim" },
+  },
+
+  {
     "williamboman/mason.nvim",
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
@@ -32,24 +37,6 @@ return {
       else
         ensure_installed()
       end
-    end,
-  },
-
-  {
-    "indent-blankline.nvim",
-    opts = function(_, opts)
-      vim.tbl_deep_extend("force", opts, {
-        exclude = {
-          filetypes = vim.list_extend(vim.tbl_get(opts, "exclude", "filetypes") or {}, { "mason" }),
-        },
-      })
-    end,
-  },
-
-  {
-    "nvim-scrollview",
-    opts = function(_, opts)
-      opts.excluded_filetypes = vim.list_extend(opts.excluded_filetypes or {}, { "mason" })
     end,
   },
 }
