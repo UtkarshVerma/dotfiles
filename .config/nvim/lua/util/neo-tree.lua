@@ -1,21 +1,23 @@
 ---@class util.neo_tree
 local M = {}
 
--- TODO: file
+-- Hide the cursor.
 function M.hide_cursor()
   vim.opt_local.guicursor = "n:block-Cursor"
   vim.cmd([[hi Cursor blend=100]])
 end
 
+-- Show the cursor.
 function M.show_cursor()
   vim.opt_local.guicursor = vim.api.nvim_get_option_info("guicursor").default
   vim.cmd([[hi Cursor blend=0]])
 end
 
----@class NeoTreeState
+---@class util.neo_tree.state
 ---@field tree NuiTree
 
----@param state NeoTreeState
+-- Focus parent directory if focused node is a file, otherwise collapse it.
+---@param state util.neo_tree.state
 ---@return boolean
 function M.parent_or_collapse(state)
   local node = state.tree:get_node()
@@ -31,7 +33,8 @@ function M.parent_or_collapse(state)
   return require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
 end
 
----@param state NeoTreeState
+-- Expand focused node if it is a directory, otherwise open it.
+---@param state util.neo_tree.state
 ---@return boolean
 function M.child_or_expand(state)
   local node = state.tree:get_node()

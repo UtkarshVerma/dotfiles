@@ -53,3 +53,5 @@ function M.notify(message, opts)
     end,
   })
 end
+
+return M

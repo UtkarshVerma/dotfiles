@@ -9,12 +9,12 @@ local M = {
   neo_tree = require("util.neo-tree"),
   plugin = require("util.plugin"),
   root = require("util.root"),
+  fs = require("util.fs"),
   telescope = require("util.telescope"),
   terminal = require("util.terminal"),
   toggle = require("util.toggle"),
   ui = require("util.ui"),
 
-  norm = util.norm,
   merge = util.merge,
 }
 

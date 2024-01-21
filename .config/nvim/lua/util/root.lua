@@ -1,183 +1,133 @@
+---@class util.root.root
+---@field paths string[]
+---@field spec util.root.spec
+
+---@alias util.root.spec string|string[]
+---@alias util.root.detector fun(bufnr:integer, spec:util.root.spec):string[]
+
 ---@class util.root
 local M = {}
 
----@class Root
----@field paths string[]
----@field spec RootSpec
+---@type table<integer, string>
+local root_dir_cache = {}
 
----@alias RootFn fun(buf: number): (string|string[])
----@alias RootSpec string|string[]|RootFn
+---@type util.root.spec[]
+local specs = { "lsp", { ".git", "lua" }, "cwd" }
 
----@type RootSpec[]
-M.spec = { "lsp", { ".git", "lua" }, "cwd" }
+---@type table<string, util.root.detector>
+local detectors = {
+  -- Get the current working directory.
+  cwd = function(_, _)
+    local cwd = require("util").fs.cwd()
+    return cwd and { cwd } or {}
+  end,
 
-M.detectors = {}
+  -- Query the LSP for the root directory.
+  lsp = function(_, _)
+    return vim.tbl_values(vim.lsp.buf.list_workspace_folders())
+  end,
 
-function M.detectors.cwd()
-  return { vim.loop.cwd() }
-end
+  -- Get the root directory based on file patterns.
+  pattern = function(bufnr, spec)
+    local util = require("util")
+    local patterns = type(spec) == "string" and { spec } or spec
 
-function M.detectors.lsp(buf)
+    local path = util.fs.buffer_path(bufnr) or util.fs.cwd()
+    local pattern = vim.fs.find(patterns, { path = path, upward = true })[1]
+
+    return pattern and { vim.fs.dirname(pattern) } or {}
+  end,
+}
+
+-- Detect root directories for {opts.bufnr} based on {opts.spec}.
+---@param opts? {bufnr?: integer, all?: boolean, specs?: util.root.spec[]}
+---@return util.root.root[]
+local function detect(opts)
   local util = require("util")
 
-  local bufpath = M.bufpath(buf)
-  if not bufpath then
-    return {}
-  end
-  local roots = {} ---@type string[]
-  for _, client in pairs(util.lsp.get_clients(buf)) do
-    -- only check workspace folders, since we're not interested in clients
-    -- running in single file mode
-    local workspace = client.config.workspace_folders
-    for _, ws in pairs(workspace or {}) do
-      roots[#roots + 1] = vim.uri_to_fname(ws.uri)
-    end
-  end
-  return vim.tbl_filter(function(path)
-    path = util.norm(path)
-    return path and bufpath:find(path, 1, true) == 1
-  end, roots)
-end
-
----@param patterns string[]|string
-function M.detectors.pattern(buf, patterns)
-  patterns = type(patterns) == "string" and { patterns } or patterns
-  local path = M.bufpath(buf) or vim.loop.cwd()
-  local pattern = vim.fs.find(patterns, { path = path, upward = true })[1]
-  return pattern and { vim.fs.dirname(pattern) } or {}
-end
-
-function M.bufpath(buf)
-  return M.realpath(vim.api.nvim_buf_get_name(assert(buf)))
-end
-
-function M.cwd()
-  return M.realpath(vim.loop.cwd()) or ""
-end
-
-function M.realpath(path)
-  local util = require("util")
-
-  if path == "" or path == nil then
-    return nil
-  end
-  path = vim.loop.fs_realpath(path) or path
-  return util.norm(path)
-end
-
----@param spec RootSpec
----@return RootFn
-function M.resolve(spec)
-  if M.detectors[spec] then
-    return M.detectors[spec]
-  elseif type(spec) == "function" then
-    return spec
-  end
-  return function(buf)
-    return M.detectors.pattern(buf, spec)
-  end
-end
-
----@param opts? { buf?: number, spec?: RootSpec[], all?: boolean }
-function M.detect(opts)
   opts = opts or {}
-  opts.spec = opts.spec or type(vim.g.root_spec) == "table" and vim.g.root_spec or M.spec
-  opts.buf = (opts.buf == nil or opts.buf == 0) and vim.api.nvim_get_current_buf() or opts.buf
+  -- local specs = opts.specs or specs
+  local all = opts.all or false
+  local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
 
-  local ret = {} ---@type Root[]
-  for _, spec in ipairs(opts.spec) do
-    local paths = M.resolve(spec)(opts.buf)
-    paths = paths or {}
-    paths = type(paths) == "table" and paths or { paths }
-    local roots = {} ---@type string[]
-    for _, p in ipairs(paths) do
-      local pp = M.realpath(p)
-      if pp and not vim.tbl_contains(roots, pp) then
-        roots[#roots + 1] = pp
-      end
-    end
-    table.sort(roots, function(a, b)
+  local roots = {} ---@type util.root.root[]
+  for _, spec in ipairs(specs) do
+    local detector = detectors[type(spec) == "string" and spec or "pattern"]
+
+    local paths = detector(bufnr, spec)
+
+    paths = vim.tbl_map(util.fs.normalize_path, paths) --[[ @as string[] ]]
+
+    -- Sort paths based in increasing order of length.
+    table.sort(paths, function(a, b)
       return #a > #b
     end)
-    if #roots > 0 then
-      ret[#ret + 1] = { spec = spec, paths = roots }
-      if opts.all == false then
+
+    if #paths > 0 then
+      roots[#roots + 1] = { spec = spec, paths = paths }
+
+      if not all then
         break
       end
     end
   end
-  return ret
+
+  return roots
 end
 
-function M.info()
+-- Display detected root directories.
+local function show_roots()
   local util = require("util")
 
-  local spec = type(vim.g.root_spec) == "table" and vim.g.root_spec or M.spec
-
-  local roots = M.detect({ all = true })
-  local lines = {} ---@type string[]
+  local roots = detect({ all = true })
+  local lines = { "" }
   local first = true
   for _, root in ipairs(roots) do
     for _, path in ipairs(root.paths) do
-      lines[#lines + 1] = ("- [%s] `%s` **(%s)**"):format(
-        first and "x" or " ",
-        path,
-        type(root.spec) == "table" and table.concat(root.spec, ", ") or root.spec
-      )
+      local s = type(root.spec) == "table" and table.concat(root.spec --[[@as table]], ", ") or root.spec
+
+      lines[#lines + 1] = ("- [%s] `%s` **(%s)**"):format(first and "x" or " ", path, s)
       first = false
     end
   end
-  lines[#lines + 1] = "```lua"
-  lines[#lines + 1] = "vim.g.root_spec = " .. vim.inspect(spec)
-  lines[#lines + 1] = "```"
+
   util.log.info(table.concat(lines, "\n"), "Roots")
-  return roots[1] and roots[1].paths[1] or vim.loop.cwd()
 end
 
----@type table<number, string>
-M.cache = {}
+-- Get the root directory for {opts.bufnr} based on:
+-- - LSP workspace folders
+-- - LSP root directory
+-- - Root pattern of current buffer's filename
+-- - Root pattern of the current working directory
+---@param opts? {bufnr?: integer}
+---@return string
+function M.dir(opts)
+  local util = require("util")
+  opts = opts or {}
+
+  local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
+  local root = root_dir_cache[bufnr]
+
+  if root == nil then
+    local roots = detect({ all = false })
+    root = roots[1] and roots[1].paths[1] or util.fs.cwd()
+    root_dir_cache[bufnr] = root
+  end
+
+  return root
+end
 
 function M.setup()
   local util = require("util")
 
-  vim.api.nvim_create_user_command("Root", function()
-    util.root.info()
-  end, { desc = "Roots for the current buffer" })
+  vim.api.nvim_create_user_command("Root", show_roots, { desc = "Roots for the current buffer" })
 
-  vim.api.nvim_create_autocmd({ "LspAttach", "BufWritePost" }, {
-    group = vim.api.nvim_create_augroup("root_cache", { clear = true }),
-    callback = function(event)
-      M.cache[event.buf] = nil
+  util.create_autocmd("BufDelete", {
+    desc = "Reset root cache on buffer delete",
+    callback = function(arg)
+      root_dir_cache[arg.buf] = nil
     end,
   })
-end
-
--- returns the root directory based on:
--- * lsp workspace folders
--- * lsp root_dir
--- * root pattern of filename of the current buffer
--- * root pattern of cwd
----@param opts? {normalize?:boolean}
----@return string
-function M.get(opts)
-  local buf = vim.api.nvim_get_current_buf()
-  local ret = M.cache[buf]
-  if not ret then
-    local roots = M.detect({ all = false })
-    ret = roots[1] and roots[1].paths[1] or vim.loop.cwd()
-    M.cache[buf] = ret
-  end
-
-  if opts and opts.normalize then
-    return ret
-  end
-
-  return ret
-end
-
----@param opts? {hl_last?: string}
-function M.pretty_path(opts)
-  return ""
 end
 
 return M

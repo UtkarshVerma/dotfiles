@@ -16,7 +16,7 @@ function M.show(builtin, opts)
   return function()
     builtin = params.builtin
     opts = params.opts
-    opts = vim.tbl_deep_extend("force", { cwd = util.root.get() }, opts or {}) --[[@as util.telescope.opts]]
+    opts = vim.tbl_deep_extend("force", { cwd = util.root.dir() }, opts or {}) --[[@as util.telescope.opts]]
     if builtin == "files" then
       if vim.loop.fs_stat((opts.cwd or vim.loop.cwd()) .. "/.git") then
         opts.show_untracked = true

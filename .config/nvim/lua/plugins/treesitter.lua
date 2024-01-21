@@ -61,7 +61,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     main = "nvim-treesitter.configs",
     build = ":TSUpdate",
-    event = { "LazyFile", "VeryLazy" },
+    event = "LazyFile",
     dependencies = { "nvim-treesitter-textobjects" },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = {

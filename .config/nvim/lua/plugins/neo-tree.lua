@@ -14,14 +14,14 @@ return {
       {
         "<leader>fe",
         function()
-          require("neo-tree.command").execute({ toggle = true, dir = util.root.get() })
+          require("neo-tree.command").execute({ toggle = true, dir = util.root.dir() })
         end,
         desc = "Explorer (root dir)",
       },
       {
         "<leader>fE",
         function()
-          require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+          require("neo-tree.command").execute({ toggle = true, dir = util.fs.cwd() })
         end,
         desc = "Explorer (cwd)",
       },

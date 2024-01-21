@@ -3,7 +3,6 @@ local util = require("util")
 return {
   {
     "rcarriga/nvim-notify",
-		enabled = false,
     keys = {
       {
         "<leader>un",

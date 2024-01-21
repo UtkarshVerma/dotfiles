@@ -1,30 +1,32 @@
----@class util.lualine
-local M = {}
+---@alias util.lualine.config.section "lualine_a"|"lualine_b"|"lualine_c"|"lualine_x"|"lualine_y"|"lualine_z"
+
+---@class util.lualine.config.options
+---@field globalstatus? boolean
+
+---@class util.lualine.config
+---@field options table
+---@field sections table<util.lualine.config.section, (util.lualine.component|string)[]>
+---@field extensions string[]
 
 ---@class util.lualine.component
+---@field [integer] string|fun():string
 ---@field icons_enabled? boolean
 ---@field icon? string|{str: string, color?: Highlight}
 ---@field separator? string|{left?: string, right?: string}
 ---@field cond? fun():boolean
 ---@field draw_empty? boolean
----@field color? string|Highlight|fun(section:string):Highlight
+---@field color? string|Highlight|fun(section:string):Highlight?
 ---@field type? string
 ---@field padding? integer|{left?: integer, right?: integer}
 ---@field fmt? fun(str:string, context:{options: util.lualine.component}):string
 ---@field on_click? fun(click_count:integer, button:"l"|"r"|"m", modifiers: "s"|"c"|"a"|"m")
 
----@class util.lualine.component.file_path: util.lualine.component
----@field modified_hl string
-
--- Display the basename for the current buffer.
----@return string
-function M.file_name()
-  return vim.fn.expand("%:t")
-end
+---@class util.lualine
+local M = {}
 
 -- Display the directory path for the current buffer.
 ---@return string
-function M.file_dir()
+function M.get_dir()
   local util = require("util")
 
   local path = vim.fn.expand("%:p")
@@ -32,12 +34,12 @@ function M.file_dir()
     return ""
   end
 
-  local cwd = util.root.cwd()
+  local cwd = util.fs.cwd() or ""
 
   if path:find(cwd, 1, true) == 1 then
     path = path:sub(#cwd + 2)
   else
-    local root = util.root.get({ normalize = true })
+    local root = util.root.dir()
     path = path:sub(#root + 2)
   end
 
@@ -51,21 +53,6 @@ function M.file_dir()
   parts[#parts] = ""
 
   return table.concat(parts, path_sep)
-end
-
--- Display the basename of current project's root directory.
----@return string
-function M.root_dir()
-  local util = require("util")
-  local root = util.root.get({ normalize = true })
-
-  return vim.fs.basename(root)
-end
-
--- Display the time.
----@return string
-function M.clock()
-  return tostring(os.date("%R"))
 end
 
 return M

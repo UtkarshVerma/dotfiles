@@ -1,7 +1,7 @@
 return {
   {
     "echasnovski/mini.ai",
-    event = "VeryLazy",
+    event = "LazyFile",
     dependencies = { "which-key.nvim" },
     opts = function()
       local ai = require("mini.ai")

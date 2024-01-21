@@ -6,7 +6,7 @@ local M = {}
 -- Get a list of LSP clients filtered according to {filter}.
 ---@param bufnr? integer
 ---@return util.lsp.client[]
-function M.get_clients(bufnr)
+function M.clients(bufnr)
   return vim.lsp.get_active_clients({ bufnr = bufnr })
 end
 
@@ -36,7 +36,7 @@ function M.formatter()
       M.format(bufnr)
     end,
     sources = function(bufnr)
-      local clients = M.get_clients(bufnr)
+      local clients = M.clients(bufnr)
 
       ---@param client util.lsp.client
       clients = vim.tbl_filter(function(client)

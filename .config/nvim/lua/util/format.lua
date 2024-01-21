@@ -154,7 +154,7 @@ function M.setup()
   })
 
   util.create_autocmd("BufDelete", {
-    desc = "Reset buffer variables on buffer delete",
+    desc = "Reset formatter buffer variables on buffer delete",
     group = group,
     callback = function(arg)
       config.buffer[arg.buf] = nil
@@ -165,9 +165,11 @@ function M.setup()
     M.format({ force = true })
   end, { desc = "Format selection or buffer" })
 
-  vim.api.nvim_create_user_command("FormatInfo", function()
-    show_status()
-  end, { desc = "Show info about the formatters for the current buffer" })
+  vim.api.nvim_create_user_command(
+    "FormatInfo",
+    show_status,
+    { desc = "Show info about the formatters for the current buffer" }
+  )
 end
 
 return M

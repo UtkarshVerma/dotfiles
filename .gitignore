@@ -19,9 +19,6 @@
 /.config/vale/*
 /!.config/vale/config.ini
 
-/.config/nvim/plugin
-/.config/nvim/lazy-lock.json
-
 /.config/safeeyes/session.json
 /.config/calcurse/caldav
 
