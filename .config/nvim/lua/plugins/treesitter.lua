@@ -9,10 +9,11 @@ return {
           local util = require("util")
           local tsc = require("treesitter-context")
           tsc.toggle()
-          if util.inject.get_upvalue(tsc.toggle, "enabled") then
-            util.info("Enabled treesitter context", { title = "Option" })
+
+          if util.get_upvalue(tsc.toggle, "enabled") then
+            util.log.info("Enabled treesitter context", "Option")
           else
-            util.warn("Disabled treesitter context", { title = "Option" })
+            util.log.warn("Disabled treesitter context", "Option")
           end
         end,
         desc = "Toggle treesitter context",

@@ -1,11 +1,6 @@
 local icons = require("config").icons
 local util = require("util")
 
----@param data {source:string, destination:string}
-local function on_move(data)
-  util.lsp.on_rename(data.source, data.destination)
-end
-
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -61,8 +56,6 @@ return {
         { event = "neo_tree_buffer_enter", handler = util.neo_tree.hide_cursor },
         { event = "neo_tree_window_before_close", handler = util.neo_tree.show_cursor },
         { event = "neo_tree_buffer_leave", handler = util.neo_tree.show_cursor },
-        { event = "file_moved", handler = on_move },
-        { event = "file_renamed", handler = on_move },
       },
       default_component_configs = {
         indent = {

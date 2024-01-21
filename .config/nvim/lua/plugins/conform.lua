@@ -23,7 +23,6 @@ return {
         util.format.register({
           name = "conform.nvim",
           priority = 100,
-          primary = true,
           format = function(buf)
             require("conform").format(util.merge({
               timeout_ms = conform_opts.format.timeout_ms,
@@ -72,7 +71,7 @@ return {
   {
     "mason.nvim",
     opts = function(_, opts)
-      local formatters = vim.tbl_flatten(vim.tbl_values(util.opts("conform.nvim").formatters_by_ft))
+      local formatters = vim.tbl_flatten(vim.tbl_values(util.plugin.opts("conform.nvim").formatters_by_ft))
       opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, formatters)
       table.sort(opts.ensure_installed)
 

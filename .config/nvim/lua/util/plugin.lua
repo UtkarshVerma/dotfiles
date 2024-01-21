@@ -8,7 +8,53 @@ function M.setup()
   M.lazy_file()
 end
 
--- Properly load file based plugins without blocking the UI
+-- Check if {plugin} exists in the spec.
+---@param plugin string
+---@return boolean
+function M.exists(plugin)
+  return require("lazy.core.config").spec.plugins[plugin] ~= nil
+end
+
+-- Get options for plugin {name}.
+---@param name string
+---@return table?
+function M.opts(name)
+  local plugin = require("lazy.core.config").plugins[name]
+  if not plugin then
+    return nil
+  end
+
+  local Plugin = require("lazy.core.plugin")
+  return Plugin.values(plugin, "opts", false)
+end
+
+-- Execute {callback} after plugin {name} is loaded.
+---@param name string
+---@param callback fun(name:string)
+function M.on_load(name, callback)
+  local util = require("util")
+
+  local config = require("lazy.core.config")
+  if config.plugins[name] and config.plugins[name]._.loaded then
+    callback(name)
+    return
+  end
+
+  util.create_autocmd("User", {
+    pattern = "LazyLoad",
+    callback = function(arg)
+      if arg.data == name then
+        callback(name)
+
+        -- Needs to stop executing after executed once for plugin {name}.
+        return true
+      end
+    end,
+  })
+end
+
+-- TODO:
+-- Properly load file based plugins without blocking the UI.
 function M.lazy_file()
   M.use_lazy_file = M.use_lazy_file and vim.fn.argc(-1) > 0
 

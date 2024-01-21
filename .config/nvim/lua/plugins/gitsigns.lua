@@ -1,5 +1,11 @@
 local icons = require("config").icons
 
+---@class plugins.gitsigns.status_dict
+---@field added integer
+---@field removed integer
+---@field changed integer
+---@field head string
+
 return {
   {
     "which-key.nvim",

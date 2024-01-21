@@ -76,7 +76,7 @@ return {
         names = vim.tbl_filter(function(name)
           local linter = lint.linters[name]
           if not linter then
-            util.warn("Linter not found: " .. name, { title = "nvim-lint" })
+            util.log.warn("Linter not found: " .. name, { title = "nvim-lint" })
           end
           return linter and not (type(linter) == "table" and linter.condition and not linter.condition(ctx))
         end, names)
@@ -101,7 +101,7 @@ return {
         biomejs = "biome",
       }
 
-      local linters = vim.tbl_flatten(vim.tbl_values(util.opts("nvim-lint").linters_by_ft))
+      local linters = vim.tbl_flatten(vim.tbl_values(util.plugin.opts("nvim-lint").linters_by_ft))
       for i, linter in pairs(linters) do
         if renames[linter] then
           linters[i] = renames[linter]

@@ -54,7 +54,7 @@ M.keys = {
 ---@param method string
 function M.has(buffer, method)
   method = method:find("/") and method or "textDocument/" .. method
-  local clients = util.lsp.get_clients({ bufnr = buffer })
+  local clients = util.lsp.get_clients(buffer)
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
       return true
@@ -71,8 +71,8 @@ function M.resolve(buffer)
     return {}
   end
   local spec = M.keys
-  local opts = util.opts("nvim-lspconfig")
-  local clients = util.lsp.get_clients({ bufnr = buffer })
+  local opts = util.plugin.opts("nvim-lspconfig")
+  local clients = util.lsp.get_clients(buffer)
   for _, client in ipairs(clients) do
     local maps = opts.servers[client.name] and opts.servers[client.name].keys or {}
     vim.list_extend(spec, maps)
@@ -129,12 +129,6 @@ return {
         },
         -- add any global capabilities here
         capabilities = require("cmp_nvim_lsp").default_capabilities(),
-        -- options for vim.lsp.buf.format
-        -- `bufnr` and `filter` is handled by the formatter, but can be also overridden when specified
-        format = {
-          formatting_options = nil,
-          timeout_ms = nil,
-        },
         -- LSP Server Settings
         servers = {},
         -- you can do any additional lsp server setup here
@@ -260,14 +254,6 @@ return {
 
       local mlsp = require("mason-lspconfig")
       mlsp.setup({ ensure_installed = ensure_installed, handlers = { setup } })
-
-      if util.lsp.get_config("denols") and util.lsp.get_config("tsserver") then
-        local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
-        util.lsp.disable("tsserver", is_deno)
-        util.lsp.disable("denols", function(root_dir)
-          return not is_deno(root_dir)
-        end)
-      end
     end,
   },
 }

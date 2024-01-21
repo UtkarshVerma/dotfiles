@@ -3,6 +3,7 @@ local util = require("util")
 return {
   {
     "rcarriga/nvim-notify",
+		enabled = false,
     keys = {
       {
         "<leader>un",
@@ -57,7 +58,7 @@ return {
     },
     init = function()
       -- when noice is not enabled, install notify on VeryLazy
-      if not util.has("noice.nvim") then
+      if not util.plugin.exists("noice.nvim") then
         util.on_very_lazy(function()
           vim.notify = require("notify")
         end)

@@ -3,111 +3,165 @@ local util = require("lazy.core.util")
 ---@class util
 local M = {
   format = require("util.format"),
-  inject = require("util.inject"),
+  log = require("util.log"),
   lsp = require("util.lsp"),
   lualine = require("util.lualine"),
+  neo_tree = require("util.neo-tree"),
   plugin = require("util.plugin"),
   root = require("util.root"),
-  neo_tree = require("util.neo-tree"),
   telescope = require("util.telescope"),
   terminal = require("util.terminal"),
   toggle = require("util.toggle"),
   ui = require("util.ui"),
 
-  track = util.track,
-  try = util.try,
-  info = util.info,
-  warn = util.warn,
-  error = util.error,
   norm = util.norm,
   merge = util.merge,
-  is_list = util.is_list,
-  find_root = util.find_root,
-  walk = util.walk,
 }
 
----@param plugin string
-function M.has(plugin)
-  return require("lazy.core.config").spec.plugins[plugin] ~= nil
+-- Get the pretty-print form of the stack-trace.
+---@return string
+local function pretty_trace()
+  local Config = require("lazy.core.config")
+  local trace = {}
+  local level = 2
+
+  while true do
+    local info = debug.getinfo(level, "Sln")
+    if not info then
+      break
+    end
+
+    if info.what ~= "C" and (Config.options.debug or not info.source:find("lazy.nvim")) then
+      local source = info.source:sub(2)
+      if source:find(Config.options.root, 1, true) == 1 then
+        source = source:sub(#Config.options.root + 1)
+      end
+
+      source = vim.fn.fnamemodify(source, ":p:~:.")
+      local line = (" - %s:%s"):format(source, info.currentline)
+      if info.name then
+        line = ("%s _in_ **%s**"):format(line, info.name)
+      end
+
+      table.insert(trace, line)
+    end
+
+    level = level + 1
+  end
+
+  return #trace > 0 and ("\n\n# stacktrace:\n" .. table.concat(trace, "\n")) or ""
 end
 
----@param fn fun()
-function M.on_very_lazy(fn)
-  vim.api.nvim_create_autocmd("User", {
+-- Try executing {fn} and log {message} if it fails.
+---@generic T
+---@param fn fun():T?
+---@param message string
+---@return T?
+function M.try(fn, message)
+  local error_handler = function(err)
+    message = (message .. "\n\n") .. err .. pretty_trace()
+
+    vim.schedule(function()
+      M.log.error(message)
+    end)
+
+    return err
+  end
+
+  local ok, result = xpcall(fn, error_handler)
+  return ok and result or nil
+end
+
+-- Execute a {callback} on the `VeryLazy` event.
+---@param callback fun()
+function M.on_very_lazy(callback)
+  M.create_autocmd("User", {
     pattern = "VeryLazy",
-    callback = function()
-      fn()
-    end,
+    callback = callback,
   })
 end
 
----@param name string
-function M.opts(name)
-  local plugin = require("lazy.core.config").plugins[name]
-  if not plugin then
-    return {}
-  end
-  local Plugin = require("lazy.core.plugin")
-  return Plugin.values(plugin, "opts", false)
-end
-
-function M.is_win()
-  return vim.loop.os_uname().sysname:find("Windows") ~= nil
-end
-
--- delay notifications till vim.notify was replaced or after 500ms
+-- Delay notifications till `vim.notify` is replaced or after 500 ms, whichever is earlier.
 function M.lazy_notify()
-  local notifs = {}
+  local notifications = {}
   local function temp(...)
-    table.insert(notifs, vim.F.pack_len(...))
+    table.insert(notifications, vim.F.pack_len(...))
   end
 
-  local orig = vim.notify
+  local original = vim.notify
   vim.notify = temp
 
-  local timer = vim.loop.new_timer()
+  local timer = assert(vim.loop.new_timer())
   local check = assert(vim.loop.new_check())
 
   local replay = function()
     timer:stop()
     check:stop()
+
+    -- Put back the original notify function.
     if vim.notify == temp then
-      vim.notify = orig -- put back the original notify if needed
+      vim.notify = original
     end
+
+    -- Display all queued notifications.
     vim.schedule(function()
-      for _, notif in ipairs(notifs) do
-        vim.notify(vim.F.unpack_len(notif))
+      for _, notification in ipairs(notifications) do
+        vim.notify(vim.F.unpack_len(notification))
       end
     end)
   end
 
-  -- wait till vim.notify has been replaced
+  -- Wait till `vim.notify` has been replaced.
   check:start(function()
     if vim.notify ~= temp then
       replay()
     end
   end)
-  -- or if it took more than 500ms, then something went wrong
+
+  -- After 500 ms, replay notifications anyway as something might have failed.
   timer:start(500, 0, replay)
 end
 
+-- Get up value for {func}'s {name} variable.
+---@param func fun(...):any
 ---@param name string
----@param fn fun(name:string)
-function M.on_load(name, fn)
-  local config = require("lazy.core.config")
-  if config.plugins[name] and config.plugins[name]._.loaded then
-    fn(name)
-  else
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "LazyLoad",
-      callback = function(event)
-        if event.data == name then
-          fn(name)
-          return true
-        end
-      end,
-    })
+---@return any
+function M.get_upvalue(func, name)
+  local i = 1
+
+  while true do
+    local n, v = debug.getupvalue(func, i)
+    if not n then
+      return nil
+    end
+
+    if n == name then
+      return v
+    end
+
+    i = i + 1
   end
+end
+
+---@class util.autocmd_callback_arg
+---@field id number
+---@field event string
+---@field group? number
+---@field match string
+---@field buf number
+---@field file string
+---@field data table
+
+-- Create an autocommand.
+---@param events string[]|string
+---@param opts {group?: number, desc?: string, pattern?: string|string[], callback: fun(arg: util.autocmd_callback_arg):boolean?}
+function M.create_autocmd(events, opts)
+  vim.api.nvim_create_autocmd(events, {
+    group = opts.group,
+    pattern = opts.pattern,
+    desc = opts.desc,
+    callback = opts.callback,
+  })
 end
 
 return M

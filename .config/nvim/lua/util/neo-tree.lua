@@ -1,6 +1,7 @@
 ---@class util.neo_tree
 local M = {}
 
+-- TODO: file
 function M.hide_cursor()
   vim.opt_local.guicursor = "n:block-Cursor"
   vim.cmd([[hi Cursor blend=100]])
@@ -11,10 +12,10 @@ function M.show_cursor()
   vim.cmd([[hi Cursor blend=0]])
 end
 
----@class State
+---@class NeoTreeState
 ---@field tree NuiTree
 
----@param state State
+---@param state NeoTreeState
 ---@return boolean
 function M.parent_or_collapse(state)
   local node = state.tree:get_node()
@@ -30,7 +31,7 @@ function M.parent_or_collapse(state)
   return require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
 end
 
----@param state State
+---@param state NeoTreeState
 ---@return boolean
 function M.child_or_expand(state)
   local node = state.tree:get_node()

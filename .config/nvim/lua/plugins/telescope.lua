@@ -9,7 +9,7 @@ return {
     build = "make",
     enabled = vim.fn.executable("make") == 1,
     config = function()
-      util.on_load("telescope.nvim", function()
+      util.plugin.on_load("telescope.nvim", function()
         require("telescope").load_extension("fzf")
       end)
     end,

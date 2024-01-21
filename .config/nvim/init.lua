@@ -12,12 +12,14 @@ if not vim.loop.fs_stat(lazy_path) then
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazy_path)
 
+local config = require("config")
+config.init()
+
 require("lazy").setup({
   spec = {
     { import = "plugins" },
     { import = "plugins.languages" },
     { import = "plugins.extras.writing" },
-    { import = "plugins.extras.copilot" },
   },
   change_detection = { enabled = false },
   defaults = {
@@ -27,7 +29,6 @@ require("lazy").setup({
   install = { colorscheme = { "monokai-pro" } },
   performance = {
     rtp = {
-      -- disable some rtp plugins
       disabled_plugins = {
         "gzip",
         -- "matchit",
@@ -42,4 +43,4 @@ require("lazy").setup({
   },
 })
 
-require("config").setup()
+config.setup()

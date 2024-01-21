@@ -1,33 +1,37 @@
 ---@class util.toggle
 local M = {}
 
----@param silent boolean?
+local nu = { number = true, relativenumber = true }
+local diagnostics = true
+
+-- Toggle {option} between {values} or `true`/`false` for the current buffer.
+---@param option string
+---@param silent? boolean
 ---@param values? {[1]:any, [2]:any}
 function M.option(option, silent, values)
   local util = require("util")
 
   if values then
     if vim.opt_local[option]:get() == values[1] then
-      ---@diagnostic disable-next-line: no-unknown
       vim.opt_local[option] = values[2]
     else
-      ---@diagnostic disable-next-line: no-unknown
       vim.opt_local[option] = values[1]
     end
-    return util.info("Set " .. option .. " to " .. vim.opt_local[option]:get(), { title = "Option" })
+
+    return util.log.info(("Set %s to %s"):format(option, vim.opt_local[option]:get()), "Option")
   end
-  ---@diagnostic disable-next-line: no-unknown
+
   vim.opt_local[option] = not vim.opt_local[option]:get()
   if not silent then
     if vim.opt_local[option]:get() then
-      util.info("Enabled " .. option, { title = "Option" })
+      util.log.info("Enabled " .. option, "Option")
     else
-      util.warn("Disabled " .. option, { title = "Option" })
+      util.log.warn("Disabled " .. option, "Option")
     end
   end
 end
 
-local nu = { number = true, relativenumber = true }
+-- Toggle line numbers.
 function M.number()
   local util = require("util")
 
@@ -35,25 +39,25 @@ function M.number()
     nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get() }
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
-    util.warn("Disabled line numbers", { title = "Option" })
+    util.log.warn("Disabled line numbers", "Option")
   else
     vim.opt_local.number = nu.number
     vim.opt_local.relativenumber = nu.relativenumber
-    util.info("Enabled line numbers", { title = "Option" })
+    util.log.info("Enabled line numbers", "Option")
   end
 end
 
-local enabled = true
+-- Toggle diagnostics.
 function M.diagnostics()
   local util = require("util")
 
-  enabled = not enabled
-  if enabled then
+  diagnostics = not diagnostics
+  if diagnostics then
     vim.diagnostic.enable()
-    util.info("Enabled diagnostics", { title = "Diagnostics" })
+    util.log.info("Enabled diagnostics", "Diagnostics")
   else
     vim.diagnostic.disable()
-    util.warn("Disabled diagnostics", { title = "Diagnostics" })
+    util.log.warn("Disabled diagnostics", "Diagnostics")
   end
 end
 
