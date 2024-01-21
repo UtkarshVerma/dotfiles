@@ -7,6 +7,9 @@ local M = {}
 function M.normalize_path(path)
   local path_sep = package.config:sub(1, 1)
 
+  -- Resolve relative paths.
+  path = vim.loop.fs_realpath(path) or path
+
   -- Expand tilde.
   if path:sub(1, 1) == "~" then
     local home = assert(vim.loop.os_homedir())
