@@ -20,6 +20,7 @@ require("lazy").setup({
     { import = "plugins" },
     { import = "plugins.languages" },
     { import = "plugins.extras.writing" },
+    { import = "plugins.extras.oil" },
   },
   change_detection = { enabled = false },
   defaults = {

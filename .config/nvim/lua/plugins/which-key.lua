@@ -1,3 +1,6 @@
+---@class plugins.which_key.config
+---@field defaults? table<string, {name: string}>
+
 ---@type LazyPluginSpec[]
 return {
   {

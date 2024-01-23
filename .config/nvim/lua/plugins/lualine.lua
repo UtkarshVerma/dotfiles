@@ -20,7 +20,7 @@
 ---@class plugins.lualine.components.diff: plugins.lualine.component
 ---@field [1] "diff"
 ---@field symbols? {added: string, modified: string, removed: string}
----@field source? fun():{added: integer, modified: integer, removed: integer}
+---@field source? fun():{added: integer, modified: integer, removed: integer}?
 
 ---@class plugins.lualine.config
 ---@field options {globalstatus?: boolean, disabled_filetypes?: {statusline?: string[]}}
@@ -101,18 +101,20 @@ return {
           -- Display the file path for current buffer and highlight the basename when unsaved changes exist.
           { dir, separator = "", padding = 0 },
           {
-            -- stylua: ignore
-            function() return vim.fn.expand("%:t") end,
+            function()
+              return vim.fn.expand("%:t")
+            end,
             padding = { left = 0 },
-            -- stylua: ignore
-            color = function(_) return vim.bo.modified and util.ui.fg("Constant") or nil end,
+            color = function(_)
+              return vim.bo.modified and util.ui.fg("Constant") or nil
+            end,
           },
         },
         lualine_x = {
           ---@type plugins.lualine.components.diff
           {
             "diff",
-            symbols = {
+            symbol = {
               added = icons.git.added,
               modified = icons.git.modified,
               removed = icons.git.removed,

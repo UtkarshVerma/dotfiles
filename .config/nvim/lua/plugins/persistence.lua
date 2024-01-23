@@ -1,12 +1,9 @@
----@class plugins.persistence.config
----@field options string[]
-
 ---@type LazyPluginSpec[]
 return {
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
-    ---@type plugins.persistence.config
+    ---@type PersistenceOptions
     opts = {
       options = {
         "buffers",

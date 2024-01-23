@@ -1,13 +1,16 @@
+---@class plugins.luasnip.config
+---@field region_check_events? string
+---@field delete_check_events? string
+
+---@type LazyPluginSpec[]
 return {
   {
     "L3MON4D3/LuaSnip",
-    build = (not jit.os:find("Windows"))
-        and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build'; make install_jsregexp"
-      or nil,
+    build = "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build'; make install_jsregexp",
+    ---@type plugins.luasnip.config
     opts = {
-      history = true,
-      region_check_events = "CursorHold,InsertLeave,InsertEnter",
-      delete_check_events = "TextChanged,InsertEnter",
+      region_check_events = "CursorHold,CursorMoved,InsertEnter",
+      delete_check_events = "TextChanged,InsertLeave",
     },
   },
 }

@@ -1,6 +1,8 @@
+---@type LazyPluginSpec[]
 return {
   {
     "hrsh7th/nvim-cmp",
+    ---@diagnostic disable-next-line: assign-type-mismatch
     version = false,
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
@@ -17,6 +19,7 @@ return {
       local cmp = require("cmp")
       local defaults = require("cmp.config.default")()
 
+      ---@type cmp.ConfigSchema
       return {
         preselect = cmp.PreselectMode.None,
         snippet = {
@@ -100,7 +103,6 @@ return {
 
       local cmp = require("cmp")
 
-      ---@diagnostic disable-next-line: missing-fields
       cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline({
           ["<cr>"] = cmp.mapping({
@@ -113,7 +115,6 @@ return {
         },
       })
 
-      ---@diagnostic disable-next-line: missing-fields
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline({
           ["<cr>"] = cmp.mapping({

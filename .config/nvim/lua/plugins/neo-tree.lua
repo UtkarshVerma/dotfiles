@@ -5,15 +5,32 @@
 ---@field event string
 ---@field handler fun(state:plugins.neo_tree.state)
 
+---@class plugins.neo_tree.components.indent
+---@field with_expanders? boolean
+---@field expander_collapsed? string
+---@field expander_expanded? string
+
+---@class plugins.neo_tree.config.default_component_configs
+---@field indent? {with_expanders?: boolean, expander_collapsed?: string, expander_expanded?: string}
+---@field icon? table<"folder_closed"|"folder_open"|"folder_empty"|"folder_empty_open", string>
+---@field modified? {symbol?: string}
+---@field git_status? {symbols?: table<"added"|"deleted"|"modified"|"renamed"|"untracked"|"ignored"|"unstaged"|"staged"|"conflict", string>}
+
 ---@class plugins.neo_tree.window
 ---@field mappings? table<string, string|boolean|{[1]:string|fun(state:plugins.neo_tree.state), config?: table}>
+
+---@class plugins.neo_tree.sources.filesystem
+---@field window? plugins.neo_tree.window
+---@field filtered_items? {hide_dotfiles?: boolean, hide_gitignored?: boolean}
+---@filed follow_current_file? {enabled?: boolean}
 
 ---@class plugins.neo_tree.config
 ---@field sources? string[]
 ---@field popup_border_style? util.ui.border.chars
 ---@field event_handlers? plugins.neo_tree.event[]
----@field default_component_configs? table<string, table>
+---@field default_component_configs? plugins.neo_tree.config.default_component_configs
 ---@field window? plugins.neo_tree.window
+---@field filesystem? plugins.neo_tree.sources.filesystem
 
 local icons = require("config").icons
 local util = require("util")
@@ -128,16 +145,18 @@ return {
         { event = "neo_tree_buffer_leave", handler = show_cursor },
       },
       default_component_configs = {
-        ---@type table<"folder_closed"|"folder_open"|"folder_empty"|"folder_empty_open", string>
+        indent = {
+          with_expanders = true,
+          expander_collapsed = icons.misc.ChevronRight,
+          expander_expanded = icons.misc.ChevronDown,
+        },
         icon = {
           folder_closed = icons.misc.FolderClosed,
           folder_open = icons.misc.FolderOpen,
           folder_empty = icons.misc.FolderEmpty,
           folder_empty_open = icons.misc.FolderEmptyOpen,
         },
-        ---@type {symbol?: string}
         modified = { symbol = icons.misc.Modified },
-        ---@type {symbols?: table<"added"|"deleted"|"modified"|"renamed"|"untracked"|"ignored"|"unstaged"|"staged"|"conflict", string>}
         git_status = { symbols = icons.git },
       },
       window = {
@@ -148,7 +167,6 @@ return {
         },
       },
       filesystem = {
-        ---@type plugins.neo_tree.window
         window = {
           mappings = {
             ["H"] = "navigate_up",
@@ -159,12 +177,10 @@ return {
             ["a"] = { "add", config = { show_path = "relative" } },
           },
         },
-        ---@type {hide_dotfiles?: boolean, hide_gitignored?: boolean}
         filtered_items = {
           hide_dotfiles = false,
           hide_gitignored = false,
         },
-        ---@type {enabled?: boolean}
         follow_current_file = { enabled = true },
       },
     },

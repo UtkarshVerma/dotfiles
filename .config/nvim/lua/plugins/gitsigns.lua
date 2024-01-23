@@ -1,14 +1,12 @@
 local icons = require("config").icons
 
----@class plugins.gitsigns.status_dict
----@field added integer
----@field removed integer
----@field changed integer
----@field head string
+---@alias plugins.gitsigns.status_dict Gitsigns.StatusObj
 
+---@type LazyPluginSpec[]
 return {
   {
     "which-key.nvim",
+    ---@type plugins.which_key.config
     opts = {
       defaults = {
         ["<leader>gh"] = { name = "+hunks" },
@@ -38,6 +36,8 @@ return {
         desc = "GitSigns select hunk",
       },
     },
+    ---@type Gitsigns.Config
+    ---@diagnostic disable: missing-fields
     opts = {
       signs = {
         add = { text = icons.gitsigns.Add },
@@ -48,5 +48,6 @@ return {
         untracked = { text = icons.gitsigns.Untracked },
       },
     },
+    ---@diagnostic enable: missing-fields
   },
 }

@@ -17,7 +17,7 @@ local M = {}
 ---@param name string
 ---@return Highlight?
 function M.fg(name)
-  local hl = vim.api.nvim_get_hl_by_name(name, true) --[[@as Highlight]]
+  local hl = vim.api.nvim_get_hl(0, { name = name }) --[[@as Highlight]]
   local fg = hl.fg
 
   return fg and { fg = string.format("#%06x", fg) }

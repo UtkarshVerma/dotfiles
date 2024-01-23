@@ -1,8 +1,10 @@
 local util = require("util")
 
+---@type LazyPluginSpec[]
 return {
   {
     "which-key.nvim",
+    ---@type plugins.which_key.config
     opts = {
       defaults = {
         ["<leader>h"] = { name = "+harpoon" },
@@ -31,6 +33,8 @@ return {
         desc = "Toggle quick menu",
       },
     },
+    ---@type HarpoonConfig
+    ---@diagnostic disable: missing-fields
     opts = {
       settings = {
         save_on_toggle = false,
@@ -38,6 +42,7 @@ return {
         key = util.root.dir,
       },
     },
+    ---@diagnostic enable: missing-fields
     config = function(_, opts)
       require("harpoon"):setup(opts)
     end,
