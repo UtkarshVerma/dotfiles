@@ -5,12 +5,9 @@ local M = {
   format = require("util.format"),
   log = require("util.log"),
   lsp = require("util.lsp"),
-  lualine = require("util.lualine"),
-  neo_tree = require("util.neo-tree"),
   plugin = require("util.plugin"),
   root = require("util.root"),
   fs = require("util.fs"),
-  telescope = require("util.telescope"),
   terminal = require("util.terminal"),
   toggle = require("util.toggle"),
   ui = require("util.ui"),
@@ -154,10 +151,11 @@ end
 
 -- Create an autocommand.
 ---@param events string[]|string
----@param opts {group?: number, desc?: string, pattern?: string|string[], callback: fun(arg: util.autocmd_callback_arg):boolean?}
+---@param opts {group?: number, desc?: string, buffer?: integer, pattern?: string|string[], callback: fun(arg: util.autocmd_callback_arg):boolean?}
 function M.create_autocmd(events, opts)
   vim.api.nvim_create_autocmd(events, {
     group = opts.group,
+    buffer = opts.buffer,
     pattern = opts.pattern,
     desc = opts.desc,
     callback = opts.callback,

@@ -112,7 +112,7 @@ end
 map("n", "<leader>uT", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end, { desc = "Toggle treesitter highlights" })
 
 -- Lazygit
-map("n", "<leader>gg", function() util.terminal.open({ "lazygit" }, { cwd = util.root.get(), esc_esc = false, ctrl_hjkl = false }) end, { desc = "Lazygit (root dir)" })
+map("n", "<leader>gg", function() util.terminal.open({ "lazygit" }, { cwd = util.root.dir(), esc_esc = false, ctrl_hjkl = false }) end, { desc = "Lazygit (root dir)" })
 map("n", "<leader>gG", function() util.terminal.open({ "lazygit" }, {esc_esc = false, ctrl_hjkl = false}) end, { desc = "Lazygit (cwd)" })
 
 -- Quit
@@ -125,7 +125,7 @@ map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 -- Floating terminal
-local lazyterm = function() util.terminal.open(nil, { cwd = util.root.get() }) end
+local lazyterm = function() util.terminal.open(nil, { cwd = util.root.dir() }) end
 map("n", "<leader>ft", lazyterm, { desc = "Terminal (root dir)" })
 map("n", "<leader>fT", function() util.terminal.open() end, { desc = "Terminal (cwd)" })
 map("n", "<c-/>", lazyterm, { desc = "Terminal (root dir)" })

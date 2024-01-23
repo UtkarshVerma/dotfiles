@@ -34,8 +34,8 @@ return {
     opts = {
       settings = {
         save_on_toggle = false,
-        border_chars = util.ui.generate_borderchars("thick"),
-        key = util.root.get,
+        border_chars = util.ui.borderchars("thick"),
+        key = util.root.dir,
       },
     },
     config = function(_, opts)

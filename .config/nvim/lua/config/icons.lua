@@ -4,6 +4,7 @@ local M = {
     File = " ",
     Files = " ",
     Reload = " ",
+    Search = " ",
     Lazy = "󰒲 ",
     Modified = "",
     Clock = " ",
@@ -13,8 +14,8 @@ local M = {
     FolderClosed = "",
     FolderOpen = "",
     FolderEmptyOpen = "",
-    ExpanderCollapsed = "",
-    ExpanderExpanded = "",
+    ChevronRight = "",
+    ChevronDown = "",
   },
   dap = {
     Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
@@ -37,6 +38,7 @@ local M = {
     ChangeDelete = "┃",
     Untracked = "┃",
   },
+  ---@type table<util.ui.border.type, util.ui.border.chars>
   borders = {
     thin = {
       top = "▔",

@@ -5,7 +5,7 @@ return {
     "stevearc/dressing.nvim",
     opts = {
       input = {
-        border = util.ui.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
+        border = util.ui.borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
         win_options = { winblend = 0 },
       },
     },

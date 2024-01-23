@@ -23,6 +23,7 @@ local options = {
     foldopen = "",
     foldclose = "",
   },
+  foldlevelstart = 99, -- Keep all folds open
   shiftwidth = 4, -- Size of an indent
   swapfile = false,
   tabstop = 4, -- Number of spaces tabs count for
@@ -73,34 +74,8 @@ local options = {
 
   splitkeep = "screen",
   virtualedit = "block", -- Allow cursor to move where there is no text in visual block mode
+  formatexpr = "v:lua.require('util').format.formatexpr()",
 }
-
-local opt = vim.opt
-if vim.fn.has("nvim-0.10") == 1 then
-  opt.smoothscroll = true
-end
-
--- TODO:
--- Folding
--- vim.opt.foldlevel = 99
--- vim.opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
-
-if vim.fn.has("nvim-0.9.0") == 1 then
-  vim.opt.statuscolumn = [[%!v:lua.require'util'.ui.statuscolumn()]]
-end
-
--- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
---if vim.fn.has("nvim-0.10") == 1 then
---	vim.opt.foldmethod = "expr"
---	vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
---else
---	vim.opt.foldmethod = "indent"
---end
-
-vim.o.formatexpr = "v:lua.require('util').format.formatexpr()"
-
----- Fix markdown indentation settings
---vim.g.markdown_recommended_style = 0
 
 for k, v in pairs(options) do
   vim.opt[k] = v

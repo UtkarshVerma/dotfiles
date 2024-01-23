@@ -118,7 +118,7 @@ return {
             focusable = false,
             style = "minimal",
             source = "if_many",
-            border = util.ui.generate_borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
+            border = util.ui.borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
           },
         },
         -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
