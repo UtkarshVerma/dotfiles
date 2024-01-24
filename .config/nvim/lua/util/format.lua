@@ -13,12 +13,14 @@ local formatters = {}
 local config = {
   ---@type table<integer, boolean?>
   buffer = {},
+  ---@type boolean
   global = true,
 }
 
 -- Check if buffer {bufnr} can be formatted.
 ---@param bufnr? integer
 ---@return boolean
+---@nodiscard
 local function can_format(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local buffer_autoformat = config.buffer[bufnr]
@@ -87,6 +89,7 @@ end
 
 -- Get the `formatexpr` for the active formatter.
 ---@return integer
+---@nodiscard
 function M.formatexpr()
   local util = require("util")
 

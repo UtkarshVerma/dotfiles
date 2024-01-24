@@ -1,11 +1,16 @@
+---@class plugins.which_key.defaults
+---@field [string] {name: string}
+---@field mode? ("n"|"v")[]
+
 ---@class plugins.which_key.config
----@field defaults? table<string, {name: string}>
+---@field defaults? plugins.which_key.defaults
 
 ---@type LazyPluginSpec[]
 return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    ---@type plugins.which_key.config
     opts = {
       plugins = {
         spelling = true,

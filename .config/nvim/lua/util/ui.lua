@@ -16,6 +16,7 @@ local M = {}
 -- Get the foreground color for highlight {name}.
 ---@param name string
 ---@return Highlight?
+---@nodiscard
 function M.fg(name)
   local hl = vim.api.nvim_get_hl(0, { name = name }) --[[@as Highlight]]
   local fg = hl.fg
@@ -28,6 +29,7 @@ end
 ---@param order? string
 ---@param overrides? util.ui.border.chars
 ---@return util.ui.border.chars
+---@nodiscard
 function M.borderchars(type, order, overrides)
   order = order or "t-r-b-l-tl-tr-br-bl"
   type = type or "empty"

@@ -1,11 +1,8 @@
 ---@class config.logo
-local M = {
-  days_of_week = {},
-  dragon = {},
-}
+local M = {}
 
----@class config.logo.dragon
-local dragon = {
+---@type table<string, string>
+local dragons = {
   night_fury = [[
   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣾⠿⣋⣭⢍⣩⣝⢿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⡿⣿⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -53,8 +50,8 @@ local dragon = {
   ]],
 }
 
----@class config.logo.day
-local days_of_week = {
+---@type table<string, string>
+local days = {
   Monday = [[
 ███╗   ███╗ ██████╗ ███╗   ██╗██████╗  █████╗ ██╗   ██╗
 ████╗ ████║██╔═══██╗████╗  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝
@@ -113,21 +110,23 @@ local days_of_week = {
   ]],
 }
 
-function M.days_of_week.generate()
-  local current_day = os.date("%A")
-  return vim.split("\n\n\n" .. days_of_week[current_day] .. "\n\n" .. os.date("%Y-%m-%d %H:%M:%S" .. "\n"), "\n")
-end
+-- Generate a logo based on {type}.
+---@param type "day"|"dragon"
+---@param type_kind? string
+---@return string[]
+---@nodiscard
+function M.generate(type, type_kind)
+  if type == "day" then
+    local current_day = os.date("%A")
 
----@param type "night_fury" | "western_dragon"
-function M.dragon.generate(type)
-  return vim.split("\n" .. dragon[type], "\n")
-end
+    return vim.split(days[current_day] .. "\n" .. os.date("%b %d, %Y"), "\n")
+  end
 
-M.dragon.random = function()
   math.randomseed(os.time())
-  local logo_names = { "night_fury", "western_dragon" }
-  local random_logo_name = logo_names[math.random(1, #logo_names)]
-  return vim.split(dragon[random_logo_name], "\n")
+  local dragon_kinds = vim.tbl_keys(dragons)
+  local dragon_kind = type_kind or dragon_kinds[math.random(#dragon_kinds)]
+
+  return vim.split(dragons[dragon_kind], "\n")
 end
 
 return M

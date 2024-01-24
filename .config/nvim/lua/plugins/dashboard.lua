@@ -1,4 +1,13 @@
 local icons = require("config").icons
+local logo = require("config").logo.generate("dragon")
+
+-- HACK: Add padding manually until centering for `doom` theme is fixed upstream.
+for _ = 1, 1 do
+  table.insert(logo, "")
+end
+for _ = 1, 1 do
+  table.insert(logo, 1, "")
+end
 
 return {
   {
@@ -19,7 +28,7 @@ return {
           { desc = "󰚰 Update", group = "@property", action = "Lazy update", key = "u" },
         },
         config = {
-          header = require("config.logo").dragon.generate("night_fury"),
+          header = logo,
           center = {
             {
               icon = icons.misc.File,

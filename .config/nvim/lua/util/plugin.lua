@@ -1,16 +1,10 @@
 ---@class util.plugin
 local M = {}
 
-function M.setup()
-  -- Set up the `LazyFile` event.
-  local event = require("lazy.core.handler.event")
-  event.mappings["LazyFile"] = { id = "LazyFile", event = { "BufReadPost", "BufNewFile", "BufWritePre" } }
-  event.mappings["User LazyFile"] = event.mappings.LazyFile
-end
-
 -- Check if {plugin} exists in the spec.
 ---@param plugin string
 ---@return boolean
+---@nodiscard
 function M.exists(plugin)
   return require("lazy.core.config").spec.plugins[plugin] ~= nil
 end
@@ -18,6 +12,7 @@ end
 -- Get options for plugin {name}.
 ---@param name string
 ---@return table?
+---@nodiscard
 function M.opts(name)
   local plugin = require("lazy.core.config").plugins[name]
   if not plugin then
@@ -51,6 +46,13 @@ function M.on_load(name, callback)
       end
     end,
   })
+end
+
+function M.setup()
+  -- Set up the `LazyFile` event.
+  local event = require("lazy.core.handler.event")
+  event.mappings["LazyFile"] = { id = "LazyFile", event = { "BufReadPost", "BufNewFile", "BufWritePre" } }
+  event.mappings["User LazyFile"] = event.mappings.LazyFile
 end
 
 return M

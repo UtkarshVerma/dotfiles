@@ -1,13 +1,18 @@
 ---@class util.toggle
 local M = {}
 
-local nu = { number = true, relativenumber = true }
-local diagnostics = true
+local config = {
+  ---@type {number: boolean, relativenumber: boolean}
+  nu = { number = true, relativenumber = true },
+
+  ---@type boolean
+  diagnostics = true,
+}
 
 -- Toggle {option} between {values} or `true`/`false` for the current buffer.
 ---@param option string
 ---@param silent? boolean
----@param values? {[1]:any, [2]:any}
+---@param values? {[1]: any, [2]: any}
 function M.option(option, silent, values)
   local util = require("util")
 
@@ -18,7 +23,8 @@ function M.option(option, silent, values)
       vim.opt_local[option] = values[1]
     end
 
-    return util.log.info(("Set %s to %s"):format(option, vim.opt_local[option]:get()), "Option")
+    util.log.info(("Set %s to %s"):format(option, vim.opt_local[option]:get()), "Option")
+    return
   end
 
   vim.opt_local[option] = not vim.opt_local[option]:get()
@@ -36,13 +42,13 @@ function M.number()
   local util = require("util")
 
   if vim.opt_local.number:get() or vim.opt_local.relativenumber:get() then
-    nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get() }
+    config.nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get() }
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
     util.log.warn("Disabled line numbers", "Option")
   else
-    vim.opt_local.number = nu.number
-    vim.opt_local.relativenumber = nu.relativenumber
+    vim.opt_local.number = config.nu.number
+    vim.opt_local.relativenumber = config.nu.relativenumber
     util.log.info("Enabled line numbers", "Option")
   end
 end
@@ -51,8 +57,8 @@ end
 function M.diagnostics()
   local util = require("util")
 
-  diagnostics = not diagnostics
-  if diagnostics then
+  config.diagnostics = not config.diagnostics
+  if config.diagnostics then
     vim.diagnostic.enable()
     util.log.info("Enabled diagnostics", "Diagnostics")
   else

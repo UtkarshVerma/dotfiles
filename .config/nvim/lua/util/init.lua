@@ -1,3 +1,24 @@
+---@alias util.autocommand.event string|string[]
+
+---@class util.autocommand.callback.arg
+---@field id number
+---@field event string
+---@field group? number
+---@field match string
+---@field buf number
+---@field file string
+---@field data table
+
+---@alias util.autocommand.callback fun(arg:util.autocommand.callback.arg):boolean?
+
+---@class util.autocommand.opts
+---@field group? integer
+---@field desc? string
+---@field command? string
+---@field buffer? integer
+---@field pattern? string|string[]
+---@field callback? util.autocommand.callback
+
 local util = require("lazy.core.util")
 
 ---@class util
@@ -17,6 +38,7 @@ local M = {
 
 -- Get the pretty-print form of the stack-trace.
 ---@return string
+---@nodiscard
 local function pretty_trace()
   local Config = require("lazy.core.config")
   local trace = {}
@@ -120,9 +142,11 @@ function M.lazy_notify()
 end
 
 -- Get up value for {func}'s {name} variable.
----@param func fun(...):any
+---@generic T
+---@param func fun(...):T
 ---@param name string
----@return any
+---@return T
+---@nodiscard
 function M.get_upvalue(func, name)
   local i = 1
 
@@ -140,22 +164,14 @@ function M.get_upvalue(func, name)
   end
 end
 
----@class util.autocmd_callback_arg
----@field id number
----@field event string
----@field group? number
----@field match string
----@field buf number
----@field file string
----@field data table
-
 -- Create an autocommand.
----@param events string[]|string
----@param opts {group?: number, desc?: string, buffer?: integer, pattern?: string|string[], callback: fun(arg: util.autocmd_callback_arg):boolean?}
-function M.create_autocmd(events, opts)
-  vim.api.nvim_create_autocmd(events, {
+---@param event util.autocommand.event
+---@param opts util.autocommand.opts
+function M.create_autocmd(event, opts)
+  vim.api.nvim_create_autocmd(event, {
     group = opts.group,
     buffer = opts.buffer,
+    command = opts.command,
     pattern = opts.pattern,
     desc = opts.desc,
     callback = opts.callback,

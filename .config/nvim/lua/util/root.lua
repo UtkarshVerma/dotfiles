@@ -17,17 +17,20 @@ local specs = { "lsp", { ".git", "lua" }, "cwd" }
 ---@type table<string, util.root.detector>
 local detectors = {
   -- Get the current working directory.
+  ---@nodiscard
   cwd = function(_, _)
     local cwd = require("util").fs.cwd()
     return cwd and { cwd } or {}
   end,
 
   -- Query the LSP for the root directory.
+  ---@nodiscard
   lsp = function(_, _)
     return vim.tbl_values(vim.lsp.buf.list_workspace_folders())
   end,
 
   -- Get the root directory based on file patterns.
+  ---@nodiscard
   pattern = function(bufnr, spec)
     local util = require("util")
     local patterns = type(spec) == "string" and { spec } or spec
@@ -42,6 +45,7 @@ local detectors = {
 -- Detect root directories for {opts.bufnr} based on {opts.spec}.
 ---@param opts? {bufnr?: integer, all?: boolean, specs?: util.root.spec[]}
 ---@return util.root.root[]
+---@nodiscard
 local function detect(opts)
   local util = require("util")
 
@@ -101,6 +105,7 @@ end
 -- - Root pattern of the current working directory
 ---@param opts? {bufnr?: integer}
 ---@return string
+---@nodiscard
 function M.dir(opts)
   local util = require("util")
   opts = opts or {}

@@ -4,6 +4,7 @@ local M = {}
 -- Normalize {path} by expanding "~" and removing trailing slashes.
 ---@param path string
 ---@return string
+---@nodiscard
 function M.normalize_path(path)
   local path_sep = package.config:sub(1, 1)
 
@@ -28,6 +29,7 @@ end
 
 -- Get the current working directory.
 ---@return string?
+---@nodiscard
 function M.cwd()
   local cwd = vim.loop.cwd()
   if cwd == nil then
@@ -40,6 +42,7 @@ end
 -- Get the file path for buffer {bufnr}.
 ---@param bufnr integer
 ---@return string
+---@nodiscard
 function M.buffer_path(bufnr)
   return M.normalize_path(vim.api.nvim_buf_get_name(bufnr))
 end
