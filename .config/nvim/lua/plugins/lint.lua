@@ -1,5 +1,6 @@
 local util = require("util")
 
+-- TODO: Specify types and fix prepend_args logic (can be tested with shellcheck and sb-date)
 return {
   {
     "mfussenegger/nvim-lint",
@@ -15,7 +16,7 @@ return {
       },
       -- Extension to easily override linter options
       -- or add custom linters.
-      ---@type table<string,table>
+      ---@type table<string, table>
       linters = {
         -- Example of using selene only when a selene.toml file is present
         selene = {

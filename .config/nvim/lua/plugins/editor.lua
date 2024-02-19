@@ -33,6 +33,7 @@ return {
       delay = 200,
       filetypes_denylist = {
         "harpoon",
+        "markdown",
       },
       large_file_cutoff = 2000,
       large_file_overrides = {

@@ -10,10 +10,10 @@ local config = {
 }
 
 -- Toggle {option} between {values} or `true`/`false` for the current buffer.
+---@generic T
 ---@param option string
----@param silent? boolean
----@param values? {[1]: any, [2]: any}
-function M.option(option, silent, values)
+---@param values? {[1]: T, [2]: T}
+function M.option(option, values)
   local util = require("util")
 
   if values then
@@ -28,12 +28,10 @@ function M.option(option, silent, values)
   end
 
   vim.opt_local[option] = not vim.opt_local[option]:get()
-  if not silent then
-    if vim.opt_local[option]:get() then
-      util.log.info("Enabled " .. option, "Option")
-    else
-      util.log.warn("Disabled " .. option, "Option")
-    end
+  if vim.opt_local[option]:get() then
+    util.log.info("Enabled " .. option, "Option")
+  else
+    util.log.warn("Disabled " .. option, "Option")
   end
 end
 

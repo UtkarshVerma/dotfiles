@@ -3,8 +3,9 @@ return {
     "folke/zen-mode.nvim",
     cmd = "ZenMode",
     keys = {
-      { "<leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle Zen Mode" },
+      { "<leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
     },
+    -- TODO: Hide lualine
     opts = {
       window = {
         backdrop = 0.95,
@@ -21,14 +22,16 @@ return {
         },
       },
       on_open = function(_)
-        if not vim.diagnostic.is_disabled(0) then
-          vim.b.restore_diagnostics = true
-          vim.diagnostic.disable(0)
+        local bufnr = vim.api.nvim_get_current_buf()
+        if not vim.diagnostic.is_disabled(bufnr) then
+          vim.b[bufnr].restore_diagnostics = true
+          vim.diagnostic.disable(bufnr)
         end
       end,
       on_close = function()
-        if vim.b.restore_diagnostics then
-          vim.diagnostic.enable(0)
+        local bufnr = vim.api.nvim_get_current_buf()
+        if vim.b[bufnr].restore_diagnostics then
+          vim.diagnostic.enable(bufnr)
         end
       end,
     },

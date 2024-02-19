@@ -59,6 +59,8 @@ local function dir()
   return table.concat(parts, path_sep)
 end
 
+-- TODO: Add a section to display word count for markdown/text files
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -111,6 +113,26 @@ return {
           },
         },
         lualine_x = {
+          {
+            -- Display pressed keys.
+            function()
+              return require("noice").api.status.command.get()
+            end,
+            cond = function()
+              return package.loaded["noice"] and require("noice").api.status.command.has()
+            end,
+            color = util.ui.fg("Statement"),
+          },
+          {
+            -- Tell if a macro is being recorded.
+            function()
+              return require("noice").api.status.mode.get()
+            end,
+            cond = function()
+              return package.loaded["noice"] and require("noice").api.status.mode.has()
+            end,
+            color = util.ui.fg("Constant"),
+          },
           ---@type plugins.lualine.components.diff
           {
             "diff",

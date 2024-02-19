@@ -3,6 +3,7 @@ local util = require("util")
 ---@type ConformOpts
 local conform_opts = {}
 
+---@type LazyPluginSpec[]
 return {
   {
     "stevearc/conform.nvim",
@@ -51,7 +52,7 @@ return {
       formatters_by_ft = {},
       -- The options you set here will be merged with the builtin formatters.
       -- You can also define any custom formatters here.
-      ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
+      ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): conform.FormatterConfigOverride?>
       formatters = {
         injected = { options = { ignore_errors = true } },
         -- # Example of using dprint only when a dprint.json file is present
@@ -71,7 +72,17 @@ return {
   {
     "mason.nvim",
     opts = function(_, opts)
+      local renames = {
+        biomejs = "biome",
+      }
+
       local formatters = vim.tbl_flatten(vim.tbl_values(util.plugin.opts("conform.nvim").formatters_by_ft))
+      for i, formatter in pairs(formatters) do
+        if renames[formatter] then
+          formatters[i] = renames[formatter]
+        end
+      end
+
       opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, formatters)
       table.sort(opts.ensure_installed)
 

@@ -32,6 +32,7 @@ local function can_format(bufnr)
   return config.global
 end
 
+-- FIXME: FormatInfo fails
 -- Display autoformat status for buffer {bufnr}.
 ---@param bufnr? integer
 local function show_status(bufnr)

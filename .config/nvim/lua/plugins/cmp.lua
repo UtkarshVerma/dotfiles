@@ -66,12 +66,13 @@ return {
           ["<c-e>"] = cmp.mapping.abort(),
         }),
         sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "emoji" },
-          { name = "buffer", keyword_length = 5 },
-          { name = "path" },
+          { name = "nvim_lsp", group_index = 1 },
+          { name = "luasnip", group_index = 1 },
+          { name = "emoji", group_index = 2 },
+          { name = "buffer", group_index = 2, keyword_length = 5 },
+          { name = "path", group_index = 2 },
         }),
+        ---@diagnostic disable-next-line: missing-fields
         formatting = {
           fields = { "kind", "abbr", "menu" },
 
@@ -80,7 +81,6 @@ return {
             item.kind = icons[item.kind]
             local sources = {
               nvim_lsp = "LSP",
-              nvim_lua = "Lua",
               luasnip = "Snippet",
               buffer = "Buffer",
               path = "Path",

@@ -12,5 +12,9 @@ return {
       region_check_events = "CursorHold,CursorMoved,InsertEnter",
       delete_check_events = "TextChanged,InsertLeave",
     },
+    config = function(_, opts)
+      require("luasnip").setup(opts)
+      require("luasnip.loaders.from_snipmate").lazy_load()
+    end,
   },
 }

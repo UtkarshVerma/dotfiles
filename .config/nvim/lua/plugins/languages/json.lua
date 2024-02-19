@@ -17,6 +17,7 @@ return {
 
   {
     "nvim-lspconfig",
+    dependencies = { "SchemaStore.nvim" },
     opts = {
       servers = {
         jsonls = {
@@ -27,13 +28,20 @@ return {
           end,
           settings = {
             json = {
-              format = {
-                enable = true,
-              },
+              format = { enable = false },
               validate = { enable = true },
             },
           },
         },
+      },
+    },
+  },
+
+  {
+    "conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        json = { "biome" },
       },
     },
   },
