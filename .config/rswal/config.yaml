@@ -1,4 +1,4 @@
-theme: monokai
+theme: catppuccin
 
 variables:
   alpha: 0.85
