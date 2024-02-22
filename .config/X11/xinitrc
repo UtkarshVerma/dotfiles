@@ -10,7 +10,6 @@ fi
 
 [ "$(supergfxctl -g)" = "hybrid" ] && autorandr -c >/dev/null 2>&1
 rswal --variables no-reload=1
-setxkbmap -option caps:escape
 
 autostart="\
     /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1

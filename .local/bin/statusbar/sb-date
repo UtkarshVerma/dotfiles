@@ -1,5 +1,5 @@
 #!/bin/sh
-# Displays the current time in HH:MM:SS (AM|PM)
+# Display the current time in HH:MM:SS.
 
 notify() {
     notify-send -i office-calendar-symbolic \
@@ -20,4 +20,4 @@ case $BLOCK_BUTTON in
 esac
 
 . sb-theme
-display " $(date '+%I:%M:%S %p')"
+display " $(date '+%H:%M:%S')"
