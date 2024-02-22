@@ -146,7 +146,7 @@ return {
       }
     end,
     config = function(_, opts)
-      -- setup autoformat
+      -- Setup autoformat
       util.format.register(util.lsp.formatter())
 
       local is_newline_shown = vim.opt.list:get() and vim.opt.listchars:get()["eol"]

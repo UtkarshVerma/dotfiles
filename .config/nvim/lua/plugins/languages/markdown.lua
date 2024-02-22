@@ -20,6 +20,7 @@ return {
 
   {
     "nvim-lint",
+    ---@type plugins.lint.config
     opts = {
       linters_by_ft = {
         markdown = { "vale" },

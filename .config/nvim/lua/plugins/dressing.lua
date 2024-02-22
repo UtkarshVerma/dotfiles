@@ -1,5 +1,6 @@
 local util = require("util")
 
+---@type LazyPluginSpec[]
 return {
   {
     "stevearc/dressing.nvim",

@@ -24,6 +24,7 @@ local util = require("lazy.core.util")
 ---@class util
 local M = {
   format = require("util.format"),
+  lint = require("util.lint"),
   log = require("util.log"),
   lsp = require("util.lsp"),
   plugin = require("util.plugin"),

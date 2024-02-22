@@ -13,6 +13,7 @@ local formatters = {}
 local config = {
   ---@type table<integer, boolean?>
   buffer = {},
+
   ---@type boolean
   global = true,
 }
@@ -32,7 +33,6 @@ local function can_format(bufnr)
   return config.global
 end
 
--- FIXME: FormatInfo fails
 -- Display autoformat status for buffer {bufnr}.
 ---@param bufnr? integer
 local function show_status(bufnr)
@@ -102,7 +102,7 @@ function M.formatexpr()
 end
 
 -- Toggle formatting for {mode}.
----@param mode? "buffer" | "global"
+---@param mode? "buffer"|"global"
 function M.toggle(mode)
   mode = mode or "global"
   local bufnr = vim.api.nvim_get_current_buf()
@@ -126,7 +126,7 @@ function M.format(opts)
   opts = opts or {}
   local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
   local force = opts.force or false
-  if not (force or can_format(bufnr)) then
+  if not force and not can_format(bufnr) then
     return
   end
 
@@ -169,11 +169,9 @@ function M.setup()
     M.format({ force = true })
   end, { desc = "Format selection or buffer" })
 
-  vim.api.nvim_create_user_command(
-    "FormatInfo",
-    show_status,
-    { desc = "Show info about the formatters for the current buffer" }
-  )
+  vim.api.nvim_create_user_command("FormatInfo", function()
+    show_status()
+  end, { desc = "Show info about formatters for the current buffer" })
 end
 
 return M

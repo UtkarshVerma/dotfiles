@@ -4,7 +4,6 @@ local util = require("util")
 local M = {
   icons = require("config.icons"),
   logo = require("config.logo"),
-  kind_filter = require("config.kind-filter"),
 }
 
 -- Initialize the editor.
@@ -35,31 +34,26 @@ function M.setup()
       M.load("keymaps")
 
       util.format.setup()
+      util.lint.setup()
       util.root.setup()
     end,
   })
 end
 
 -- Load configuration for {name}.
----@param name "autocmds" | "options" | "keymaps"
+---@param name "autocmds"|"options"|"keymaps"
 function M.load(name)
-  local function load(mod)
-    if require("lazy.core.cache").find(mod)[1] then
-      util.try(function()
-        require(mod)
-      end, "Failed loading " .. mod)
-    end
+  local mod = "config." .. name
+  if require("lazy.core.cache").find(mod)[1] then
+    util.try(function()
+      require(mod)
+    end, "Failed loading " .. mod)
   end
 
-  load("config." .. name)
   if vim.bo.filetype == "lazy" then
     -- HACK: Editor may have overwritten options of the Lazy UI, so reset this here
     vim.cmd([[do VimResized]])
   end
-
-  -- TODO: Does this work?
-  local pattern = "Editor" .. name:sub(1, 1):upper() .. name:sub(2)
-  vim.api.nvim_exec_autocmds("User", { pattern = pattern, modeline = false })
 end
 
 return M

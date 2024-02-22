@@ -19,20 +19,22 @@ return {
       },
     },
     init = function()
-      -- Install the conform formatter on VeryLazy
+      -- Register the conform formatter on VeryLazy.
       util.on_very_lazy(function()
         util.format.register({
           name = "conform.nvim",
           priority = 100,
-          format = function(buf)
-            require("conform").format(util.merge({
+          format = function(bufnr)
+            require("conform").format({
               timeout_ms = conform_opts.format.timeout_ms,
               async = conform_opts.format.async,
               quiet = conform_opts.format.quiet,
-            }, { bufnr = buf }))
+              bufnr = bufnr,
+            })
           end,
-          sources = function(buf)
-            local ret = require("conform").list_formatters(buf)
+          sources = function(bufnr)
+            local ret = require("conform").list_formatters(bufnr)
+
             ---@param v conform.FormatterInfo
             return vim.tbl_map(function(v)
               return v.name

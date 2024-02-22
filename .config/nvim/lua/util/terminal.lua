@@ -1,7 +1,9 @@
+-- TODO: Do we need this?
+
 ---@class util.terminal
 local M = {}
 
----@type table<string,LazyFloat>
+---@type table<string, LazyFloat>
 local terminals = {}
 
 ---@class util.terminal.opts: LazyCmdOptions

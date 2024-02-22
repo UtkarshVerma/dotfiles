@@ -6,13 +6,11 @@
 ---@alias util.root.detector fun(bufnr:integer, spec:util.root.spec):string[]
 
 ---@class util.root
+---@field specs util.root.spec[]
 local M = {}
 
 ---@type table<integer, string>
 local root_dir_cache = {}
-
----@type util.root.spec[]
-local specs = { "lsp", { ".git", "lua" }, "cwd" }
 
 ---@type table<string, util.root.detector>
 local detectors = {
@@ -43,19 +41,18 @@ local detectors = {
 }
 
 -- Detect root directories for {opts.bufnr} based on {opts.spec}.
----@param opts? {bufnr?: integer, all?: boolean, specs?: util.root.spec[]}
+---@param opts? {bufnr?: integer, all?: boolean}
 ---@return util.root.root[]
 ---@nodiscard
 local function detect(opts)
   local util = require("util")
 
   opts = opts or {}
-  -- local specs = opts.specs or specs
   local all = opts.all or false
   local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
 
   local roots = {} ---@type util.root.root[]
-  for _, spec in ipairs(specs) do
+  for _, spec in ipairs(M.specs) do
     local detector = detectors[type(spec) == "string" and spec or "pattern"]
 
     local paths = detector(bufnr, spec)
@@ -122,8 +119,12 @@ function M.dir(opts)
   return root
 end
 
-function M.setup()
+---@param opts? {specs?: util.root.spec[]}
+function M.setup(opts)
   local util = require("util")
+
+  opts = opts or {}
+  M.specs = opts.specs or { "lsp", { ".git", "lua" }, "cwd" }
 
   vim.api.nvim_create_user_command("Root", show_roots, { desc = "Roots for the current buffer" })
 

@@ -1,6 +1,7 @@
 ---@class plugins.luasnip.config
 ---@field region_check_events? string
 ---@field delete_check_events? string
+---@field update_events? string[]
 
 ---@type LazyPluginSpec[]
 return {
@@ -11,10 +12,15 @@ return {
     opts = {
       region_check_events = "CursorHold,CursorMoved,InsertEnter",
       delete_check_events = "TextChanged,InsertLeave",
+
+      -- For dynamic snippets.
+      -- update_events = { "TextChanged", "TextChangedI" },
     },
     config = function(_, opts)
-      require("luasnip").setup(opts)
-      require("luasnip.loaders.from_snipmate").lazy_load()
+      local luasnip = require("luasnip")
+      luasnip.setup(opts)
+
+      require("luasnip.loaders.from_lua").load({ paths = { vim.fn.stdpath("config") .. "/lua/snippets" } })
     end,
   },
 }

@@ -70,79 +70,64 @@ return {
     dependencies = { "plenary.nvim" },
     ---@type fun(_:LazyPlugin, _:LazyKeysSpec):LazyKeys[]
     keys = function(_, _)
-      local telescope = require("telescope.builtin")
+      local builtin = require("telescope.builtin")
 
       return {
         -- Find
-        { "<leader>fb", telescope.buffers, desc = "Buffers" },
+        { "<leader>fb", builtin.buffers, desc = "Buffers" },
         { "<leader>fc", search_files({ cwd = vim.fn.stdpath("config") }), desc = "Find config file" },
         { "<leader>ff", search_files(), desc = "Find files (root dir)" },
         { "<leader>fF", search_files({ cwd = false }), desc = "Find files (cwd)" },
-        { "<leader>fr", telescope.oldfiles, desc = "Recent" },
+        { "<leader>fr", builtin.oldfiles, desc = "Recent" },
         -- stylua: ignore
-        { "<leader>fR", function() telescope.oldfiles({ cwd = vim.loop.cwd() }) end, desc = "Recent (cwd)" },
+        { "<leader>fR", function() builtin.oldfiles({ cwd = vim.loop.cwd() }) end, desc = "Recent (cwd)" },
 
         -- Git
-        { "<leader>gc", telescope.git_commits, desc = "Git commits" },
-        { "<leader>gs", telescope.git_status, desc = "Git status" },
+        { "<leader>gc", builtin.git_commits, desc = "Git commits" },
+        { "<leader>gs", builtin.git_status, desc = "Git status" },
 
         -- Search
-        { '<leader>s"', telescope.registers, desc = "Registers" },
-        { "<leader>sa", telescope.autocommands, desc = "Auto commands" },
-        { "<leader>sb", telescope.current_buffer_fuzzy_find, desc = "Buffer" },
-        { "<leader>sc", telescope.command_history, desc = "Command history" },
-        { "<leader>sC", telescope.commands, desc = "Commands" },
+        { '<leader>s"', builtin.registers, desc = "Registers" },
+        { "<leader>sa", builtin.autocommands, desc = "Auto commands" },
+        { "<leader>sb", builtin.current_buffer_fuzzy_find, desc = "Buffer" },
+        { "<leader>sc", builtin.command_history, desc = "Command history" },
+        { "<leader>sC", builtin.commands, desc = "Commands" },
         -- stylua: ignore
-        { "<leader>sd", function() telescope.diagnostics({ bufnr = 0 }) end, desc = "Document diagnostics" },
-        { "<leader>sD", telescope.diagnostics, desc = "Workspace diagnostics" },
-        { "<leader>sg", telescope.live_grep, desc = "Grep (root dir)" },
+        { "<leader>sd", function() builtin.diagnostics({ bufnr = 0 }) end, desc = "Document diagnostics" },
+        { "<leader>sD", builtin.diagnostics, desc = "Workspace diagnostics" },
+        { "<leader>sg", builtin.live_grep, desc = "Grep (root dir)" },
         -- stylua: ignore
-        { "<leader>sG", function() telescope.live_grep({ cwd = false }) end, desc = "Grep (cwd)" },
-        { "<leader>sh", telescope.help_tags, desc = "Help pages" },
-        { "<leader>sH", telescope.highlights, desc = "Search highlight groups" },
-        { "<leader>sk", telescope.keymaps, desc = "Keymaps" },
-        { "<leader>sM", telescope.man_pages, desc = "Man pages" },
-        { "<leader>sm", telescope.marks, desc = "Jump to mark" },
-        { "<leader>so", telescope.vim_options, desc = "Options" },
-        { "<leader>sR", telescope.resume, desc = "Resume" },
-        {
-          "<leader>sw",
-          function()
-            telescope.grep_string({ word_match = "-w" })
-          end,
-          desc = "Word (root dir)",
-        },
+        { "<leader>sG", function() builtin.live_grep({ cwd = false }) end, desc = "Grep (cwd)" },
+        { "<leader>sh", builtin.help_tags, desc = "Help pages" },
+        { "<leader>sH", builtin.highlights, desc = "Search highlight groups" },
+        { "<leader>sk", builtin.keymaps, desc = "Keymaps" },
+        { "<leader>sM", builtin.man_pages, desc = "Man pages" },
+        { "<leader>sm", builtin.marks, desc = "Jump to mark" },
+        { "<leader>so", builtin.vim_options, desc = "Options" },
+        { "<leader>sR", builtin.resume, desc = "Resume" },
+        -- stylua: ignore
+        { "<leader>sw", function() builtin.grep_string({ word_match = "-w" }) end, desc = "Word (root dir)" },
         {
           "<leader>sW",
           function()
-            telescope.grep_string({ cwd = false, word_match = "-w" })
+            builtin.grep_string({ cwd = false, word_match = "-w" })
           end,
           desc = "Word (cwd)",
         },
-        { "<leader>sw", telescope.grep_string, mode = "v", desc = "Selection (root dir)" },
+        { "<leader>sw", builtin.grep_string, mode = "v", desc = "Selection (root dir)" },
         -- stylua: ignore
-        { "<leader>sW", function() telescope.grep_string({ cwd = false }) end, mode = "v", desc = "Selection (cwd)" },
+        { "<leader>sW", function() builtin.grep_string({ cwd = false }) end, mode = "v", desc = "Selection (cwd)" },
         {
           "<leader>uC",
           function()
-            telescope.colorscheme({ enable_preview = true })
+            builtin.colorscheme({ enable_preview = true })
           end,
           desc = "Colorscheme with preview",
         },
-        {
-          "<leader>ss",
-          function()
-            telescope.lsp_document_symbols({ symbols = config.kind_filter.get() })
-          end,
-          desc = "Goto symbol",
-        },
-        {
-          "<leader>sS",
-          function()
-            telescope.lsp_dynamic_workspace_symbols({ symbols = config.kind_filter.get() })
-          end,
-          desc = "Goto symbol (workspace)",
-        },
+        -- stylua: ignore start
+        { "<leader>ss", function() builtin.lsp_document_symbols() end, desc = "Goto symbol" },
+        { "<leader>sS", function() builtin.lsp_dynamic_workspace_symbols() end, desc = "Goto symbol (workspace)" },
+        -- stylua: ignore end
       }
     end,
 

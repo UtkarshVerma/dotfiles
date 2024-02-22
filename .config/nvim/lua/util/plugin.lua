@@ -15,7 +15,7 @@ end
 ---@nodiscard
 function M.opts(name)
   local plugin = require("lazy.core.config").plugins[name]
-  if not plugin then
+  if plugin == nil then
     return nil
   end
 

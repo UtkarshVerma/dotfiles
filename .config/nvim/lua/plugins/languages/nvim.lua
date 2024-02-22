@@ -1,13 +1,13 @@
+---@type LazyPluginSpec[]
 return {
   {
+    "folke/neodev.nvim",
+    opts = {},
+  },
+
+  {
     "nvim-lspconfig",
-    dependencies = {
-      {
-        "folke/neodev.nvim",
-        version = false, -- Last release is way too old for neovim v0.9.5.
-        opts = {},
-      },
-    },
+    dependencies = { "neodev.nvim" },
   },
 
   {

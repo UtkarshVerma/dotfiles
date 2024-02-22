@@ -35,7 +35,22 @@ function M.formatter()
     name = "LSP",
     priority = 1,
     format = function(bufnr)
-      M.format(bufnr)
+      local opts = { bufnr = bufnr }
+
+      -- NOTE:
+      -- Some LSP servers are lazy and replace the entire buffer. Use conform for for LSP formatting since it applies
+      -- the changes to the buffer in a piecewise manner.
+      local ok, conform = pcall(require, "conform")
+      if ok then
+        -- Pass no formatters so that conform falls back to the LSP server.
+        opts.formatters = {}
+        opts.lsp_fallback = true
+
+        conform.format(opts)
+        return
+      end
+
+      vim.lsp.buf.format(opts)
     end,
     sources = function(bufnr)
       local clients = M.clients(bufnr)
@@ -52,24 +67,6 @@ function M.formatter()
       end, clients)
     end,
   }
-end
-
--- Format buffer {bufnr} using the LSP.
----@param bufnr? integer
-function M.format(bufnr)
-  local opts = { bufnr = bufnr }
-
-  -- Use conform for formatting with LSP when available, since it has better format diffing.
-  local ok, conform = pcall(require, "conform")
-  if ok then
-    opts.formatters = {}
-    opts.lsp_fallback = true
-
-    conform.format(opts)
-    return
-  end
-
-  vim.lsp.buf.format(opts)
 end
 
 return M

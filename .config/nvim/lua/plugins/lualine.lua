@@ -32,6 +32,7 @@ local util = require("util")
 
 -- Display the directory path for the current buffer.
 ---@return string
+---@nodiscard
 local function dir()
   local path = vim.fn.expand("%:p")
   if path == "" then

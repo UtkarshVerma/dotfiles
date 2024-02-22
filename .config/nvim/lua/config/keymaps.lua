@@ -46,9 +46,15 @@ local keys = {
   { "[q", vim.cmd.cprev, desc = "Previous quickfix" },
   { "]q", vim.cmd.cnext, desc = "Next quickfix" },
 
-  -- Lazygit
-  -- {esc_esc = false, ctrl_hjkl = false }) end, "<leader>gg", function() util.terminal.open({ "lazygit" }, { cwd = util.root.dir(),  desc = "Lazygit (root dir)" },
-  -- {{esc_esc = false, ctrl_hjkl = false}) end, "<leader>gG", function() util.terminal.open({ "lazygit" },  desc = "Lazygit (cwd)" },
+  {
+    "<leader>gg",
+    function()
+      util.terminal.open({ "lazygit" }, { cwd = util.root.dir(), esc_esc = false, ctrl_hjkl = false })
+    end,
+    desc = "Lazygit",
+  },
+  -- stylua: ignore
+  { "<leader>gG", function() util.terminal.open({ "lazygit" }) end, desc = "Lazygit (cwd)" },
 
   { "<leader>ui", vim.show_pos, desc = "Inspect position" },
   { "<leader>l", "<cmd>Lazy<cr>", desc = "Lazy" },
@@ -83,11 +89,6 @@ local keys = {
   { "<leader><tab>]", "<cmd>tabnext<cr>", desc = "Next tab" },
   { "<leader><tab>d", "<cmd>tabclose<cr>", desc = "Close tab" },
   { "<leader><tab>[", "<cmd>tabprevious<cr>", desc = "Previous tab" },
-
-  -- Add undo break-points.
-  { ",", ",<c-g>u", mode = "i" },
-  { ".", ".<c-g>u", mode = "i" },
-  { ";", ";<c-g>u", mode = "i" },
 
   -- stylua: ignore start
   { "<leader>uf", util.format.toggle, desc = "Toggle auto-format (global)" },

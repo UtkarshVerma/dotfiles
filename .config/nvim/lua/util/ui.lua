@@ -18,6 +18,7 @@ local M = {}
 ---@return Highlight?
 ---@nodiscard
 function M.fg(name)
+  ---@diagnostic disable-next-line: undefined-field
   local hl = vim.api.nvim_get_hl(0, { name = name }) --[[@as Highlight]]
   local fg = hl.fg
 
