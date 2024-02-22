@@ -34,6 +34,7 @@ if [[ "$TERM" =~ "^foot" ]]; then
 fi
 
 setopt hist_ignore_all_dups
+setopt posixbuiltins
 
 #-------------------------------------------------------------------------------
 # Plugins
@@ -144,14 +145,9 @@ bindkey '\C-e' edit-command-line
 # Ctrl-f: cd fzf-selected directory
 bindkey -s '\C-f' '^ucd "$(dirname "$(fzf)")"\n'
 
-# Ctrl-o: Open a directory using lf
+# Ctrl-o: Open a directory using $FILE_MANAGER
 case "$FILE_MANAGER" in
-    lf*)
-        (( $+functions[lfcd] )) &>/dev/null &&
-            bindkey -s '\C-o' '^ulfcd\r'
-        ;;
-    nnn*)
-        (( $+functions[nnncd] )) &>/dev/null &&
-            bindkey -s '\C-o' 'nnncd\r'
-        ;;
+    yazi)
+        (( $+functions[ya] )) &>/dev/null &&
+            bindkey -s '\C-o' '^uya\r'
 esac

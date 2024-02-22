@@ -2,7 +2,7 @@
 
 scripts="$XDG_CONFIG_HOME/aliasrc
     $XDG_CONFIG_HOME/lf/lfcd.sh
-    /usr/share/z/z.sh
+    $XDG_CONFIG_HOME/yazi/yazicd.sh
     /opt/ros/noetic/setup.sh
     /usr/bin/virtualenvwrapper_lazy.sh"
 
@@ -12,6 +12,10 @@ echo "$scripts" | while read -r script; do
         . "$script"
     fi
 done
+
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init posix --hook prompt --cmd cd)"
+fi
 
 se() {
     bin_dir="$HOME/.local/bin"
