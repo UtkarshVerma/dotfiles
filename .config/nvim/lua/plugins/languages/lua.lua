@@ -1,3 +1,4 @@
+---@type LazyPluginSpec[]
 return {
   {
     "nvim-treesitter",
@@ -10,21 +11,16 @@ return {
 
   {
     "nvim-lspconfig",
+    ---@type plugins.lspconfig.config
     opts = {
       servers = {
         lua_ls = {
           settings = {
             format = { enable = false },
             Lua = {
-              workspace = { checkThirdParty = false },
-              completion = {
-                callSnippet = "Replace",
-
-                -- Don't be redundant with cmp-buffer
-                workspaceWord = false,
-                showWord = "Disable",
+              workspace = {
+                checkThirdParty = false,
               },
-              telemetry = { enable = false },
             },
           },
         },

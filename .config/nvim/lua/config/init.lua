@@ -32,9 +32,6 @@ function M.setup()
       end
 
       M.load("keymaps")
-
-      util.format.setup()
-      util.lint.setup()
       util.root.setup()
     end,
   })

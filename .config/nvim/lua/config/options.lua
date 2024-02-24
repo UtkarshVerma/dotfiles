@@ -1,3 +1,6 @@
+local config = require("config")
+local util = require("util")
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
@@ -74,7 +77,6 @@ local options = {
 
   splitkeep = "screen",
   virtualedit = "block", -- Allow cursor to move where there is no text in visual block mode
-  formatexpr = "v:lua.require('util').format.formatexpr()",
 }
 
 for k, v in pairs(options) do
@@ -94,3 +96,40 @@ vim.filetype.add({
     def = "c",
   },
 })
+
+local diagnostic_opts = {
+  underline = true,
+  update_in_insert = true,
+  virtual_text = {
+    spacing = 4,
+    source = "if_many",
+    prefix = "●",
+  },
+  virtual_lines = false,
+  severity_sort = true,
+  float = {
+    focusable = false,
+    style = "minimal",
+    source = "if_many",
+    border = util.ui.borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
+  },
+}
+vim.diagnostic.config(diagnostic_opts)
+
+if type(diagnostic_opts.virtual_text) == "table" and diagnostic_opts.virtual_text.prefix == "icons" then
+  diagnostic_opts.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
+    or function(diagnostic)
+      local icons = config.icons.diagnostics
+
+      for d, icon in pairs(icons) do
+        if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+          return icon
+        end
+      end
+    end
+end
+
+for name, icon in pairs(config.icons.diagnostics) do
+  name = "DiagnosticSign" .. name
+  vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
+end

@@ -1,14 +1,100 @@
+---@class plugins.conform.config.format_on_save
+---@field lsp_fallback? boolean
+---@field timeout_ms? integer
+
+---@class plugins.conform.config
+---@field notify_on_error? boolean
+---@field format_on_save? plugins.conform.config.format_on_save|fun(bufnr:integer):plugins.conform.config.format_on_save?
+---@field formatters? table<string, conform.FormatterConfigOverride|fun(bufnr:integer):conform.FormatterConfigOverride>
+---@field formatters_by_ft? table<string, conform.FormatterUnit[]>
+
 local util = require("util")
 
----@type ConformOpts
-local conform_opts = {}
+-- Check if buffer {bufnr} can be formatted.
+---@param bufnr integer
+---@return boolean
+---@nodiscard
+local function can_format(bufnr)
+  local buffer_autoformat = vim.b[bufnr].autoformat --[[@as boolean?]]
+  local global_autoformat = vim.g.autoformat --[[@as boolean]]
+
+  if buffer_autoformat ~= nil then
+    return buffer_autoformat
+  end
+
+  return global_autoformat
+end
+
+-- Display autoformat status for buffer {bufnr}.
+---@param bufnr? integer
+local function show_status(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local enabled = can_format(bufnr)
+  local buffer_autoformat = vim.b[bufnr].autoformat --[[@as boolean?]]
+
+  local lines = {
+    (enabled and "enabled" or "disabled"),
+    ("- [%s] global"):format(vim.g.autoformat and "x" or " "),
+    ("- [%s] buffer%s"):format(
+      (buffer_autoformat or enabled) and "x" or " ",
+      buffer_autoformat == nil and " (inherit)" or ""
+    ),
+  }
+
+  local message = table.concat(lines, "\n")
+  local title = "Format"
+  if enabled then
+    util.log.info(message, title)
+  else
+    util.log.warn(message, title)
+  end
+end
+
+-- Toggle formatting for {mode}.
+---@param mode "buffer"|"global"
+local function toggle_autoformat(mode)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local enabled = can_format(bufnr)
+
+  if mode == "buffer" then
+    vim.b[bufnr].autoformat = not enabled
+  else
+    vim.g.autoformat = not enabled
+    vim.b[bufnr].autoformat = nil
+  end
+
+  show_status(bufnr)
+end
 
 ---@type LazyPluginSpec[]
 return {
   {
+    "mason.nvim",
+    ---@param opts plugins.mason.config
+    opts = function(_, opts)
+      local renames = {
+        biomejs = "biome",
+      }
+
+      local formatters = vim.tbl_map(function(formatter)
+        return renames[formatter] or formatter
+      end, vim.tbl_flatten(vim.tbl_values(util.plugin.opts("conform.nvim").formatters_by_ft)))
+
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, formatters)
+    end,
+  },
+
+  {
     "stevearc/conform.nvim",
+    dependencies = { "mason.nvim" },
+    event = "LazyFile",
     cmd = "ConformInfo",
     keys = {
+      -- stylua: ignore start
+      { "<leader>uf", function() toggle_autoformat("global") end, desc = "Toggle auto-format (global)" },
+      { "<leader>uF", function() toggle_autoformat("buffer") end, desc = "Toggle auto-format (buffer)" },
+      -- stylua: ignore end
       {
         "<leader>cF",
         function()
@@ -19,76 +105,21 @@ return {
       },
     },
     init = function()
-      -- Register the conform formatter on VeryLazy.
-      util.on_very_lazy(function()
-        util.format.register({
-          name = "conform.nvim",
-          priority = 100,
-          format = function(bufnr)
-            require("conform").format({
-              timeout_ms = conform_opts.format.timeout_ms,
-              async = conform_opts.format.async,
-              quiet = conform_opts.format.quiet,
-              bufnr = bufnr,
-            })
-          end,
-          sources = function(bufnr)
-            local ret = require("conform").list_formatters(bufnr)
-
-            ---@param v conform.FormatterInfo
-            return vim.tbl_map(function(v)
-              return v.name
-            end, ret)
-          end,
-        })
-      end)
+      vim.g.autoformat = true
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
-    ---@class ConformOpts
+    ---@type plugins.conform.config
     opts = {
-      format = {
-        timeout_ms = 3000,
-        async = false, -- not recommended to change
-        quiet = false, -- not recommended to change
-      },
-      ---@type table<string, conform.FormatterUnit[]>
-      formatters_by_ft = {},
-      -- The options you set here will be merged with the builtin formatters.
-      -- You can also define any custom formatters here.
-      ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): conform.FormatterConfigOverride?>
-      formatters = {
-        injected = { options = { ignore_errors = true } },
-        -- # Example of using dprint only when a dprint.json file is present
-        -- dprint = {
-        --   condition = function(ctx)
-        --     return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
-        --   end,
-        -- },
-      },
-    },
-    config = function(_, opts)
-      conform_opts = opts
-      require("conform").setup(opts)
-    end,
-  },
-
-  {
-    "mason.nvim",
-    opts = function(_, opts)
-      local renames = {
-        biomejs = "biome",
-      }
-
-      local formatters = vim.tbl_flatten(vim.tbl_values(util.plugin.opts("conform.nvim").formatters_by_ft))
-      for i, formatter in pairs(formatters) do
-        if renames[formatter] then
-          formatters[i] = renames[formatter]
+      notify_on_error = false,
+      format_on_save = function(bufnr)
+        if not can_format(bufnr) then
+          return nil
         end
-      end
 
-      opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, formatters)
-      table.sort(opts.ensure_installed)
-
-      opts.ensure_installed = vim.fn.uniq(opts.ensure_installed)
-    end,
+        return { timeout_ms = 500, lsp_fallback = true }
+      end,
+      formatters_by_ft = {},
+      formatters = {},
+    },
   },
 }

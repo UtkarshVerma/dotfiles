@@ -91,8 +91,6 @@ local keys = {
   { "<leader><tab>[", "<cmd>tabprevious<cr>", desc = "Previous tab" },
 
   -- stylua: ignore start
-  { "<leader>uf", util.format.toggle, desc = "Toggle auto-format (global)" },
-  { "<leader>uF", function() util.format.toggle("buffer") end, desc = "Toggle auto-format (buffer)" },
   { "<leader>us", function() util.toggle.option("spell") end, desc = "Toggle spelling" },
   { "<leader>uw", function() util.toggle.option("wrap") end, desc = "Toggle word wrap" },
   { "<leader>uL", function() util.toggle.option("relativenumber") end, desc = "Toggle relative line numbers" },

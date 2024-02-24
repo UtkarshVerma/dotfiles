@@ -20,7 +20,7 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
     { import = "plugins.languages" },
-    { import = "plugins.extras.writing" },
+    -- { import = "plugins.extras.writing" },
   },
   change_detection = { enabled = false },
   defaults = {

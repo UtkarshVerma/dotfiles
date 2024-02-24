@@ -13,6 +13,7 @@ return {
 
   {
     "nvim-lspconfig",
+    ---@type plugins.lspconfig.config
     opts = {
       servers = {
         -- TODO: Switch to biome lsp in nvim v0.10

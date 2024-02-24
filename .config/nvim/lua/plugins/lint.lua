@@ -31,24 +31,32 @@ end
 ---@type LazyPluginSpec[]
 return {
   {
+    "mason.nvim",
+    ---@param opts plugins.mason.config
+    opts = function(_, opts)
+      local renames = {
+        biomejs = "biome",
+      }
+
+      local linters = vim.tbl_map(function(linter)
+        return renames[linter] or linter
+      end, vim.tbl_flatten(vim.tbl_values(util.plugin.opts("nvim-lint").linters_by_ft)))
+
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, linters)
+    end,
+  },
+
+  {
     "mfussenegger/nvim-lint",
     event = "LazyFile",
-    init = function()
-      -- Register the nvim-lint linter on VeryLazy.
-      util.on_very_lazy(function()
-        util.lint.register({
-          name = "nvim-lint",
-          priority = 100,
-          lint = function(_)
-            require("lint").try_lint()
-          end,
-          sources = function(bufnr)
-            local linters = require("lint")._resolve_linter_by_ft(vim.bo[bufnr].filetype)
-
-            return linters
-          end,
-        })
-      end)
+    dependencies = { "mason.nvim" },
+    init = function(_)
+      util.create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+        callback = function()
+          require("lint").try_lint()
+        end,
+      })
     end,
     ---@type plugins.lint.config
     opts = {
@@ -59,27 +67,6 @@ return {
       local lint = require("lint")
       override_linters(lint.linters, opts.linters)
       lint.linters_by_ft = opts.linters_by_ft
-    end,
-  },
-
-  {
-    "mason.nvim",
-    opts = function(_, opts)
-      local renames = {
-        biomejs = "biome",
-      }
-
-      local linters = vim.tbl_flatten(vim.tbl_values(util.plugin.opts("nvim-lint").linters_by_ft))
-      for i, linter in pairs(linters) do
-        if renames[linter] then
-          linters[i] = renames[linter]
-        end
-      end
-
-      opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, linters)
-      table.sort(opts.ensure_installed)
-
-      opts.ensure_installed = vim.fn.uniq(opts.ensure_installed)
     end,
   },
 }
