@@ -93,8 +93,6 @@ local keys = {
   -- stylua: ignore start
   { "<leader>us", function() util.toggle.option("spell") end, desc = "Toggle spelling" },
   { "<leader>uw", function() util.toggle.option("wrap") end, desc = "Toggle word wrap" },
-  { "<leader>uL", function() util.toggle.option("relativenumber") end, desc = "Toggle relative line numbers" },
-  { "<leader>ul", util.toggle.number, desc = "Toggle line numbers" },
   { "<leader>ud", util.toggle.diagnostics, desc = "Toggle diagnostics" },
   { "<leader>uc", function() util.toggle.option("conceallevel", { 0, conceallevel }) end, desc = "Toggle conceal" },
   -- stylua: ignore end
@@ -108,8 +106,6 @@ local keys = {
   { "]w", diagnostic_goto(true, "WARN"), desc = "Next warning" },
   { "[w", diagnostic_goto(false, "WARN"), desc = "Previous warning" },
 
-  -- stylua: ignore
-  { "<leader>cf", function() util.format.format({ force = true }) end, mode = { "n", "v" }, desc = "Format" },
   {
     "<leader>ur",
     "<cmd>nohlsearch<bar>diffupdate<bar>normal! <c-l><cr>",

@@ -1,14 +1,6 @@
 ---@class util.toggle
 local M = {}
 
-local config = {
-  ---@type {number: boolean, relativenumber: boolean}
-  nu = { number = true, relativenumber = true },
-
-  ---@type boolean
-  diagnostics = true,
-}
-
 -- Toggle {option} between {values} or `true`/`false` for the current buffer.
 ---@generic T
 ---@param option string
@@ -23,7 +15,7 @@ function M.option(option, values)
       vim.opt_local[option] = values[1]
     end
 
-    util.log.info(("Set %s to %s"):format(option, vim.opt_local[option]:get()), "Option")
+    util.log.info(string.format("Set %s to %s", option, vim.opt_local[option]:get()), "Option")
     return
   end
 
@@ -35,32 +27,17 @@ function M.option(option, values)
   end
 end
 
--- Toggle line numbers.
-function M.number()
+-- Toggle diagnostics for buffer {bufnr} or globally if {bufnr} is omitted.
+---@param bufnr? integer
+function M.diagnostics(bufnr)
   local util = require("util")
 
-  if vim.opt_local.number:get() or vim.opt_local.relativenumber:get() then
-    config.nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get() }
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    util.log.warn("Disabled line numbers", "Option")
-  else
-    vim.opt_local.number = config.nu.number
-    vim.opt_local.relativenumber = config.nu.relativenumber
-    util.log.info("Enabled line numbers", "Option")
-  end
-end
-
--- Toggle diagnostics.
-function M.diagnostics()
-  local util = require("util")
-
-  config.diagnostics = not config.diagnostics
-  if config.diagnostics then
-    vim.diagnostic.enable()
+  local is_disabled = vim.diagnostic.is_disabled(bufnr)
+  if is_disabled then
+    vim.diagnostic.enable(bufnr)
     util.log.info("Enabled diagnostics", "Diagnostics")
   else
-    vim.diagnostic.disable()
+    vim.diagnostic.disable(bufnr)
     util.log.warn("Disabled diagnostics", "Diagnostics")
   end
 end

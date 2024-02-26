@@ -52,7 +52,7 @@ return {
     event = "LazyFile",
     dependencies = { "mason.nvim" },
     init = function(_)
-      util.create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+      vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
         callback = function()
           require("lint").try_lint()
         end,

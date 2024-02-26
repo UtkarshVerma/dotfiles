@@ -1,6 +1,8 @@
+---@type LazyPluginSpec[]
 return {
   {
     "which-key.nvim",
+    ---@type plugins.which_key.config
     opts = {
       defaults = {
         ["<leader>sn"] = { name = "+noice" },
@@ -82,6 +84,7 @@ return {
       },
     },
     dependencies = { "nui.nvim" },
+    ---@type NoiceConfig
     opts = {
       lsp = {
         override = {

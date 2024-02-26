@@ -1,24 +1,3 @@
----@alias util.autocommand.event string|string[]
-
----@class util.autocommand.callback.arg
----@field id number
----@field event string
----@field group? number
----@field match string
----@field buf number
----@field file string
----@field data table
-
----@alias util.autocommand.callback fun(arg:util.autocommand.callback.arg):boolean?
-
----@class util.autocommand.opts
----@field group? integer
----@field desc? string
----@field command? string
----@field buffer? integer
----@field pattern? string|string[]
----@field callback? util.autocommand.callback
-
 local util = require("lazy.core.util")
 
 ---@class util
@@ -55,9 +34,9 @@ local function pretty_trace()
       end
 
       source = vim.fn.fnamemodify(source, ":p:~:.")
-      local line = (" - %s:%s"):format(source, info.currentline)
+      local line = string.format(" - %s:%s", source, info.currentline)
       if info.name then
-        line = ("%s _in_ **%s**"):format(line, info.name)
+        line = string.format("%s _in_ **%s**", line, info.name)
       end
 
       table.insert(trace, line)
@@ -92,7 +71,7 @@ end
 -- Execute a {callback} on the `VeryLazy` event.
 ---@param callback fun()
 function M.on_very_lazy(callback)
-  M.create_autocmd("User", {
+  vim.api.nvim_create_autocmd("User", {
     pattern = "VeryLazy",
     callback = callback,
   })
@@ -143,14 +122,14 @@ end
 ---@generic T
 ---@param func fun(...):T
 ---@param name string
----@return T
+---@return unknown?
 ---@nodiscard
 function M.get_upvalue(func, name)
   local i = 1
 
   while true do
     local n, v = debug.getupvalue(func, i)
-    if not n then
+    if n == nil then
       return nil
     end
 
@@ -160,20 +139,6 @@ function M.get_upvalue(func, name)
 
     i = i + 1
   end
-end
-
--- Create an autocommand.
----@param event util.autocommand.event
----@param opts util.autocommand.opts
-function M.create_autocmd(event, opts)
-  vim.api.nvim_create_autocmd(event, {
-    group = opts.group,
-    buffer = opts.buffer,
-    command = opts.command,
-    pattern = opts.pattern,
-    desc = opts.desc,
-    callback = opts.callback,
-  })
 end
 
 return M

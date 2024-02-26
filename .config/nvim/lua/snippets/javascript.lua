@@ -1,5 +1,6 @@
----@diagnostic disable: undefined-global
+require("snippets._env")
 
+---@type snippet[]
 return {
   s(
     "fn",

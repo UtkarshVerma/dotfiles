@@ -34,8 +34,8 @@ local function show_status(bufnr)
 
   local lines = {
     (enabled and "enabled" or "disabled"),
-    ("- [%s] global"):format(vim.g.autoformat and "x" or " "),
-    ("- [%s] buffer%s"):format(
+    string.format("- [%s] global", vim.g.autoformat and "x" or " "),
+    string.format("- [%s] buffer%s", 
       (buffer_autoformat or enabled) and "x" or " ",
       buffer_autoformat == nil and " (inherit)" or ""
     ),

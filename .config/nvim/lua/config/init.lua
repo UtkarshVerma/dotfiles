@@ -23,7 +23,7 @@ function M.setup()
   end
 
   local group = vim.api.nvim_create_augroup("Editor", {})
-  util.create_autocmd("User", {
+  vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "VeryLazy",
     callback = function()

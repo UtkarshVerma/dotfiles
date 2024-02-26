@@ -129,7 +129,7 @@ end
 -- Execute {callback} on the `LspAttach` event.
 ---@param callback fun(client: lsp.Client, bufnr?: integer)
 local function on_lsp_attach(callback)
-  util.create_autocmd("LspAttach", {
+  vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -144,10 +144,23 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = { "cmp-nvim-lsp" },
     init = function(_)
-      -- Setup keymaps.
-      on_lsp_attach(function(_, bufnr)
+      on_lsp_attach(function(client, bufnr)
+        -- Setup keymaps.
         local keymaps = get_keymaps(bufnr)
         bind_keys(keymaps)
+
+        -- Highlight the word under cursor when it rests for some time.
+        if client and client.server_capabilities.documentHighlightProvider then
+          vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+            buffer = bufnr,
+            callback = vim.lsp.buf.document_highlight,
+          })
+
+          vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+            buffer = bufnr,
+            callback = vim.lsp.buf.clear_references,
+          })
+        end
       end)
 
       -- Enable inlay hints.

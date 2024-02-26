@@ -39,12 +39,4 @@ function M.cwd()
   return M.normalize_path(cwd)
 end
 
--- Get the file path for buffer {bufnr}.
----@param bufnr integer
----@return string
----@nodiscard
-function M.buffer_path(bufnr)
-  return M.normalize_path(vim.api.nvim_buf_get_name(bufnr))
-end
-
 return M

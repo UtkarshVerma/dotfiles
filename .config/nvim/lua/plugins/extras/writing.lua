@@ -5,7 +5,6 @@ return {
     keys = {
       { "<leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
     },
-    -- TODO: Hide lualine
     opts = {
       window = {
         backdrop = 0.95,
@@ -22,16 +21,14 @@ return {
         },
       },
       on_open = function(_)
-        local bufnr = vim.api.nvim_get_current_buf()
-        if not vim.diagnostic.is_disabled(bufnr) then
-          vim.b[bufnr].restore_diagnostics = true
-          vim.diagnostic.disable(bufnr)
+        if not vim.diagnostic.is_disabled(0) then
+          vim.b[0].restore_diagnostics = true
+          vim.diagnostic.disable(0)
         end
       end,
       on_close = function()
-        local bufnr = vim.api.nvim_get_current_buf()
-        if vim.b[bufnr].restore_diagnostics then
-          vim.diagnostic.enable(bufnr)
+        if vim.b[0].restore_diagnostics then
+          vim.diagnostic.enable(0)
         end
       end,
     },
@@ -56,18 +53,18 @@ return {
           },
         },
       },
-      setup = {
-        ltex = function(_, opts)
-          opts.on_attach = function(_, _)
-            require("ltex_extra").setup({
-              load_langs = { "en-GB" },
-              path = vim.fn.expand("~/.local/state/ltex/"),
-            })
-          end
+      -- setup = {
+      --   ltex = function(_, opts)
+      --     opts.on_attach = function(_, _)
+      --       require("ltex_extra").setup({
+      --         load_langs = { "en-GB" },
+      --         path = vim.fn.expand("~/.local/state/ltex/"),
+      --       })
+      --     end
 
-          return false
-        end,
-      },
+      --     return false
+      --   end,
+      -- },
     },
   },
 }

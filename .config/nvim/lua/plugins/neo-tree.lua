@@ -111,20 +111,6 @@ return {
         end,
         desc = "Explorer (cwd)",
       },
-      {
-        "<leader>ge",
-        function()
-          require("neo-tree.command").execute({ source = "git_status", toggle = true })
-        end,
-        desc = "Git explorer",
-      },
-      {
-        "<leader>be",
-        function()
-          require("neo-tree.command").execute({ source = "buffers", toggle = true })
-        end,
-        desc = "Buffer explorer",
-      },
     },
     init = function()
       if vim.fn.argc() == 1 then
@@ -136,7 +122,7 @@ return {
     end,
     ---@type plugins.neo_tree.config
     opts = {
-      sources = { "filesystem", "buffers", "git_status" },
+      sources = { "filesystem" },
       popup_border_style = util.ui.borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
       event_handlers = {
         { event = "neo_tree_window_after_open", handler = hide_cursor },
@@ -184,17 +170,5 @@ return {
         follow_current_file = { enabled = true },
       },
     },
-    config = function(_, opts)
-      require("neo-tree").setup(opts)
-
-      util.create_autocmd("TermClose", {
-        pattern = "*lazygit",
-        callback = function()
-          if package.loaded["neo-tree.sources.git_status"] then
-            require("neo-tree.sources.git_status").refresh()
-          end
-        end,
-      })
-    end,
   },
 }

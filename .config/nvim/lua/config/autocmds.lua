@@ -1,6 +1,4 @@
-local util = require("util")
-
----@type {[1]: util.autocommand.event, [2]: util.autocommand.opts}[]
+---@type {[1]: vim.autocommand.event, [2]: vim.autocommand.opts}[]
 local autocommands = {
   {
     { "FocusGained", "TermClose", "TermLeave" },
@@ -109,5 +107,5 @@ local autocommands = {
 }
 
 for _, autocommand in ipairs(autocommands) do
-  util.create_autocmd(autocommand[1], autocommand[2])
+  vim.api.nvim_create_autocmd(autocommand[1], autocommand[2])
 end

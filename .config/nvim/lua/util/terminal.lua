@@ -41,8 +41,7 @@ function M.open(cmd, opts)
     vim.keymap.set("t", "<c-l>", "<c-l>", { buffer = buf, nowait = true })
   end
 
-  local util = require("util")
-  util.create_autocmd("BufEnter", {
+  vim.api.nvim_create_autocmd("BufEnter", {
     buffer = buf,
     callback = function()
       vim.cmd.startinsert()

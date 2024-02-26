@@ -27,13 +27,13 @@ local detectors = {
     return vim.tbl_values(vim.lsp.buf.list_workspace_folders())
   end,
 
-  -- Get the root directory based on file patterns.
+  -- Get the root directory for buffer {bufnr} based on file patterns passed as {spec}.
   ---@nodiscard
   pattern = function(bufnr, spec)
     local util = require("util")
     local patterns = type(spec) == "string" and { spec } or spec
 
-    local path = util.fs.buffer_path(bufnr) or util.fs.cwd()
+    local path = util.fs.normalize_path(vim.api.nvim_buf_get_name(bufnr)) or util.fs.cwd()
     local pattern = vim.fs.find(patterns, { path = path, upward = true })[1]
 
     return pattern and { vim.fs.dirname(pattern) } or {}
@@ -56,8 +56,7 @@ local function detect(opts)
     local detector = detectors[type(spec) == "string" and spec or "pattern"]
 
     local paths = detector(bufnr, spec)
-
-    paths = vim.tbl_map(util.fs.normalize_path, paths) --[[ @as string[] ]]
+    paths = vim.tbl_map(util.fs.normalize_path, paths) --[=[@as string[]]=]
 
     -- Sort paths based in increasing order of length.
     table.sort(paths, function(a, b)
@@ -87,7 +86,7 @@ local function show_roots()
     for _, path in ipairs(root.paths) do
       local s = type(root.spec) == "table" and table.concat(root.spec --[[@as table]], ", ") or root.spec
 
-      lines[#lines + 1] = ("- [%s] `%s` **(%s)**"):format(first and "x" or " ", path, s)
+      lines[#lines + 1] = string.format("- [%s] `%s` **(%s)**", first and "x" or " ", path, s)
       first = false
     end
   end
@@ -121,14 +120,12 @@ end
 
 ---@param opts? {specs?: util.root.spec[]}
 function M.setup(opts)
-  local util = require("util")
-
   opts = opts or {}
   M.specs = opts.specs or { "lsp", { ".git", "lua" }, "cwd" }
 
   vim.api.nvim_create_user_command("Root", show_roots, { desc = "Roots for the current buffer" })
 
-  util.create_autocmd("BufDelete", {
+  vim.api.nvim_create_autocmd("BufDelete", {
     desc = "Reset root cache on buffer delete",
     callback = function(arg)
       root_dir_cache[arg.buf] = nil

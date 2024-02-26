@@ -1,8 +1,18 @@
+---@type LazyPluginSpec[]
 return {
   {
     "folke/tokyonight.nvim",
-    event = "VeryLazy",
-    opts = {},
+    lazy = false,
+    priority = 1000,
+    ---@type Config
+    opts = {
+      style = "night",
+    },
+    config = function(_, opts)
+      local tokyonight = require("tokyonight")
+      tokyonight.setup(opts)
+      tokyonight.load(opts)
+    end,
   },
 
   {
@@ -39,8 +49,8 @@ return {
 
   {
     "loctvl842/monokai-pro.nvim",
-    lazy = false,
-    priority = 1000,
+    -- lazy = false,
+    -- priority = 1000,
     dependencies = { "nvim-web-devicons" },
     opts = {
       transparent_background = false,
