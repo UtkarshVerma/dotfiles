@@ -41,7 +41,8 @@ local function filetype()
     return ""
   end
 
-  local icon = require("nvim-web-devicons").get_icon_by_filetype(vim.bo.filetype) .. " "
+  local icon = require("nvim-web-devicons").get_icon_by_filetype(vim.bo.filetype)
+  icon = icon and icon .. " " or ""
   return string.format("%s%s", icon, ft)
 end
 

@@ -55,7 +55,18 @@ local options = {
   pumheight = 10, -- Maximum number of entries in a popup
   relativenumber = true, -- Relative line numbers
   scrolloff = 4, -- Lines of context
-  sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp" },
+  sessionoptions = {
+    "blank",
+    "buffers",
+    "curdir",
+    "folds",
+    "help",
+    "tabpages",
+    "winsize",
+    "winpos",
+    "terminal",
+    "localoptions",
+  },
   shiftround = true, -- Round indent
   showmode = false, -- Dont show mode since we have a statusline
   sidescrolloff = 8, -- Columns of context

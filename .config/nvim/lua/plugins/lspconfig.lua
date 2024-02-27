@@ -1,4 +1,5 @@
 ---@class plugins.lspconfig.server.opts
+---@field cmd? string[]
 ---@field capabilities? table
 ---@field on_attach? fun(client:lsp.Client, bufnr:integer):integer
 
