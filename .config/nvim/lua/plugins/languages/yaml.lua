@@ -1,6 +1,10 @@
+-- TODO: Relies on lspconfig's `setup`.
+
+---@type LazyPluginSpec[]
 return {
   {
     "nvim-treesitter",
+    ---@param opts plugins.treesitter.config
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "yaml",
@@ -15,6 +19,7 @@ return {
 
   {
     "nvim-lspconfig",
+    ---@type plugins.lspconfig.config
     opts = {
       servers = {
         yamlls = {
@@ -50,7 +55,7 @@ return {
             "-d",
             string.format(
               "{extends: default, rules: {document-start: disable, line-length: {max: %d}}}",
-              tonumber(vim.o.colorcolumn or "80") - 1
+              (tonumber(vim.o.colorcolumn) or 80) - 1
             ),
           },
         },
@@ -60,6 +65,7 @@ return {
 
   {
     "conform.nvim",
+    ---@type plugins.lspconfig.config
     opts = {
       formatters_by_ft = {
         yaml = { "yamlfmt" },
@@ -70,7 +76,7 @@ return {
             "-formatter",
             string.format(
               "type=basic,retain_line_breaks=true,max_line_length=%d",
-              tonumber(vim.o.colorcolumn or "80") - 1
+              (tonumber(vim.o.colorcolumn) or 80) - 1
             ),
           },
         },

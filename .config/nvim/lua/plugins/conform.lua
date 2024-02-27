@@ -35,7 +35,8 @@ local function show_status(bufnr)
   local lines = {
     (enabled and "enabled" or "disabled"),
     string.format("- [%s] global", vim.g.autoformat and "x" or " "),
-    string.format("- [%s] buffer%s", 
+    string.format(
+      "- [%s] buffer%s",
       (buffer_autoformat or enabled) and "x" or " ",
       buffer_autoformat == nil and " (inherit)" or ""
     ),
@@ -91,9 +92,10 @@ return {
     event = "LazyFile",
     cmd = "ConformInfo",
     keys = {
+      { "<leader>uC", "<cmd>ConformInfo<cr>", desc = "Conform information" },
       -- stylua: ignore start
-      { "<leader>uf", function() toggle_autoformat("global") end, desc = "Toggle auto-format (global)" },
-      { "<leader>uF", function() toggle_autoformat("buffer") end, desc = "Toggle auto-format (buffer)" },
+      { "<leader>tf", function() toggle_autoformat("global") end, desc = "Auto-format (global)" },
+      { "<leader>tF", function() toggle_autoformat("buffer") end, desc = "Auto-format (buffer)" },
       -- stylua: ignore end
       {
         "<leader>cF",

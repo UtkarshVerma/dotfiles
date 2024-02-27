@@ -38,7 +38,7 @@ local function search_files(opts)
   return function()
     opts = vim.tbl_deep_extend("force", { cwd = util.root.dir() }, opts or {})
     local cwd = opts.cwd or util.fs.cwd()
-    local path_sep = package.config:sub(1, 1)
+    local path_sep = util.fs.path_sep
 
     local picker = "find_files"
     if vim.loop.fs_stat(cwd .. path_sep .. ".git") then
@@ -118,7 +118,7 @@ return {
         -- stylua: ignore
         { "<leader>sW", function() builtin.grep_string({ cwd = false }) end, mode = "v", desc = "Selection (cwd)" },
         {
-          "<leader>uC",
+          "<leader>uc",
           function()
             builtin.colorscheme({ enable_preview = true })
           end,

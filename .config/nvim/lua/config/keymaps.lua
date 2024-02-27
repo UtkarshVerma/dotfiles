@@ -2,9 +2,14 @@ local util = require("util")
 
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 
-local function diagnostic_goto(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+--- Go to next or previous diagnostic of severity {severity} based on {direction}.
+---@param direction "next"|"prev"
+---@param severity DiagnosticSeverity?
+---@return fun()
+local function goto_diagnostic(direction, severity)
+  local go = direction == "next" and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
+
   return function()
     go({ severity = severity })
   end
@@ -47,22 +52,26 @@ local keys = {
   { "]q", vim.cmd.cnext, desc = "Next quickfix" },
 
   {
-    "<leader>gg",
+    "<leader>gl",
     function()
       util.terminal.open({ "lazygit" }, { cwd = util.root.dir(), esc_esc = false, ctrl_hjkl = false })
     end,
     desc = "Lazygit",
   },
   -- stylua: ignore
-  { "<leader>gG", function() util.terminal.open({ "lazygit" }) end, desc = "Lazygit (cwd)" },
+  { "<leader>gL", function() util.terminal.open({ "lazygit" }) end, desc = "Lazygit (cwd)" },
 
   { "<leader>ui", vim.show_pos, desc = "Inspect position" },
-  { "<leader>l", "<cmd>Lazy<cr>", desc = "Lazy" },
+  { "<leader>ul", "<cmd>Lazy<cr>", desc = "Lazy" },
   { "<leader>qq", "<cmd>qa<cr>", desc = "Quit" },
 
   -- stylua: ignore start
-  { "<leader>ft", function() util.terminal.open(nil, { cwd = util.root.dir() }) end, desc = "Terminal (root dir)" },
-  { "<leader>fT", function() util.terminal.open() end, desc = "Terminal (cwd)" },
+  { "<leader>tt", function() util.terminal.open(nil, { cwd = util.root.dir() }) end, desc = "Terminal (root dir)" },
+  { "<leader>tT", function() util.terminal.open() end, desc = "Terminal (cwd)" },
+  { "<leader>ts", function() util.toggle.option("spell") end, desc = "Spelling" },
+  { "<leader>tw", function() util.toggle.option("wrap") end, desc = "Word wrap" },
+  { "<leader>td", util.toggle.diagnostics, desc = "Diagnostics" },
+  { "<leader>tc", function() util.toggle.option("conceallevel", { 0, conceallevel }) end, desc = "Conceal" },
   -- stylua: ignore end
 
   -- Terminal mappings
@@ -79,8 +88,6 @@ local keys = {
   { "<leader>wd", "<C-W>c", desc = "Delete window", remap = true },
   { "<leader>w-", "<C-W>s", desc = "Split window below", remap = true },
   { "<leader>w|", "<C-W>v", desc = "Split window right", remap = true },
-  { "<leader>-", "<C-W>s", desc = "Split window below", remap = true },
-  { "<leader>|", "<C-W>v", desc = "Split window right", remap = true },
 
   -- Tabs
   { "<leader><tab>l", "<cmd>tablast<cr>", desc = "Last tab" },
@@ -90,21 +97,9 @@ local keys = {
   { "<leader><tab>d", "<cmd>tabclose<cr>", desc = "Close tab" },
   { "<leader><tab>[", "<cmd>tabprevious<cr>", desc = "Previous tab" },
 
-  -- stylua: ignore start
-  { "<leader>us", function() util.toggle.option("spell") end, desc = "Toggle spelling" },
-  { "<leader>uw", function() util.toggle.option("wrap") end, desc = "Toggle word wrap" },
-  { "<leader>ud", util.toggle.diagnostics, desc = "Toggle diagnostics" },
-  { "<leader>uc", function() util.toggle.option("conceallevel", { 0, conceallevel }) end, desc = "Toggle conceal" },
-  -- stylua: ignore end
-
   -- Diagnostics
-  { "<leader>cd", vim.diagnostic.open_float, desc = "Line diagnostics" },
-  { "]d", diagnostic_goto(true), desc = "Next diagnostic" },
-  { "[d", diagnostic_goto(false), desc = "Previous diagnostic" },
-  { "]e", diagnostic_goto(true, "ERROR"), desc = "Next error" },
-  { "[e", diagnostic_goto(false, "ERROR"), desc = "Previous error" },
-  { "]w", diagnostic_goto(true, "WARN"), desc = "Next warning" },
-  { "[w", diagnostic_goto(false, "WARN"), desc = "Previous warning" },
+  { "]d", goto_diagnostic("next"), desc = "Next diagnostic" },
+  { "[d", goto_diagnostic("prev"), desc = "Previous diagnostic" },
 
   {
     "<leader>ur",

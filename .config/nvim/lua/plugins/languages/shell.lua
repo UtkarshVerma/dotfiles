@@ -1,6 +1,8 @@
+---@type LazyPluginSpec[]
 return {
   {
     "nvim-treesitter",
+    ---@param opts plugins.treesitter.config
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "bash",
@@ -10,6 +12,7 @@ return {
 
   {
     "nvim-lspconfig",
+    ---@type plugins.lspconfig.config
     opts = {
       servers = {
         bashls = {
@@ -40,13 +43,14 @@ return {
 
   {
     "conform.nvim",
+    ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
         sh = { "shfmt" },
       },
       formatters = {
         shfmt = {
-          prepend_args = { "--indent", vim.o.shiftwidth or 4, "--case-indent" },
+          prepend_args = { "--indent", tostring(vim.o.shiftwidth or 4), "--case-indent" },
         },
       },
     },

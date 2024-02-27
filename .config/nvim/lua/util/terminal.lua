@@ -1,5 +1,3 @@
--- TODO: Do we need this?
-
 ---@class util.terminal
 local M = {}
 
@@ -15,13 +13,15 @@ local terminals = {}
 ---@param cmd? string[]|string
 ---@param opts? util.terminal.opts
 function M.open(cmd, opts)
-  opts = vim.tbl_deep_extend("force", {
+  opts = vim.tbl_extend("force", {
     ft = "lazyterm",
     size = { width = 0.9, height = 0.9 },
-  }, opts or {}, { persistent = true }) --[[@as util.terminal.opts]]
+    persistent = true,
+    esc_esc = true,
+    ctrl_hjkl = true,
+  }, opts or {})
 
   local termkey = vim.inspect({ cmd = cmd or "shell", cwd = opts.cwd, env = opts.env, count = vim.v.count1 })
-
   if terminals[termkey] and terminals[termkey]:buf_valid() then
     terminals[termkey]:toggle()
     return
@@ -30,11 +30,11 @@ function M.open(cmd, opts)
   terminals[termkey] = require("lazy.util").float_term(cmd, opts)
   local buf = terminals[termkey].buf
   vim.b[buf].lazyterm_cmd = cmd
-  if opts.esc_esc == false then
+  if not opts.esc_esc then
     vim.keymap.set("t", "<esc>", "<esc>", { buffer = buf, nowait = true })
   end
 
-  if opts.ctrl_hjkl == false then
+  if not opts.ctrl_hjkl then
     vim.keymap.set("t", "<c-h>", "<c-h>", { buffer = buf, nowait = true })
     vim.keymap.set("t", "<c-j>", "<c-j>", { buffer = buf, nowait = true })
     vim.keymap.set("t", "<c-k>", "<c-k>", { buffer = buf, nowait = true })

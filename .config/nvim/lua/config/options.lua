@@ -1,5 +1,4 @@
 local config = require("config")
-local util = require("util")
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -39,7 +38,7 @@ local options = {
   -- autowrite = true, -- Enable auto write
   clipboard = "unnamedplus", -- Sync with system clipboard
   completeopt = { "menuone", "noselect", "preview" },
-  conceallevel = 3, -- Hide * markup for bold and italic
+  conceallevel = 2, -- Hide concealed text.
   confirm = true, -- Confirm to save changes before exiting modified buffer
   cursorline = true, -- Enable highlighting of the current line
   expandtab = true, -- Use spaces instead of tabs
@@ -83,7 +82,6 @@ for k, v in pairs(options) do
   vim.opt[k] = v
 end
 vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
-vim.opt.whichwrap:append({ ["<"] = true, [">"] = true }) -- Wrap movement between lines using arrow keys
 vim.opt.formatoptions:remove({ "c", "r", "o" })
 
 vim.filetype.add({
@@ -97,7 +95,7 @@ vim.filetype.add({
   },
 })
 
-local diagnostic_opts = {
+vim.diagnostic.config({
   underline = true,
   update_in_insert = true,
   virtual_text = {
@@ -111,23 +109,8 @@ local diagnostic_opts = {
     focusable = false,
     style = "minimal",
     source = "if_many",
-    border = util.ui.borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
   },
-}
-vim.diagnostic.config(diagnostic_opts)
-
-if type(diagnostic_opts.virtual_text) == "table" and diagnostic_opts.virtual_text.prefix == "icons" then
-  diagnostic_opts.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
-    or function(diagnostic)
-      local icons = config.icons.diagnostics
-
-      for d, icon in pairs(icons) do
-        if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-          return icon
-        end
-      end
-    end
-end
+})
 
 for name, icon in pairs(config.icons.diagnostics) do
   name = "DiagnosticSign" .. name

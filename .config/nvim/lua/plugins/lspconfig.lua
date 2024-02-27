@@ -1,4 +1,8 @@
----@class plugins.lspconfig.config.server: lspconfig.Config
+---@class plugins.lspconfig.server.opts
+---@field capabilities? table
+---@field on_attach? fun(client:lsp.Client, bufnr:integer):integer
+
+---@class plugins.lspconfig.config.server: plugins.lspconfig.server.opts
 ---@field keys? plugins.lspconfig.key[]
 
 ---@class plugins.lspconfig.config
@@ -143,6 +147,9 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = { "cmp-nvim-lsp" },
+    keys = {
+      { "<leader>uL", "<cmd>LspInfo<cr>", "LSP information" },
+    },
     init = function(_)
       on_lsp_attach(function(client, bufnr)
         -- Setup keymaps.

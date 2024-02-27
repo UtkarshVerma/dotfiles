@@ -33,7 +33,7 @@ local detectors = {
     local util = require("util")
     local patterns = type(spec) == "string" and { spec } or spec
 
-    local path = util.fs.normalize_path(vim.api.nvim_buf_get_name(bufnr)) or util.fs.cwd()
+    local path = util.fs.normalize(vim.api.nvim_buf_get_name(bufnr)) or util.fs.cwd()
     local pattern = vim.fs.find(patterns, { path = path, upward = true })[1]
 
     return pattern and { vim.fs.dirname(pattern) } or {}
@@ -56,7 +56,7 @@ local function detect(opts)
     local detector = detectors[type(spec) == "string" and spec or "pattern"]
 
     local paths = detector(bufnr, spec)
-    paths = vim.tbl_map(util.fs.normalize_path, paths) --[=[@as string[]]=]
+    paths = vim.tbl_map(util.fs.normalize, paths) --[=[@as string[]]=]
 
     -- Sort paths based in increasing order of length.
     table.sort(paths, function(a, b)

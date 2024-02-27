@@ -1,6 +1,8 @@
+---@type LazyPluginSpec[]
 return {
   {
     "nvim-treesitter",
+    ---@param opts plugins.treesitter.config
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "json",
@@ -18,6 +20,7 @@ return {
   {
     "nvim-lspconfig",
     dependencies = { "SchemaStore.nvim" },
+    ---@type plugins.lspconfig.config
     opts = {
       servers = {
         jsonls = {
@@ -39,6 +42,7 @@ return {
 
   {
     "conform.nvim",
+    ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
         json = { "biome" },

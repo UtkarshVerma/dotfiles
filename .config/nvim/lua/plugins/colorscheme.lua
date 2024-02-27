@@ -1,98 +1,77 @@
+local palette = require("util.colors")
+
 ---@type LazyPluginSpec[]
 return {
   {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    ---@type Config
-    opts = {
-      style = "night",
-    },
-    config = function(_, opts)
-      local tokyonight = require("tokyonight")
-      tokyonight.setup(opts)
-      tokyonight.load(opts)
-    end,
-  },
-
-  {
     "catppuccin/nvim",
     name = "catppuccin",
-    event = "VeryLazy",
+    lazy = false,
+    priority = 1000,
+    ---@type CatppuccinOptions
     opts = {
-      integrations = {
-        nvimtree = false,
-        neotree = true,
-        leap = true,
-        telescope = true,
-        noice = true,
-        notify = true,
-        mini = true,
-        which_key = true,
-      },
-      custom_highlights = function(c)
-        return {
-          ColorColumn = { bg = c.mantle },
-
-          -- Mine
-          DashboardRecent = { fg = c.pink },
-          DashboardProject = { fg = c.blue },
-          DashboardConfiguration = { fg = c.base.white },
-          DashboardSession = { fg = c.green },
-          DashboardLazy = { fg = c.sky },
-          DashboardServer = { fg = c.yellow },
-          DashboardQuit = { fg = c.red },
-        }
-      end,
-    },
-  },
-
-  {
-    "loctvl842/monokai-pro.nvim",
-    -- lazy = false,
-    -- priority = 1000,
-    dependencies = { "nvim-web-devicons" },
-    opts = {
-      transparent_background = false,
-      devicons = true,
-      filter = "spectrum",
-      day_night = {
-        enable = false,
-        day_filter = "classic",
-        night_filter = "octagon",
-      },
-      inc_search = "background",
-      background_clear = {},
-      plugins = {
-        indent_blankline = {
-          context_highlight = "pro",
-          context_start_underline = false,
+      color_overrides = {
+        -- TODO: Compute other colors from the base 16 palette.
+        mocha = {
+          rosewater = palette.special.cursor,
+          flamingo = "#f2cdcd",
+          pink = palette.normal.magenta,
+          mauve = "#cba6f7",
+          red = palette.normal.red,
+          maroon = "#eba0ac",
+          peach = "#fab387",
+          yellow = palette.normal.yellow,
+          green = palette.normal.green,
+          teal = palette.normal.cyan,
+          sky = "#89dceb",
+          sapphire = "#74c7ec",
+          blue = palette.normal.blue,
+          lavender = "#b4befe",
+          text = palette.special.foreground,
+          subtext1 = palette.normal.white,
+          subtext0 = palette.bright.white,
+          overlay2 = "#9399b2",
+          overlay1 = "#7f849c",
+          overlay0 = "#6c7086",
+          surface2 = palette.bright.black,
+          surface1 = palette.normal.black,
+          surface0 = "#313244",
+          base = palette.special.background,
+          mantle = "#181825",
+          crust = "#11111b",
         },
       },
-      override = function(c)
-        return {
-          ColorColumn = { bg = c.base.dimmed5 },
-          NonText = { fg = c.base.dimmed5 },
-          LspCodeLens = { link = "Comment" },
-
-          IblIndent = { link = "IndentBlanklineChar" },
-          IblScope = { link = "IndentBlanklineContextChar" },
-          IblWhitespace = { link = "IndentBlanklineSpaceChar" },
-
-          DashboardRecent = { fg = c.base.magenta },
-          DashboardProject = { fg = c.base.blue },
-          DashboardConfiguration = { fg = c.base.white },
-          DashboardSession = { fg = c.base.green },
-          DashboardLazy = { fg = c.base.cyan },
-          DashboardServer = { fg = c.base.yellow },
-          DashboardQuit = { fg = c.base.red },
-        }
-      end,
+      integrations = {
+        alpha = false,
+        cmp = true,
+        coc_nvim = false,
+        dap = true,
+        dap_ui = true,
+        dashboard = true,
+        flash = false,
+        gitsigns = true,
+        illuminate = false,
+        indent_blankline = true,
+        mini = true,
+        native_lsp = {
+          enabled = true,
+        },
+        neotree = true,
+        noice = true,
+        notify = true,
+        nvimtree = false,
+        telescope = {
+          enabled = true,
+          style = "nvchad",
+        },
+        treesitter = true,
+        treesitter_context = true,
+        ufo = true,
+        which_key = true,
+      },
     },
     config = function(_, opts)
-      local monokai = require("monokai-pro")
-      monokai.setup(opts)
-      monokai.load()
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin")
     end,
   },
 }

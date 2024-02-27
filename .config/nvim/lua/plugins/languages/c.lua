@@ -1,6 +1,10 @@
+-- TODO: Relies on lspconfig `setup` which has been removed.
+
+---@type LazyPluginSpec[]
 return {
   {
     "nvim-treesitter",
+    ---@param opts plugins.treesitter.config
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "c",
@@ -11,17 +15,8 @@ return {
   },
 
   {
-    "nvim-ts-context-commentstring",
-    opts = {
-      languages = {
-        c = "// %s",
-        cpp = "// %s",
-      },
-    },
-  },
-
-  {
     "nvim-lspconfig",
+    ---@type plugins.lspconfig.config
     opts = {
       servers = {
         clangd = {
@@ -96,6 +91,7 @@ return {
 
   {
     "nvim-cmp",
+    ---@param opts plugins.cmp.config
     opts = function(_, opts)
       table.insert(opts.sorting.comparators, 1, require("clangd_extensions.cmp_scores"))
     end,

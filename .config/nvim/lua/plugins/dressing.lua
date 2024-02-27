@@ -7,7 +7,6 @@ return {
     opts = {
       input = {
         border = util.ui.borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
-        win_options = { winblend = 0 },
       },
     },
     init = function()

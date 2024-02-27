@@ -3,7 +3,6 @@ local util = require("util")
 ---@class config
 local M = {
   icons = require("config.icons"),
-  logo = require("config.logo"),
 }
 
 -- Initialize the editor.

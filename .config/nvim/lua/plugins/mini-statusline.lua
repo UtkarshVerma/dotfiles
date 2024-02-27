@@ -21,7 +21,7 @@ local function file_path()
     path = path:sub(#root + 2)
   end
 
-  local path_sep = package.config:sub(1, 1)
+  local path_sep = util.fs.path_sep
   local parts = vim.split(path, path_sep)
   local max_part_count = 6
   if #parts > max_part_count then

@@ -15,3 +15,5 @@ templates:
     target: ~/.config/dunst/dunstrc
   - source: suckless.xresources
     target: ~/.config/X11/Xresources/suckless
+  - source: colors.lua
+    target: ~/.config/nvim/lua/util/colors.lua

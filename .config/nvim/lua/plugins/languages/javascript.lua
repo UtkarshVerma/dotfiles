@@ -2,6 +2,7 @@
 return {
   {
     "nvim-treesitter",
+    ---@param opts plugins.treesitter.config
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "javascript",
@@ -94,7 +95,7 @@ return {
               "$FILENAME",
               "--indent-style=" .. (vim.o.expandtab and "space" or "tab"),
               "--indent-width=" .. vim.o.shiftwidth,
-              "--line-width=" .. tonumber(vim.o.colorcolumn or "80"),
+              "--line-width=" .. (tonumber(vim.o.colorcolumn) or 80),
             },
           }
         end,

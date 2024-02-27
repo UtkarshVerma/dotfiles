@@ -1,4 +1,4 @@
--- Bootstrap lazy.nvim
+-- Bootstrap lazy.nvim.
 local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazy_path) then
   vim.fn.system({
@@ -20,14 +20,17 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
     { import = "plugins.languages" },
-    -- { import = "plugins.extras.writing" },
   },
-  change_detection = { enabled = false },
+  change_detection = {
+    enabled = false,
+  },
   defaults = {
     lazy = true,
     version = "*",
   },
-  install = { colorscheme = { "monokai-pro" } },
+  install = {
+    colorscheme = { "catppuccin" },
+  },
   performance = {
     rtp = {
       disabled_plugins = {

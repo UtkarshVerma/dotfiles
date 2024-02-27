@@ -4,6 +4,7 @@
 
 ---@class plugins.which_key.config
 ---@field defaults? plugins.which_key.defaults
+---@field key_labels? table<string, string>
 
 ---@type LazyPluginSpec[]
 return {
@@ -15,6 +16,9 @@ return {
       plugins = {
         spelling = true,
         presets = { motions = false, g = false }, -- This fix mapping for fold when press f and nothing show up
+      },
+      key_labels = {
+        ["<Tab>"] = "<tab>",
       },
       layout = {
         height = { min = 3, max = 25 }, -- min and max height of the columns
@@ -42,6 +46,7 @@ return {
         ["<leader>q"] = { name = "+quit/session" },
         ["<leader>s"] = { name = "+search" },
         ["<leader>u"] = { name = "+ui" },
+        ["<leader>t"] = { name = "+toggle" },
         ["<leader>w"] = { name = "+windows" },
         ["<leader>x"] = { name = "+diagnostics/quickfix" },
       },

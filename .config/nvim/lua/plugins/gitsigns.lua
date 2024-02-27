@@ -1,6 +1,6 @@
-local icons = require("config").icons
+---@alias plugins.gitsigns.config Gitsigns.Config
 
----@alias plugins.gitsigns.status_dict Gitsigns.StatusObj
+local icons = require("config").icons
 
 ---@type LazyPluginSpec[]
 return {
@@ -36,7 +36,7 @@ return {
         desc = "GitSigns select hunk",
       },
     },
-    ---@type Gitsigns.Config
+    ---@type plugins.gitsigns.config
     ---@diagnostic disable: missing-fields
     opts = {
       signs = {

@@ -2,10 +2,11 @@ local util = require("lazy.core.util")
 
 ---@class util
 local M = {
+  colors = require("util.colors"),
+  fs = require("util.fs"),
   log = require("util.log"),
   plugin = require("util.plugin"),
   root = require("util.root"),
-  fs = require("util.fs"),
   terminal = require("util.terminal"),
   toggle = require("util.toggle"),
   ui = require("util.ui"),

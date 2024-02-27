@@ -26,5 +26,4 @@
 /.config/X11/Xresources/suckless
 /.config/rofi/themes/colors.rasi
 /.config/dunst/dunstrc
-
-/root/etc/sv/*/supervise
+/.config/nvim/lua/util/colors.lua

@@ -1,28 +1,18 @@
 ---@class util.fs
 local M = {}
 
--- Normalize {path} by expanding "~" and removing trailing slashes.
+M.path_sep = package.config:sub(1, 1)
+
+-- Normalize slashes in {path}, expand "~" and remove trailing slashes.
 ---@param path string
 ---@return string
 ---@nodiscard
-function M.normalize_path(path)
-  local path_sep = package.config:sub(1, 1)
-
+function M.normalize(path)
   -- Resolve relative paths.
   path = vim.loop.fs_realpath(path) or path
 
-  -- Expand tilde.
-  if path:sub(1, 1) == "~" then
-    local home = assert(vim.loop.os_homedir())
-    if home:sub(-1) == path_sep then
-      home = home:sub(1, -2)
-    end
-
-    path = home .. path:sub(2)
-  end
-
-  -- Remove trailing slashes.
-  path = path:sub(-1) == path_sep and path:sub(1, -2) or path
+  -- Expand tilde, normalize slashes and removing trailing ones.
+  path = vim.fs.normalize(path)
 
   return path
 end
@@ -36,7 +26,7 @@ function M.cwd()
     return nil
   end
 
-  return M.normalize_path(cwd)
+  return M.normalize(cwd)
 end
 
 return M

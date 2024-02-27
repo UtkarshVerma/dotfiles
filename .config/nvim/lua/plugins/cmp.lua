@@ -1,3 +1,5 @@
+---@alias plugins.cmp.config cmp.ConfigSchema
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -19,7 +21,7 @@ return {
       local cmp = require("cmp")
       local defaults = require("cmp.config.default")()
 
-      ---@type cmp.ConfigSchema
+      ---@type plugins.cmp.config
       return {
         preselect = cmp.PreselectMode.None,
         snippet = {

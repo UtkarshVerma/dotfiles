@@ -12,6 +12,9 @@ return {
         desc = "Dismiss all notifications",
       },
     },
+    ---@type notify.Config
+    -- TODO: Get rid of border
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       render = function(bufnr, notif, highlights)
         local base = require("notify.render.base")

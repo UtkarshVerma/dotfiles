@@ -25,3 +25,10 @@
 ---@param opts vim.autocommand.opts
 ---@return integer
 function vim.api.nvim_create_autocmd(event, opts) end
+
+---@generic T
+---@param dst T[]
+---@param src T[]
+---@param start? integer
+---@param finish? integer
+function vim.list_extend(dst, src, start, finish) end
