@@ -6,7 +6,8 @@ while ! wget --spider -q "http://example.com"; do
     sleep 10
 done
 
-tokens="token.json college_token.json"
+# tokens="token.json college_token.json"
+tokens="token.json"
 icons=" : "
 
 # Display work mail info during work hours only

@@ -1,1 +1,1 @@
-root=/dev/nvme0n1p4 resume=/dev/nvme0n1p6 rw quiet bgrt_disable i8042.noaux i8042.nomux iommu.passthrough=1 nvidia-drm.modeset=0
+root=/dev/nvme0n1p4 resume=/dev/nvme0n1p6 rw quiet bgrt_disable i8042.noaux i8042.nomux iommu.passthrough=1

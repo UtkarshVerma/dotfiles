@@ -7,7 +7,6 @@ cpuProfiles="\
 
 gpuProfiles="\
 💻 Integrated
-🧮 NvidiaNoModeset
 🔮 Vfio
 🚀 Hybrid"
 
