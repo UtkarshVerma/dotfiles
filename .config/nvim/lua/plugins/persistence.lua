@@ -1,19 +1,13 @@
+---@alias plugins.persistence.config PersistenceOptions
+
 ---@type LazyPluginSpec[]
 return {
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
-    ---@type PersistenceOptions
+    ---@type plugins.persistence.config
     opts = {
-      options = {
-        "buffers",
-        "curdir",
-        "tabpages",
-        "winsize",
-        "help",
-        "globals",
-        "skiprtp",
-      },
+      options = vim.split(vim.o.sessionoptions, ","),
     },
     -- stylua: ignore
     keys = {

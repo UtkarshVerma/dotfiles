@@ -1,7 +1,7 @@
 local config = require("config")
 
 vim.g.mapleader = " "
-vim.g.maplocalleader = ","
+vim.g.maplocalleader = " "
 
 local options = {
   backup = false,
@@ -35,7 +35,6 @@ local options = {
 
   undodir = "/tmp/nvim-undodir", -- Preserve undo history per reboot
 
-  -- autowrite = true, -- Enable auto write
   clipboard = "unnamedplus", -- Sync with system clipboard
   completeopt = { "menuone", "noselect", "preview" },
   conceallevel = 2, -- Hide concealed text.
@@ -60,12 +59,14 @@ local options = {
     "buffers",
     "curdir",
     "folds",
+    "globals",
     "help",
-    "tabpages",
-    "winsize",
-    "winpos",
-    "terminal",
     "localoptions",
+    "skiprtp",
+    "tabpages",
+    "terminal",
+    "winpos",
+    "winsize",
   },
   shiftround = true, -- Round indent
   showmode = false, -- Dont show mode since we have a statusline

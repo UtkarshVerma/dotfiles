@@ -70,6 +70,24 @@ local autocommands = {
   },
 
   {
+    "FileType",
+    function(arg)
+      vim.bo[arg.buf].buflisted = false
+      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = arg.buf })
+    end,
+    pattern = {
+      "help",
+      "man",
+      "notify",
+      "qf",
+      "query",
+      "spectre_panel",
+      "checkhealth",
+    },
+    desc = "Close with q",
+  },
+
+  {
     { "BufNewFile", "BufRead" },
     'setlocal noswapfile nobackup noundofile shada=""',
     pattern = "/dev/shm/gopass*",

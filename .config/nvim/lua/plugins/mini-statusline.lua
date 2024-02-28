@@ -71,6 +71,12 @@ return {
           local git = msl.section_git({ trunc_width = 75 })
           local diagnostics = msl.section_diagnostics({ trunc_width = 75 })
 
+          local arrow_nvim = util.plugin.exists("arrow.nvim")
+            and {
+              hl = "Special",
+              strings = { require("arrow.statusline").text_for_statusline_with_icons() },
+            }
+
           return msl.combine_groups({
             { hl = mode_hl, strings = { mode } },
             { hl = "MiniStatuslineDevinfo", strings = { git, diagnostics } },
@@ -78,6 +84,7 @@ return {
             { hl = "Special", strings = { root_dir() } },
             { hl = "MiniStatuslineFilename", strings = { file_path() } },
             "%=", -- End left alignment
+            arrow_nvim,
             { hl = "MiniStatuslineFileinfo", strings = { filetype() } },
             { hl = mode_hl, strings = { "%l│%v" } },
           })
