@@ -1,14 +1,7 @@
----@class plugins.arrow.config.window
----@field width? integer|"auto"
----@field height? integer|"auto"
----@field border? "none"|"single"|"double"|"rounded"|"solid"|"shadow"|string[]|string[][]
----@field row? integer|"auto"
----@field col? integer|"auto"
-
 ---@class plugins.arrow.config
 ---@field leader_key? string
 ---@field hide_handbook? boolean
----@field window? plugins.arrow.config.window
+---@field window? vim.window.opts
 
 ---@type LazyPluginSpec[]
 return {

@@ -1,5 +1,13 @@
 ---@meta
 
+---@class vim.window.opts
+---@field anchor? "NW"|"NE"|"SW"|"SE"
+---@field width? integer
+---@field height? integer
+---@field row? integer
+---@field col? integer
+---@field border? "none"|"single"|"double"|"rounded"|"solid"|"shadow"|string[]|string[][]
+
 ---@alias vim.autocommand.event string|string[]
 
 ---@class vim.autocommand.callback.arg

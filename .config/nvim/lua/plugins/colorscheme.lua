@@ -68,6 +68,13 @@ return {
         ufo = true,
         which_key = true,
       },
+      custom_highlights = function(colors)
+        return {
+          -- Make window separator blend with neo-tree.
+          WinSeparator = { fg = colors.mantle, bg = colors.none },
+          MiniNotifyBorder = { link = "MiniNotifyNormal" },
+        }
+      end,
     },
     config = function(_, opts)
       require("catppuccin").setup(opts)

@@ -24,6 +24,7 @@ local options = {
     fold = " ",
     foldopen = "",
     foldclose = "",
+    vert = "▎", -- Used for window separator.
   },
   foldlevelstart = 99, -- Keep all folds open
   shiftwidth = 4, -- Size of an indent

@@ -2,6 +2,7 @@
 ---@field cmd? string[]
 ---@field capabilities? table
 ---@field on_attach? fun(client:lsp.Client, bufnr:integer):integer
+---@field filetypes? string[]
 
 ---@class plugins.lspconfig.config.server: plugins.lspconfig.server.opts
 ---@field keys? plugins.lspconfig.key[]

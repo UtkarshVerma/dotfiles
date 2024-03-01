@@ -2,7 +2,7 @@
 ---@field format? { enabled?: boolean}
 ---@field Lua? { workspace?: { checkThirdParty?: boolean } }
 
----@class lsp.lua_ls.config
+---@class lsp.lua_ls.config: plugins.lspconfig.server.opts
 ---@field settings? lsp.lua_ls.config.settings
 
 ---@type LazyPluginSpec[]
