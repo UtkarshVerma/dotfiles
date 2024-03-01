@@ -1,4 +1,12 @@
 #!/bin/sh
+# `lf` wrapper that allows changing CWD on exit whenever the command below is
+# executed in `lf`.
+#
+#   # Quit and update the parent shell's current working directory to match lf's.
+#   cmd quit-and-cd &{{
+#       pwd > $LF_CD_FILE
+#       lf -remote "send $id quit"
+#   }}
 
 TMPDIR=${TMPDIR:-/tmp}
 
