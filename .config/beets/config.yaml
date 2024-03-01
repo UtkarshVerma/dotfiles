@@ -1,0 +1,33 @@
+include:
+  - secrets.yaml
+
+plugins:
+  - spotify
+  - fromfilename
+  - fetchart
+  - embedart
+  - lyrics
+  - lastgenre
+  - duplicates
+  - scrub
+
+directory: ~/music
+library: ~/.cache/beets/library.db
+
+spotify:
+  source_weight: 0.0
+
+musicbrainz:
+  enabled: false
+
+lyrics:
+  sources:
+    - lyricwiki
+    - lyrics.com
+    - musixmatch
+
+paths:
+  singleton: $artist/$title
+
+import:
+  move: true

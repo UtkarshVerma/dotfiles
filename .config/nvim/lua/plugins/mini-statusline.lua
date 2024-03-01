@@ -1,5 +1,6 @@
 ---@class plugins.mini.statusline.config
 ---@field content? table<"active"|"inactive", fun():string>
+---@field set_vim_settings? boolean
 
 local config = require("config")
 local util = require("util")
@@ -90,6 +91,9 @@ return {
           })
         end,
       },
+
+      -- Do not override vim settings.
+      set_vim_settings = false,
     },
   },
 }

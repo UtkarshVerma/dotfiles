@@ -1,153 +1,219 @@
-# Basic options
-set shellopts '-eu'
-set ifs "\n"
-set scrolloff 10
-set icons
-set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
-set drawbox
-set ratios 2:3
-set cleaner ~/.config/lf/cleaner
-set previewer ~/.config/lf/previewer
-set autoquit
-set wrapscroll
-set mouse
-set cursorpreviewfmt ""
+## Basic options --------------------------------------------------------------
+set shell sh        # Use the default shell interpreter.
+set shellopts '-eu' # Exit scripts on error and on unset variables.
+set ifs "\n"        # Split fields on newline in shell scripts.
+set scrolloff 10    # Leave some space at the bottom of the screen.
+set autoquit        # Automatically quit the server when no clients remain.
+set wrapscroll      # Wrap cursor scrolling.
+set mouse           # Enable mouse.
 
-# Custom commands
+### Previews
+# set cleaner ~/.config/lf/cleaner
+# set previewer ~/.config/lf/previewer
+
+### Appearance
+set cursorpreviewfmt "\033[7m"    # Highlight preview directory cursor.
+set icons                         # Enable icons.
+set drawbox                       # Enable borders.
+
+## Commands -------------------------------------------------------------------
+# Edit config and reload lf.
+cmd edit-config ${{
+    $EDITOR ~/.config/lf/lfrc
+    lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+
+# (Override) Display file transfer progress.
+cmd paste &{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    case "$mode" in
+        copy)
+            rsync -av --ignore-existing --progress -- "$@" . |
+            stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+            while IFS= read -r line; do
+                lf -remote "send $id echo $line"
+            done
+            ;;
+        move) mv -n -- "$@" .;;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
+}}
+
+# Move the file/directory to trash.
+cmd trash %{{
+    set -f
+
+    if ! command -v trash-put >/dev/null 2>&1; then 
+        echo "trash-cli is not installed."
+        exit 1
+    fi
+
+    file_count=$(echo "$fx" | wc -l)
+    if [ $file_count -eq 1 ]; then
+        printf "trash '%s'?" $fx
+    else
+        printf "trash %s items?" $file_count
+    fi
+    printf " [y/N] "
+
+    choice=$(/usr/bin/env bash -c 'read -n 1 choice; echo $choice')
+
+    # Clear the prompt.
+    echo
+
+    if [ $choice != "y" ]; then
+        exit
+    fi
+
+    trash-put $fx
+}}
+
+# Restore deleted files/directories from trash.
+cmd restore ${{
+    set -f
+
+    if ! command -v trash-restore >/dev/null 2>&1; then 
+        echo "trash-cli is not installed."
+        exit 1
+    fi
+
+    deleted="$(printf "\n" | trash-restore |
+        head -n -1 |
+        awk -v filter="^${PWD}/[^/]*$" -v pwd_length="${#PWD}" \
+            '$4~filter {print $1, substr($4, pwd_length + 2)}')"
+    ids="$(echo "$deleted" |
+        fzf --multi --layout=reverse |
+        cut -d' ' -f1 | tr '\n' ',')"
+    ids="${ids%,}"
+
+    echo "$ids" | exec trash-restore >/dev/null
+}}
+
+# Compress current file or selected files with tar and gunzip.
+cmd tar ${{
+    set -f
+
+    mkdir $1
+    cp -r $fx $1
+    tar czf $1.tar.gz $1
+    rm -rf $1
+}}
+
+# Compress current file or selected files with zip.
+cmd zip ${{
+    set -f
+
+    mkdir $1
+    cp -r $fx $1
+    zip -r $1.zip $1
+    rm -rf $1
+}}
+
+# Extract the current file with the right command.
+cmd extract ${{
+    set -f
+
+    case $f in
+        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
+        *.tar.gz|*.tgz) tar xzvf $f;;
+        *.tar.xz|*.txz) tar xJvf $f;;
+        *.zip) unzip $f;;
+        *.rar) unrar x $f;;
+        *.7z) 7z x $f;;
+    esac
+}}
+
+# Create a new file or directory.
+cmd create &{{
+    set -f
+
+    case $1 in
+        */) mkdir --parents $1 ;;
+        *) touch $1 ;;
+    esac
+}}
+
+# Quit and update the parent shell's current working directory to match lf's.
+cmd quit-and-cd &{{
+    pwd > $LF_CD_FILE
+    lf -remote "send $id quit"
+}}
+
+# Execute zoxide command.
+cmd z %{{
+    result="$(zoxide query --exclude $PWD $@ | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    lf -remote "send $id cd \"$result\""
+}}
+
+# Execute zoxide command interactively.
+cmd zi ${{
+    result="$(zoxide query --interactive | sed 's|\\|\\\\|g;s|"|\\"|g')"
+    lf -remote "send $id cd \"$result\""
+}}
+
+# Drag and drop the selected files/directories.
+cmd drag-and-drop ${{
+    dragon-drop --all --and-exit $fx
+}}
+
+# Fuzzy find a file/directory and select it.
+cmd fuzzy-find ${{
+    selection=$(fzf)
+    lf -remote "send $id select \"$selection\""
+}}
+
+## Keymaps --------------------------------------------------------------------
+map <enter> shell         # Spawn a shell.
+map ` !true               # Show the result of previous command.
+map p paste               # Clear selection after pasting.
+map a push :create<space> # Create a new directory.
+map r :rename; cmd-end    # For renames, place the cursor at the end.
+map . set hidden!         # Toggle hidden files.
+map <c-r> reload          # Refresh.
+map D delete              # Delete permanently.
+
+map R restore             # Restore from trash.
+map E extract             # Extract archive.
+map d trash               # Send to trash.
+map C edit-config         # Edit config and reload lf.
+map Q quit-and-cd         # Exit lf and update parent's CWD.
+map zd drag-and-drop      # Drag and drop the selection.
+map <c-f> fuzzy-find      # Fuzzy find and focus selection.
+
+## Hooks ----------------------------------------------------------------------
+# NOTE: This feature is releasing in v32.
+# cmd on-redraw %{{
+#     # Dynamically set number of columns based on the current terminal width.
+#     if [ $lf_width -le 80 ]; then
+#         lf -remote "send $id set ratios 1:2"
+#     elif [ $lf_width -le 160 ]; then
+#         lf -remote "send $id set ratios 1:2:3"
+#     else
+#         lf -remote "send $id set ratios 1:2:3:5"
+#     fi
+# }}
+
 cmd on-cd &{{
-    # '&' commands run silently in background (which is what we want here),
-    # but are not connected to stdout.
-    # To make sure our escape sequence still reaches stdout we pipe it to /dev/tty
+    # Update zoxide statistics.
+    zoxide add "$PWD"
+
+    # Dynamically update the terminal title based on current working directory.
+    #
+    # Redirection to /dev/tty is necessary as async commands are not connected
+    # to stdout.
     printf "\033]0;$(pwd | sed "s|$HOME|~|") - lf\007" >/dev/tty
 }}
 
 cmd on-quit &{{
-    printf "\033[23t" >/dev/tty   # Restore cached window title
+    # Restore the cached terminal title on exit.
+    #
+    # Redirection to /dev/tty is necessary as async commands are not connected
+    # to stdout.
+    printf "\033[23t" >/dev/tty
 }}
 
-cmd open ${{
-    case $(file --mime-type "$(readlink -f $f)" -b) in
-    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) localc $fx ;;
-    image/vnd.djvu|application/pdf|application/octet-stream|application/postscript) setsid -f zathura $fx >/dev/null 2>&1 ;;
-        text/*|application/json|inode/x-empty) $EDITOR $fx;;
-    image/x-xcf) setsid -f gimp $f >/dev/null 2>&1 ;;
-    image/svg+xml) display -- $f ;;
-    image/*)
-        sxiv . -F $f -ao 2>/dev/null | while read -r file; do
-            [ -z "$file" ] && continue
-            lf -remote "send select \"$file\""
-            lf -remote "send toggle"
-        done &
-        ;;
-    audio/*) mpv --audio-display=no $f ;;
-    video/*|application/vnd.rn-realmedia) setsid -f mpv $f -quiet >/dev/null 2>&1 ;;
-    application/pdf|application/vnd.djvu|application/epub*) setsid -f zathura $fx >/dev/null 2>&1 ;;
-    application/pgp-encrypted) $EDITOR $fx ;;
-    application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text) setsid -f lowriter $fx >/dev/null 2>&1 ;;
-    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/octet-stream|application/vnd.oasis.opendocument.spreadsheet|application/vnd.oasis.opendocument.spreadsheet-template) setsid -f localc $fx >/dev/null 2>&1 ;;
-    application/vnd.openxmlformats-officedocument.presentationml.presentation|application/vnd.oasis.opendocument.presentation-template|application/vnd.oasis.opendocument.presentation|application/vnd.ms-powerpoint) setsid -f loimpress $fx >/dev/null 2>&1 ;;
-    application/vnd.oasis.opendocument.graphics|application/vnd.oasis.opendocument.graphics-template) setsid -f lodraw $fx >/dev/null 2>&1 ;;
-    application/vnd.oasis.opendocument.formula) setsid -f lomath $fx >/dev/null 2>&1 ;;
-    application/vnd.oasis.opendocument.database) setsid -f lobase $fx >/dev/null 2>&1 ;;
-        *) for f in $fx; do setsid -f $OPENER $f >/dev/null 2>&1; done;;
-    esac
-}}
-
-cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
-
-cmd drag $dragon-drop --all --and-exit $fx
-
-cmd extract ${{
-    clear; tput cup $(($(tput lines)/3)); tput bold
-    set -f
-    printf "%s\n\t" "$fx"
-    printf "extract?[y/N]"
-    read ans
-    [ $ans = "y" ] && aunpack $fx
-}}
-
-# cmd moveto ${{
-#   clear; tput cup $(($(tput lines)/3)); tput bold
-#   set -f
-#   clear; echo "Move to where?"
-#   dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
-#   for x in $fx; do
-#       eval mv -iv \"$x\" \"$dest\"
-#   done &&
-#   notify-send "🚚 File(s) moved." "File(s) moved to $dest."
-# }}
-
-# cmd copyto ${{
-#   clear; tput cup $(($(tput lines)/3)); tput bold
-#   set -f
-#   clear; echo "Copy to where?"
-#   dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
-#   for x in $fx; do
-#       eval cp -ivr \"$x\" \"$dest\"
-#   done &&
-#   notify-send "📋 File(s) copied." "File(s) copies to $dest."
-# }}
-
-# cmd bulk_rename ${{
-#     old="$(mktemp)"
-#     new="$(mktemp)"
-#     if [ -n "$fs" ]; then
-#         fs="$(basename -a $fs)"
-#     else
-#         fs="$(ls)"
-#     fi
-#     printf '%s\n' "$fs" >"$old"
-#     printf '%s\n' "$fs" >"$new"
-#     $EDITOR "$new"
-#     [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
-#     paste "$old" "$new" | while IFS= read -r names; do
-#         src="$(printf '%s' "$names" | cut -f1)"
-#         dst="$(printf '%s' "$names" | cut -f2)"
-#         if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
-#             continue
-#         fi
-#         mv -- "$src" "$dst"
-#     done
-#     rm -- "$old" "$new"
-#     lf -remote "send $id unselect"
-# }}
-
-cmd paste %{{
-    mode=$(head -1 ~/.local/share/lf/files)
-    list=$(sed 1d ~/.local/share/lf/files)
-
-    if [ -z $list ]; then
-        exit 1
-    fi
-
-    if [ $mode = "copy" ]; then
-        cp -r $list .
-    elif [ $mode = "move" ]; then
-        mv $list .
-    fi
-
-    lf -remote "send load"
-    lf -remote "send clear"
-}}
-
-on-cd
-
-map <m-3> updir
-
-map <c-f> $lf -remote "send $id select \"$(fzf)\""
-map J $lf -remote "send $id cd $(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
-map zd drag
-
-map R $vidir
-map D delete
-map E extract
-map C copyto
-map M moveto
-map <c-n> push :mkdir<space>
-map <c-r> reload
-map . set hidden!
-map <enter> shell
-map x $$f
-map X !$f
-map o &mimeopen "$f"
-map O $mimeopen --ask "$f"
+## Other stuff ----------------------------------------------------------------
+on-cd  # Trigger on-cd hook on startup.

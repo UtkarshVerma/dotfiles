@@ -1,7 +1,7 @@
 #!/bin/sh
 
 scripts="$XDG_CONFIG_HOME/aliasrc
-    $XDG_CONFIG_HOME/lf/lfcd.sh
+    $XDG_CONFIG_HOME/lf/lf.sh
     $XDG_CONFIG_HOME/yazi/yazicd.sh
     /opt/ros/noetic/setup.sh
     /usr/bin/virtualenvwrapper_lazy.sh"

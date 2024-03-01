@@ -5,7 +5,8 @@ export EDITOR="nvim"
 export BROWSER="brave"
 export READER="zathura"
 export TERMINAL="st"
-export FILE_MANAGER="yazi"
+export FILE_MANAGER="lf"
+export SYSTEM_MONITOR="btop"
 export STATUSBAR="dwmblocks"
 
 # XDG paths

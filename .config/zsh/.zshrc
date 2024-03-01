@@ -146,8 +146,14 @@ bindkey '\C-e' edit-command-line
 bindkey -s '\C-f' '^ucd "$(dirname "$(fzf)")"\n'
 
 # Ctrl-o: Open a directory using $FILE_MANAGER
+local file_manager_cmd=""
 case "$FILE_MANAGER" in
-    yazi)
-        (( $+functions[ya] )) &>/dev/null &&
-            bindkey -s '\C-o' '^uya\r'
+    yazi) file_manager_cmd="ya" ;;
+    lf) file_manager_cmd="lf" ;;
 esac
+
+if [[ -n "$file_manager_cmd" ]] &&
+    (( $+functions[$file_manager_cmd] )) &>/dev/null; then
+    bindkey -s '\C-o' '^u'"$file_manager_cmd"'\r'
+fi
+unset file_manager_cmd

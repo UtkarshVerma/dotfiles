@@ -1,5 +1,0 @@
-"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
-
-[manager]
-sort_by = "natural"
-sort_dir_first = true

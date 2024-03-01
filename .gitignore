@@ -13,6 +13,9 @@
 /.config/mpd/*
 /!.config/mpd/mpd.conf
 
+/.config/beets/*
+!/.config/beets/config.yaml
+
 /.config/ncmpcpp/*
 /!.config/ncmpcpp/{bindings,config}
 
