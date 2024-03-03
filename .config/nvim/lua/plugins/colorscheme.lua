@@ -70,8 +70,8 @@ return {
       },
       custom_highlights = function(colors)
         return {
-          -- Make window separator blend with neo-tree.
-          WinSeparator = { fg = colors.mantle, bg = colors.none },
+          -- Workaround for https://github.com/catppuccin/nvim/issues/670
+          NeoTreeWinSeparator = { fg = colors.base, bg = colors.base },
           MiniNotifyBorder = { link = "MiniNotifyNormal" },
         }
       end,

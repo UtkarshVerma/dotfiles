@@ -22,7 +22,7 @@
 ---@class plugins.neo_tree.sources.filesystem
 ---@field window? plugins.neo_tree.window
 ---@field filtered_items? {hide_dotfiles?: boolean, hide_gitignored?: boolean}
----@filed follow_current_file? {enabled?: boolean}
+---@field follow_current_file? {enabled?: boolean}
 
 ---@class plugins.neo_tree.config
 ---@field sources? string[]

@@ -1,0 +1,22 @@
+## Directories --------------------------------------------------------------------------------------------------------
+lyrics_directory = ~/.cache/lyrics
+
+## MPD ----------------------------------------------------------------------------------------------------------------
+mpd_host = localhost
+mpd_port = 6600
+mpd_music_dir = ~/music
+
+## Misc ---------------------------------------------------------------------------------------------------------------
+# Use the new UI.
+user_interface = alternative
+
+# Specify columns for the playlist screen as [Track No, Title, Artist, Album, Length].
+song_columns_list_format = (6f)[green]{NE} (40)[white]{t|f:Title} (30)[]{a} (20)[cyan]{b} (7f)[magenta]{l}
+
+# Set the terminal title format to "{Title} - {Artist} - ncmpcpp".
+song_window_title_format = {%t}{ - %a} - ncmpcpp
+
+lyrics_fetchers = musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet
+
+# If currently playing song changes, change the lyrics as well.
+follow_now_playing_lyrics = yes
