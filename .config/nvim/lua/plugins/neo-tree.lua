@@ -91,21 +91,17 @@ return {
   {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
+    branch = "v3.x",
     dependencies = {
       "nui.nvim",
       "plenary.nvim",
       "nvim-web-devicons",
     },
     keys = {
-      {
-        "<leader>fe",
-        function()
-          require("neo-tree.command").execute({ toggle = true, dir = util.fs.cwd() })
-        end,
-        desc = "Explorer",
-      },
+      -- stylua: ignore
+      { "<leader>fe", function() require("neo-tree.command").execute({ toggle = true }) end, desc = "Explorer" },
     },
-    init = function()
+    init = function(_)
       if vim.fn.argc() == 1 then
         local stat = vim.loop.fs_stat(tostring(vim.fn.argv(0)))
         if stat and stat.type == "directory" then

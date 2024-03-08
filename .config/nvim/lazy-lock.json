@@ -32,7 +32,7 @@
   "mini.splitjoin": { "branch": "main", "commit": "a6b043b4afb075058a8c49325ff22e07f0e96170" },
   "mini.statusline": { "branch": "main", "commit": "dfd3d2ba295473930f78f143852b9b53eb54ae2a" },
   "mini.surround": { "branch": "main", "commit": "a1b590cc3b676512de507328d6bbab5e43794720" },
-  "neo-tree.nvim": { "branch": "main", "commit": "459c60317cc1d251f6eb3b6f010d015d5d24b806" },
+  "neo-tree.nvim": { "branch": "v3.x", "commit": "459c60317cc1d251f6eb3b6f010d015d5d24b806" },
   "neodev.nvim": { "branch": "main", "commit": "da1562e1e3df0e994ddc52cb4ba22376a5d7f2fc" },
   "neogen": { "branch": "main", "commit": "e5460f2ad8de3afaf0864497d2c9c0490b702625" },
   "nui.nvim": { "branch": "main", "commit": "a0fd35fcbb4cb479366f1dc5f20145fd718a3733" },
