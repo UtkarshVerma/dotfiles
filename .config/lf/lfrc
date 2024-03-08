@@ -146,24 +146,6 @@ cmd fuzzy-find ${{
     lf -remote "send $id select \"$selection\""
 }}
 
-## Keymaps --------------------------------------------------------------------
-map <enter> shell         # Spawn a shell.
-map ` !true               # Show the result of previous command.
-map a push :create<space> # Create a new directory.
-map r :rename; cmd-end    # For renames, place the cursor at the end.
-map . set hidden!         # Toggle hidden files.
-map <c-r> reload          # Refresh.
-map x cut                 # Cut.
-map D delete              # Delete permanently.
-
-map R restore             # Restore from trash.
-map E extract             # Extract archive.
-map d trash               # Send to trash.
-map C edit-config         # Edit config and reload lf.
-map Q quit-and-cd         # Exit lf and update parent's CWD.
-map zd drag-and-drop      # Drag and drop the selection.
-map <c-f> fuzzy-find      # Fuzzy find and focus selection.
-
 ## Hooks ----------------------------------------------------------------------
 # NOTE: This feature is releasing in v32.
 # cmd on-redraw %{{
@@ -195,6 +177,23 @@ cmd on-quit &{{
     # to stdout.
     printf "\033[23t" >/dev/tty
 }}
+
+## Keymaps --------------------------------------------------------------------
+map ` !true               # Show the result of previous command.
+map a push :create<space> # Create a new directory.
+map r :rename; cmd-end    # For renames, place the cursor at the end.
+map . set hidden!         # Toggle hidden files.
+map <c-r> reload          # Refresh.
+map x cut                 # Cut.
+map D delete              # Delete permanently.
+
+map R restore             # Restore from trash.
+map E extract             # Extract archive.
+map d trash               # Send to trash.
+map C edit-config         # Edit config and reload lf.
+map Q quit-and-cd         # Exit lf and update parent's CWD.
+map zd drag-and-drop      # Drag and drop the selection.
+map <c-f> fuzzy-find      # Fuzzy find and focus selection.
 
 ## Other stuff ----------------------------------------------------------------
 # Trigger on-cd hook on startup.

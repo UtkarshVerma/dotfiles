@@ -35,19 +35,19 @@
 local icons = require("config").icons
 local util = require("util")
 
--- Hide the cursor.
+---Hide the cursor.
 local function hide_cursor()
   vim.opt_local.guicursor = "n:block-Cursor"
   vim.cmd([[hi Cursor blend=100]])
 end
 
--- Show the cursor.
+---Show the cursor.
 local function show_cursor()
   vim.opt_local.guicursor = vim.api.nvim_get_option_info("guicursor").default
   vim.cmd([[hi Cursor blend=0]])
 end
 
--- Focus parent directory if focused node is a file, otherwise collapse it.
+---Focus parent directory if focused node is a file, otherwise collapse it.
 ---@param state plugins.neo_tree.state
 local function parent_or_collapse(state)
   local node = state.tree:get_node()
@@ -63,7 +63,7 @@ local function parent_or_collapse(state)
   require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
 end
 
--- Expand focused node if it is a directory, otherwise open it.
+---Expand focused node if it is a directory, otherwise open it.
 ---@param state plugins.neo_tree.state
 local function child_or_expand(state)
   local node = state.tree:get_node()
@@ -100,16 +100,9 @@ return {
       {
         "<leader>fe",
         function()
-          require("neo-tree.command").execute({ toggle = true, dir = util.root.dir() })
-        end,
-        desc = "Explorer (root dir)",
-      },
-      {
-        "<leader>fE",
-        function()
           require("neo-tree.command").execute({ toggle = true, dir = util.fs.cwd() })
         end,
-        desc = "Explorer (cwd)",
+        desc = "Explorer",
       },
     },
     init = function()

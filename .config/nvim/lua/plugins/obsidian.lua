@@ -1,3 +1,6 @@
+---@class plugins.obsidian.config: obsidian.config.ClientOpts
+---@field note_frontmatter_func fun(note:obsidian.Note):table
+
 local vaults = {
   "~/notes/personal",
   "~/notes/cooking",
@@ -47,10 +50,19 @@ return {
       { "<leader>os", "<cmd>ObsidianSearch<cr>", desc = "Search notes" },
     },
     dependencies = { "plenary.nvim" },
-    ---@type obsidian.config.ClientOpts
+    ---@type plugins.obsidian.config
     ---@diagnostic disable-next-line: missing-fields
     opts = {
       workspaces = workspaces,
+      note_frontmatter_func = function(note)
+        local out = {
+          aliases = #note.aliases > 0 and note.aliases,
+        }
+
+        vim.tbl_extend("force", out, note.metadata or {})
+
+        return out
+      end,
     },
   },
 }

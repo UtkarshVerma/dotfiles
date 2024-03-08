@@ -6,7 +6,6 @@ local M = {
   fs = require("util.fs"),
   log = require("util.log"),
   plugin = require("util.plugin"),
-  root = require("util.root"),
   terminal = require("util.terminal"),
   toggle = require("util.toggle"),
   ui = require("util.ui"),

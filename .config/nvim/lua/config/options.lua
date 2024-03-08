@@ -31,9 +31,8 @@ local options = {
   swapfile = false,
   tabstop = 4, -- Number of spaces tabs count for
   title = true,
-  titlestring = "%(%t - %)%(%{substitute(getcwd(), '^.*/', '', '')} - %)NVIM",
+  titlestring = "%(%t - %)%(%{substitute(getcwd(), '^.*/', '', '')} - %)nvim",
   titlelen = 50,
-
   undodir = "/tmp/nvim-undodir", -- Preserve undo history per reboot
 
   clipboard = "unnamedplus", -- Sync with system clipboard

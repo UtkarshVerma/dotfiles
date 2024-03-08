@@ -15,12 +15,7 @@ local function file_path()
   end
 
   local cwd = util.fs.cwd() or ""
-  if path:find(cwd, 1, true) == 1 then
-    path = path:sub(#cwd + 2)
-  else
-    local root = util.root.dir()
-    path = path:sub(#root + 2)
-  end
+  path = path:sub(#cwd + 2)
 
   local path_sep = util.fs.path_sep
   local parts = vim.split(path, path_sep)
@@ -48,20 +43,22 @@ local function filetype()
 end
 
 -- Display current buffer's root directory.
----@return string
+---@return string?
 local function root_dir()
-  return config.icons.misc.RootDir .. " " .. vim.fs.basename(util.root.dir())
+  local cwd = util.fs.cwd()
+  if cwd ~= nil then
+    return config.icons.misc.RootDir .. " " .. vim.fs.basename(cwd)
+  end
+
+  return nil
 end
 
 ---@type LazyPluginSpec[]
 return {
   {
     "echasnovski/mini.statusline",
-    event = "VeryLazy",
-    dependencies = {
-      "gitsigns.nvim",
-      "nvim-web-devicons",
-    },
+    lazy = false, -- Don't lazy load as it flickers the status bar.
+    dependencies = { "nvim-web-devicons" }, -- Avoid loading gitsigns early.
     ---@type plugins.mini.statusline.config
     opts = {
       content = {

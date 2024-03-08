@@ -30,19 +30,19 @@
 local config = require("config")
 local util = require("util")
 
--- Return a function that spawns telescope with the `git_files` or `find_files` picker, depending on existence of the
--- `.git` folder.
+---Return a function that spawns telescope with the `git_files` or `find_files` picker, depending on existence of the
+---`.git` folder.
 ---@param opts? {cwd?: string|boolean}
 ---@return fun()
 local function search_files(opts)
   return function()
-    opts = vim.tbl_deep_extend("force", { cwd = util.root.dir() }, opts or {})
+    opts = opts or {}
     local cwd = opts.cwd or util.fs.cwd()
     local path_sep = util.fs.path_sep
 
     local picker = "find_files"
     if vim.loop.fs_stat(cwd .. path_sep .. ".git") then
-      opts.show_untracked = true
+      opts["show_untracked"] = true
       picker = "git_files"
     end
 
@@ -76,11 +76,8 @@ return {
         -- Find
         { "<leader>fb", builtin.buffers, desc = "Buffers" },
         { "<leader>fc", search_files({ cwd = vim.fn.stdpath("config") }), desc = "Find config file" },
-        { "<leader>ff", search_files(), desc = "Find files (root dir)" },
-        { "<leader>fF", search_files({ cwd = false }), desc = "Find files (cwd)" },
+        { "<leader>ff", search_files(), desc = "Find files" },
         { "<leader>fr", builtin.oldfiles, desc = "Recent" },
-        -- stylua: ignore
-        { "<leader>fR", function() builtin.oldfiles({ cwd = vim.loop.cwd() }) end, desc = "Recent (cwd)" },
 
         -- Git
         { "<leader>gc", builtin.git_commits, desc = "Git commits" },
@@ -95,9 +92,7 @@ return {
         -- stylua: ignore
         { "<leader>sd", function() builtin.diagnostics({ bufnr = 0 }) end, desc = "Document diagnostics" },
         { "<leader>sD", builtin.diagnostics, desc = "Workspace diagnostics" },
-        { "<leader>sg", builtin.live_grep, desc = "Grep (root dir)" },
-        -- stylua: ignore
-        { "<leader>sG", function() builtin.live_grep({ cwd = false }) end, desc = "Grep (cwd)" },
+        { "<leader>sg", builtin.live_grep, desc = "Grep" },
         { "<leader>sh", builtin.help_tags, desc = "Help pages" },
         { "<leader>sH", builtin.highlights, desc = "Search highlight groups" },
         { "<leader>sk", builtin.keymaps, desc = "Keymaps" },
@@ -106,17 +101,8 @@ return {
         { "<leader>so", builtin.vim_options, desc = "Options" },
         { "<leader>sR", builtin.resume, desc = "Resume" },
         -- stylua: ignore
-        { "<leader>sw", function() builtin.grep_string({ word_match = "-w" }) end, desc = "Word (root dir)" },
-        {
-          "<leader>sW",
-          function()
-            builtin.grep_string({ cwd = false, word_match = "-w" })
-          end,
-          desc = "Word (cwd)",
-        },
-        { "<leader>sw", builtin.grep_string, mode = "v", desc = "Selection (root dir)" },
-        -- stylua: ignore
-        { "<leader>sW", function() builtin.grep_string({ cwd = false }) end, mode = "v", desc = "Selection (cwd)" },
+        { "<leader>sw", function() builtin.grep_string({ word_match = "-w" }) end, desc = "Word" },
+        { "<leader>sw", builtin.grep_string, mode = "v", desc = "Selection" },
         {
           "<leader>uc",
           function()

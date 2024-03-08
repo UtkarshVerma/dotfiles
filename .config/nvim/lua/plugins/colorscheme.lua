@@ -1,5 +1,3 @@
-local palette = require("util.colors")
-
 ---@type LazyPluginSpec[]
 return {
   {
@@ -10,35 +8,7 @@ return {
     ---@type CatppuccinOptions
     opts = {
       color_overrides = {
-        -- TODO: Compute other colors from the base 16 palette.
-        mocha = {
-          rosewater = palette.special.cursor,
-          flamingo = "#f2cdcd",
-          pink = palette.normal.magenta,
-          mauve = "#cba6f7",
-          red = palette.normal.red,
-          maroon = "#eba0ac",
-          peach = "#fab387",
-          yellow = palette.normal.yellow,
-          green = palette.normal.green,
-          teal = palette.normal.cyan,
-          sky = "#89dceb",
-          sapphire = "#74c7ec",
-          blue = palette.normal.blue,
-          lavender = "#b4befe",
-          text = palette.special.foreground,
-          subtext1 = palette.normal.white,
-          subtext0 = palette.bright.white,
-          overlay2 = "#9399b2",
-          overlay1 = "#7f849c",
-          overlay0 = "#6c7086",
-          surface2 = palette.bright.black,
-          surface1 = palette.normal.black,
-          surface0 = "#313244",
-          base = palette.special.background,
-          mantle = "#181825",
-          crust = "#11111b",
-        },
+        mocha = require("util").colors,
       },
       integrations = {
         alpha = false,
@@ -48,6 +18,7 @@ return {
         dap_ui = true,
         dashboard = true,
         flash = false,
+        fidget = true,
         gitsigns = true,
         illuminate = false,
         indent_blankline = true,
@@ -70,7 +41,7 @@ return {
       },
       custom_highlights = function(colors)
         return {
-          -- Workaround for https://github.com/catppuccin/nvim/issues/670
+          -- Workaround for https://github.com/catppuccin/nvim/issues/670.
           NeoTreeWinSeparator = { fg = colors.base, bg = colors.base },
           MiniNotifyBorder = { link = "MiniNotifyNormal" },
         }

@@ -54,20 +54,17 @@ local keys = {
   {
     "<leader>gl",
     function()
-      util.terminal.open({ "lazygit" }, { cwd = util.root.dir(), esc_esc = false, ctrl_hjkl = false })
+      util.terminal.open({ "lazygit" }, { esc_esc = false, ctrl_hjkl = false })
     end,
     desc = "Lazygit",
   },
-  -- stylua: ignore
-  { "<leader>gL", function() util.terminal.open({ "lazygit" }) end, desc = "Lazygit (cwd)" },
 
   { "<leader>ui", vim.show_pos, desc = "Inspect position" },
   { "<leader>ul", "<cmd>Lazy<cr>", desc = "Lazy" },
   { "<leader>qq", "<cmd>qa<cr>", desc = "Quit" },
 
   -- stylua: ignore start
-  { "<leader>tt", function() util.terminal.open(nil, { cwd = util.root.dir() }) end, desc = "Terminal (root dir)" },
-  { "<leader>tT", function() util.terminal.open() end, desc = "Terminal (cwd)" },
+  { "<leader>tt", function() util.terminal.open() end, desc = "Terminal" },
   { "<leader>ts", function() util.toggle.option("spell") end, desc = "Spelling" },
   { "<leader>tw", function() util.toggle.option("wrap") end, desc = "Word wrap" },
   { "<leader>td", util.toggle.diagnostics, desc = "Diagnostics" },

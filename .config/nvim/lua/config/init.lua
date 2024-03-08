@@ -5,7 +5,7 @@ local M = {
   icons = require("config.icons"),
 }
 
--- Initialize the editor.
+---Initialize the editor.
 function M.init()
   util.lazy_notify()
 
@@ -13,7 +13,7 @@ function M.init()
   util.plugin.setup()
 end
 
--- Set up the editor.
+---Set up the editor.
 function M.setup()
   -- Autocmds can be loaded lazily when not opening a file.
   local lazy_autocmds = vim.fn.argc(-1) == 0
@@ -31,12 +31,11 @@ function M.setup()
       end
 
       M.load("keymaps")
-      util.root.setup()
     end,
   })
 end
 
--- Load configuration for {name}.
+---Load configuration for {name}.
 ---@param name "autocmds"|"options"|"keymaps"
 function M.load(name)
   local mod = "config." .. name

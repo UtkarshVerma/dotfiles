@@ -3,6 +3,7 @@
 ---@field capabilities? table
 ---@field on_attach? fun(client:lsp.Client, bufnr:integer):integer
 ---@field filetypes? string[]
+---@field setup? fun():boolean
 
 ---@class plugins.lspconfig.config.server: plugins.lspconfig.server.opts
 ---@field keys? plugins.lspconfig.key[]
@@ -187,6 +188,7 @@ return {
       return {
         capabilities = require("cmp_nvim_lsp").default_capabilities(),
         servers = {},
+        setup = {},
       }
     end,
     config = function(_, _) end,
@@ -216,6 +218,12 @@ return {
             local server_opts = vim.tbl_deep_extend("force", {
               capabilities = vim.deepcopy(lspconfig_opts.capabilities) or {},
             }, servers[server])
+
+            if server_opts.setup ~= nil then
+              if server_opts.setup() then
+                return
+              end
+            end
 
             require("lspconfig")[server].setup(server_opts)
           end,
