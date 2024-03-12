@@ -2,5 +2,5 @@
 Name=File Manager
 Icon=system-file-manager
 Type=Application
-Exec=sh -c 'exec terminal -e "$FILE_MANAGER" %u'
+Exec=terminal -e lf %u
 MimeType=inode/directory;

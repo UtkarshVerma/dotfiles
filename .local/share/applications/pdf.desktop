@@ -2,5 +2,5 @@
 Name=PDF Reader
 Icon=document-viewer
 Type=Application
-Exec=sh -c 'exec "$READER" %U'
-MimeType=application/pdf;
+Exec=zathura %U
+MimeType=application/pdf;application/oxps;application/epub+zip;application/x-fictionbook;
