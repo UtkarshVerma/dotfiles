@@ -65,7 +65,7 @@ return {
 
   {
     "conform.nvim",
-    ---@type plugins.lspconfig.config
+    ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
         yaml = { "yamlfmt" },

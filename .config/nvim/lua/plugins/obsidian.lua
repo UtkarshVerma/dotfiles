@@ -1,5 +1,5 @@
 ---@class plugins.obsidian.config: obsidian.config.ClientOpts
----@field note_frontmatter_func fun(note:obsidian.Note):table
+---@field note_frontmatter_func? fun(note:obsidian.Note):table
 
 local vaults = {
   "~/notes/personal",
@@ -51,12 +51,11 @@ return {
     },
     dependencies = { "plenary.nvim" },
     ---@type plugins.obsidian.config
-    ---@diagnostic disable-next-line: missing-fields
     opts = {
       workspaces = workspaces,
       note_frontmatter_func = function(note)
         local out = {
-          aliases = #note.aliases > 0 and note.aliases,
+          aliases = #note.aliases > 0 and note.aliases or nil,
         }
 
         vim.tbl_extend("force", out, note.metadata or {})

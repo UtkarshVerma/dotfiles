@@ -88,9 +88,6 @@ return {
           })
         end,
       },
-
-      -- Do not override vim settings.
-      set_vim_settings = false,
     },
   },
 }

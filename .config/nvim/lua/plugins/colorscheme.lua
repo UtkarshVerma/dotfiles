@@ -1,3 +1,5 @@
+---@class plugins.catppuccin.config: CatppuccinOptions
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -5,7 +7,7 @@ return {
     name = "catppuccin",
     lazy = false,
     priority = 1000,
-    ---@type CatppuccinOptions
+    ---@type plugins.catppuccin.config
     opts = {
       color_overrides = {
         mocha = require("util").colors,
@@ -42,7 +44,7 @@ return {
       custom_highlights = function(colors)
         return {
           -- Workaround for https://github.com/catppuccin/nvim/issues/670.
-          NeoTreeWinSeparator = { fg = colors.base, bg = colors.base },
+          NeoTreeWinSeparator = { fg = colors.base, bg = colors.none },
           MiniNotifyBorder = { link = "MiniNotifyNormal" },
         }
       end,

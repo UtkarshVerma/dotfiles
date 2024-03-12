@@ -75,6 +75,7 @@ return {
     opts = function(_, opts)
       local renames = {
         biomejs = "biome",
+        nixpkgs_fmt = "nixpkgs-fmt",
       }
 
       local formatters = vim.tbl_map(function(formatter)
