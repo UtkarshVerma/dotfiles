@@ -6,6 +6,7 @@ set scrolloff 10    # Leave some space at the bottom of the screen.
 set autoquit        # Automatically quit the server when no clients remain.
 set wrapscroll      # Wrap cursor scrolling.
 set mouse           # Enable mouse.
+set sixel           # Enable sixels.
 
 ### Previews using ctpv.
 set cleaner ctpvclear
