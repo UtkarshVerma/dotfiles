@@ -7,6 +7,7 @@
 return {
   {
     "barreiroleo/ltex_extra.nvim",
+    enabled = false,
     ft = { "markdown", "tex" },
     dependencies = { "nvim-lspconfig" },
     ---@type plugins.ltex_extra.config

@@ -1,48 +1,48 @@
 #!/bin/sh
+# Spawns a menu choose a CPU/GPU profile based on passed flags.
 
-cpuProfiles="\
+set -e
+
+case "$1" in
+    --cpu)
+        mode="CPU"
+        icon="freon-fan-symbolic"
+        active="$(asusctl profile --profile-get | cut -d' ' -f4)"
+
+        profiles="\
 💤 Quiet
 💻 Balanced
 💨 Performance"
+        ;;
+    --gpu)
+        mode="GPU"
+        icon="freon-gpu-temperature-symbolic"
+        active="$(supergfxctl --get)"
 
-gpuProfiles="\
+        profiles="\
 💻 Integrated
 🔮 Vfio
 🚀 Hybrid"
+        if [ "$active" = "Hybrid" ]; then
+            profiles="$(echo "$profiles" | grep -v Vfio)"
+        fi
+        ;;
+    *)
+        echo "usage: $(basename "$0") [--cpu|--gpu]"
+        exit 1
+        ;;
+esac
 
-notify() {
-    icon="freon-fan-symbolic"
-    [ "$mode" = "GPU" ] && icon="freon-gpu-temperature-symbolic"
-    notify-send -i "$icon" "$mode Mode" "Switched to $profile mode." -t 2000
-}
-
-mode="CPU"
-[ "$1" = "-g" ] && mode="GPU"
-
-if [ "$mode" = "CPU" ]; then
-    profiles="$cpuProfiles"
-    active="$(asusctl profile -p | cut -d' ' -f4)"
-else
-    profiles="$gpuProfiles"
-    active="$(supergfxctl -g)"
-
-    if [ "$active" = "Hybrid" ]; then
-        profiles="$(echo "$profiles" | grep -v Vfio)"
-    fi
-fi
-
-preselect="$(echo "$profiles" | grep -n -i "$active" | cut -d':' -f1)"
+preselect="$(echo "$profiles" | grep --line-number -i "$active" | cut -d':' -f1)"
 preselect="$((preselect - 1))"
 prompt="$mode Profile:"
 
 choice="$(echo "$profiles" | dmenu -i -ps "$preselect" -p "$prompt")"
-[ ! "$choice" ] && exit 1
-
 profile="${choice##* }"
 
-if [ "$mode" = "CPU" ]; then
-    asusctl profile -P "$profile"
-else
-    echo "$profile"
-    supergfxctl -m "$profile"
-fi && notify
+case "$mode" in
+    CPU) asusctl profile --profile-set "$profile" ;;
+    GPU) supergfxctl --mode "$profile" ;;
+esac
+
+notify-send --expire-time=2000 --icon="$icon" "$mode Mode" "Switched to $profile mode."
