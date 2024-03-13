@@ -1,6 +1,11 @@
 ---@type LazyPluginSpec[]
 return {
   {
+    "bullets-vim/bullets.vim",
+    ft = "markdown",
+  },
+
+  {
     "nvim-treesitter",
     ---@param opts plugins.treesitter.config
     opts = function(_, opts)
