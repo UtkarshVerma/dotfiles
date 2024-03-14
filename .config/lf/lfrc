@@ -116,6 +116,8 @@ cmd create &{{
         */) mkdir --parents $1 ;;
         *) touch $1 ;;
     esac
+
+    lf -remote "send $id select $1"
 }}
 
 # Quit and update the parent shell's current working directory to match lf's.
