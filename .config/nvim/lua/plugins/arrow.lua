@@ -8,11 +8,11 @@ return {
   {
     "otavioschwanck/arrow.nvim",
     keys = {
-      { ",", desc = "Arrow" },
+      { "ga", desc = "Arrow" },
     },
     ---@type plugins.arrow.config
     opts = {
-      leader_key = ",",
+      leader_key = "ga",
       window = {
         border = "none",
       },
