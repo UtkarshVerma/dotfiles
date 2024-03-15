@@ -38,6 +38,9 @@ window.foreground: {{colors.special.foreground}}
 *.color14: {{colors.bright.cyan}}
 *.color15: {{colors.bright.white}}
 
+*.highlightfg: 258
+*.highlightbg: 9
+
 
 !! slock
 slock.locked: {{colors.normal.black}}

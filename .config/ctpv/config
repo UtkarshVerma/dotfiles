@@ -1,5 +1,1 @@
 set chafasixel
-
-preview images image/jpeg image/webp image/svg image/png {{
-    chafa --format sixels --polite on --size "$w"x"$h" "$f"
-}}
