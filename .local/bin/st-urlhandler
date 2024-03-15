@@ -1,38 +1,28 @@
 #!/bin/sh
-# Credits: https://github.com/LukeSmithxyz/st/blob/master/st-urlhandler
+# Open URLs from the terminal with dmenu.
 
-urlRegex="(((http|https|gopher|gemini|ftp|ftps|git)://|www\\.)[a-zA-Z0-9.]*[:;a-zA-Z0-9./+@$&%?$\#=_~-]*)|((magnet:\\?xt=urn:btih:)[a-zA-Z0-9]*)"
-urls="$(sed 's/.*│//g' | tr -d '\n' |                           # First remove linebreaks and mutt sidebars
-    grep -aEo "$urlRegex" |                                     # grep only urls as defined above
-    uniq |                                                      # Ignore neighboring duplicates
-    sed "s/\(\.\|,\|;\|\!\\|\?\)$//; s/^www./http:\/\/www\./")" # xdg-open will not detect url without http
+dmenu() {
+    command dmenu -i -l 10 -w "$WINDOWID" -bw 2 -fn "$(xrdb -get st.font)" "$@" |
+        tr -d '\n' # Trim trailing newline.
+}
+
+# Detect http/https/ftp URLs.
+urls="$(grep --text --extended-regexp --only-matching '(http|https|ftp)://[a-zA-Z0-9./?=_%:-]*' | uniq)"
 
 [ -z "$urls" ] && exit 1
 
-dmenu() {
-    command dmenu -i -l 10 -w "$WINDOWID" -bw 2 -fn "$(xrdb -get st.font)" "$@"
-}
-
-while getopts "hoc" o; do
-    case "$o" in
-        h)
-            printf "Optional arguments for custom use:\\n \
-                -c: copy\\n  -o: xdg-open\\n \
-                -h: Show this message\\n"
-            exit 1
-            ;;
-        o)
-            chosen="$(echo "$urls" | dmenu -p "Follow which URL?")"
-            setsid xdg-open "$chosen" >/dev/null 2>&1 &
-            ;;
-        c)
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --copy)
             echo "$urls" |
-                dmenu -p "Copy which URL?" | tr -d '\n' |
+                dmenu -p "Copy which URL?" |
                 xclip -selection clipboard
             ;;
-        *)
-            printf "Invalid option: -%s\\n" "$OPTARG"
-            exit 1
+        --open)
+            url="$(echo "$urls" | dmenu -p "Follow which URL?")"
+            setsid xdg-open "$url" >/dev/null 2>&1 &
             ;;
     esac
+
+    shift
 done
