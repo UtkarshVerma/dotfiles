@@ -18,14 +18,11 @@
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 
-[includeIf "gitdir:~/work/"]
-    path = ~/work/.gitconfig
+[includeIf "gitdir:~/work/aepl/"]
+	path = ~/work/aepl/.gitconfig
 
 [includeIf "gitdir:~/gsoc/rtems/"]
 	path = ~/gsoc/rtems/.gitconfig
-
-[includeIf "gitdir:~/remotes/"]
-	path = ~/remotes/.gitconfig
 
 [safe]
 	directory = /run/media/subaru/Stuff/Software/QEMU/Windows 10
