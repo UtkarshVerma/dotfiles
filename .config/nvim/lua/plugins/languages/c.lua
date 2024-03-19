@@ -1,4 +1,14 @@
--- TODO: Relies on lspconfig `setup` which has been removed.
+---@class lsp.clangd.config.capabilities: lsp.base.capabilities
+---@field offsetEncoding? string[]
+
+---@class lsp.clangd.config.init_options
+---@field usePlaceholders? boolean
+---@field completeUnimported? boolean
+---@field clangdFileStatus? boolean
+
+---@class lsp.clangd.config: lsp.base
+---@field capabilities? lsp.clangd.config.capabilities
+---@field init_options? lsp.clangd.config.init_options
 
 ---@type LazyPluginSpec[]
 return {
@@ -23,7 +33,7 @@ return {
           keys = {
             { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
           },
-          root_dir = function(fname)
+          root_dir = function(file)
             return require("lspconfig.util").root_pattern(
               "Makefile",
               "configure.ac",
@@ -32,9 +42,9 @@ return {
               "meson.build",
               "meson_options.txt",
               "build.ninja"
-            )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(
-              fname
-            ) or require("lspconfig.util").find_git_ancestor(fname)
+            )(file) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(
+              file
+            ) or require("lspconfig.util").find_git_ancestor(file)
           end,
           capabilities = {
             offsetEncoding = { "utf-16" },
@@ -43,7 +53,7 @@ return {
                 completionItem = {
                   commitCharactersSupport = true,
                   insertReplaceSupport = true,
-                  snippetSupport = true,
+                  snippetSupport = false,
                   deprecatedSupport = true,
                   labelDetailsSupport = true,
                   preselectSupport = false,
@@ -100,6 +110,7 @@ return {
   {
     "p00f/clangd_extensions.nvim",
     config = function() end,
+    -- TODO: Specify types
     opts = {
       inlay_hints = {
         inline = false,
@@ -124,5 +135,15 @@ return {
         },
       },
     },
+  },
+
+  {
+    "mason-nvim-dap.nvim",
+    ---@param opts plugins.mason_nvim_dap.config
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
+        "codelldb",
+      })
+    end,
   },
 }

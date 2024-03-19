@@ -1,7 +1,7 @@
 ---@class plugins.ltex_extra.config
 ---@field load_langs? string[]
 ---@field path? string
----@field server_opts? plugins.lspconfig.server.opts
+---@field server_opts? lsp.base
 
 ---@LazyPluginSpec[]
 return {

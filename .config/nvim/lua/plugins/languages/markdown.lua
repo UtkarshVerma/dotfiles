@@ -49,6 +49,7 @@ return {
     ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
+        -- TODO: Set line length to colorcolumn - 1
         markdown = { "prettierd" },
       },
     },

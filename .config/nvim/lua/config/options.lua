@@ -100,10 +100,12 @@ vim.filetype.add({
   filename = {
     wscript = "python",
     ["hugo.work"] = "gowork",
+    Kraftfile = "yaml",
   },
   extension = {
     dto = "devicetree",
     def = "c",
+    mdx = "markdown",
   },
 })
 

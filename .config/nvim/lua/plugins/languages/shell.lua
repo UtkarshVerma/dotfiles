@@ -6,7 +6,7 @@
 ---@class lsp.bashls.config.settings
 ---@field bashIde? lsp.bashls.config.settings.bash_ide
 
----@class lsp.bashls.config: plugins.lspconfig.server.opts
+---@class lsp.bashls.config: lsp.base
 ---@field settings? lsp.bashls.config.settings
 
 ---@type LazyPluginSpec[]

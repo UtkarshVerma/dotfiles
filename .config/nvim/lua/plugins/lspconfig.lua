@@ -1,11 +1,4 @@
----@class plugins.lspconfig.server.opts
----@field cmd? string[]
----@field capabilities? table
----@field on_attach? fun(client:lsp.Client, bufnr:integer):integer
----@field filetypes? string[]
----@field setup? fun():boolean
-
----@class plugins.lspconfig.config.server: plugins.lspconfig.server.opts
+---@class plugins.lspconfig.config.server: lsp.base
 ---@field keys? plugins.lspconfig.key[]
 
 ---@class plugins.lspconfig.config
@@ -14,6 +7,8 @@
 
 ---@class plugins.lspconfig.key: LazyKeys
 ---@field method? string
+
+---@class plugins.mason_lspconfig.config: MasonLspconfigSettings
 
 local util = require("util")
 
@@ -205,7 +200,7 @@ return {
       local lspconfig_opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
       local servers = lspconfig_opts.servers or {}
 
-      ---@type MasonLspconfigSettings
+      ---@type plugins.mason_lspconfig.config
       return {
         ensure_installed = vim.tbl_keys(servers),
         handlers = {

@@ -2,7 +2,7 @@
 ---@field exportPdf? "onType"|"onSave"|"never"
 ---@field serverPath? string
 
----@class lsp.typst_lsp.config: plugins.lspconfig.server.opts
+---@class lsp.typst_lsp.config: lsp.base
 ---@field settings? lsp.typst_lsp.config.settings
 
 ---@type LazyPluginSpec[]

@@ -1,4 +1,4 @@
----@class lsp.arduino_language_server.config: plugins.lspconfig.server.opts
+---@class lsp.arduino_language_server.config: lsp.base
 
 local arduino_dir_data = os.getenv("ARDUINO_DIRECTORIES_DATA")
 
