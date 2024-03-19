@@ -1,19 +1,22 @@
 #!/bin/sh
-# Simple script to toggle the touchpad.
+# Toggle the touchpad on or off.
 
 notify() {
     icon="touchpad-$1-symbolic"
     message="The touchpad input has been ${1}."
-    notify-send -h string:x-canonical-private-synchronous:touchpad -c system \
-        -i "$icon" Touchpad "$message"
+    notify-send \
+        --icon="$icon" \
+        --hint=string:x-canonical-private-synchronous:touchpad \
+        --category=system \
+        Touchpad "$message"
 }
 
-touchpadID="$(xinput list | grep Touchpad | cut -d'=' -f2 | cut -f1)"
-if xinput list-props "$touchpadID" | grep "Device Enabled" | grep -q "1$"; then
-    xinput disable "$touchpadID"
+touchpad_id="$(xinput list | grep Touchpad | cut -d'=' -f2 | cut -f1)"
+if xinput list-props "$touchpad_id" | grep "Device Enabled" | grep -q "1$"; then
+    xinput disable "$touchpad_id"
     notify disabled
     exit
 fi
 
-xinput enable "$touchpadID"
+xinput enable "$touchpad_id"
 notify enabled

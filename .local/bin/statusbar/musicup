@@ -1,9 +1,9 @@
 #!/bin/sh
-# This loop will update the music statusbar module whenever a command changes the
-# music player's status. mpd and must be running on X's start for this to work.
+# Signal the statusbar's music block whenever the music player changes state.
+# Supports MPRIS-compatible music players and mpd.
 
 {
-    playerctl metadata -F -f "{{title}}{{artist}}{{status}}" &
+    playerctl metadata --follow --format "{{title}}{{artist}}{{status}}" &
     while ! mpc idleloop 2>/dev/null; do
         sleep 1
     done

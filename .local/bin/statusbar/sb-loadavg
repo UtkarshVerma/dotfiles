@@ -1,13 +1,16 @@
 #!/bin/sh
-# Displays the average CPU load.
+# Display the average CPU load.
 
-case $BLOCK_BUTTON in
-    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+case "$BLOCK_BUTTON" in
+    6) terminal -e "$EDITOR" "$0" ;;
 esac
 
-threshold=5
+THRESHOLD=5
+
 load=$(cut -d' ' -f1 /proc/loadavg)
 
+is_threshold_exceeded="$(echo "$load > $THRESHOLD" | bc)"
+[ "$is_threshold_exceeded" -eq 1 ] && color=9
+
 . sb-theme
-[ 1 -eq "$(echo "$load > $threshold" | bc)" ] && color=9
 display " $load" "$color"

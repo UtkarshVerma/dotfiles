@@ -1,21 +1,22 @@
 #!/bin/sh
-# Prints all batteries, their percentage remaining and an emoji corresponding
-# to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
+# Display the current battery status.
 
 notify() {
-    notify-send -i battery-good-symbolic \
-        -h string:x-canonical-private-synchronous:battery \
-        "Battery" "$1" -t 4000
+    notify-send \
+        --icon=battery-good-symbolic \
+        --expire-time=4000 \
+        --hint=string:x-canonical-private-synchronous:battery \
+        "Battery" "$1"
 }
 
 case "$BLOCK_BUTTON" in
     1) notify "$(acpi -b | awk -F ': |, ' '{printf "%s\n%s\n", $2, $4}')" ;;
-    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    6) terminal -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme
 
-# Loop through all attached batteries and format the info
+# Loop through all attached batteries.
 for battery in /sys/class/power_supply/BAT?*; do
     # If non-first battery, print a space separator.
     [ -n "${capacity+x}" ] && printf " "
@@ -33,7 +34,6 @@ for battery in /sys/class/power_supply/BAT?*; do
         status=" "
     fi
 
-    # Sets up the status and capacity
     case "$(cat "$battery/status" 2>&1)" in
         Full) status=" " ;;
         Discharging)
@@ -48,6 +48,5 @@ for battery in /sys/class/power_supply/BAT?*; do
         *) exit 1 ;;
     esac
 
-    # Prints the info
     display "$status$capacity%" "$color"
 done

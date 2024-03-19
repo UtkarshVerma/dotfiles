@@ -1,7 +1,11 @@
 #!/bin/sh
-# Displays an indicator during screen records.
+# Display an indicator during screen records.
 
-if [ -f /tmp/record ]; then
-    . sb-theme
-    display ""
+PID_FILE=/tmp/record.pid
+
+if [ ! -f "$PID_FILE" ]; then
+    exit
 fi
+
+. sb-theme
+display ""

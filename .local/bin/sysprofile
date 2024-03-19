@@ -1,5 +1,5 @@
 #!/bin/sh
-# Spawns a menu choose a CPU/GPU profile based on passed flags.
+# Display a menu to switch between CPU/GPU profiles.
 
 set -e
 

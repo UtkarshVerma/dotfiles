@@ -2,21 +2,25 @@
 # This script provides a hassle-free way of taking screenshots.
 
 set -e
-screenshotsDir="$(xdg-user-dir PICTURES)/screenshots"
 
-snipTo() {
+SCREENSHOT_DIR="$(xdg-user-dir PICTURES)/screenshots"
+SCREENSHOT_FORMAT='+%Y-%m-%d_%H-%M-%S'
+
+snip_to() {
     if [ "$1" = "clip" ]; then
         message="The screenshot has been successfully saved to your clipboard."
         output="-"
     else
         # shellcheck disable=2088
-        output="$screenshotsDir/$(date '+%Y-%m-%d_%H-%M-%S').png"
-        message="The screenshot has been successfully saved as \
-            $(echo "$output" | sed "s|$HOME|~|")."
+        output="$SCREENSHOT_DIR/$(date "$SCREENSHOT_FORMAT").png"
+        message="The screenshot has been successfully saved as $(echo "$output" | sed "s|$HOME|~|")."
     fi
 
     shotgun -g "$2" "$output" | xclip -sel c -target image/png
-    notify-send -i accessories-screenshot-symbolic "Snip" "$message" -t 3000
+    notify-send \
+        --icon=accessories-screenshot-symbolic \
+        --expire-time=3000 \
+        "Snip" "$message"
 }
 
 case "$1" in
@@ -45,4 +49,4 @@ case "$1" in
 esac
 
 sel="$(sel-area "$region")"
-snipTo "$mode" "$sel"
+snip_to "$mode" "$sel"

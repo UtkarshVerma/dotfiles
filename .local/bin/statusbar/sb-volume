@@ -1,11 +1,12 @@
 #!/bin/sh
+# Display volume levels.
 
-case $BLOCK_BUTTON in
-    1) setsid -f "$TERMINAL" -e pulsemixer ;;
+case "$BLOCK_BUTTON" in
+    1) setsid --fork terminal -e pulsemixer ;;
     2) pamixer -t ;;
     4) pamixer -i 3 ;;
     5) pamixer -d 3 ;;
-    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    6) terminal -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme
@@ -14,15 +15,17 @@ if [ "$(pamixer --get-mute)" = true ]; then
     exit
 fi
 
-vol="$(pamixer --get-volume)"
-[ $? -ne 0 ] && [ -z "$vol" ] && exit 1
+volume="$(pamixer --get-volume)"
+if [ -z "$volume" ]; then
+    exit 1
+fi
 
-if [ "$vol" -gt 40 ]; then
+if [ "$volume" -gt 40 ]; then
     icon=" "
-elif [ "$vol" -gt 15 ]; then
+elif [ "$volume" -gt 15 ]; then
     icon=" "
 else
     icon=" "
 fi
 
-display "$icon$vol%"
+display "$icon$volume%"

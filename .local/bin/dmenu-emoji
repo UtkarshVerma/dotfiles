@@ -1,5 +1,5 @@
 #!/bin/sh
-# Displays a list of emojis to be selected from using dmenu.
+# Display an emoji prompt using dmenu.
 #
 # This script takes inspiration from:
 #   https://gist.github.com/Tadly/0741821d3694deaec1ee454a95c591fa
@@ -11,8 +11,10 @@ EMOJI_FILE="$XDG_CACHE_HOME/emojis"
 URL="https://unicode.org/emoji/charts/emoji-list.html"
 
 notify() {
-    notify-send -i emoji-people-symbolic -t 1500 \
-        -h string:x-canonical-private-synchronous:emojis \
+    notify-send \
+        --icon=emoji-people-symbolic \
+        --expire-time=1500 \
+        --hint string:x-canonical-private-synchronous:emojis \
         "Emoji Prompt" "$@"
 }
 
@@ -38,8 +40,8 @@ case "$1" in
         ;;
 esac
 
-# Download all emojis if they don't exist yet
-if [ ! -f "$EMOJI_FILE" ]; then
+# Download all emojis if they don't exist yet.
+if [ ! -r "$EMOJI_FILE" ]; then
     download
     exit
 fi

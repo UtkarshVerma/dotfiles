@@ -1,50 +1,50 @@
 #!/bin/sh
-# This script provides a hassle-free way of taking screen recordings.
+# Take screen recordings using ffmpeg.
 
-pidFile="/tmp/record"
-logFile="/tmp/record.log"
-recordingsDir="$(xdg-user-dir VIDEOS)/recordings"
+CACHE_FILE="/tmp/record.pid"
+LOG_FILE="/tmp/record.log"
+RECORDING_DIR="$(xdg-user-dir VIDEOS)/recordings"
 
-recordRegion() {
+record_region() {
     # Selection was cancelled
     [ -z "$1" ] && return 1
 
     width="${1%%x*}"
     height="${1#*x}"
     height="${height%%+*}"
-    xOffset="${1#*+}"
-    xOffset="${xOffset%%+*}"
-    yOffset="${1##*+}"
+    x_offset="${1#*+}"
+    x_offset="${x_offset%%+*}"
+    y_offset="${1##*+}"
 
     set -- -f x11grab -r 60 -s "${width}x${height}" \
-        -i "$DISPLAY+$xOffset,$yOffset"
+        -i "$DISPLAY+$x_offset,$y_offset"
 
-    # Use NVENC if GPU is in "compute" mode
-    if [ "$(supergfxctl -g)" = "compute" ]; then
+    # Use NVENC if GPU, if possible.
+    if [ "$(supergfxctl --get)" = "Hybrid" ]; then
         set -- "$@" -c:v h264_nvenc
     fi
 
     file="$(date '+%Y-%m-%d_%H-%M-%S').mp4"
-    set -- "$@" "$recordingsDir/$file"
+    set -- "$@" "$RECORDING_DIR/$file"
 
-    ffmpeg "$@" >"$logFile" 2>&1 &
-    echo "file=$file;pid=$!" >"$pidFile"
+    ffmpeg "$@" >"$LOG_FILE" 2>&1 &
+    echo "file=$file;pid=$!" >"$CACHE_FILE"
 }
 
-# Stop recording if PID file exists
-if [ -f "$pidFile" ]; then
+# Stop recording if cache file exists, otherwise start a new recording.
+if [ -f "$CACHE_FILE" ]; then
     # shellcheck disable=1090
-    . "$pidFile"
+    . "$CACHE_FILE"
     # shellcheck disable=2154
     kill -INT "$pid"
     wait "$pid"
 
-    notify-send -i view-list-video-symbolic \
+    notify-send --icon=view-list-video-symbolic \
         "Record" "The recording has been successfully saved as $file."
-    rm "$pidFile"
+
+    rm "$CACHE_FILE"
 else
-    # Start recording
-    recordRegion "$(sel-area)"
+    record_region "$(sel-area)"
 fi
 
 pkill -RTMIN+7 "$STATUSBAR"

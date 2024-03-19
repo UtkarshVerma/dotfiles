@@ -1,13 +1,15 @@
 #!/bin/sh
-# Script to toggle the WiFi hotspot using NetworkManager
+# Toggle the WiFi hotspot using NetworkManager.
 
 ssid="Dare To Hack Into"
 password="whatthehell"
 connection="Hotspot"
 
 notify() {
-    notify-send -h string:x-canonical-private-synchronous:hotspot \
-        -i network-wireless-hotspot-symbolic "WiFi Hotspot" "$1"
+    notify-send \
+        --icon=network-wireless-hotspot-symbolic \
+        --hint=string:x-canonical-private-synchronous:hotspot \
+        "WiFi Hotspot" "$1"
 }
 
 if nmcli --terse --fields TYPE,CONNECTION device status |

@@ -1,10 +1,10 @@
 #!/bin/sh
 # Utility script to get the geometry of a selected region.
 
-selAlpha=0.5
-selColor="$(xrdb -get color12)"
+ALPHA=0.5
+COLOR="$(xrdb -get color12)"
 
-hexToRGB() {
+hex_to_rgb() {
     color="$(echo "${1#?}" | tr '[:lower:]' '[:upper:]')"
     mask="${color#??}"
     while [ -n "$color" ]; do
@@ -19,9 +19,9 @@ hexToRGB() {
 }
 
 if [ "$1" = "full" ]; then
-    res="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'curent ')"
-    echo "$res+0+0"
+    resolution="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'curent ')"
+    echo "$resolution+0+0"
     exit
 fi
 
-slop -l -c "$(hexToRGB "$selColor"),$selAlpha"
+exec slop --highlight --color="$(hex_to_rgb "$COLOR"),$ALPHA"

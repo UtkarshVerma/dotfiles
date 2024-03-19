@@ -1,14 +1,17 @@
 #!/bin/sh
-# This script allows hassle-free management of disk and MTP mounts using dmenu.
+# Mount and unmount disks and MTP devices using dmenu.
 
-newLine="
+REMOVABLE_DRIVE_ICON="🧳"
+DISK_DRIVE_ICON="🗄"
+MTP_DRIVE_ICON="📱"
+AUTOMOUNTED_DRIVES="/dev/nvme0n1p5 /dev/sda4"
+
+newline="
 "
 
-formatBlockDrives() {
-    removableDriveIcon="🧳"
-    diskDriveIcon="🗄"
+display_block_drives() {
     drives="$(echo "$1" | sed -e 's|^1  |1 Unnamed\\x20Drive |' |
-        sed "s|^1|$removableDriveIcon|;s|^0|$diskDriveIcon|")"
+        sed "s|^1|$REMOVABLE_DRIVE_ICON|;s|^0|$DISK_DRIVE_ICON|")"
     mode="$2"
 
     if [ "$mode" = mount ]; then
@@ -25,17 +28,26 @@ formatBlockDrives() {
        }'
 }
 
-getBlockDrives() {
-    drives="$(lsblk --noheadings --raw -o rm,label,name,mountpoint |
-        grep -v -e nvme0n1p5 -e sda4)" # automounted using fstab
+get_block_drives() {
+    set --
+    for drive in $AUTOMOUNTED_DRIVES; do
+        drive_name="${drive##*/}"
+        set -- "$@" -e "$drive_name"
+    done
 
-    removableDrives="$(echo "$drives" | grep "^1")"
-    diskDrives="$(echo "$drives" | grep -v "^1")"
-    drives="$removableDrives$newLine$diskDrives"
-    formatBlockDrives "$drives" "$1"
+    drives="$(lsblk --noheadings --raw -o rm,label,name,mountpoint)"
+    if [ $# -gt 0 ]; then
+        # Filter out automounted drives.
+        drives="$(echo "$drives" | grep -v "$@")"
+    fi
+
+    removable_drives="$(echo "$drives" | grep "^1")"
+    disk_drives="$(echo "$drives" | grep -v "^1")"
+    drives="$removable_drives$newline$disk_drives"
+    display_block_drives "$drives" "$1"
 }
 
-getMTPDrives() {
+get_mtp_drives() {
     devices="$(lsusb -v 2>/dev/null |
         grep -e ^Bus -e mtp -e iManufacturer -e iProduct -e iSerial |
         grep -B3 mtp |
@@ -44,15 +56,14 @@ getMTPDrives() {
         sed -z 's/\([^\n]*\)\n\([^\n]*\)\n\([^\n]*\)\nmtp/\1 \2 \3/g' |
         tr ' ' '_')"
 
-    icon="📱"
     for id in $ids; do
         device="${id#*_}"
         device="${device%_*}"
         device="$(echo "$device" | tr '_' ' ')"
         if [ -d "$XDG_RUNTIME_DIR/gvfs/mtp:host=$id" ]; then
-            mounted="${mounted}$icon=$device=mtp://$id$newLine"
+            mounted="${mounted}$MTP_DRIVE_ICON=$device=mtp://$id$newline"
         else
-            unmounted="${unmounted}$icon=$device=mtp://$id$newLine"
+            unmounted="${unmounted}$MTP_DRIVE_ICON=$device=mtp://$id$newline"
         fi
     done
 
@@ -68,14 +79,16 @@ notify() {
     icon="media-mount-symbolic"
     [ "$mode" != "mount" ] && icon="media-eject-symbolic"
 
-    notify-send -i "$icon" \
-        -h string:x-canonical-private-synchronous:mountmate \
-        "MountMate" "$1" -t 4000
+    notify-send \
+        --icon "$icon" \
+        --hint=string:x-canonical-private-synchronous:mountmate \
+        --expire-time=4000 \
+        "MountMate" "$1"
 }
 
 prompt() {
-    mtpDrives="$(getMTPDrives "$mode")"
-    drives="$mtpDrives${mtpDrives:+$newLine}$(getBlockDrives "$mode")"
+    mtp_drives="$(get_mtp_drives "$mode")"
+    drives="$mtp_drives${mtp_drives:+$newline}$(get_block_drives "$mode")"
     drives="$(echo "$drives" | sed 's|\\x20| |g')"
     if [ -z "$drives" ]; then
         notify "Nothing to $mode."
@@ -90,24 +103,24 @@ prompt() {
         dmenu -i -p "$prompt")" || return 1
 
     chosen="${chosen#* }"
-    chosenMeta="$(echo "$drives" | grep "$chosen")"
-    chosenPath="${chosenMeta##*=}"
-    chosenLabel="${chosenMeta%=*}"
-    chosenLabel="${chosenLabel#*=}"
+    chosen_meta="$(echo "$drives" | grep "$chosen")"
+    chosen_path="${chosen_meta##*=}"
+    chosen_label="${chosen_meta%=*}"
+    chosen_label="${chosen_label#*=}"
 
     if [ "$mode" != "mount" ]; then
         args="-u"
-    elif ! echo "$chosenMeta" | grep -q "mtp://"; then
+    elif ! echo "$chosen_meta" | grep -q "mtp://"; then
         args="-d"
     fi
 
     # shellcheck disable=2086
-    if gio mount $args "$chosenPath"; then
-        notify "\"$chosenLabel\" has been ${mode}ed successfully."
+    if gio mount $args "$chosen_path"; then
+        notify "\"$chosen_label\" has been ${mode}ed successfully."
         return
     fi
 
-    notify "\"$chosenLabel\" could not be ${mode}ed."
+    notify "\"$chosen_label\" could not be ${mode}ed."
 }
 
 mode="mount"

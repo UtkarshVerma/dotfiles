@@ -2,8 +2,8 @@
 # Display the current time in HH:MM:SS.
 
 notify() {
-    notify-send -i office-calendar-symbolic \
-        -h string:x-canonical-private-synchronous:"$1" "$@"
+    notify-send --icon=office-calendar-symbolic \
+        --hint=string:x-canonical-private-synchronous:"$1" "$@"
 }
 
 case $BLOCK_BUTTON in
@@ -15,8 +15,8 @@ case $BLOCK_BUTTON in
             --format-event "• <span foreground='$(xrdb -get color6)'>%m</span>\n")"
         [ -n "$appointments" ] && notify "Appointments" "$appointments"
         ;;
-    2) setsid -f "$TERMINAL" -e calcurse ;;
-    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    2) setsid --fork terminal -e calcurse ;;
+    6) terminal -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme

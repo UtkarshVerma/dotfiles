@@ -1,16 +1,19 @@
 #!/bin/sh
-# Simple script to toggle the microphone.
+# Toggle the microphone on and off.
 
 notify() {
     icon="audio-input-microphone-${1}${1:+-}symbolic"
     message="The microphone has been ${1:-unmuted}."
 
-    notify-send -h string:x-canonical-private-synchronous:mic -c system \
-        -i "$icon" Microphone "$message"
+    notify-send \
+        --icon="$icon" \
+        --hint=string:x-canonical-private-synchronous:mic \
+        --category=system \
+        Microphone "$message"
 }
 
 pactl set-source-mute @DEFAULT_SOURCE@ toggle || exit 1
-pkill -RTMIN+8 "$STATUSBAR"
+pkill -RTMIN+6 "$STATUSBAR"
 
 if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
     notify muted

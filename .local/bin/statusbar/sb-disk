@@ -1,17 +1,20 @@
 #!/bin/sh
-# Displays the disk usages of root and home partitions.
+# Display disk usage for both `/` and `/home`.
 
 case $BLOCK_BUTTON in
-    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    6) terminal -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme
 
-fetchDiskUsage() {
-    avail=$(df "$1" | awk 'NR==2 {printf "%2.1f", ($4 / 1024 / 1024)}')
-    percentUsed=$(df "$1" | awk -F'[^0-9]*' 'NR==2 {print $5}')
-    [ "$percentUsed" -le 10 ] && color=10
-    display "${avail}G" "$color"
+disk_usage() {
+    used_bytes="$(df --output=avail "$1" | tail -n 1)"
+    used_gibs="$(echo "scale=1; $used_bytes / 1024 / 1024" | bc)"
+
+    percent_used="$(df --output=pcent "$1" | tail -n 1 | grep -o '[[:digit:]]\+')"
+    [ "$percent_used" -le 10 ] && color=10
+
+    display "${used_gibs}G" "$color"
 }
 
-echo "$(display "󰋊") $(fetchDiskUsage "/")$(display "|")$(fetchDiskUsage "/home")"
+echo "$(display "󰋊") $(disk_usage "/")$(display "|")$(disk_usage "/home")"

@@ -1,7 +1,9 @@
 #!/bin/sh
 # Display an icon if the microphone is muted.
 
-if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
-    . sb-theme
-    display ""
+if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q "^Mute: no"; then
+    exit
 fi
+
+. sb-theme
+display ""
