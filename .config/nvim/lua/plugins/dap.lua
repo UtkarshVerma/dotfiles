@@ -67,7 +67,10 @@ return {
   {
     "rcarriga/nvim-dap-ui",
     event = "VeryLazy",
-    dependencies = { "nvim-dap" },
+    dependencies = {
+      "nvim-dap",
+      "nvim-neotest/nvim-nio",
+    },
     keys = {
       -- stylua: ignore start
       { "<leader>du", function() require("dapui").toggle({}) end, desc = "Dap UI" },
