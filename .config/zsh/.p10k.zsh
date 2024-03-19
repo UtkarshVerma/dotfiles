@@ -1638,6 +1638,9 @@
   (( ! $+functions[p10k] )) || p10k reload
 }
 
+# Enable OSC 133 markers for the prompt string.
+typeset -g POWERLEVEL9K_TERM_SHELL_INTEGRATION=true
+
 # Tell `p10k configure` which file it should overwrite.
 typeset -g POWERLEVEL9K_CONFIG_FILE=${${(%):-%x}:a}
 

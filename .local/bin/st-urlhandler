@@ -7,7 +7,7 @@ dmenu() {
 }
 
 # Detect http/https/ftp URLs.
-urls="$(grep --text --extended-regexp --only-matching '(http|https|ftp)://[a-zA-Z0-9./?=_%:-]*' | uniq)"
+urls="$(grep --text --extended-regexp --only-matching '(http|https|ftp)://[a-zA-Z0-9./#?=_%:-]*' | uniq)"
 
 [ -z "$urls" ] && exit 1
 
