@@ -14,14 +14,18 @@ local function file_path()
     return ""
   end
 
-  local cwd = util.fs.cwd() or ""
-  path = path:sub(#cwd + 2)
+  local cwd = util.fs.cwd()
+  if cwd ~= nil and vim.startswith(path, cwd) then
+    path = path:sub(#(cwd .. "/") + 1)
+  end
 
   local path_sep = util.fs.path_sep
   local parts = vim.split(path, path_sep)
   local max_part_count = 6
   if #parts > max_part_count then
-    parts = { parts[1], "…", unpack(parts, #parts - (max_part_count - 1) + 1, #parts) }
+    local lead_parts = { unpack(parts, 1, math.floor(max_part_count / 2)) }
+    local trail_parts = { unpack(parts, #parts - (max_part_count - #lead_parts) + 1, #parts) }
+    parts = vim.tbl_flatten({ lead_parts, "…", trail_parts })
   end
 
   return table.concat(parts, path_sep) .. "%m%r"
