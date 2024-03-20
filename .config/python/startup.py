@@ -1,35 +1,37 @@
-# Store interactive Python shell history in ~/.cache/python/history
-# instead of ~/.python_history.
+# Store interactive Python shell history according to the XDG specification.
+# Set the `PYTHONSTARTUP` environment variable to this file.
 #
-# Create the following .config/pythonstartup.py file
-# and export its path using PYTHONSTARTUP environment variable:
-#
-# export PYTHONSTARTUP="${XDG_CONFIG_HOME:-$HOME/.config}/pythonstartup.py"
+# This entire thing is unnecessary post v3.13.0a3
+#   https://github.com/python/cpython/issues/73965
 
-# Don't do anything for ipython
-import sys
-if hasattr(__builtins__, '__IPYTHON__'):
-    sys.exit()
 
-import atexit
-import os
-import readline
+def is_vanilla_python() -> bool:
+    import sys
 
-histdir = os.path.join(os.getenv("XDG_CACHE_HOME", os.path.expanduser("~/.cache")), "python")
-if not os.path.isdir(histdir):
-    os.mkdir(histdir)
+    return not hasattr(__builtins__, "__IPYTHON__") and "bpython" not in sys.argv[0]
 
-histfile = os.path.join(histdir, "history")
 
-try:
-    readline.read_history_file(histfile)
-    h_len = readline.get_current_history_length()
-except FileNotFoundError:
-    open(histfile, 'wb').close()
-    h_len = 0
+def setup_history():
+    import atexit
+    import os
+    import readline
+    from pathlib import Path
 
-def save(prev_h_len, histfile):
-    new_h_len = readline.get_current_history_length()
-    readline.set_history_length(1000)
-    readline.append_history_file(new_h_len - prev_h_len, histfile)
-atexit.register(save, h_len, histfile)
+    # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html#variables
+    state_home = Path(os.environ.get("XDG_STATE_HOME") or "~/.local/state")
+    if not state_home.is_dir():
+        print("Error: XDG_STATE_HOME does not exist at", state_home)
+
+    history_file = state_home / "python" / "history"
+
+    try:
+        readline.read_history_file(history_file)
+    except FileNotFoundError:
+        Path(history_file.parent).mkdir(parents=False, exist_ok=True)
+        open(history_file, "wb").close()
+
+    atexit.register(readline.write_history_file, history_file)
+
+
+if is_vanilla_python():
+    setup_history()
