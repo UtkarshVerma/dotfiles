@@ -12,10 +12,10 @@ notify() {
         Microphone "$message"
 }
 
-pactl set-source-mute @DEFAULT_SOURCE@ toggle || exit 1
+wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle || exit 1
 pkill -RTMIN+6 "$STATUSBAR"
 
-if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q yes; then
+if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q "[MUTED]"; then
     notify muted
     exit
 fi

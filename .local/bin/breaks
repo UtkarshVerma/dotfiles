@@ -1,11 +1,12 @@
 #!/bin/sh
 # Notify the user to take breaks at specified intervals.
 
+# Interval duration specified as in sleep(1).
 INTERVAL=20m
 
 # Message format: <time period>:<break duration>:<message string>
 MESSAGES="\
-3:60:Walk around.
+3:60:Walk around for a minute.
 *:20:Look 20 feet away for 20 seconds."
 
 notify() {
@@ -20,11 +21,10 @@ notify() {
 
 take_break() {
     count=$1
-
     message="$(echo "$MESSAGES" | grep "^$count:")"
     [ -z "$message" ] && message="$(echo "$MESSAGES" | grep '^\*:')"
-    message="${message#*:}" # Remove the count.
 
+    message="${message#*:}" # Remove the count.
     timeout="${message%:*}"
     timeout_millis=$((timeout * 1000))
     message="${message#*:}"
@@ -34,11 +34,10 @@ take_break() {
 
 max_count="$(echo "$MESSAGES" | grep -v '^\*:' | cut -d: -f1 | sort -n | tail -n1)"
 count=1
-
 while :; do
     sleep "$INTERVAL"
     take_break $count
 
-    # Confine count within [1, max_count].
-    count=$((((count - 1) % max_count) + 1))
+    # Increment count while confining it within [1, max_count].
+    count=$((count % max_count + 1))
 done

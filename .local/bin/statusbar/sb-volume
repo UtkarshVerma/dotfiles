@@ -1,21 +1,36 @@
 #!/bin/sh
 # Display volume levels.
 
+wpctl() {
+    arg="$2"
+
+    set -- "$1"
+    if [ "$1" = set-volume ]; then
+        set -- "$@" --limit=1.0
+    fi
+
+    set -- "$@" @DEFAULT_AUDIO_SINK@ "$arg"
+
+    command wpctl "$@"
+}
+
 case "$BLOCK_BUTTON" in
     1) setsid --fork terminal -e pulsemixer ;;
-    2) pamixer -t ;;
-    4) pamixer -i 3 ;;
-    5) pamixer -d 3 ;;
+    2) wpctl set-mute toggle ;;
+    4) wpctl set-volume 3%+ ;;
+    5) wpctl set-volume 3%- ;;
     6) terminal -e "$EDITOR" "$0" ;;
 esac
 
 . sb-theme
-if [ "$(pamixer --get-mute)" = true ]; then
+if wpctl get-volume | grep -q "[MUTED]"; then
     display " " 9
     exit
 fi
 
-volume="$(pamixer --get-volume)"
+volume_frac="$(wpctl get-volume | cut -d' ' -f2)"
+volume="$(echo "$volume_frac * 100 / 1" | bc)"
+
 if [ -z "$volume" ]; then
     exit 1
 fi
