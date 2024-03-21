@@ -5,6 +5,7 @@ local vaults = {
   "~/notes/personal",
   "~/notes/cooking",
   "~/notes/colleges",
+  "~/notes/freelancing",
 }
 
 ---@type obsidian.workspace.WorkspaceSpec[]
@@ -12,20 +13,9 @@ local workspaces = vim.tbl_map(function(vault)
   ---@type obsidian.workspace.WorkspaceSpec
   return {
     name = vim.fs.basename(vault),
-    path = vault,
+    path = vim.fn.resolve(vim.fn.expand(vault)),
   }
 end, vaults)
-
----@type LazyEventSpec[]
-local events = vim.tbl_flatten(vim.tbl_map(function(workspace)
-  return vim.tbl_map(function(event)
-    ---@type LazyEventSpec
-    return {
-      event = event,
-      pattern = string.format("%s/**.md", workspace.path),
-    }
-  end, { "BufReadPre", "BufNewFile" })
-end, workspaces))
 
 ---@type LazyPluginSpec[]
 return {
@@ -41,7 +31,14 @@ return {
 
   {
     "epwalsh/obsidian.nvim",
-    event = events,
+    event = {
+      {
+        event = { "BufReadPre", "BufNewFile" },
+        pattern = vim.tbl_map(function(workspace)
+          return string.format("%s/**.md", workspace.path)
+        end, workspaces),
+      },
+    },
     keys = {
       { "<leader>oo", "<cmd>ObsidianQuickSwitch<cr>", desc = "Open note" },
       { "<leader>oO", "<cmd>ObsidianOpen<cr>", desc = "Open vault" },
