@@ -29,6 +29,8 @@ display_block_drives() {
 }
 
 get_block_drives() {
+    mode="$1"
+
     set --
     for drive in $AUTOMOUNTED_DRIVES; do
         drive_name="${drive##*/}"
@@ -44,7 +46,7 @@ get_block_drives() {
     removable_drives="$(echo "$drives" | grep "^1")"
     disk_drives="$(echo "$drives" | grep -v "^1")"
     drives="$removable_drives$newline$disk_drives"
-    display_block_drives "$drives" "$1"
+    display_block_drives "$drives" "$mode"
 }
 
 get_mtp_drives() {
@@ -88,6 +90,7 @@ notify() {
 
 prompt() {
     mtp_drives="$(get_mtp_drives "$mode")"
+
     drives="$mtp_drives${mtp_drives:+$newline}$(get_block_drives "$mode")"
     drives="$(echo "$drives" | sed 's|\\x20| |g')"
     if [ -z "$drives" ]; then

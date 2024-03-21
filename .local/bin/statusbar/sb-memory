@@ -9,4 +9,4 @@ free_mib="$(free --mebi | grep '^Mem:' | tr -s ' ' | cut -d' ' -f3)"
 free_gib="$(echo "scale=2; $free_mib / 1024" | bc)"
 
 . sb-theme
-display " ${free_gib}GiB"
+display " $(printf "%.2f" "$free_gib")GiB"

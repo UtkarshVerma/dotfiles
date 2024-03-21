@@ -9,6 +9,16 @@ MESSAGES="\
 *:20:Look 20 feet away for 20 seconds."
 
 notify() {
+    timeout_millis="$1"
+    message="$2"
+
+    notify-send \
+        --icon=clock-applet-symbolic \
+        --expire-time="$timeout_millis" \
+        Breaks "$message"
+}
+
+take_break() {
     count=$1
 
     message="$(echo "$MESSAGES" | grep "^$count:")"
@@ -19,7 +29,7 @@ notify() {
     timeout_millis=$((timeout * 1000))
     message="${message#*:}"
 
-    notify-send --expire-time=$timeout_millis Breaks "$message"
+    notify $timeout_millis "$message"
 }
 
 max_count="$(echo "$MESSAGES" | grep -v '^\*:' | cut -d: -f1 | sort -n | tail -n1)"
@@ -27,7 +37,7 @@ count=1
 
 while :; do
     sleep "$INTERVAL"
-    notify $count
+    take_break $count
 
     # Confine count within [1, max_count].
     count=$((((count - 1) % max_count) + 1))
