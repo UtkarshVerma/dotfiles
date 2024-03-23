@@ -127,15 +127,19 @@ bindkey '\e[B' down-line-or-beginning-search
 bindkey -M vicmd "j" down-line-or-beginning-search
 
 bindkey '\C-w' backward-kill-word       # Ctrl-w: delete whole word backword
-bindkey '\e[Z' reverse-menu-complete	# Shift-Tab: move through the completion menu backwards
-bindkey '\b' backward-delete-char		# Backspace: delete backward
-bindkey '\e[3~' delete-char				# Delete: delete forward
-bindkey '\e[M' kill-word				# Ctrl-Delete: delete whole forward-word
+bindkey '\e[Z' reverse-menu-complete    # Shift-Tab: move through the completion menu backwards
+bindkey '\b' backward-delete-char       # Backspace: delete backward
+bindkey '\e[3~' delete-char             # Delete: delete forward
+bindkey '\e[M' kill-word                # Ctrl-Delete: delete whole forward-word
 bindkey '\e[127;5u' backward-kill-word  # Ctrl-Backspace: delete whole word backward
-bindkey '\e[1;5C' forward-word			# Ctrl-RightArrow: move forward one word
-bindkey '\e[1;5D' backward-word			# Ctrl-LeftArrow: move backward one word
+bindkey '\e[1;5C' forward-word          # Ctrl-RightArrow: move forward one word
+bindkey '\e[1;5D' backward-word         # Ctrl-LeftArrow: move backward one word
 
-bindkey ' ' magic-space					# Space: don't do history expansion
+bindkey ' ' magic-space                 # Space: don't do history expansion
+
+# Ignore Shift key when combined with backspace/space
+bindkey -s '\e[127;2u' '^?'             # Shift-Backspace
+bindkey -s '\e[32;2u' ' '               # Shift-Space
 
 # Ctrl-e: Edit the current command line in $EDITOR
 autoload -U edit-command-line

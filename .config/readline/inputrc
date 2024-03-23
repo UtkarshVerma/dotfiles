@@ -7,3 +7,15 @@ set show-mode-in-prompt on
 # Change cursor based on mode and inject OSC 133 escape sequences.
 set vi-ins-mode-string "\1\e[5 q\e]133;A\e\\\2"
 set vi-cmd-mode-string "\1\e[2 q\e]133;A\e\\\2"
+
+# Command mode keymaps.
+set keymap vi-command
+Control-l: clear-screen
+
+# Insert mode keymaps.
+set keymap vi-insert
+Control-l: clear-screen 
+
+# Ignore Shift key when combined with backspace/space.
+"\e[127;2u": "\b"
+"\e[32;2u": " "
