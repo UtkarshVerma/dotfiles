@@ -58,7 +58,6 @@ local options = {
     "blank",
     "buffers",
     "curdir",
-    "folds",
     "globals",
     "help",
     "localoptions",
