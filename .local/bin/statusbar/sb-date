@@ -20,4 +20,4 @@ case $BLOCK_BUTTON in
 esac
 
 . sb-theme
-display " $(date '+%H:%M:%S')"
+display "󰥔 $(date '+%H:%M:%S')"

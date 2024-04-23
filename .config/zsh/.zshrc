@@ -1,13 +1,13 @@
 #!/bin/zsh
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Initialize stuff
-#-------------------------------------------------------------------------------
-## Instant prompt
+#------------------------------------------------------------------------------
+# Instant prompt
 if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-## History file
+# History file
 HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=10000000
 SAVEHIST=10000000
@@ -15,16 +15,17 @@ SAVEHIST=10000000
 
 export GPG_TTY="$TTY"
 
-## Initialize completions
+# Initialize completions
 autoload -U compinit
 fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 zstyle ':completion:*' menu select
+zstyle ':completion:*' rehash true
 zmodload zsh/complist
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 _comp_options+=(globdots)       # Include hidden files
 
-## Retain scrollback history on Ctrl+l
+# Retain scrollback history on Ctrl+l
 if [[ "$TERM" =~ "^foot" ]]; then
     clear-screen-keep-sb() {
         printf "%$((LINES-1))s" | tr ' ' '\n'
@@ -36,9 +37,9 @@ fi
 setopt hist_ignore_all_dups
 setopt posixbuiltins
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Plugins
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 plugins=(
     "https://github.com/romkatv/powerlevel10k"
     "https://github.com/zsh-users/zsh-autosuggestions"
@@ -56,9 +57,9 @@ for plugin in $plugins; do
 done
 unset plugins plugin basename dir
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Source configurations
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 configs=(
     "$XDG_CONFIG_HOME/shellrc"  # common shell config
     "$ZDOTDIR/.p10k.zsh"        # p10k config
@@ -78,9 +79,9 @@ if command -v direnv >/dev/null 2>&1; then
 fi
 
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Vi mode
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 export KEYTIMEOUT=1
 
 # Change cursor shape for different vi modes.
@@ -99,12 +100,9 @@ zle-line-init() {
 }
 zle -N zle-line-init
 
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Key bindings
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 bindkey -v  # Use vim bindings
 
 # Use vim keys in tab complete menu:
@@ -136,10 +134,6 @@ bindkey '\e[1;5C' forward-word          # Ctrl-RightArrow: move forward one word
 bindkey '\e[1;5D' backward-word         # Ctrl-LeftArrow: move backward one word
 
 bindkey ' ' magic-space                 # Space: don't do history expansion
-
-# Ignore Shift key when combined with backspace/space
-bindkey -s '\e[127;2u' '^?'             # Shift-Backspace
-bindkey -s '\e[32;2u' ' '               # Shift-Space
 
 # Ctrl-e: Edit the current command line in $EDITOR
 autoload -U edit-command-line

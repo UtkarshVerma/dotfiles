@@ -15,7 +15,3 @@ Control-l: clear-screen
 # Insert mode keymaps.
 set keymap vi-insert
 Control-l: clear-screen 
-
-# Ignore Shift key when combined with backspace/space.
-"\e[127;2u": "\b"
-"\e[32;2u": " "

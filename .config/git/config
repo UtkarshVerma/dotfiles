@@ -3,6 +3,9 @@
 	name = Utkarsh Verma
 	signingkey = 7A4885A7162BDF20
 
+[credential]
+	helper = gopass
+
 [commit]
 	gpgsign = true
 
