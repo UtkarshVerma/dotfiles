@@ -9,6 +9,10 @@ return {
     ---@type plugins.ufo.config
     opts = {
       open_fold_hl_timeout = 0, -- Disable fold highlight.
+      ---@return UfoProviderEnum[]
+      provider_selector = function(_, _, _)
+        return { "treesitter", "indent" }
+      end,
     },
   },
 }

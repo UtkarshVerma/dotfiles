@@ -50,9 +50,15 @@ return {
     ---@type plugins.obsidian.config
     opts = {
       workspaces = workspaces,
+      disable_frontmatter = true, -- Don't set first heading as an alias.
       note_frontmatter_func = function(note)
+        if note.path.filename:match("tags") then
+          return note.metadata
+        end
+
         local out = {
           aliases = #note.aliases > 0 and note.aliases or nil,
+          tags = #note.tags > 0 and note.tags or nil,
         }
 
         vim.tbl_extend("force", out, note.metadata or {})
