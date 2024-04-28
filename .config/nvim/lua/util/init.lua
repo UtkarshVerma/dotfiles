@@ -141,4 +141,11 @@ function M.get_upvalue(func, name)
   end
 end
 
+-- Check if buffer contains a large file.
+---@return boolean
+---@nodiscard
+function M.buf_has_large_file(bufnr)
+  return vim.api.nvim_buf_line_count(bufnr) > 5000
+end
+
 return M

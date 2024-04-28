@@ -1,5 +1,14 @@
+---@class plugins.treesitter.plugin
+---@field enable? boolean
+---@field disable? fun(filetype:string, bufnr: number):boolean
+
+---@class plugins.treesitter.highlight: plugins.treesitter.plugin
+
 ---@class plugins.treesitter.config: TSConfig
 ---@field ensure_installed? string[]
+---@field highlight? plugins.treesitter.highlight
+
+local util = require("util")
 
 ---@type LazyPluginSpec[]
 return {
@@ -20,7 +29,12 @@ return {
     },
     ---@type plugins.treesitter.config
     opts = {
-      highlight = { enable = true },
+      highlight = {
+        enable = true,
+        disable = function(_, bufnr)
+          return util.buf_has_large_file(bufnr)
+        end,
+      },
       indent = { enable = true },
       ensure_installed = {},
       incremental_selection = {

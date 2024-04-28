@@ -11,7 +11,9 @@ return {
     },
     build = ":MasonUpdate",
     ---@type MasonSettings
-    opts = {},
+    opts = {
+      ensure_installed = {},
+    },
     ---@param opts plugins.mason.config
     config = function(_, opts)
       require("mason").setup(opts)
