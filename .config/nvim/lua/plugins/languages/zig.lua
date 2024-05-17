@@ -19,4 +19,14 @@ return {
       },
     },
   },
+
+  {
+    "conform.nvim",
+    ---@type plugins.conform.config
+    opts = {
+      formatters_by_ft = {
+        zig = { "zigfmt" },
+      },
+    },
+  },
 }

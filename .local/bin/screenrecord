@@ -1,33 +1,36 @@
 #!/bin/sh
-# Take screen recordings using ffmpeg.
+# Take screen recordings.
 
 CACHE_FILE="/tmp/record.pid"
 LOG_FILE="/tmp/record.log"
 RECORDING_DIR="$(xdg-user-dir VIDEOS)/recordings"
 
 record_region() {
-    # Selection was cancelled
-    [ -z "$1" ] && return 1
+    [ $# -ne 4 ] && return 1
 
-    width="${1%%x*}"
-    height="${1#*x}"
-    height="${height%%+*}"
-    x_offset="${1#*+}"
-    x_offset="${x_offset%%+*}"
-    y_offset="${1##*+}"
-
-    set -- -f x11grab -r 60 -s "${width}x${height}" \
-        -i "$DISPLAY+$x_offset,$y_offset"
-
-    # Use NVENC if GPU, if possible.
-    if [ "$(supergfxctl --get)" = "Hybrid" ]; then
-        set -- "$@" -c:v h264_nvenc
-    fi
+    x_offset="$1"
+    y_offset="$2"
+    width="$3"
+    height="$4"
 
     file="$(date '+%Y-%m-%d_%H-%M-%S').mp4"
-    set -- "$@" "$RECORDING_DIR/$file"
 
-    ffmpeg "$@" >"$LOG_FILE" 2>&1 &
+    case "$XDG_SESSION_TYPE" in
+        x11)
+            set -- ffmpeg -f x11grab -r 60 -s "${width}x${height}" \
+                -i "$DISPLAY+$x_offset,$y_offset"
+
+            # Use NVENC if GPU, if possible.
+            if [ "$(supergfxctl --get)" = "Hybrid" ]; then
+                set -- "$@" -c:v h264_nvenc
+            fi
+            ;;
+        wayland)
+            set -- wf-recorder -f
+            ;;
+    esac
+
+    "$@" "$RECORDING_DIR/$file" >"$LOG_FILE" 2>&1 &
     echo "file=$file;pid=$!" >"$CACHE_FILE"
 }
 
@@ -44,7 +47,10 @@ if [ -f "$CACHE_FILE" ]; then
 
     rm "$CACHE_FILE"
 else
-    record_region "$(sel-area)"
+    selection="$(sel-area)" || exit 1
+
+    # shellcheck disable=SC2086
+    record_region $selection
 fi
 
 pkill -RTMIN+7 "$STATUSBAR"

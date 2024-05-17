@@ -6,7 +6,7 @@ if [ "$1" = "--type" ]; then
     shift
 fi
 
-choice=$(gopass list --flat | dmenu "$@")
+choice=$(gopass list --flat | menu "$@")
 
 [ -n "$choice" ] || exit
 

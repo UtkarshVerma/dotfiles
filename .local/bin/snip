@@ -1,22 +1,40 @@
 #!/bin/sh
-# This script provides a hassle-free way of taking screenshots.
-
-set -e
+# Take screenshots for a region or the entire screen.
 
 SCREENSHOT_DIR="$(xdg-user-dir PICTURES)/screenshots"
 SCREENSHOT_FORMAT='+%Y-%m-%d_%H-%M-%S'
 
 snip_to() {
-    if [ "$1" = "clip" ]; then
-        message="The screenshot has been successfully saved to your clipboard."
-        output="-"
-    else
-        # shellcheck disable=2088
-        output="$SCREENSHOT_DIR/$(date "$SCREENSHOT_FORMAT").png"
-        message="The screenshot has been successfully saved as $(echo "$output" | sed "s|$HOME|~|")."
-    fi
+    mode="$1"
+    x="$2"
+    y="$3"
+    width="$4"
+    height="$5"
 
-    shotgun -g "$2" "$output" | xclip -sel c -target image/png
+    case "$mode" in
+        clip)
+            message="The screenshot has been successfully saved to your clipboard."
+            output="-"
+            ;;
+        file)
+            output="$SCREENSHOT_DIR/$(date "$SCREENSHOT_FORMAT").png"
+            message="The screenshot has been successfully saved as $(echo "$output" | sed "s|$HOME|~|")."
+            ;;
+    esac
+
+    case "$XDG_SESSION_TYPE" in
+        x11)
+            shotgun -g "${width}x$height+$x+$y" "$output" | xclip -sel c -target image/png
+            ;;
+        wayland)
+            grim -g "$x,$y ${width}x$height" -c "$output" | wl-copy --type image/png
+            ;;
+        *)
+            echo "error: unsupported session type"
+            return 1
+            ;;
+    esac || return 1
+
     notify-send \
         --icon=accessories-screenshot-symbolic \
         --expire-time=3000 \
@@ -35,7 +53,7 @@ case "$1" in
 🖱 Selection (Copy)
 💻 Entire Screen (Copy)"
 
-        choice="$(echo "$choices" | dmenu -i -p "Screenshot:")" || exit
+        choice="$(echo "$choices" | menu -i -p "Screenshot:")" || exit
         case "$choice" in
             *Selection*) region="sel" ;;
             *) region="full" ;;
@@ -48,5 +66,7 @@ case "$1" in
         ;;
 esac
 
-sel="$(sel-area "$region")"
-snip_to "$mode" "$sel"
+selection="$(sel-area "$region")" || exit
+
+# shellcheck disable=SC2086
+snip_to "$mode" $selection || exit 1

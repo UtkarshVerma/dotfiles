@@ -57,6 +57,8 @@ local function root_dir()
   return nil
 end
 
+-- TODO: Add arrow plugin to inactive status.
+
 ---@type LazyPluginSpec[]
 return {
   {

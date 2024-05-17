@@ -12,7 +12,7 @@ fi
 rswal --variables no-reload=1
 
 autostart="\
-    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+    /usr/lib/polkit-kde-authentication-agent-1
     picom
     unclutter
     parcellite -n

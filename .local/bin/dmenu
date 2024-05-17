@@ -1,10 +1,10 @@
 #!/bin/sh
-# dmenu wrapper to ensure that the menu overlaps the statusbar
+# Wrap dmenu to lay it on top of the statusbar.
 
-getParentRect() {
-    focusedX="${1#+}"
-    focusedX="${focusedX%+*}"
-    focusedY="${1##*+}"
+get_parent_rect() {
+    focused_x="${1#+}"
+    focused_x="${focused_x%+*}"
+    focused_y="${1##*+}"
 
     for geometry in $2; do
         x="${geometry#*+}"
@@ -14,27 +14,27 @@ getParentRect() {
         height="${geometry%%+*}"
         height="${height##*x}"
 
-        if [ "$focusedX" -ge "$x" ] && [ "$focusedX" -le "$((x + width))" ] &&
-            [ "$focusedY" -ge "$y" ] && [ "$focusedY" -le "$((y + height))" ]; then
+        if [ "$focused_x" -ge "$x" ] && [ "$focused_x" -le "$((x + width))" ] &&
+            [ "$focused_y" -ge "$y" ] && [ "$focused_y" -le "$((y + height))" ]; then
             echo "$geometry"
             return
         fi
     done
 }
 
-getBarGeometry() {
+get_bar_geometry() {
     focusedSystray="$(xwininfo -root -tree | grep 'dwmsystray' | head -1 |
         awk '{ print $NF }')"
     geometries="$(xwininfo -root -tree | grep '("dwm" "dwm")' |
         awk '{ print $(NF - 1) }')"
-    getParentRect "$focusedSystray" "$geometries"
+    get_parent_rect "$focusedSystray" "$geometries"
 }
 
-scriptDir="${0%/*}"
+script_dir="${0%/*}"
 binary="${0##*/}"
 IFS=":"
 for dir in $PATH; do
-    [ "$dir" = "$scriptDir" ] && continue
+    [ "$dir" = "$script_dir" ] && continue
     [ -x "$dir/$binary" ] && break
 done
 unset IFS
@@ -45,21 +45,21 @@ for arg in "$@"; do
     esac
 done
 
-barGeometry="$(getBarGeometry)"
+bar_geometry="$(get_bar_geometry)"
 
-height="${barGeometry#*x}"
+height="${bar_geometry#*x}"
 height="${height%%+*}"
 set -- "$@" -h "$height"
 
-width="${barGeometry%x*}"
+width="${bar_geometry%x*}"
 set -- "$@" -W "$width"
 
-xOffset="${barGeometry#*+}"
-xOffset="${xOffset%+*}"
-set -- "$@" -X "$xOffset"
+x_offset="${bar_geometry#*+}"
+x_offset="${x_offset%+*}"
+set -- "$@" -X "$x_offset"
 
-yOffset="${barGeometry##*+}"
-[ "$yOffset" -lt 0 ] && yOffset="$xOffset"
-set -- "$@" -Y "$yOffset"
+y_offset="${bar_geometry##*+}"
+[ "$y_offset" -lt 0 ] && y_offset="$x_offset"
+set -- "$@" -Y "$y_offset"
 
 exec "$dir/$binary" "$@"

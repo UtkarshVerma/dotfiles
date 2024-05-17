@@ -1,0 +1,52 @@
+#!/bin/sh
+# Wrap around dmenu and bemenu to provide a unified menu.
+
+shift_args() {
+    arg="${args%%"$IFS"*}"
+
+    args="${args#"$arg"}"
+    args="${args#"$IFS"}" # IFS may or may not be present.
+}
+
+menu=dmenu
+[ "$XDG_SESSION_TYPE" = wayland ] && menu=tofi
+
+IFS="$(printf '\nx')" && IFS="${IFS%x}"
+args="$*"
+set --
+while [ -n "$args" ]; do
+    shift_args
+    case "$arg" in
+        -l)
+            shift_args
+            case "$menu" in
+                # TODO: Make args dynamically inferred from config.
+                tofi) set -- "$@" --horizontal=false --num-results="$arg" --height=300 --result-spacing=5 ;;
+                *) set -- "$@" -l "$arg" ;;
+            esac
+            ;;
+        -i)
+            case "$menu" in
+                tofi) ;; # Case-insenstive by default.
+                *) set -- "$@" -i "$arg" ;;
+            esac
+            ;;
+        -p)
+            shift_args
+            case "$menu" in
+                tofi) set -- "$@" --prompt-text="$arg" ;;
+                *) set -- "$@" -p "$arg" ;;
+            esac
+            ;;
+        -ps)
+            shift_args
+            case "$menu" in
+                tofi) set -- "$@" ;;
+                dmenu) set -- "$@" -ps "$arg" ;;
+            esac
+            ;;
+        *) set -- "$@" "$arg" ;;
+    esac
+done
+
+exec "$menu" "$@"

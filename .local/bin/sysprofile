@@ -37,7 +37,7 @@ preselect="$(echo "$profiles" | grep --line-number -i "$active" | cut -d':' -f1)
 preselect="$((preselect - 1))"
 prompt="$mode Profile:"
 
-choice="$(echo "$profiles" | dmenu -i -ps "$preselect" -p "$prompt")"
+choice="$(echo "$profiles" | menu -i -ps "$preselect" -p "$prompt")"
 profile="${choice##* }"
 
 case "$mode" in

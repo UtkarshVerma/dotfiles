@@ -1,5 +1,5 @@
 #!/bin/sh
-# Display an emoji prompt using dmenu.
+# Display an emoji prompt.
 #
 # This script takes inspiration from:
 #   https://gist.github.com/Tadly/0741821d3694deaec1ee454a95c591fa
@@ -47,14 +47,21 @@ if [ ! -r "$EMOJI_FILE" ]; then
 fi
 
 emojis="$(grep -v '#' "$EMOJI_FILE" | grep -v '^[[:space:]]*$')"
-if line="$(echo "$emojis" | dmenu -l 8 -i -p "Emoji:")"; then
+if line="$(echo "$emojis" | menu -l 8 -i -p "Emoji:")"; then
     emoji="${line%%[[:space:]]*}"
 
     if [ -n "$MUST_COPY" ]; then
-        printf "%s" "$emoji" | xclip -sel clipboard &&
-            notify "'$emoji' copied to clipboard."
+        printf "%s" "$emoji" | {
+            case "$XDG_SESSION_TYPE" in
+                wayland) wl-copy ;;
+                x11) xclip -sel clipboard ;;
+            esac
+        } && notify "'$emoji' copied to clipboard."
         exit
     fi
 
-    xdotool type "$emoji"
+    case "$XDG_SESSION_TYPE" in
+        wayland) wtype "$emoji" ;;
+        x11) xdotool type "$emoji" ;;
+    esac
 fi

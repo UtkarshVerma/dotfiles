@@ -1,8 +1,10 @@
 #!/bin/sh
-# Utility script to get the geometry of a selected region.
+# Get the geometry of a selected region.
+
+. ~/.cache/rswal/colors.sh
 
 ALPHA=0.5
-COLOR="$(xrdb -get color12)"
+COLOR="$(get_color 12)"
 
 hex_to_rgb() {
     color="$(echo "${1#?}" | tr '[:lower:]' '[:upper:]')"
@@ -18,10 +20,68 @@ hex_to_rgb() {
     done
 }
 
+get_focused_screen_resolution() {
+    case "$XDG_SESSION_TYPE" in
+        x11)
+            xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'curent ' 'x' ' ' | tr 'x' ' '
+            return
+            ;;
+        wayland)
+            case "$XDG_CURRENT_DESKTOP" in
+                Hyprland)
+                    hyprctl -j monitors | jq -r '.[] | select(.focused) | "\(.width) \(.height)"'
+                    ;;
+                *)
+                    echo "error: unsupported wayland compositor"
+                    return 1
+                    ;;
+            esac
+            ;;
+        *)
+            echo "error: unsupported session type"
+            return 1
+            ;;
+    esac
+}
+
 if [ "$1" = "full" ]; then
-    resolution="$(xrandr --current | grep -o 'current [0-9]* x [0-9]*' | tr -d 'curent ')"
-    echo "$resolution+0+0"
+    resolution="$(get_focused_screen_resolution)" || exit 1
+    echo "0 0 $resolution"
     exit
 fi
 
-exec slop --highlight --color="$(hex_to_rgb "$COLOR"),$ALPHA"
+regions=""
+case "$XDG_SESSION_TYPE" in
+    x11)
+        selection_color="$(hex_to_rgb "$COLOR"),$ALPHA"
+        set -- slop --format="%x %y %w %h" --highlight --color="$selection_color"
+        ;;
+    wayland)
+        selection_color="$COLOR$(echo "scale=0;obase=16; (255 * $ALPHA)/1" | bc)"
+        set -- slurp -f "%x %y %w %h
+" -b "#00000000" \
+            -B "#00000000" \
+            -c "${COLOR}ff" \
+            -s "$selection_color" \
+            -w 1 \
+            -o
+
+        case "$XDG_CURRENT_DESKTOP" in
+            Hyprland)
+                workspaces="$(hyprctl monitors -j | jq -r 'map(.activeWorkspace.id)')"
+                regions="$(
+                    hyprctl clients -j |
+                        jq -r --argjson workspaces "$workspaces" 'map(select([.workspace.id] | inside($workspaces)))' |
+                        jq -r '.[] | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
+                )"
+                ;;
+            *) regions="" ;;
+        esac
+        ;;
+    *)
+        echo "error: unsupported session type"
+        exit 1
+        ;;
+esac
+
+echo "$regions" | exec "$@"

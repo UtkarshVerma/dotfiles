@@ -1,17 +1,30 @@
 #!/bin/sh
-# This script opens a dropdown menu containing system actions.
+# Open a dropdown menu containing system actions.
 
 set -e
 
+case "$XDG_CURRENT_DESKTOP" in
+    dwm)
+        logout_cmd="pkill -TERM -u $USER dwm"
+        lock_cmd=slock
+        display_off_cmd="sleep 0.1 && xset dpms force off"
+        ;;
+    Hyprland)
+        logout_cmd="hyprctl dispatch exit"
+        lock_cmd=hyprlock
+        display_off_cmd="sleep 0.2 && hyprctl dispatch dpms off"
+        ;;
+esac
+
 choices="\
-🔒 Lock:slock
-🚪 Logout:pkill -TERM -u $USER dwm
+🔒 Lock:$lock_cmd
+🚪 Logout:$logout_cmd
 💤 Sleep:systemctl suspend
 🐻 Hibernate:systemctl hibernate
 🔃 Reboot:systemctl reboot
 🔌 Shutdown:systemctl poweroff
-💻 Display off:sleep 0.1 && xset dpms force off
+💻 Display off:$display_off_cmd
 🔃 Reboot (Windows):sudo -A reboot-windows"
 
-choice="$(echo "$choices" | cut -d':' -f1 | dmenu -i -p "Action:")"
+choice="$(echo "$choices" | cut -d':' -f1 | menu -i -p "Action:")"
 sh -c "$(echo "$choices" | grep "^$choice:" | cut -d':' -f2)"

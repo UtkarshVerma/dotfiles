@@ -101,6 +101,9 @@ vim.filetype.add({
     ["hugo.work"] = "gowork",
     Kraftfile = "yaml",
   },
+  pattern = {
+    ["${XDG_CONFIG_HOME}/hypr/.*.conf"] = "hyprlang",
+  },
   extension = {
     dto = "devicetree",
     def = "c",

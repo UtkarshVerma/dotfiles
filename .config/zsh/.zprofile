@@ -1,12 +1,21 @@
 #!/bin/sh
 
 # Default programs
-export EDITOR="nvim"
-export BROWSER="brave"
-export TERMINAL="st"
-export FILE_MANAGER="lf"
-export SYSTEM_MONITOR="btop"
-export STATUSBAR="dwmblocks"
+export EDITOR=nvim
+export BROWSER=brave
+export FILE_MANAGER=lf
+export SYSTEM_MONITOR=btop
+
+case "$XDG_SESSION_TYPE" in
+x11)
+    export TERMINAL=st
+    export STATUSBAR=dwmblocks
+    ;;
+wayland)
+    export TERMINAL=foot
+    export STATUSBAR=waybar
+    ;;
+esac
 
 # XDG paths
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -79,40 +88,66 @@ $PATH"
 
 # Add RubyGems to PATH, if installed
 if command -v ruby >/dev/null 2>&1 && command -v gem >/dev/null 2>&1; then
-    export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+    ruby_user_dir="$(ruby -r rubygems -e 'puts Gem.user_dir')"
+    export PATH="$ruby_user_dir/bin:$PATH"
 fi
 
 # Misc
-export NVIM_LISTEN_ADDRESS="/tmp/nvim"
-export AWT_TOOLKIT="MToolkit"
+export NVIM_LISTEN_ADDRESS=/tmp/nvim
+export AWT_TOOLKIT=MToolkit
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+export SUDO_ASKPASS="$HOME/.local/bin/passprompt"
 export PIPENV_VENV_IN_PROJECT=1
 
 # Look and feel
-export QT_QPA_PLATFORMTHEME="qt5ct"
+eval "$(dircolors --sh)" # LS_COLORS
+export QT_QPA_PLATFORMTHEME=qt5ct
+export XCURSOR_SIZE=32
+QT_QPA_PLATFORM=xcb
+[ "$XDG_SESSION_TYPE" = wayland ] && QT_QPA_PLATFORM=wayland
+export QT_QPA_PLATFORM
 
 # Colorize `less`
-export LESS="-R"
+export LESS=-R
 export LESSOPEN="| highlight -O ansi %s 2>/dev/null"
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
-export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
-export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 4; tput rev)
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7)
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
-export LESS_TERMCAP_mr=$(tput rev)
-export LESS_TERMCAP_mh=$(tput dim)
-export LESS_TERMCAP_ZN=$(tput ssubm)
-export LESS_TERMCAP_ZV=$(tput rsubm)
-export LESS_TERMCAP_ZO=$(tput ssupm)
-export LESS_TERMCAP_ZW=$(tput rsupm)
+export LESS_TERMCAP_mb="$(
+    tput bold
+    tput setaf 2
+)"
+export LESS_TERMCAP_md="$(
+    tput bold
+    tput setaf 6
+)"
+export LESS_TERMCAP_me="$(tput sgr0)"
+export LESS_TERMCAP_so="$(
+    tput bold
+    tput setaf 4
+    tput rev
+)"
+export LESS_TERMCAP_se="$(
+    tput rmso
+    tput sgr0
+)"
+export LESS_TERMCAP_us="$(
+    tput smul
+    tput bold
+    tput setaf 7
+)"
+export LESS_TERMCAP_ue="$(
+    tput rmul
+    tput sgr0
+)"
+export LESS_TERMCAP_mr="$(tput rev)"
+export LESS_TERMCAP_mh="$(tput dim)"
+export LESS_TERMCAP_ZN="$(tput ssubm)"
+export LESS_TERMCAP_ZV="$(tput rsubm)"
+export LESS_TERMCAP_ZO="$(tput ssupm)"
+export LESS_TERMCAP_ZW="$(tput rsupm)"
 
 # fcitx
-export GTK_IM_MODULE="fcitx5"
-export QT_IM_MODULE="fcitx5"
-export XMODIFIERS="@im=fcitx5"
+export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+export XMODIFIERS=@im=fcitx5
 
 # Fix for Java AWT based software (e.g. MATLAB)
 export _JAVA_AWT_WM_NONREPARENTING=1

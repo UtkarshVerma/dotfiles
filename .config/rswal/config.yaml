@@ -2,6 +2,8 @@ theme: catppuccin
 
 variables:
   alpha: 0.85
+  icon-theme: Papirus-Dark
+  gap: 10
 
 hooks:
   - set-wallpaper.sh
@@ -17,3 +19,13 @@ templates:
     target: ~/.config/X11/Xresources/suckless
   - source: nvim.lua
     target: ~/.config/nvim/lua/util/colors.lua
+  - source: colors.hyprland
+    target: ~/.config/hypr/colors.conf
+  - source: colors.foot
+    target: ~/.config/foot/colors.ini
+  - source: colors.sh
+    target: ~/.cache/rswal/colors.sh
+  - source: colors.tofi
+    target: ~/.config/tofi/colors
+  - source: fnott.ini
+    target: ~/.config/fnott/fnott.ini
