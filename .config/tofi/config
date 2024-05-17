@@ -1,0 +1,23 @@
+include = colors
+
+# Treat remapped Caps Lock as Esc.
+physical-keybindings = false
+
+outline-width = 0
+border-width = 0
+prompt-text = ""
+text-cursor = true
+
+font = monospace
+font-size = 16
+
+anchor = top
+width = 100%
+height = 30
+horizontal = true
+min-input-width = 120
+result-spacing = 15
+padding-top = 0
+padding-bottom = 0
+padding-left = 0
+padding-right = 0

@@ -22,11 +22,7 @@ display() {
     fi
 
     case "$STATUSBAR" in
-        "dwmblocks")
-            echo "^C$color^$1"
-            ;;
-        *)
-            echo "$1"
-            ;;
+        dwmblocks) echo "^C$color^$1" ;;
+        *) echo "$1" ;;
     esac
 }
