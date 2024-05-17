@@ -1,5 +1,7 @@
 include = colors
 
+matching-algorithm = fuzzy
+
 # Treat remapped Caps Lock as Esc.
 physical-keybindings = false
 
