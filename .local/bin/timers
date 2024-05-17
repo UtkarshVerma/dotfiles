@@ -1,0 +1,47 @@
+#!/bin/sh
+# Track time using timewarrior.
+
+set -e
+
+get_timers() {
+    raw_output="$(timew tags)"
+    column_header="$(echo "$raw_output" | sed '3q;d' | cut -d' ' -f1)"
+    column_width="${#column_header}"
+
+    echo "$raw_output" |
+        tail -n +4 |
+        cut -c "-$column_width" |
+        sed 's/[[:space:]]*$//'
+}
+
+get_active_timer() {
+    if ! raw_output="$(timew)"; then
+        return
+    fi
+
+    echo "$raw_output" |
+        head -n 1 |
+        cut -d' ' -f2- |
+        tr -d '"'
+}
+
+timers="$(get_timers)"
+active_timer="$(get_active_timer)"
+
+action="start"
+preselect=0
+if [ -n "$active_timer" ]; then
+    preselect="$(echo "$timers" | grep --line-number -i "$active_timer" | cut -d':' -f1)"
+    preselect="$((preselect - 1))"
+
+    action="stop"
+fi
+
+timer="$(echo "$timers" | menu -i -ps "$preselect" -p "Timer:")"
+output="$(timew "$action" "$timer")"
+
+notify-send \
+    --expire-time=5000 \
+    --icon=timer-symbolic \
+    Timers \
+    "$output"
