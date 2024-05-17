@@ -1,7 +1,8 @@
 #!/bin/zsh
 
 # Early loading ---------------------------------------------------------------
-function _set_cursor() {
+function __set_cursor() {
+    local code
     case "$1" in
         block) code=1 ;;
         beam) code=5 ;;
@@ -9,14 +10,32 @@ function _set_cursor() {
     printf "\033[%d q" "$code"
 }
 
-_set_cursor beam            # Set cursor on startup.
+function __emit_osc7_sequence() {
+    local temp="$PWD"
+    local encoded=""
+    while [ -n "$temp" ]; do
+        local n="${temp#?}"
+        local c="${temp%"$n"}"
+        case "$c" in
+            [-/:_.!\'\(\)~[:alnum:]]) encoded="$encoded$c" ;;
+            *) encoded="${encoded}$(printf '%%%02X' "$c")" ;;
+        esac
+        temp="$n"
+    done
+
+    printf "\033]7;file://%s%s\033\\" "$(hostname)" "$encoded"
+}
+
+__set_cursor beam                           # Set cursor on startup.
+__emit_osc7_sequence                        # Emit OSC7 on launch.
+chpwd_functions+=(__emit_osc7_sequence)     # Emit OSC7 on CWD change.
+
 export GPG_TTY="$TTY"
 
-# Initialize powerlevel10k instant prompt.
-if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+# Initialise powerlevel10k instant prompt.
+if [ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]; then
     source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
 
 # Plugins ---------------------------------------------------------------------
 ZINIT_HOME="$XDG_DATA_HOME/zsh/zinit"
@@ -38,23 +57,6 @@ zinit snippet OMZP::archlinux
 zinit snippet OMZP::command-not-found
 
 # Configurations --------------------------------------------------------------
-# Load external configurations.
-typeset -A assoc configs=(
-    # Path                     Launch as POSIX shell
-    "$XDG_CONFIG_HOME/shellrc" true
-    "$ZDOTDIR/.p10k.zsh"       false
-)
-for config as_posix in ${(@kv)configs}; do
-    if [[ -f "$config" ]]; then
-        if [[ $as_posix ]]; then
-            . "$config"
-        else
-            source "$config"
-        fi
-    fi
-done
-unset configs config
-
 # Completions
 autoload -U compinit
 fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
@@ -88,18 +90,14 @@ history_dir="${HISTFILE%/*}"
 [ -d "$history_dir" ] || mkdir -p "$history_dir"
 unset history_dir
 
-# Retain scrollback history on Ctrl+l
+# Retain scrollback history on Ctrl+l.
 if [[ "$TERM" =~ "^foot" ]]; then
-    clear-screen-keep-sb() {
+    function __clear_screen_keep_scrollback() {
         printf "%$((LINES-1))s" | tr ' ' '\n'
         zle .clear-screen
     }
-    zle -N clear-screen clear-screen-keep-sb
+    zle -N clear-screen __clear_screen_keep_scrollback
 fi
-
-# ZSH options.
-setopt hist_ignore_all_dups
-setopt posixbuiltins
 
 # Vi mode ---------------------------------------------------------------------
 bindkey -v  # Use vim bindings.
@@ -108,11 +106,17 @@ export KEYTIMEOUT=1
 # Change cursor shape for different vi modes.
 function zle-keymap-select () {
     case "$KEYMAP" in
-        vicmd) _set_cursor block ;;
-        viins|main) _set_cursor beam ;;
+        vicmd) __set_cursor block ;;
+        viins|main) __set_cursor beam ;;
     esac
 }
 zle -N zle-keymap-select
+
+# Set beam cursor initlialising a new line.
+function zle-line-init() {
+    __set_cursor beam
+}
+zle -N zle-line-init
 
 # Keybinds --------------------------------------------------------------------
 # Use vim keys in tab complete menu:
@@ -143,18 +147,79 @@ bindkey '\e[127;5u' backward-kill-word  # Ctrl-Backspace: delete whole word back
 bindkey '\e[1;5C' forward-word          # Ctrl-RightArrow: move forward one word
 bindkey '\e[1;5D' backward-word         # Ctrl-LeftArrow: move backward one word
 
-# Ctrl-e: Edit the current command line in $EDITOR
+# Ctrl-e: Edit the current command line in $EDITOR.
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-e' edit-command-line
 
-# Ctrl-f: cd fzf-selected directory
-if command -v fzf >/dev/null 2>&1; then
-    bindkey -s '\C-f' '^ucd "$(dirname "$(fzf)")"\n'
+# Aliases ---------------------------------------------------------------------
+alias \
+    cat="bat" \
+    cbcopy="xclip -selection clipboard" \
+    cbpaste="xclip -selection clipboard -out" \
+    cmatrix="unimatrix -n -s 96 -l o" \
+    diff="diff --color=auto" \
+    dosbox="dosbox -conf \$XDG_CONFIG_HOME/dosbox/dosbox.conf" \
+    egrep="egrep --color=auto" \
+    fgrep="fgrep --color=auto" \
+    grep="grep --color=auto" \
+    ll="ls -l" \
+    ls="ls --color=auto" \
+    ncdu="ncdu --color dark" \
+    open="xdg-open" \
+    tree="tree -a -I .git" \
+    vale='vale --config="$XDG_CONFIG_HOME/vale/config.ini"' \
+    vi="nvim" \
+    yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+
+# Functions -------------------------------------------------------------------
+function se() {
+    local bin_dir="$HOME/.local/bin"
+    cat <<EOF | sed "s|$bin_dir/||g" | fzf | sed "s|^|$bin_dir/|g" | xargs -r "$EDITOR"
+$(find "$bin_dir/" -type l -xtype f)
+$(find "$bin_dir/statusbar/" -type f)
+EOF
+}
+
+function dpaste() {
+    if local url="$(curl --silent --form 'format=url' --form 'content=<-' \
+        "https://dpaste.org/api/")"; then
+        printf "%s" "$url" | xclip -selection clipboard &&
+            echo "URL \"$url\" copied to clipboard."
+    fi
+}
+
+# Integrations ----------------------------------------------------------
+configs=(
+    "$ZDOTDIR/.p10k.zsh"
+    "$XDG_CONFIG_HOME/lf/lf.sh"
+    "/usr/bin/virtualenvwrapper_lazy.sh"
+)
+
+for config in ${configs}; do
+    if [ -f "$config" ]; then
+        source "$config"
+    fi
+done
+unset config configs
+
+if command -v direnv >/dev/null 2>&1; then
+    export DIRENV_LOG_FORMAT="" # Silence direnv
+    eval "$(direnv hook zsh)" 
 fi
 
-# Ctrl-o: Open a directory using $FILE_MANAGER
-if [[ -n "$FILE_MANAGER" ]] &&
-    (( $+functions[$FILE_MANAGER] )) &>/dev/null; then
+if command -v fzf >/dev/null 2>&1; then
+    # Ctrl-f: cd fzf-selected directory.
+    bindkey -s '\C-f' '^ucd "$(dirname "$(fzf)")"\n'
+
+    eval "$(fzf --zsh)"
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh --cmd cd)"
+fi
+
+# Ctrl-o: Open a directory using $FILE_MANAGER.
+if [ -n "$FILE_MANAGER" ] && command -v "$FILE_MANAGER" &>/dev/null; then
     bindkey -s '\C-o' '^u'"$FILE_MANAGER"'\r'
 fi
