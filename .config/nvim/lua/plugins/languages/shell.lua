@@ -1,7 +1,12 @@
--- Borrowed from https://github.com/bash-lsp/bash-language-server/blob/main/server/src/config.ts
+---@class lsp.bashls.config.settings.bash_ide.shfmt
+---@field caseIndent? boolean Indent patterns in case statements.
+
+--Borrowed from https://github.com/bash-lsp/bash-language-server/blob/main/server/src/config.ts
 ---@class lsp.bashls.config.settings.bash_ide
 ---@field globPattern? string Glob pattern for finding and parsing shell script files in the workspace. Used by the background analysis features across files.
 ---@field includeAllWorkspaceSymbols? boolean Controls how symbols (e.g. variables and functions) are included and used for completion, documentation, and renaming. If false, then we only include symbols from sourced files (i.e. using non dynamic statements like 'source file.sh' or '. file.sh' or following ShellCheck directives). If true, then all symbols from the workspace are included.
+---@field shellcheckArguments? string[]|string Additional ShellCheck arguments. Note that we already add the following arguments: --shell, --format, --external-sources.
+---@field shfmt? lsp.bashls.config.settings.bash_ide.shfmt
 
 ---@class lsp.bashls.config.settings
 ---@field bashIde? lsp.bashls.config.settings.bash_ide
@@ -22,6 +27,18 @@ return {
   },
 
   {
+    "mason.nvim",
+    ---@type plugins.mason.config
+    opts = {
+      -- bashls takes care of formatting and linting both.
+      ensure_installed = {
+        "shfmt",
+        "shellcheck",
+      },
+    },
+  },
+
+  {
     "nvim-lspconfig",
     ---@type plugins.lspconfig.config
     opts = {
@@ -32,40 +49,12 @@ return {
           settings = {
             bashIde = {
               includeAllWorkspaceSymbols = true,
+              shellcheckArguments = { "-x" },
+              shfmt = {
+                caseIndent = true,
+              },
             },
           },
-        },
-      },
-    },
-  },
-
-  {
-    "nvim-lint",
-    ---@type plugins.lint.config
-    opts = {
-      linters_by_ft = {
-        sh = { "shellcheck" },
-      },
-      linters = {
-        shellcheck = {
-          prepend_args = {
-            "-x",
-          },
-        },
-      },
-    },
-  },
-
-  {
-    "conform.nvim",
-    ---@type plugins.conform.config
-    opts = {
-      formatters_by_ft = {
-        sh = { "shfmt" },
-      },
-      formatters = {
-        shfmt = {
-          prepend_args = { "--indent", tostring(vim.o.shiftwidth or 4), "--case-indent" },
         },
       },
     },
