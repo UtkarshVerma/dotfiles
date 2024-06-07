@@ -7,7 +7,7 @@ case "$1" in
     --cpu)
         mode="CPU"
         icon="freon-fan-symbolic"
-        active="$(asusctl profile --profile-get | cut -d' ' -f4)"
+        active="$(asusctl profile --profile-get | tail -n 1 | cut -d' ' -f4)"
 
         profiles="\
 💤 Quiet

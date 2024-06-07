@@ -1,27 +1,31 @@
 #!/bin/sh
+# Display a menu to run executables on the machine.
 
-cache="$XDG_CACHE_HOME/menu-run"
+CACHE="$XDG_CACHE_HOME/menu-run"
 
-find_commands() {
-    find "$@" -type f -executable |
-        sed 's|.*/\(.*\)|\1|'
+update_cache() {
+    if [ -f "$CACHE" ]; then
+        updated_dirs="$(find -L "$@" -newer "$CACHE" -type d)"
+    else
+        updated_dirs="$(find -L "$@" -type d)"
+        touch "$CACHE"
+    fi 2>/dev/null
+
+    if [ -n "$updated_dirs" ]; then
+        # shellcheck disable=2086
+        executables="$(find -L "$@" -type f -executable 2>/dev/null | sort)"
+
+        # Filter out removed executables.
+        output="$(echo "$executables" | comm -2 --output-delimiter="" - "$CACHE")"
+        echo "$output" >"$CACHE"
+    fi
 }
 
-update_cache_and_list_commands() {
-    if [ -f "$cache" ]; then
-        set -- "$@" -newer "$cache"
-    fi
-
-    updated_dirs="$(find "$@" -type d)"
-    if [ -n "$updated_dirs" ]; then
-        temp_file="$(mktemp)"
-        # shellcheck disable=2086
-        find_commands $updated_dirs | sort -u "$cache" - >"$temp_file" && mv "$temp_file" "$cache"
-    fi
-
-    cat "$cache"
+list_commands() {
+    sed 's|.*/\(.*\)|\1|' <"$CACHE" | sort --unique
 }
 
 dirs=$(echo "$PATH" | tr ':' '\n')
 # shellcheck disable=2086
-exec $(update_cache_and_list_commands $dirs | menu -p "Run:" "$@")
+update_cache $dirs
+exec $(list_commands | menu -p "Run:" "$@")
