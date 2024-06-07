@@ -12,7 +12,7 @@ return {
         "[q",
         function()
           if require("trouble").is_open() then
-            require("trouble").previous({ skip_groups = true, jump = true })
+            require("trouble").prev({ skip_groups = true, jump = true })
           else
             vim.cmd.cprev()
           end

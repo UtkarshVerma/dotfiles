@@ -48,8 +48,10 @@ local keys = {
 
   { "<leader>xl", "<cmd>lopen<cr>", desc = "Location List" },
   { "<leader>xq", "<cmd>copen<cr>", desc = "Quickfix List" },
-  { "[q", vim.cmd.cprev, desc = "Previous quickfix" },
-  { "]q", vim.cmd.cnext, desc = "Next quickfix" },
+  -- stylua: ignore start
+  { "[q", function() vim.cmd.cprev() end, desc = "Previous quickfix" },
+  { "]q", function() vim.cmd.cnext() end, desc = "Next quickfix" },
+  -- stylua: ignore end
 
   {
     "<leader>gl",
@@ -97,6 +99,10 @@ local keys = {
   -- Diagnostics
   { "]d", goto_diagnostic("next"), desc = "Next diagnostic" },
   { "[d", goto_diagnostic("prev"), desc = "Previous diagnostic" },
+
+  -- Inlay hints
+  -- stylua: ignore
+  { "<leader>ti", function() util.toggle.inlay_hints(0) end, desc = "Inlay hints" },
 
   {
     "<leader>ur",

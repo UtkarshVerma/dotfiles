@@ -16,6 +16,8 @@ local options = {
     trail = "·",
   },
   foldcolumn = "0", -- Don't show the foldcolumn
+  foldlevel = 99, -- Keep all folds open
+  foldlevelstart = 99, -- Keep all folds open
   foldenable = true,
   fillchars = {
     eob = " ", -- suppress ~ at EndOfBuffer
@@ -26,7 +28,6 @@ local options = {
     foldclose = "",
     vert = "▎", -- Used for window separator.
   },
-  foldlevelstart = 99, -- Keep all folds open
   shiftwidth = 4, -- Size of an indent
   swapfile = false,
   tabstop = 4, -- Number of spaces tabs count for
@@ -108,6 +109,7 @@ vim.filetype.add({
     dto = "devicetree",
     def = "c",
     mdx = "markdown",
+    sub = "spice",
   },
 })
 

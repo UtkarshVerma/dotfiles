@@ -21,8 +21,14 @@
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 
+[url "ssh://git@gitlab.com/"]
+	insteadOf = https://gitlab.com/
+
 [includeIf "gitdir:~/work/aepl/"]
 	path = ~/work/aepl/.gitconfig
+
+[includeIf "gitdir:~/work/hyperhorizon/"]
+	path = ~/work/hyperhorizon/.gitconfig
 
 [includeIf "gitdir:~/gsoc/rtems/"]
 	path = ~/gsoc/rtems/.gitconfig

@@ -32,14 +32,24 @@ end
 function M.diagnostics(bufnr)
   local util = require("util")
 
-  local is_disabled = vim.diagnostic.is_disabled(bufnr)
-  if is_disabled then
-    vim.diagnostic.enable(bufnr)
-    util.log.info("Enabled diagnostics", "Diagnostics")
-  else
-    vim.diagnostic.disable(bufnr)
+  ---@type vim.diagnostic.Filter
+  local filter = { bufnr = bufnr }
+
+  local was_enabled = not vim.diagnostic.is_enabled(filter)
+  vim.diagnostic.enable(not was_enabled, filter)
+  if not was_enabled then
     util.log.warn("Disabled diagnostics", "Diagnostics")
+  else
+    util.log.info("Enabled diagnostics", "Diagnostics")
   end
+end
+
+-- Toggle inlay hints for buffer {bufnr}.
+---@param bufnr? integer
+function M.inlay_hints(bufnr)
+  ---@type vim.lsp.inlay_hint.enable.Filter
+  local filter = { bufnr = bufnr }
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)
 end
 
 return M

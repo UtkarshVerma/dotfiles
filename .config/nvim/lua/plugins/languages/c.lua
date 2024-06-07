@@ -113,7 +113,7 @@ return {
     -- TODO: Specify types
     opts = {
       inlay_hints = {
-        inline = false,
+        inline = true,
       },
       ast = {
         role_icons = {

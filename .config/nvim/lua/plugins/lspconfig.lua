@@ -5,8 +5,9 @@
 ---@field capabilities? table
 ---@field servers? plugins.lspconfig.config.server
 
----@class plugins.lspconfig.key: LazyKeys
+---@class plugins.lspconfig.key: LazyKeysSpec
 ---@field method? string
+---
 
 ---@class plugins.mason_lspconfig.config: MasonLspconfigSettings
 
@@ -70,6 +71,14 @@ local keys = {
     desc = "Source action",
     method = "textDocument/codeAction",
   },
+  { "<leader>cc", vim.lsp.codelens.run, desc = "Run codelens", mode = { "n", "v" }, method = "textDocument/codeLens" },
+  {
+    "<leader>cC",
+    vim.lsp.codelens.refresh,
+    desc = "Refresh and display codelens",
+    mode = { "n" },
+    method = "textDocument/codeLens",
+  },
 }
 
 -- Check if any LSP client in buffer {bufnr} supports {method}.
@@ -78,7 +87,7 @@ local keys = {
 ---@return boolean
 ---@nodiscard
 local function buffer_supports(method, bufnr)
-  local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
       return true
@@ -100,7 +109,7 @@ local function get_keymaps(bufnr)
 
   local lsp_keymaps = vim.deepcopy(keys)
   local opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
-  local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
   for _, client in ipairs(clients) do
     local server_keymaps = opts.servers[client.name] and opts.servers[client.name].keys or {}
     vim.list_extend(lsp_keymaps, server_keymaps)
@@ -129,13 +138,15 @@ local function bind_keys(keymaps)
 end
 
 -- Execute {callback} on the `LspAttach` event.
----@param callback fun(client: lsp.Client, bufnr?: integer)
+---@param callback fun(client: vim.lsp.Client, bufnr?: integer)
 local function on_lsp_attach(callback)
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-
+      if client == nil then
+        return
+      end
       callback(client, bufnr)
     end,
   })
@@ -155,7 +166,7 @@ return {
         bind_keys(keymaps)
 
         -- Highlight the word under cursor when it rests for some time.
-        if client and client.server_capabilities.documentHighlightProvider then
+        if client.server_capabilities.documentHighlightProvider then
           vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
             buffer = bufnr,
             callback = vim.lsp.buf.document_highlight,
@@ -166,17 +177,16 @@ return {
             callback = vim.lsp.buf.clear_references,
           })
         end
-      end)
 
-      -- Enable inlay hints.
-      local inlay_hint = vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint
-      if inlay_hint then
-        on_lsp_attach(function(client, bufnr)
-          if client.supports_method("textDocument/inlayHint") then
-            inlay_hint(bufnr, true)
-          end
-        end)
-      end
+        -- Enable code lens.
+        if vim.lsp.codelens and client.supports_method("textDocument/codeLens") then
+          vim.lsp.codelens.refresh()
+          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+            buffer = bufnr,
+            callback = vim.lsp.codelens.refresh,
+          })
+        end
+      end)
     end,
     opts = function(_, _)
       ---@type plugins.lspconfig.config
