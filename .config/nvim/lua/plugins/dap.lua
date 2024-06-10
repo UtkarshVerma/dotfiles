@@ -1,18 +1,29 @@
+---@class plugins.nvim_dap.adapter: Adapter
+---@class plugins.nvim_dap.configuration: Configuration
+---@class plugins.nvim_dap.session: Session
+
 ---@class plugins.nvim_dap.config
-
----@class plugins.nvim_dap.dap_config
----@field adapters? table[]
----@field configurations? table[]
----@field filetypes? string[]
-
----@class plugins.nvim_dap_virtual_text.config: nvim_dap_virtual_text_options
-
----@class plugins.mason_nvim_dap.config: MasonNvimDapSettings
----@field ensure_installed string[]
----@field handlers table<string, fun(config:plugins.nvim_dap.dap_config)>
+---@field adapters? table<string, plugins.nvim_dap.adapter|fun(callback:fun(adapter:plugins.nvim_dap.adapter), config?:plugins.nvim_dap.configuration, parent?:plugins.nvim_dap.session)>
+---@field configurations? table<string, plugins.nvim_dap.configuration[]>
 
 ---@type LazyPluginSpec[]
 return {
+  {
+    "which-key.nvim",
+    opts = {
+      defaults = {
+        ["<leader>d"] = { name = "+debug" },
+      },
+    },
+  },
+
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    event = "VeryLazy",
+    dependencies = { "nvim-dap" },
+    opts = {},
+  },
+
   {
     "mfussenegger/nvim-dap",
     keys = {
@@ -41,27 +52,29 @@ return {
       { "<leader>dw", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
       -- stylua: ignore end
     },
-    config = function(_, _)
+    ---@type plugins.nvim_dap.config
+    opts = {
+      adapters = {},
+      configurations = {},
+    },
+    ---@param opts plugins.nvim_dap.config
+    config = function(_, opts)
       local icons = require("config").icons
       vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
-      for name, sign in pairs(icons.dap) do
-        sign = type(sign) == "table" and sign or { sign }
-        vim.fn.sign_define(
-          "Dap" .. name,
-          { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
-        )
-      end
-    end,
-  },
+      for name, config in pairs(icons.dap) do
+        config = type(config) == "table" and config or { config }
 
-  {
-    "which-key.nvim",
-    opts = {
-      defaults = {
-        ["<leader>d"] = { name = "+debug" },
-      },
-    },
+        local text = config[1]
+        local text_hl = config[2] or "DiagnosticInfo"
+        local num_hl = config[3]
+        vim.fn.sign_define("Dap" .. name, { text = text, texthl = text_hl, linehl = num_hl, numhl = num_hl })
+      end
+
+      local dap = require("dap")
+      dap.adapters = vim.tbl_extend("force", dap.adapters, opts.adapters)
+      dap.configurations = vim.tbl_extend("force", dap.configurations, opts.configurations)
+    end,
   },
 
   {
@@ -84,38 +97,14 @@ return {
 
       dapui.setup(opts)
       dap.listeners.after.event_initialized["dapui_config"] = function()
-        dapui.open({})
+        dapui.open()
       end
       dap.listeners.before.event_terminated["dapui_config"] = function()
-        dapui.close({})
+        dapui.close()
       end
       dap.listeners.before.event_exited["dapui_config"] = function()
-        dapui.close({})
+        dapui.close()
       end
     end,
-  },
-
-  {
-    "theHamsta/nvim-dap-virtual-text",
-    dependencies = { "nvim-dap" },
-    ---@type plugins.nvim_dap_virtual_text.config
-    opts = {},
-  },
-
-  {
-    "jay-babu/mason-nvim-dap.nvim",
-    event = "VeryLazy",
-    dependencies = { "mason.nvim" },
-    cmd = { "DapInstall", "DapUninstall" },
-    ---@type plugins.mason_nvim_dap.config
-    opts = {
-      ensure_installed = {},
-      handlers = {
-        -- Default handler.
-        function(config)
-          require("mason-nvim-dap").default_setup(config)
-        end,
-      },
-    },
   },
 }

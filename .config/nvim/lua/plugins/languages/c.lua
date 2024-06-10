@@ -25,6 +25,16 @@ return {
   },
 
   {
+    "mason.nvim",
+    ---@param opts plugins.mason.config
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
+        "codelldb",
+      })
+    end,
+  },
+
+  {
     "nvim-lspconfig",
     ---@type plugins.lspconfig.config
     opts = {
@@ -138,12 +148,21 @@ return {
   },
 
   {
-    "mason-nvim-dap.nvim",
-    ---@param opts plugins.mason_nvim_dap.config
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "codelldb",
-      })
-    end,
+    "nvim-dap",
+    ---@type plugins.nvim_dap.config
+    opts = {
+      adapters = {
+        codelldb = {
+          id = "codelldb",
+          type = "server",
+          host = "localhost",
+          port = "${port}",
+          executable = {
+            command = "codelldb",
+            args = { "--port", "${port}" },
+          },
+        },
+      },
+    },
   },
 }

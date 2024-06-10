@@ -17,6 +17,7 @@ local M = {
     ChevronRight = "",
     ChevronDown = "",
   },
+  ---@type table<string, string|string[]>
   dap = {
     Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
     Breakpoint = " ",

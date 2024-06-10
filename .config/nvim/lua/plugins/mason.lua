@@ -10,7 +10,7 @@ return {
       { "<leader>um", "<cmd>Mason<cr>", desc = "Mason" },
     },
     build = ":MasonUpdate",
-    ---@type MasonSettings
+    ---@type plugins.mason.config
     opts = {
       ensure_installed = {},
     },
