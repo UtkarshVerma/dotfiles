@@ -19,13 +19,34 @@ return {
 
   {
     "theHamsta/nvim-dap-virtual-text",
-    event = "VeryLazy",
-    dependencies = { "nvim-dap" },
+    dependencies = {
+      "nvim-dap",
+      "nvim-treesitter",
+    },
+    opts = {},
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = {
+      "nvim-dap",
+      "nvim-neotest/nvim-nio",
+    },
+    keys = {
+      -- stylua: ignore start
+      { "<leader>du", function() require("dapui").toggle({}) end, desc = "Dap UI" },
+      { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = { "n", "v" } },
+      -- stylua: ignore end
+    },
     opts = {},
   },
 
   {
     "mfussenegger/nvim-dap",
+    dependencies = {
+      "nvim-dap-ui",
+      "nvim-dap-virtual-text",
+    },
     keys = {
       {
         "<leader>dB",
@@ -74,28 +95,8 @@ return {
       local dap = require("dap")
       dap.adapters = vim.tbl_extend("force", dap.adapters, opts.adapters)
       dap.configurations = vim.tbl_extend("force", dap.configurations, opts.configurations)
-    end,
-  },
 
-  {
-    "rcarriga/nvim-dap-ui",
-    event = "VeryLazy",
-    dependencies = {
-      "nvim-dap",
-      "nvim-neotest/nvim-nio",
-    },
-    keys = {
-      -- stylua: ignore start
-      { "<leader>du", function() require("dapui").toggle({}) end, desc = "Dap UI" },
-      { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = { "n", "v" } },
-      -- stylua: ignore end
-    },
-    opts = {},
-    config = function(_, opts)
-      local dap = require("dap")
       local dapui = require("dapui")
-
-      dapui.setup(opts)
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
       end

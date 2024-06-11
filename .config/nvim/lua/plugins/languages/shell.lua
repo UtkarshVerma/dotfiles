@@ -75,7 +75,7 @@ return {
         },
       },
       configurations = {
-        {
+        sh = {
           name = "Launch file",
           type = "bash-debug-adapter",
           request = "launch",
