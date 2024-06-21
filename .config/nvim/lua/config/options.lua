@@ -26,7 +26,7 @@ local options = {
     fold = " ",
     foldopen = "",
     foldclose = "",
-    vert = "▎", -- Used for window separator.
+    vert = "┃", -- Used for window separator.
   },
   shiftwidth = 4, -- Size of an indent
   swapfile = false,

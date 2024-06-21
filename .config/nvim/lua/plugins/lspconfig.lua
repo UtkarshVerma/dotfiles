@@ -152,6 +152,7 @@ local function on_lsp_attach(callback)
   })
 end
 
+---@type LazyPluginSpec[]
 return {
   {
     "neovim/nvim-lspconfig",
@@ -180,10 +181,13 @@ return {
 
         -- Enable code lens.
         if vim.lsp.codelens and client.supports_method("textDocument/codeLens") then
-          vim.lsp.codelens.refresh()
+          vim.lsp.codelens.refresh({ bufnr = bufnr })
+
           vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
             buffer = bufnr,
-            callback = vim.lsp.codelens.refresh,
+            callback = function(_)
+              vim.lsp.codelens.refresh({ bufnr = bufnr })
+            end,
           })
         end
       end)
