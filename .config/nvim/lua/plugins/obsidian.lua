@@ -24,7 +24,7 @@ return {
     ---@type plugins.which_key.config
     opts = {
       defaults = {
-        ["<leader>o"] = { name = "+obsidian" },
+        ["<leader>n"] = { name = "+notes" },
       },
     },
   },
@@ -40,11 +40,11 @@ return {
       },
     },
     keys = {
-      { "<leader>oo", "<cmd>ObsidianQuickSwitch<cr>", desc = "Open note" },
-      { "<leader>oO", "<cmd>ObsidianOpen<cr>", desc = "Open vault" },
-      { "<leader>ow", "<cmd>ObsidianWorkspace<cr>", desc = "Switch workspace" },
-      { "<leader>ot", "<cmd>ObsidianTags<cr>", desc = "Search tags" },
-      { "<leader>os", "<cmd>ObsidianSearch<cr>", desc = "Search notes" },
+      { "<leader>no", "<cmd>ObsidianQuickSwitch<cr>", desc = "Open note" },
+      { "<leader>nO", "<cmd>ObsidianOpen<cr>", desc = "Open vault" },
+      { "<leader>nw", "<cmd>ObsidianWorkspace<cr>", desc = "Switch workspace" },
+      { "<leader>nt", "<cmd>ObsidianTags<cr>", desc = "Search tags" },
+      { "<leader>ns", "<cmd>ObsidianSearch<cr>", desc = "Search notes" },
     },
     dependencies = { "plenary.nvim" },
     ---@type plugins.obsidian.config

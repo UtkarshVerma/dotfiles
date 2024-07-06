@@ -15,6 +15,17 @@ return {
   },
 
   {
+    "mason.nvim",
+    ---@param opts plugins.mason.config
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
+        "clangd",
+        "clang-format",
+      })
+    end,
+  },
+
+  {
     "nvim-lspconfig",
     ---@type plugins.lspconfig.config
     opts = {

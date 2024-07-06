@@ -41,7 +41,7 @@ return {
       servers = {
         clangd = {
           keys = {
-            { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
+            { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
           },
           root_dir = function(file)
             return require("lspconfig.util").root_pattern(
@@ -86,8 +86,8 @@ return {
             "--function-arg-placeholders",
             "--enable-config",
 
-            -- Resolve standard include paths for cross-compilation targets
-            "--query-driver=/usr/sbin/arm-none-eabi-gcc,/usr/sbin/aarch64-linux-gnu-gcc",
+            -- Whitelist compilers used by PlatformIO.
+            string.format("--query-driver=/usr/bin/**/clang-*,%s/**/bin/*-gcc", os.getenv("PLATFORMIO_CORE_DIR")),
 
             -- Auto-format only if .clang-format exists
             "--fallback-style=none",
@@ -152,14 +152,22 @@ return {
     ---@type plugins.nvim_dap.config
     opts = {
       adapters = {
-        codelldb = {
-          id = "codelldb",
-          type = "server",
-          host = "localhost",
-          port = "${port}",
-          executable = {
-            command = "codelldb",
-            args = { "--port", "${port}" },
+        gdb = {
+          type = "executable",
+          command = "gdb",
+        },
+      },
+      configurations = {
+        c = {
+          {
+            name = "Launch file",
+            type = "gdb",
+            request = "launch",
+            program = function()
+              return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            end,
+            cwd = "${workspaceFolder}",
+            stopAtBeginningOfMainSubprogram = false,
           },
         },
       },

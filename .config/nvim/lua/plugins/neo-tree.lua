@@ -99,7 +99,7 @@ return {
     },
     keys = {
       -- stylua: ignore
-      { "<leader>fe", function() require("neo-tree.command").execute({ toggle = true }) end, desc = "Explorer" },
+      { "<leader>fe", function() require("neo-tree.command").execute({ toggle = true, position = "right" }) end, desc = "Explorer" },
     },
     init = function(_)
       if vim.fn.argc() == 1 then
@@ -115,9 +115,6 @@ return {
       popup_border_style = util.ui.borderchars("thick", "tl-t-tr-r-bl-b-br-l"),
       event_handlers = {
         { event = "neo_tree_window_after_open", handler = hide_cursor },
-        -- stylua: ignore
-        -- HACK: https://github.com/nvim-neo-tree/neo-tree.nvim/issues/1211
-        { event = "neo_tree_window_after_close", handler = function() vim.cmd("do WinEnter") end },
         { event = "neo_tree_buffer_enter", handler = hide_cursor },
         { event = "neo_tree_window_before_close", handler = show_cursor },
         { event = "neo_tree_buffer_leave", handler = show_cursor },

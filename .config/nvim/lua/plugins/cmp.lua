@@ -91,10 +91,6 @@ return {
             return item
           end,
         },
-        experimental = {
-          ghost_text = true,
-          hl_group = "Comment",
-        },
         sorting = defaults.sorting,
       }
     end,

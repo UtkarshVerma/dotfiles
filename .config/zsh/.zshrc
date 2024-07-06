@@ -54,7 +54,6 @@ zinit light Aloxaf/fzf-tab
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
-zinit snippet OMZP::command-not-found
 
 # Configurations --------------------------------------------------------------
 # Completions
@@ -79,7 +78,6 @@ HISTSIZE=10000000
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
 setopt appendhistory
-setopt sharehistory
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
@@ -157,7 +155,6 @@ alias \
     cat="bat" \
     cbcopy="xclip -selection clipboard" \
     cbpaste="xclip -selection clipboard -out" \
-    cmatrix="unimatrix -n -s 96 -l o" \
     diff="diff --color=auto" \
     dosbox="dosbox -conf \$XDG_CONFIG_HOME/dosbox/dosbox.conf" \
     egrep="egrep --color=auto" \

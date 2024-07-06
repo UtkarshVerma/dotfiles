@@ -7,14 +7,14 @@ export FILE_MANAGER=lf
 export SYSTEM_MONITOR=btop
 
 case "$XDG_SESSION_TYPE" in
-x11)
-    export TERMINAL=st
-    export STATUSBAR=dwmblocks
-    ;;
-wayland)
-    export TERMINAL=foot
-    export STATUSBAR=waybar
-    ;;
+    x11)
+        export TERMINAL=st
+        export STATUSBAR=dwmblocks
+        ;;
+    wayland)
+        export TERMINAL=foot
+        export STATUSBAR=waybar
+        ;;
 esac
 
 # XDG paths

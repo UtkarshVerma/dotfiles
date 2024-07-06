@@ -35,9 +35,9 @@ function M.diagnostics(bufnr)
   ---@type vim.diagnostic.Filter
   local filter = { bufnr = bufnr }
 
-  local was_enabled = not vim.diagnostic.is_enabled(filter)
+  local was_enabled = vim.diagnostic.is_enabled(filter)
   vim.diagnostic.enable(not was_enabled, filter)
-  if not was_enabled then
+  if was_enabled then
     util.log.warn("Disabled diagnostics", "Diagnostics")
   else
     util.log.info("Enabled diagnostics", "Diagnostics")

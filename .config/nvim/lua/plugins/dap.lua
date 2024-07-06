@@ -96,6 +96,11 @@ return {
       dap.adapters = vim.tbl_extend("force", dap.adapters, opts.adapters)
       dap.configurations = vim.tbl_extend("force", dap.configurations, opts.configurations)
 
+      -- Load VS Code launch configurations.
+      if vim.fn.filereadable(".vscode/launch.json") then
+        require("dap.ext.vscode").load_launchjs(nil, { ["platformio-debug"] = { "c", "cpp", "asm" } })
+      end
+
       local dapui = require("dapui")
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
