@@ -23,8 +23,8 @@ return {
     "which-key.nvim",
     ---@type plugins.which_key.config
     opts = {
-      defaults = {
-        ["<leader>n"] = { name = "+notes" },
+      spec = {
+        { "<leader>n", group = "notes" },
       },
     },
   },

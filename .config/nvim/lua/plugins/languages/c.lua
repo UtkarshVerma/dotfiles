@@ -1,3 +1,5 @@
+---@module "lazy.types"
+
 ---@class lsp.clangd.config.capabilities: lsp.base.capabilities
 ---@field offsetEncoding? string[]
 
@@ -6,7 +8,7 @@
 ---@field completeUnimported? boolean
 ---@field clangdFileStatus? boolean
 
----@class lsp.clangd.config: lsp.base
+---@class lsp.clangd.config: plugins.lspconfig.config.server
 ---@field capabilities? lsp.clangd.config.capabilities
 ---@field init_options? lsp.clangd.config.init_options
 
@@ -39,6 +41,7 @@ return {
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
+        ---@type lsp.clangd.config
         clangd = {
           keys = {
             { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
@@ -97,14 +100,13 @@ return {
             completeUnimported = true,
             clangdFileStatus = true,
           },
+          setup = function(_)
+            require("clangd_extensions.inlay_hints").setup_autocmd()
+            require("clangd_extensions.inlay_hints").set_inlay_hints()
+
+            return false
+          end,
         },
-      },
-      setup = {
-        clangd = function(_, opts)
-          local clangd_ext_opts = require("util").plugin.opts("clangd_extensions.nvim")
-          require("clangd_extensions").setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = opts }))
-          return false
-        end,
       },
     },
   },
@@ -113,13 +115,24 @@ return {
     "nvim-cmp",
     ---@param opts plugins.cmp.config
     opts = function(_, opts)
-      table.insert(opts.sorting.comparators, 1, require("clangd_extensions.cmp_scores"))
+      local cmp = require("cmp")
+
+      opts.sorting = opts.sorting or {}
+      opts.sorting.comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.recently_used,
+        require("clangd_extensions.cmp_scores"),
+        cmp.config.compare.kind,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
+      }
     end,
   },
 
   {
     "p00f/clangd_extensions.nvim",
-    config = function() end,
     -- TODO: Specify types
     opts = {
       inlay_hints = {
@@ -145,6 +158,7 @@ return {
         },
       },
     },
+    config = function() end,
   },
 
   {

@@ -11,8 +11,8 @@ return {
   {
     "which-key.nvim",
     opts = {
-      defaults = {
-        ["<leader>d"] = { name = "+debug" },
+      spec = {
+        { "<leader>d", group = "debug" },
       },
     },
   },

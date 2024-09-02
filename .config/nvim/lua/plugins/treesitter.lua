@@ -1,3 +1,6 @@
+---@module "nvim-treesitter"
+---@module "lazy"
+
 ---@class plugins.treesitter.plugin
 ---@field enable? boolean
 ---@field disable? fun(filetype:string, bufnr: number):boolean

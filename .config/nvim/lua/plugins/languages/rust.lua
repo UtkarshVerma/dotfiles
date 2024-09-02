@@ -1,5 +1,3 @@
-local util = require("util")
-
 ---@type LazyPluginSpec[]
 return {
   {
@@ -19,7 +17,7 @@ return {
     opts = {
       servers = {
         rust_analyzer = {
-          setup = function()
+          setup = function(_)
             -- Do not initialize the LSP as rustaceanvim will take care of that.
             return true
           end,

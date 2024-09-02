@@ -1,3 +1,5 @@
+-- NOTE: This file has to be loaded before conform.nvim and nvim-lint for properly merging the opts.
+
 ---@class plugins.mason.config: MasonSettings
 ---@field ensure_installed? string[]
 

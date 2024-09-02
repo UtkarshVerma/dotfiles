@@ -8,8 +8,8 @@ return {
     "which-key.nvim",
     ---@type plugins.which_key.config
     opts = {
-      defaults = {
-        ["<leader>gh"] = { name = "+hunks" },
+      spec = {
+        { "<leader>gh", group = "hunks" },
       },
     },
   },

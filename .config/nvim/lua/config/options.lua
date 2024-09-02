@@ -2,6 +2,7 @@ local config = require("config")
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.g.c_syntax_for_h = true
 
 local options = {
   backup = false,

@@ -44,7 +44,13 @@ snip_to() {
 case "$1" in
     full | sel)
         region="$1"
-        mode="$2"
+        case "$2" in
+            file | clip) mode="$2" ;;
+            *)
+                echo "error: invalid mode passed"
+                exit 1
+                ;;
+        esac
         ;;
     *)
         choices="\

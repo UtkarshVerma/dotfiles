@@ -7,8 +7,8 @@ return {
     "which-key.nvim",
     ---@type plugins.which_key.config
     opts = {
-      defaults = {
-        ["<leader>ag"] = { name = "+chatGPT" },
+      spec = {
+        { "<leader>ag", group = "chatGPT" },
       },
     },
   },

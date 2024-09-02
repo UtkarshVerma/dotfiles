@@ -1,6 +1,6 @@
 (
     charge_control_end_threshold: 80,
-    panel_od: false,
+    panel_od: true,
     mini_led_mode: false,
     disable_nvidia_powerd_on_battery: true,
     ac_command: "",

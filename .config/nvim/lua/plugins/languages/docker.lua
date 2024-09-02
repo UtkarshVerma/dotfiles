@@ -1,3 +1,13 @@
+---@module "lazy.types"
+
+-- This filetype mapping is required for docker-compose-language-service.
+vim.filetype.add({
+  filename = {
+    ["docker-compose.yaml"] = "yaml.docker-compose",
+    ["compose.yaml"] = "yaml.docker-compose",
+  },
+})
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -6,6 +16,7 @@ return {
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "dockerfile",
+        "yaml",
       })
     end,
   },
@@ -16,6 +27,16 @@ return {
     opts = {
       servers = {
         dockerls = {},
+      },
+    },
+  },
+
+  {
+    "nvim-lint",
+    ---@type plugins.lint.config
+    opts = {
+      linters_by_ft = {
+        dockerfile = { "hadolint" },
       },
     },
   },

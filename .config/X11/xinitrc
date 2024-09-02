@@ -18,6 +18,7 @@ autostart="\
     parcellite -n
     breaks
     nm-applet
+    kdeconnectd --replace
     $STATUSBAR"
 
 echo "$autostart" | while read -r program; do

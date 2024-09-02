@@ -1,11 +1,14 @@
+---@module "lazy"
+---@module "overseer"
+
 ---@type LazyPluginSpec[]
 return {
   {
     "which-key.nvim",
     ---@type plugins.which_key.config
     opts = {
-      defaults = {
-        ["<leader>o"] = { name = "+overseer" },
+      spec = {
+        { "<leader>o", group = "overseer" },
       },
     },
   },

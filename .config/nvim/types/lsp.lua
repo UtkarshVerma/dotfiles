@@ -22,10 +22,11 @@
 ---@field offsetEncoding? string[]
 ---@field textDocument? lsp.base.capabilites.text_document
 
+---Refer to :h lspconfig-setup.
 ---@class lsp.base
 ---@field cmd? string[]
 ---@field capabilities? table
 ---@field on_attach? fun(client:lsp.Client, bufnr:integer):integer
 ---@field filetypes? string[]
 ---@field root_dir? fun(file:string):string
----@field setup? fun():boolean
+---@field on_new_config fun(new_config:lsp.base, new_root_dir:string)

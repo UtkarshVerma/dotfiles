@@ -1,4 +1,6 @@
----@alias plugins.cmp.config cmp.ConfigSchema
+---@module "cmp.types"
+
+---@class plugins.cmp.config: cmp.ConfigSchema
 
 ---@type LazyPluginSpec[]
 return {
@@ -19,7 +21,6 @@ return {
     opts = function(_, _)
       local luasnip = require("luasnip")
       local cmp = require("cmp")
-      local defaults = require("cmp.config.default")()
 
       ---@type plugins.cmp.config
       return {
@@ -91,7 +92,6 @@ return {
             return item
           end,
         },
-        sorting = defaults.sorting,
       }
     end,
     config = function(_, opts)

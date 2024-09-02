@@ -4,8 +4,8 @@ return {
     "which-key.nvim",
     ---@type plugins.which_key.config
     opts = {
-      defaults = {
-        ["<leader>gw"] = { name = "+worktree" },
+      spec = {
+        { "<leader>gw", group = "worktree" },
       },
     },
   },

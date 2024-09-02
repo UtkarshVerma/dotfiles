@@ -1,3 +1,5 @@
+---@module "lazy.types"
+
 ---@class plugins.luasnip.config
 ---@field region_check_events? string
 ---@field delete_check_events? string
@@ -37,7 +39,16 @@ return {
       local luasnip = require("luasnip")
       luasnip.setup(opts)
 
-      require("luasnip.loaders.from_lua").load({ paths = { vim.fn.stdpath("config") .. "/lua/snippets" } })
+      require("luasnip.loaders.from_lua").lazy_load({
+        paths = { vim.fn.stdpath("config") .. "/lua/snippets" },
+        fs_event_providers = {
+          -- Reload snippets when edited in another instance.
+          libuv = true,
+
+          -- Fallback.
+          autocmd = true,
+        },
+      })
     end,
   },
 }

@@ -78,11 +78,15 @@ return {
         nixpkgs_fmt = "nixpkgs-fmt",
       }
 
-      local formatters = vim.tbl_map(function(formatter)
-        return renames[formatter] or formatter
-      end, vim.tbl_flatten(vim.tbl_values(util.plugin.opts("conform.nvim").formatters_by_ft)))
+      local conform_opts = util.plugin.opts("conform.nvim") --[[@as plugins.conform.config]]
+      local formatters = vim
+        .iter(vim.tbl_values(conform_opts.formatters_by_ft))
+        :flatten()
+        :map(function(formatter)
+          return renames[formatter] or formatter
+        end)
+        :totable()
 
-      opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, formatters)
     end,
   },

@@ -1,3 +1,23 @@
+---@module "lazy.types"
+
+---@class lsp.jsonls.config.settings.json.format
+---@field enable? boolean
+
+---@class lsp.jsonls.config.settings.json.validate
+---@field enable? boolean
+
+---@class lsp.jsonls.config.settings.json
+---@field format? lsp.jsonls.config.settings.json.format
+---@field validate? lsp.jsonls.config.settings.json.validate
+
+-- Borrowed from https://www.npmjs.com/package/vscode-json-languageserver#settings
+---@class lsp.jsonls.config.settings
+---@field json? lsp.jsonls.config.settings.json
+---@field schemas? table[]
+
+---@class lsp.jsonls.config: lsp.base
+---@field settings? lsp.jsonls.config.settings
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -24,11 +44,12 @@ return {
     opts = {
       servers = {
         jsonls = {
-          -- lazy-load schemastore when needed
-          on_new_config = function(new_config)
-            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-            vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+          -- Lazy-load schemastore when needed.
+          ---@param new_config lsp.jsonls.config
+          on_new_config = function(new_config, _)
+            new_config.settings.json["schemas"] = require("schemastore").json.schemas()
           end,
+          ---@type lsp.jsonls.config
           settings = {
             json = {
               format = { enable = false },

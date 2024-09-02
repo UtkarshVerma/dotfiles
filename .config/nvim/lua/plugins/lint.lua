@@ -1,3 +1,5 @@
+---@module "lazy.types"
+
 ---@class plugins.lint.linter
 ---@field prepend_args? string[]
 
@@ -38,11 +40,15 @@ return {
         biomejs = "biome",
       }
 
-      local linters = vim.tbl_map(function(linter)
-        return renames[linter] or linter
-      end, vim.tbl_flatten(vim.tbl_values(util.plugin.opts("nvim-lint").linters_by_ft)))
+      local nvim_lint_opts = util.plugin.opts("nvim-lint") --[[@as plugins.lint.config]]
+      local linters = vim
+        .iter(vim.tbl_values(nvim_lint_opts.linters_by_ft))
+        :flatten()
+        :map(function(linter)
+          return renames[linter] or linter
+        end)
+        :totable()
 
-      opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, linters)
     end,
   },

@@ -1,61 +1,68 @@
----@class plugins.which_key.defaults
----@field [string] {name: string}
----@field mode? ("n"|"v")[]
+---@module "lazy"
+---@module "which-key"
 
----@class plugins.which_key.config
----@field defaults? plugins.which_key.defaults
----@field key_labels? table<string, string>
+---@class plugins.which_key.config: wk.Config
 
 ---@type LazyPluginSpec[]
 return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    dependencies = {
+      "nvim-web-devicons",
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
+    },
     ---@type plugins.which_key.config
     opts = {
-      plugins = {
-        spelling = true,
-        presets = { motions = false, g = false }, -- This fix mapping for fold when press f and nothing show up
-      },
-      key_labels = {
-        ["<Tab>"] = "<tab>",
-      },
+      preset = "classic",
       layout = {
         height = { min = 3, max = 25 }, -- min and max height of the columns
         width = { min = 20, max = 50 }, -- min and max width of the columns
-        spacing = 5, -- spacing between columns
+        spacing = 3, -- spacing between columns
         align = "center", -- align columns left, center or right
       },
-      window = {
-        margin = { 1, 0, 2, 0 }, -- extra window margin [top, right, bottom, left]
-        padding = { 1, 2, 1, 2 }, -- extra window padding [top, right, bottom, left]
-        winblend = 5, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+      icons = {
+        rules = false,
       },
-      defaults = {
+      win = {
+        padding = { 1, 2 },
+        wo = {
+          winblend = 5, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+        },
+      },
+
+      spec = {
         mode = { "n", "v" },
-        ["g"] = { name = "+goto" },
-        ["gz"] = { name = "+surround" },
-        ["]"] = { name = "+next" },
-        ["["] = { name = "+prev" },
-        ["<leader><tab>"] = { name = "+tabs" },
-        ["<leader>a"] = { name = "+ai" },
-        ["<leader>b"] = { name = "+buffer" },
-        ["<leader>c"] = { name = "+code" },
-        ["<leader>d"] = { name = "+debug" },
-        ["<leader>f"] = { name = "+file/find" },
-        ["<leader>g"] = { name = "+git" },
-        ["<leader>q"] = { name = "+quit/session" },
-        ["<leader>s"] = { name = "+search" },
-        ["<leader>u"] = { name = "+ui" },
-        ["<leader>t"] = { name = "+toggle" },
-        ["<leader>w"] = { name = "+windows" },
-        ["<leader>x"] = { name = "+diagnostics/quickfix" },
+        { "g", group = "goto" },
+        { "gz", group = "surround" },
+        { "]", group = "next" },
+        { "[", group = "prev" },
+        { "<leader><tab>", group = "tabs" },
+        { "<leader>a", group = "ai" },
+        { "<leader>b", group = "buffer" },
+        { "<leader>c", group = "code" },
+        { "<leader>d", group = "debug" },
+        { "<leader>f", group = "file/find" },
+        { "<leader>g", group = "git" },
+        { "<leader>q", group = "quit/session" },
+        { "<leader>s", group = "search" },
+        { "<leader>u", group = "ui" },
+        { "<leader>t", group = "toggle" },
+        { "<leader>w", group = "windows" },
+        { "<leader>x", group = "diagnostics/quickfix" },
       },
     },
     config = function(_, opts)
       local wk = require("which-key")
       wk.setup(opts)
-      wk.register(opts.defaults)
     end,
   },
 }

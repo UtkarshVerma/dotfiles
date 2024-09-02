@@ -1,3 +1,5 @@
+---@module "lazy.types"
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -16,16 +18,6 @@ return {
     opts = {
       servers = {
         zls = {},
-      },
-    },
-  },
-
-  {
-    "conform.nvim",
-    ---@type plugins.conform.config
-    opts = {
-      formatters_by_ft = {
-        zig = { "zigfmt" },
       },
     },
   },

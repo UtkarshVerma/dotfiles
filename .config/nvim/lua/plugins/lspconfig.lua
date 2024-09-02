@@ -1,13 +1,16 @@
+---@module "lazy.types"
+---@module "mason-lspconfig.settings"
+
 ---@class plugins.lspconfig.config.server: lsp.base
 ---@field keys? plugins.lspconfig.key[]
+---@field setup? fun(opts:plugins.lspconfig.config.server):boolean
 
 ---@class plugins.lspconfig.config
 ---@field capabilities? table
----@field servers? plugins.lspconfig.config.server
+---@field servers? table<string, plugins.lspconfig.config.server>
 
 ---@class plugins.lspconfig.key: LazyKeysSpec
 ---@field method? string
----
 
 ---@class plugins.mason_lspconfig.config: MasonLspconfigSettings
 
@@ -197,7 +200,6 @@ return {
       return {
         capabilities = require("cmp_nvim_lsp").default_capabilities(),
         servers = {},
-        setup = {},
       }
     end,
     config = function(_, _) end,
@@ -226,10 +228,10 @@ return {
 
             local server_opts = vim.tbl_deep_extend("force", {
               capabilities = vim.deepcopy(lspconfig_opts.capabilities) or {},
-            }, servers[server])
+            } --[[@as plugins.lspconfig.config.server]], servers[server])
 
             if server_opts.setup ~= nil then
-              if server_opts.setup() then
+              if server_opts.setup(server_opts) then
                 return
               end
             end
