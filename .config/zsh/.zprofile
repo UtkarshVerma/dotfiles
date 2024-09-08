@@ -34,6 +34,7 @@ export ARDUINO_DIRECTORIES_USER="$HOME/Documents/Arduino"
 export BUN_HOME="$XDG_DATA_HOME/bun"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export CHROME_EXECUTABLE="$BROWSER"
+export COURSIER_BIN_DIR="$XDG_DATA_HOME/coursier/bin"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export DIFFPROG="nvim -d"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
@@ -80,6 +81,7 @@ $NPM_CONFIG_PREFIX/bin:\
 $BUN_HOME/bin:\
 $GOPATH/bin:\
 $CARGO_HOME/bin:\
+$COURSIER_BIN_DIR:\
 $ANDROID_SDK_ROOT/emulator:\
 $ANDROID_SDK_ROOT/platform-tools:\
 $ANDROID_SDK_ROOT/cmdline-tools/tools/bin:\

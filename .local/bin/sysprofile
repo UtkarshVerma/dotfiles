@@ -7,42 +7,44 @@ case "$1" in
     --cpu)
         mode="CPU"
         icon="freon-fan-symbolic"
-        active="$(asusctl profile --profile-get | tail -n 1 | cut -d' ' -f4)"
+        active="$(powerprofilesctl get)"
 
         profiles="\
-💤 Quiet
-💻 Balanced
-💨 Performance"
+🔋 Power Saver:power-saver
+💻 Balanced:balanced
+🚀 Performance:performance"
         ;;
+
     --gpu)
         mode="GPU"
         icon="freon-gpu-temperature-symbolic"
         active="$(supergfxctl --get)"
 
         profiles="\
-💻 Integrated
-🔮 Vfio
-🚀 Hybrid"
+💻 Integrated:Integrated
+🔮 Vfio:Vfio
+🚀 Hybrid:Hybrid"
         if [ "$active" = "Hybrid" ]; then
             profiles="$(echo "$profiles" | grep -v Vfio)"
         fi
         ;;
+
     *)
         echo "usage: $(basename "$0") [--cpu|--gpu]"
         exit 1
         ;;
 esac
 
-preselect="$(echo "$profiles" | grep --line-number -i "$active" | cut -d':' -f1)"
+preselect="$(echo "$profiles" | cut -d':' -f2 | grep --line-number -i "$active" | cut -d':' -f1)"
 preselect="$((preselect - 1))"
 prompt="$mode Profile:"
 
-choice="$(echo "$profiles" | menu -i -ps "$preselect" -p "$prompt")"
-profile="${choice##* }"
+choice="$(echo "$profiles" | cut -d':' -f1 | menu -i -ps "$preselect" -p "$prompt")"
+profile="$(echo "$profiles" | grep "$choice" | cut -d':' -f2)"
 
 case "$mode" in
-    CPU) asusctl profile --profile-set "$profile" ;;
+    CPU) powerprofilesctl set "$profile" ;;
     GPU) supergfxctl --mode "$profile" ;;
 esac
 
-notify-send --expire-time=2000 --icon="$icon" "$mode Mode" "Switched to $profile mode."
+notify-send --expire-time=2000 --icon="$icon" "$mode Mode" "Switched to ${choice#* } mode."

@@ -15,6 +15,9 @@
 [gpg]
 	program = gpg2
 
+[alias]
+	nicelog = log --all --graph --decorate
+
 [init]
 	defaultBranch = main
 
@@ -32,6 +35,9 @@
 
 [includeIf "gitdir:~/gsoc/rtems/"]
 	path = ~/gsoc/rtems/.gitconfig
+
+[includeIf "gitdir:~/study/software-fundamentals/"]
+	path = ~/study/software-fundamentals/.gitconfig
 
 [safe]
 	directory = /run/media/subaru/Stuff/Software/QEMU/Windows 10

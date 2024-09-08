@@ -207,6 +207,7 @@ return {
 
   {
     "williamboman/mason-lspconfig.nvim",
+    version = "v1.30.0", -- NOTE: Keep using this until lspconfig releases v0.1.9 or newer.
     event = "LazyFile",
     dependencies = {
       "mason.nvim",

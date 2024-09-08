@@ -23,8 +23,6 @@ return {
         opts.ensure_installed = util.dedup(opts.ensure_installed)
       end
 
-      vim.print(vim.inspect(opts.ensure_installed))
-
       require("mason").setup(opts)
 
       local mr = require("mason-registry")
