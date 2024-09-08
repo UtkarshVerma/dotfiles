@@ -148,4 +148,22 @@ function M.buf_has_large_file(bufnr)
   return vim.api.nvim_buf_line_count(bufnr) > 5000
 end
 
+-- Remove duplicates from list.
+---@generic T
+---@param list T[]
+---@return T[]
+---@nodiscard
+function M.dedup(list)
+  local ret = {}
+  local seen = {}
+  for _, v in ipairs(list) do
+    if not seen[v] then
+      table.insert(ret, v)
+      seen[v] = true
+    end
+  end
+
+  return ret
+end
+
 return M

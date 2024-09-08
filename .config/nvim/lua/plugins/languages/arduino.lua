@@ -6,23 +6,23 @@ local arduino_dir_data = os.getenv("ARDUINO_DIRECTORIES_DATA")
 return {
   {
     "nvim-treesitter",
-    ---@param opts plugins.treesitter.config
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
+    ---@type plugins.treesitter.config
+    opts = {
+      ensure_installed = {
         "arduino",
-      })
-    end,
+      },
+    },
   },
 
   {
     "mason.nvim",
-    ---@param opts plugins.mason.config
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
+    ---@type plugins.mason.config
+    opts = {
+      ensure_installed = {
         "clangd",
         "clang-format",
-      })
-    end,
+      },
+    },
   },
 
   {

@@ -21,25 +21,24 @@ local BASHDB_DIR = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter
 return {
   {
     "nvim-treesitter",
-    ---@param opts plugins.treesitter.config
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
+    ---@type plugins.treesitter.config
+    opts = {
+      ensure_installed = {
         "bash",
-      })
-    end,
+      },
+    },
   },
 
   {
     "mason.nvim",
-    ---@param opts plugins.mason.config
-    opts = function(_, opts)
-      -- bashls takes care of formatting and linting both, so just ensure that they're installed.
-      vim.list_extend(opts.ensure_installed, {
+    ---@type plugins.mason.config
+    opts = {
+      ensure_installed = {
         "shfmt",
         "shellcheck",
         "bash-debug-adapter",
-      })
-    end,
+      },
+    },
   },
 
   {

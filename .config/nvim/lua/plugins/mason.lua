@@ -1,7 +1,7 @@
--- NOTE: This file has to be loaded before conform.nvim and nvim-lint for properly merging the opts.
-
 ---@class plugins.mason.config: MasonSettings
 ---@field ensure_installed? string[]
+
+local util = require("util")
 
 ---@type LazyPluginSpec[]
 return {
@@ -12,12 +12,19 @@ return {
       { "<leader>um", "<cmd>Mason<cr>", desc = "Mason" },
     },
     build = ":MasonUpdate",
+    opts_extend = { "ensure_installed" },
     ---@type plugins.mason.config
     opts = {
       ensure_installed = {},
     },
     ---@param opts plugins.mason.config
     config = function(_, opts)
+      if type(opts.ensure_installed) == "table" then
+        opts.ensure_installed = util.dedup(opts.ensure_installed)
+      end
+
+      vim.print(vim.inspect(opts.ensure_installed))
+
       require("mason").setup(opts)
 
       local mr = require("mason-registry")

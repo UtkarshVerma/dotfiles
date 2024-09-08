@@ -17,7 +17,6 @@ local util = require("util")
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    main = "nvim-treesitter.configs",
     build = ":TSUpdate",
     event = "LazyFile",
     version = false, -- v0.9.2 causes crashes when parsing gohtml files.
@@ -30,6 +29,7 @@ return {
       { "<c-space>", desc = "Increment selection" },
       { "<bs>", desc = "Decrement selection", mode = "x" },
     },
+    opts_extend = { "ensure_installed" },
     ---@type plugins.treesitter.config
     opts = {
       highlight = {
@@ -50,5 +50,12 @@ return {
         },
       },
     },
+    config = function(_, opts)
+      if type(opts.ensure_installed) == "table" then
+        opts.ensure_installed = util.dedup(opts.ensure_installed)
+      end
+
+      require("nvim-treesitter.configs").setup(opts)
+    end,
   },
 }

@@ -35,6 +35,7 @@ return {
   {
     "mason.nvim",
     ---@param opts plugins.mason.config
+    ---@return plugins.mason.config
     opts = function(_, opts)
       local renames = {
         biomejs = "biome",
@@ -49,7 +50,9 @@ return {
         end)
         :totable()
 
-      vim.list_extend(opts.ensure_installed, linters)
+      return vim.tbl_deep_extend("force", opts, {
+        ensure_installed = vim.list_extend(opts.ensure_installed or {}, linters),
+      })
     end,
   },
 
