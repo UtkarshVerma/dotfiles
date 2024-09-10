@@ -45,11 +45,15 @@ if [ ! -d "$ZINIT_HOME" ]; then
 fi
 source "$ZINIT_HOME/zinit.zsh"
 
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit ice depth=1
+
+zinit light romkatv/powerlevel10k
+zinit light chisui/zsh-nix-shell
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light Aloxaf/fzf-tab
+zinit light nix-community/nix-zsh-completions
 
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo

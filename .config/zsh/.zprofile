@@ -20,7 +20,11 @@ esac
 # XDG paths
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_DIRS="$XDG_DATA_HOME:/usr/local/share:/usr/share"
+export XDG_DATA_DIRS="\
+$XDG_STATE_HOME/nix/profile/share:\
+$XDG_DATA_HOME:\
+/usr/local/share:\
+/usr/share"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
@@ -85,6 +89,7 @@ $COURSIER_BIN_DIR:\
 $ANDROID_SDK_ROOT/emulator:\
 $ANDROID_SDK_ROOT/platform-tools:\
 $ANDROID_SDK_ROOT/cmdline-tools/tools/bin:\
+$XDG_STATE_HOME/nix/profile/bin:\
 $HOME/.local/bin/statusbar:\
 $HOME/.local/bin:\
 $PATH"
@@ -101,6 +106,9 @@ export AWT_TOOLKIT=MToolkit
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
 export SUDO_ASKPASS="$HOME/.local/bin/passprompt"
 export PIPENV_VENV_IN_PROJECT=1
+
+# nix
+export NIX_PATH="$XDG_STATE_HOME/nix/defexpr/channels"
 
 # Look and feel
 eval "$(dircolors --sh)" # LS_COLORS
