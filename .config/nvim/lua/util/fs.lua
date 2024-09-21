@@ -9,7 +9,7 @@ M.path_sep = package.config:sub(1, 1)
 ---@nodiscard
 function M.normalize(path)
   -- Resolve relative paths.
-  path = vim.loop.fs_realpath(path) or path
+  path = vim.uv.fs_realpath(path) or path
 
   -- Expand tilde, normalize slashes and removing trailing ones.
   path = vim.fs.normalize(path)
@@ -21,7 +21,7 @@ end
 ---@return string?
 ---@nodiscard
 function M.cwd()
-  local cwd = vim.loop.cwd()
+  local cwd = vim.uv.cwd()
   if cwd == nil then
     return nil
   end

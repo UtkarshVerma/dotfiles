@@ -160,6 +160,7 @@ alias \
     cbcopy="xclip -selection clipboard" \
     cbpaste="xclip -selection clipboard -out" \
     diff="diff --color=auto" \
+    docker="podman" \
     dosbox="dosbox -conf \$XDG_CONFIG_HOME/dosbox/dosbox.conf" \
     egrep="egrep --color=auto" \
     fgrep="fgrep --color=auto" \

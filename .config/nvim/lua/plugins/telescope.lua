@@ -41,7 +41,7 @@ local function search_files(opts)
     local path_sep = util.fs.path_sep
 
     local picker = "find_files"
-    if vim.loop.fs_stat(cwd .. path_sep .. ".git") then
+    if vim.uv.fs_stat(cwd .. path_sep .. ".git") then
       opts["show_untracked"] = true
       picker = "git_files"
     end

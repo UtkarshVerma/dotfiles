@@ -87,8 +87,8 @@ function M.lazy_notify()
   local original = vim.notify
   vim.notify = temp
 
-  local timer = assert(vim.loop.new_timer())
-  local check = assert(vim.loop.new_check())
+  local timer = assert(vim.uv.new_timer())
+  local check = assert(vim.uv.new_check())
 
   local replay = function()
     timer:stop()

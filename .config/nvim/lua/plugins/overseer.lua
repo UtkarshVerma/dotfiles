@@ -1,4 +1,4 @@
----@module "lazy"
+---@module "lazy.types"
 ---@module "overseer"
 
 ---@type LazyPluginSpec[]

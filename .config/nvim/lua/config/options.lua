@@ -111,6 +111,7 @@ vim.filetype.add({
     def = "c",
     mdx = "markdown",
     sub = "spice",
+    cl = "c",
   },
 })
 

@@ -18,7 +18,7 @@ return {
     opts = {
       servers = {
         -- TODO: Switch to biome lsp in nvim v0.10
-        tsserver = {
+        ts_ls = {
           -- Disable formatter in favour of biome.
           on_attach = function(client)
             client.server_capabilities.documentFormattingProvider = false

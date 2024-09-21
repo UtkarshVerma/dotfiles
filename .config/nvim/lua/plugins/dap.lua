@@ -10,6 +10,7 @@
 return {
   {
     "which-key.nvim",
+    ---@type plugins.which_key.config
     opts = {
       spec = {
         { "<leader>d", group = "debug" },

@@ -1,7 +1,19 @@
 ---@module "lazy.types"
 
+local util = require("util")
+
 ---@type LazyPluginSpec[]
 return {
+  {
+    "which-key.nvim",
+    ---@type plugins.which_key.config
+    opts = {
+      spec = {
+        { "<leader>m", group = "metals" },
+      },
+    },
+  },
+
   {
     "nvim-treesitter",
     ---@type plugins.treesitter.config
@@ -10,16 +22,31 @@ return {
     },
   },
 
-  -- TODO: lspconfig integration.
   {
     "scalameta/nvim-metals",
     dependencies = { "plenary.nvim" },
     ft = { "scala", "sbt" },
     opts = function(_, _)
-      local opts = require("metals").bare_config()
+      local map = vim.keymap.set
 
-      opts = vim.tbl_deep_extend("force", opts, {
-        on_attach = function(_, _) end,
+      return {
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        on_attach = function(_, _)
+          local metals = require("metals")
+          metals.setup_dap()
+
+          map("n", "<leader>ws", function()
+            metals.hover_worksheet()
+          end, { desc = "Hover worksheet" })
+
+          map("n", "<leader>mc", function()
+            metals.compile_cascade()
+          end, { desc = "Compile cascade" })
+
+          map("n", "<leader>me", function()
+            require("telescope").extensions.metals.commands()
+          end, { desc = "Commands" })
+        end,
         init_options = {
           statusBarProvider = "off",
         },
@@ -27,16 +54,17 @@ return {
           showImplicitArguments = true,
           excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
         },
-      })
-
-      return opts
+      }
     end,
     config = function(self, opts)
+      local metals = require("metals")
+      local metals_config = vim.tbl_deep_extend("force", metals.bare_config(), opts)
+
       local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
         pattern = self.ft,
         callback = function()
-          require("metals").initialize_or_attach(opts)
+          metals.initialize_or_attach(metals_config)
         end,
         group = nvim_metals_group,
       })

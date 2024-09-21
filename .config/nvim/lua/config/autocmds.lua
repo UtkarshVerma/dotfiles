@@ -57,7 +57,7 @@ local autocommands = {
         return
       end
 
-      local file = vim.loop.fs_realpath(arg.match) or arg.match
+      local file = vim.uv.fs_realpath(arg.match) or arg.match
       vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
     end,
     desc = "Auto create parent directories when they don't exist",

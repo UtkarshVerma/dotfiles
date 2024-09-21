@@ -4,7 +4,7 @@ local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 
 --- Go to next or previous diagnostic of severity {severity} based on {direction}.
 ---@param direction "next"|"prev"
----@param severity DiagnosticSeverity?
+---@param severity vim.diagnostic.Severity?
 ---@return fun()
 local function goto_diagnostic(direction, severity)
   local go = direction == "next" and vim.diagnostic.goto_next or vim.diagnostic.goto_prev

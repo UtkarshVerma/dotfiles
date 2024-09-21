@@ -20,27 +20,19 @@ return {
         desc = "Buffer Local Keymaps (which-key)",
       },
     },
+    opts_extend = { "spec" },
     ---@type plugins.which_key.config
     opts = {
       preset = "classic",
-      layout = {
-        height = { min = 3, max = 25 }, -- min and max height of the columns
-        width = { min = 20, max = 50 }, -- min and max width of the columns
-        spacing = 3, -- spacing between columns
-        align = "center", -- align columns left, center or right
-      },
       icons = {
-        rules = false,
+        mappings = false,
       },
       win = {
-        padding = { 1, 2 },
         wo = {
-          winblend = 5, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+          winblend = 5,
         },
       },
-
       spec = {
-        mode = { "n", "v" },
         { "g", group = "goto" },
         { "gz", group = "surround" },
         { "]", group = "next" },
@@ -59,6 +51,9 @@ return {
         { "<leader>w", group = "windows" },
         { "<leader>x", group = "diagnostics/quickfix" },
       },
+
+      -- spec = {
+      -- },
     },
     config = function(_, opts)
       local wk = require("which-key")

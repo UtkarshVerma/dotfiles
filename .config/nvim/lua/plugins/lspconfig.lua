@@ -207,18 +207,17 @@ return {
 
   {
     "williamboman/mason-lspconfig.nvim",
-    version = "v1.30.0", -- NOTE: Keep using this until lspconfig releases v0.1.9 or newer.
     event = "LazyFile",
     dependencies = {
       "mason.nvim",
       "nvim-lspconfig",
     },
-    opts = function(_, _)
+    opts = function(_, opts)
       local lspconfig_opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
       local servers = lspconfig_opts.servers or {}
 
       ---@type plugins.mason_lspconfig.config
-      return {
+      return vim.tbl_deep_extend("force", opts, {
         ensure_installed = vim.tbl_keys(servers),
         handlers = {
           -- Default handler.
@@ -240,7 +239,7 @@ return {
             require("lspconfig")[server].setup(server_opts)
           end,
         },
-      }
+      })
     end,
   },
 }
