@@ -1,3 +1,6 @@
+---@module "lazy.types"
+---@module "gitsigns"
+
 ---@alias plugins.gitsigns.config Gitsigns.Config
 
 local icons = require("config").icons

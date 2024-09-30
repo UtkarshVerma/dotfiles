@@ -75,13 +75,13 @@ return {
       return {
         -- Find
         { "<leader>fb", builtin.buffers, desc = "Buffers" },
-        { "<leader>fc", search_files({ cwd = vim.fn.stdpath("config") }), desc = "Find config file" },
-        { "<leader>ff", search_files(), desc = "Find files" },
+        { "<leader>fc", search_files({ cwd = vim.fn.stdpath("config") }), desc = "Config file" },
+        { "<leader>ff", search_files(), desc = "Files" },
         { "<leader>fr", builtin.oldfiles, desc = "Recent" },
 
         -- Git
-        { "<leader>gc", builtin.git_commits, desc = "Git commits" },
-        { "<leader>gs", builtin.git_status, desc = "Git status" },
+        { "<leader>gc", builtin.git_commits, desc = "Commits" },
+        { "<leader>gs", builtin.git_status, desc = "Status" },
 
         -- Search
         { '<leader>s"', builtin.registers, desc = "Registers" },
