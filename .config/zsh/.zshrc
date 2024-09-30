@@ -64,6 +64,9 @@ zinit snippet OMZP::archlinux
 autoload -U compinit
 fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
 zmodload zsh/complist
+
+[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 _comp_options+=(globdots)       # Include hidden files.
 zinit cdreplay -q               # Run compdefs cached by zinit.
