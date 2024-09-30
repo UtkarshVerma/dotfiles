@@ -3,17 +3,11 @@
 	name = Utkarsh Verma
 	signingkey = 7A4885A7162BDF20
 
-[credential]
-	helper = gopass
-
 [commit]
 	gpgsign = true
 
 [pull]
 	rebase = false
-
-[gpg]
-	program = gpg2
 
 [alias]
 	nicelog = log --all --graph --decorate
@@ -27,21 +21,7 @@
 [url "ssh://git@gitlab.com/"]
 	insteadOf = https://gitlab.com/
 
-[includeIf "gitdir:~/work/aepl/"]
-	path = ~/work/aepl/.gitconfig
-
-[includeIf "gitdir:~/work/hyperhorizon/"]
-	path = ~/work/hyperhorizon/.gitconfig
-
-[includeIf "gitdir:~/gsoc/rtems/"]
-	path = ~/gsoc/rtems/.gitconfig
-
-[includeIf "gitdir:~/study/software-fundamentals/"]
-	path = ~/study/software-fundamentals/.gitconfig
-
-[safe]
-	directory = /run/media/subaru/Stuff/Software/QEMU/Windows 10
-	directory = /run/media/subaru/Stuff/Academics/Notes/vimwiki
-	directory = /run/media/subaru/Stuff/Resume/utkarshverma.github.io
-	directory = /run/media/subaru/Stuff/Resume/hugo-yami
-	directory = /home/subaru/remotes/dullahan/homelab
+[include]
+	path = ./delta.inc
+	path = ./machine.inc
+	path = ./gopass.inc

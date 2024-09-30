@@ -1,6 +1,3 @@
-/.config/git/*
-!/.config/git/config
-
 /.config/gnupg/*
 !/.config/gnupg/gpg-agent.conf
 
