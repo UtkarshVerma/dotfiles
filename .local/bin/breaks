@@ -15,6 +15,7 @@ notify() {
 
     notify-send \
         --icon=clock-applet-symbolic \
+        --category=breaks \
         --expire-time="$timeout_millis" \
         Breaks "$message"
 }

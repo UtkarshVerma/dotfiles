@@ -208,23 +208,33 @@ for config in ${configs}; do
 done
 unset config configs
 
-if command -v direnv >/dev/null 2>&1; then
+function command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+if command_exists direnv; then
     export DIRENV_LOG_FORMAT="" # Silence direnv
     eval "$(direnv hook zsh)" 
 fi
 
-if command -v fzf >/dev/null 2>&1; then
+if command_exists fzf; then
     # Ctrl-f: cd fzf-selected directory.
     bindkey -s '\C-f' '^ucd "$(dirname "$(fzf)")"\n'
 
     eval "$(fzf --zsh)"
 fi
 
-if command -v zoxide >/dev/null 2>&1; then
+if command_exists zoxide; then
     eval "$(zoxide init zsh --cmd cd)"
 fi
 
+if command_exists atuin; then
+    eval "$(atuin init zsh)"
+fi
+
 # Ctrl-o: Open a directory using $FILE_MANAGER.
-if [ -n "$FILE_MANAGER" ] && command -v "$FILE_MANAGER" &>/dev/null; then
+if [ -n "$FILE_MANAGER" ] && command_exists "$FILE_MANAGER"; then
     bindkey -s '\C-o' '^u'"$FILE_MANAGER"'\r'
 fi
+
+unset -f command_exists

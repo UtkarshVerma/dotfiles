@@ -47,4 +47,4 @@ case "$mode" in
     GPU) supergfxctl --mode "$profile" ;;
 esac
 
-notify-send --expire-time=2000 --icon="$icon" "$mode Mode" "Switched to ${choice#* } mode."
+notify-send --expire-time=2000 --category=system --icon="$icon" "$mode Mode" "Switched to ${choice#* } mode."

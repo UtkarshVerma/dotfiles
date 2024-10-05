@@ -413,10 +413,9 @@
     fullscreen = show
     timeout = 2
 
-[cpu-profile]
-    appname = "Fan Mode"
+[breaks]
+    category = "breaks"
     fullscreen = show
-    timeout = 2
 
 #[stack-volumes]
 #    appname = "some_volume_notifiers"

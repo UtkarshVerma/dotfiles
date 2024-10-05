@@ -18,6 +18,7 @@ autostart="\
     parcellite -n
     breaks
     nm-applet
+    redshift-gtk
     kdeconnectd --replace
     $STATUSBAR"
 
