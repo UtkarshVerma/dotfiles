@@ -229,7 +229,7 @@ if command_exists zoxide; then
 fi
 
 if command_exists atuin; then
-    eval "$(atuin init zsh)"
+    eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
 # Ctrl-o: Open a directory using $FILE_MANAGER.
