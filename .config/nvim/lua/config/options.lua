@@ -105,6 +105,7 @@ vim.filetype.add({
   },
   pattern = {
     ["${XDG_CONFIG_HOME}/hypr/.*.conf"] = "hyprlang",
+    ["${XDG_CONFIG_HOME}/redshift/redshift.conf"] = "confini",
   },
   extension = {
     dto = "devicetree",
@@ -112,6 +113,7 @@ vim.filetype.add({
     mdx = "markdown",
     sub = "spice",
     cl = "c",
+    v = "verilog",
   },
 })
 

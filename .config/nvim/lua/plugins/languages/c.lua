@@ -12,6 +12,19 @@
 ---@field capabilities? lsp.clangd.config.capabilities
 ---@field init_options? lsp.clangd.config.init_options
 
+-- Whitelist compilers used by PlatformIO and CUDA.
+local drivers = { "/usr/bin/**/clang-*" }
+local platformio_dir = os.getenv("PLATFORMIO_CORE_DIR")
+local cuda_path = os.getenv("CUDA_PATH")
+if platformio_dir then
+  table.insert(drivers, string.format("%s/**/bin/*-gcc", platformio_dir))
+end
+if cuda_path then
+  table.insert(drivers, string.format("%s/bin/nvcc", cuda_path))
+end
+
+local query_drivers = "--query-driver=" .. table.concat(drivers, ",")
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -88,10 +101,7 @@ return {
             "--completion-style=detailed",
             "--function-arg-placeholders",
             "--enable-config",
-
-            -- Whitelist compilers used by PlatformIO.
-            string.format("--query-driver=/usr/bin/**/clang-*,%s/**/bin/*-gcc", os.getenv("PLATFORMIO_CORE_DIR")),
-
+            -- query_drivers, TODO:
             -- Auto-format only if .clang-format exists
             "--fallback-style=none",
           },

@@ -1,3 +1,4 @@
+---@module "lazy.types"
 ---@class plugins.catppuccin.config: CatppuccinOptions
 
 ---@type LazyPluginSpec[]

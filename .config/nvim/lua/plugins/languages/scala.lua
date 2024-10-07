@@ -53,6 +53,10 @@ return {
         settings = {
           showImplicitArguments = true,
           excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
+          inlayHints = {
+            inferredTypes = { enable = true },
+            implicitConversions = { enable = true },
+          },
         },
       }
     end,
