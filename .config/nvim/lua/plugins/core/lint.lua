@@ -39,6 +39,7 @@ return {
     opts = function(_, opts)
       local renames = {
         biomejs = "biome",
+        cmakelint = "cmakelang",
       }
 
       local nvim_lint_opts = util.plugin.opts("nvim-lint") --[[@as plugins.lint.config]]

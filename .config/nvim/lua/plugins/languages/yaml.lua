@@ -108,10 +108,7 @@ return {
         yamllint = {
           prepend_args = {
             "-d",
-            string.format(
-              "{extends: default, rules: {document-start: disable, line-length: {max: %d}}}",
-              (tonumber(vim.o.colorcolumn) or 80) - 1
-            ),
+            "{extends: default, rules: {document-start: disable, line-length: disable}}",
           },
         },
       },
@@ -123,16 +120,13 @@ return {
     ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
-        -- yaml = { "yamlfmt" },
+        yaml = { "yamlfmt" },
       },
       formatters = {
         yamlfmt = {
           prepend_args = {
             "-formatter",
-            string.format(
-              "type=basic,retain_line_breaks=true,max_line_length=%d",
-              (tonumber(vim.o.colorcolumn) or 80) - 1
-            ),
+            "type=basic,retain_line_breaks=true",
           },
         },
       },

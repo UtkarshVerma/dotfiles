@@ -1,7 +1,5 @@
 ---@module "lazy.types"
 
-local util = require("util")
-
 ---@type LazyPluginSpec[]
 return {
   {

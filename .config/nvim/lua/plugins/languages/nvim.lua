@@ -1,4 +1,3 @@
----@module "lazy"
 ---@module "lazydev"
 
 ---@type LazyPluginSpec[]
@@ -23,6 +22,8 @@ return {
     ---@type lazydev.Config
     opts = {
       library = {
+        "lazy.nvim",
+
         -- Load luvit types when the `vim.uv` word is found.
         { path = "luvit-meta/library", words = { "vim%.uv" } },
       },

@@ -12,27 +12,17 @@ return {
     },
   },
 
-  -- {
-  --   "mason.nvim",
-  --   ---@type plugins.mason.config
-  --   opts = {
-  --     ensure_installed = {
-  --       "cmakelang",
-  --     },
-  --   },
-  -- },
-
   {
     "nvim-lspconfig",
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
         neocmake = {
-          single_file_support = true,
           init_options = {
-            format = { enable = true },
-            lint = { enable = true },
-            scan_cmake_in_package = true,
+            single_file_support = true,
+            format = { enable = false }, -- gersemi is better.
+            lint = { enable = false }, -- external cmake_lint integrates better.
+            semantic_tokens = false,
           },
         },
       },
@@ -40,34 +30,22 @@ return {
   },
 
   {
-    "Civitasv/cmake-tools.nvim",
-    init = function()
-      local loaded = false
-      local function check()
-        local cwd = vim.uv.cwd()
-        if vim.fn.filereadable(cwd .. "/CMakeLists.txt") == 1 then
-          require("lazy").load({ plugins = { "cmake-tools.nvim" } })
-          loaded = true
-        end
-      end
-      check()
-      vim.api.nvim_create_autocmd("DirChanged", {
-        callback = function()
-          if not loaded then
-            check()
-          end
-        end,
-      })
-    end,
-    opts = {},
+    "nvim-lint",
+    ---@type plugins.lint.config
+    opts = {
+      linters_by_ft = {
+        cmake = { "cmakelint" },
+      },
+    },
   },
 
-  -- {
-  --   "nvim-lint",
-  --   opts = {
-  --     linters_by_ft = {
-  --       cmake = { "cmakelint" },
-  --     },
-  --   },
-  -- },
+  {
+    "conform.nvim",
+    ---@type plugins.conform.config
+    opts = {
+      formatters_by_ft = {
+        cmake = { "gersemi" },
+      },
+    },
+  },
 }

@@ -16,6 +16,11 @@ return {
       window = {
         border = "none",
       },
+      -- TODO: Add this to type
+      mappings = {
+        prev_item = "k",
+        next_item = "j",
+      },
     },
   },
 }

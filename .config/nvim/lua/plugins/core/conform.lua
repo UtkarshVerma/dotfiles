@@ -75,6 +75,7 @@ return {
     opts = function(_, opts)
       local renames = {
         biomejs = "biome",
+        cmake_format = "cmakelang",
         nixpkgs_fmt = "nixpkgs-fmt",
       }
 

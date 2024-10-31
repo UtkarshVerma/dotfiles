@@ -36,19 +36,18 @@ return {
       update_events = { "TextChanged", "TextChangedI" },
     },
     config = function(_, opts)
-      local luasnip = require("luasnip")
-      luasnip.setup(opts)
+      require("luasnip").setup(opts)
 
-      require("luasnip.loaders.from_lua").lazy_load({
-        paths = { vim.fn.stdpath("config") .. "/lua/snippets" },
-        fs_event_providers = {
-          -- Reload snippets when edited in another instance.
-          libuv = true,
+      -- require("luasnip.loaders.from_lua").lazy_load({
+      --   paths = { vim.fn.stdpath("config") .. "/lua/snippets" },
+      --   fs_event_providers = {
+      --     -- Reload snippets when edited in another instance.
+      --     libuv = true,
 
-          -- Fallback.
-          autocmd = true,
-        },
-      })
+      --     -- Fallback.
+      --     autocmd = true,
+      --   },
+      -- })
     end,
   },
 }

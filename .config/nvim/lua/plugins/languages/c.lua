@@ -35,6 +35,7 @@ return {
         "c",
         "cpp",
         "make",
+        "cuda",
       },
     },
   },
