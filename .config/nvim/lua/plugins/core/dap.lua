@@ -98,8 +98,11 @@ return {
       dap.configurations = vim.tbl_extend("force", dap.configurations, opts.configurations)
 
       -- Load VS Code launch configurations.
-      if vim.fn.filereadable(".vscode/launch.json") then
-        require("dap.ext.vscode").load_launchjs(nil, { ["platformio-debug"] = { "c", "cpp", "asm" } })
+      -- TODO: Use an autocommand to reload config.
+      local vscode = require("dap.ext.vscode")
+      local json = require("plenary.json")
+      vscode.json_decode = function(str)
+        return vim.json.decode(json.json_strip_comments(str))
       end
 
       local dapui = require("dapui")

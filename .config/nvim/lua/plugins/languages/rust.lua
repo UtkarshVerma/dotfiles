@@ -1,3 +1,5 @@
+---@module "rustaceanvim"
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -72,6 +74,7 @@ return {
     lazy = false, -- It's lazy by default.
     init = function(_)
       vim.g.rustaceanvim = {
+        ---@type rustaceanvim.lsp.ClientOpts
         server = {
           on_attach = function(_, bufnr)
             vim.keymap.set("n", "<leader>cR", function()
@@ -81,19 +84,10 @@ return {
               vim.cmd.RustLsp("debuggables")
             end, { desc = "Rust debuggables", buffer = bufnr })
           end,
+          -- NOTE: https://github.com/hrsh7th/cmp-nvim-lsp/issues/72
+          capabilities = vim.lsp.protocol.make_client_capabilities(),
           default_settings = {
-            ["rust-analyzer"] = {
-              capabilities = {
-                textDocument = {
-                  completion = {
-                    completionItem = {
-                      -- Snippet support is wonky for v5 for some reason.
-                      snippetSupport = false, -- TODO: This is a workaround. Fix it.
-                    },
-                  },
-                },
-              },
-            },
+            ["rust-analyzer"] = {},
           },
         },
 
