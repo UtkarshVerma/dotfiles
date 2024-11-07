@@ -1,20 +1,6 @@
 ---@type LazyPluginSpec[]
 return {
   {
-    "bullets-vim/bullets.vim",
-    ft = "markdown",
-  },
-
-  {
-    "OXY2DEV/markview.nvim",
-    lazy = false, -- Recommended since the plugin lazy-loads itself.
-    dependencies = {
-      "nvim-treesitter",
-      "nvim-web-devicons",
-    },
-  },
-
-  {
     "nvim-treesitter",
     ---@type plugins.treesitter.config
     opts = {
@@ -23,6 +9,13 @@ return {
         "markdown_inline",
       },
     },
+  },
+
+  { "markview.nvim" },
+
+  {
+    "bullets-vim/bullets.vim",
+    ft = "markdown",
   },
 
   {

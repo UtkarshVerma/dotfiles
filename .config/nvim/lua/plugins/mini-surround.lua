@@ -1,4 +1,3 @@
----@module "lazy.types"
 ---@alias plugins.mini.surround.mapping "add"|"delete"|"find"|"find_left"|"highlight"|"replace"|"update_n_lines"|"suffix_last"|"suffix_next"
 
 ---@class plugins.mini.surround.config

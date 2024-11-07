@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 ---@class plugins.trouble.config: trouble.Config
 
 ---@type LazyPluginSpec[]

@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 ---@class lsp.clangd.config.capabilities: lsp.base.capabilities
 ---@field offsetEncoding? string[]
 

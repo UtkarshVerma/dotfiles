@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 ---@class lsp.jsonls.config.settings.json.format
 ---@field enable? boolean
 

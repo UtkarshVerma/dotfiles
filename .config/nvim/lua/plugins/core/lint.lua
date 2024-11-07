@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 ---@class plugins.lint.linter
 ---@field prepend_args? string[]
 

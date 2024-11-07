@@ -1,4 +1,3 @@
----@module "lazy.types"
 ---@module "mason-lspconfig.settings"
 
 ---@class plugins.lspconfig.config.server: lsp.base

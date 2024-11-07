@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 ---@class plugins.mini.statusline.config
 ---@field content? table<"active"|"inactive", fun():string>
 ---@field set_vim_settings? boolean

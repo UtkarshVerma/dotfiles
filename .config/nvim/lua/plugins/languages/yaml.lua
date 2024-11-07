@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 -- Borrowed from https://github.com/redhat-developer/yaml-language-server?tab=readme-ov-file#language-server-settings
 ---@class lsp.yamlls.config.settings.yaml.format
 ---@field enable? boolean Whether to enable formatting support.

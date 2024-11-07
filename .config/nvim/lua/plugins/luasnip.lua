@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 ---@class plugins.luasnip.config
 ---@field region_check_events? string
 ---@field delete_check_events? string

@@ -1,5 +1,3 @@
----@module "lazy.types"
-
 -- This filetype mapping is required for docker-compose-language-service.
 vim.filetype.add({
   filename = {
