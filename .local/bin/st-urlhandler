@@ -19,7 +19,7 @@ while [ $# -gt 0 ]; do
                 xclip -selection clipboard
             ;;
         --open)
-            url="$(echo "$urls" | dmenu -p "Follow which URL?")"
+            url="$(echo "$urls" | tac | dmenu -p "Follow which URL?")"
             setsid xdg-open "$url" >/dev/null 2>&1 &
             ;;
     esac
