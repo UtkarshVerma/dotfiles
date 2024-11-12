@@ -38,6 +38,7 @@ return {
       local renames = {
         biomejs = "biome",
         cmakelint = "cmakelang",
+        terraform_validate = "",
       }
 
       local nvim_lint_opts = util.plugin.opts("nvim-lint") --[[@as plugins.lint.config]]
@@ -45,7 +46,12 @@ return {
         .iter(vim.tbl_values(nvim_lint_opts.linters_by_ft))
         :flatten()
         :map(function(linter)
-          return renames[linter] or linter
+          local rename = renames[linter]
+          if rename == "" then
+            return nil
+          end
+
+          return rename or linter
         end)
         :totable()
 

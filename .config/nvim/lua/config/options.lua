@@ -113,6 +113,7 @@ vim.filetype.add({
     mdx = "markdown",
     sub = "spice",
     cl = "c",
+    tf = "terraform",
     v = "verilog",
   },
 })

@@ -77,6 +77,8 @@ return {
         biomejs = "biome",
         cmake_format = "cmakelang",
         nixpkgs_fmt = "nixpkgs-fmt",
+        terraform_fmt = "",
+        packer_fmt = "",
       }
 
       local conform_opts = util.plugin.opts("conform.nvim") --[[@as plugins.conform.config]]
@@ -84,7 +86,12 @@ return {
         .iter(vim.tbl_values(conform_opts.formatters_by_ft))
         :flatten()
         :map(function(formatter)
-          return renames[formatter] or formatter
+          local rename = renames[formatter]
+          if rename == "" then
+            return nil
+          end
+
+          return rename or formatter
         end)
         :totable()
 
