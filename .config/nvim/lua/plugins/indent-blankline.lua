@@ -1,8 +1,4 @@
----@class plugins.indent_blankline.config
----@field enabled? boolean
----@field scope? {enabled?: boolean}
----@field exclude? {filetypes?: string[]}
----@field indent? {char?: string, tab_char?: string, priority?: integer}
+---@class plugins.indent_blankline.config: ibl.config
 
 local util = require("util")
 local icons = require("config").icons

@@ -49,7 +49,7 @@ local options = {
   ignorecase = true, -- Ignore case
   inccommand = "nosplit", -- preview incremental substitute
   laststatus = 2, -- Always show statusline.
-  list = true, -- Show some invisible characters (tabs...
+  list = true, -- Show some invisible characters (tabs...)
   mouse = "a", -- Enable mouse mode
   number = true, -- Print line number
   pumblend = 10, -- Popup blend
@@ -109,6 +109,7 @@ vim.filetype.add({
   },
   extension = {
     dto = "devicetree",
+    overlay = "devicetree",
     def = "c",
     mdx = "markdown",
     sub = "spice",

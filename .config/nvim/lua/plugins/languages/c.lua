@@ -100,7 +100,7 @@ return {
             "--completion-style=detailed",
             "--function-arg-placeholders",
             "--enable-config",
-            -- query_drivers, TODO:
+            query_drivers,
             -- Auto-format only if .clang-format exists
             "--fallback-style=none",
           },
