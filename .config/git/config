@@ -27,4 +27,4 @@
 [include]
 	path = ./delta.inc
 	path = ./machine.inc
-	path = ./gopass.inc
+	path = ./rbw.inc

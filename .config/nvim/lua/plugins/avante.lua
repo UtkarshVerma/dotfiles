@@ -58,7 +58,7 @@ return {
       auto_suggestions_provider = "copilot",
       provider = "claude",
       claude = {
-        api_key_name = "cmd:gopass show --password api-keys/anthropic_avante",
+        api_key_name = "cmd:rbw get --folder=api-keys anthropic avante",
       },
     },
   },

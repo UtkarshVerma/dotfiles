@@ -22,9 +22,10 @@ gmail_count() {
 
 imap_count() {
     url="$1"
-    credentials="$2"
-    email="$(gopass show "$credentials" user | tail -n 1)"
-    password="$(gopass show --password "$credentials")"
+    folder="${2%/*}"
+    secret="${2#*/}"
+    email="$(rbw get --folder="$folder" --field=username "$secret")"
+    password="$(rbw get --folder="$folder" --field=password "$secret")"
 
     count="$(
         curl \
@@ -61,7 +62,7 @@ for account in $ACCOUNTS; do
     count="$(
         case "$service" in
             gmail) gmail_count "$credentials" ;;
-            *) imap_count "$service" "$credentials" ;;
+            imaps://*) imap_count "$service" "$credentials" ;;
         esac
     )"
 

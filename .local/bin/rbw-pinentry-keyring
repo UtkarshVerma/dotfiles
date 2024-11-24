@@ -1,10 +1,10 @@
 #!/bin/sh
 set -eu
 
-rbw_profile="rbw${RBW_PROFILE:+-$RBW_PROFILE}"
+profile="rbw${RBW_PROFILE:+-$RBW_PROFILE}"
 
 help() {
-    cat <<EOHELP
+    cat <<EOF
 Use this script as pinentry to store master password for rbw into your keyring
 
 Usage
@@ -17,14 +17,23 @@ Notes
 - master passwords are stored into the keyring as plaintext, so secure your keyring appropriately
 - supports multiple profiles, simply set RBW_PROFILE during setup
 - can easily be rewritten to use other backends than keyring by setting the "secret_value"-variable
-EOHELP
+EOF
 }
 
-clear() {
-    secret-tool clear application rbw profile "$rbw_profile" type master_password
+prompt() {
+    title="$1"
+    prompt="$2"
+    desc="$3"
+
+    pinentry <<EOF | grep -E "^D " | cut -c3-
+SETTITLE $title
+SETPROMPT $prompt
+SETDESC $desc
+GETPIN
+EOF
 }
 
-getpin() {
+get_pin() {
     echo 'OK'
 
     title=""
@@ -48,36 +57,21 @@ getpin() {
             GETPIN)
                 if [ "$prompt" = "Master Password" ]; then
                     set +e
-                    secret_value="$(secret-tool lookup application rbw profile "$rbw_profile" type master_password)"
+                    secret_value="$(secret-tool lookup application rbw profile "$profile" type master_password)"
                     err=$?
                     set -e
 
-                    if [ "$err" = "1" ]; then
-                        secret_value="$(
-                            pinentry <<EOF | grep -E "^D " | cut -c3-
-SETTITLE rbw
-SETPROMPT Master Password
-SETDESC Please enter the master password for '$rbw_profile'
-%GETPIN
-EOF
-                        )"
+                    if [ $err -eq 1 ]; then
+                        secret_value="$(prompt rbw "Master Password" "Please enter the master password for '$profile'")"
                         if [ -n "$secret_value" ]; then
-                            printf "%s" "$secret_value" | secret-tool store --label="$rbw_profile master password" application rbw profile "$rbw_profile" type master_password >/dev/null 2>&1
+                            printf "%s" "$secret_value" | secret-tool store --label="$profile master password" application rbw profile "$profile" type master_password >/dev/null 2>&1
                         fi
                     fi
 
                     printf 'D %s\n' "$secret_value"
                     echo 'OK'
                 else
-                    secret_value="$(
-                        pinentry <<EOF | grep -E "^D " | cut -c3-
-SETTITLE $title
-SETPROMPT $prompt
-SETDESC $desc
-GETPIN
-EOF
-                    )"
-
+                    secret_value="$(prompt "$title" "$prompt" "$desc")"
                     printf 'D %s\n' "$secret_value"
                     echo 'OK'
                 fi
@@ -98,9 +92,9 @@ case "$command" in
         help
         ;;
     -c | --clear | clear)
-        clear
+        secret-tool clear application rbw profile "$profile" type master_password
         ;;
     *)
-        getpin
+        get_pin
         ;;
 esac
