@@ -1,0 +1,106 @@
+#!/bin/sh
+set -eu
+
+rbw_profile="rbw${RBW_PROFILE:+-$RBW_PROFILE}"
+
+help() {
+    cat <<EOHELP
+Use this script as pinentry to store master password for rbw into your keyring
+
+Usage
+- run "rbw-pinentry-keyring clear" to clear the master password from your keyring 
+- add "rbw-pinentry-keyring" as "pinentry" in rbw config (${XDG_CONFIG_HOME}/rbw/config.json)
+- use rbw as normal
+Notes
+- needs "secret-tool" to access keyring
+- setup tested with pinentry-gnome3, but you can run the "secret-tool store"-command manually as well
+- master passwords are stored into the keyring as plaintext, so secure your keyring appropriately
+- supports multiple profiles, simply set RBW_PROFILE during setup
+- can easily be rewritten to use other backends than keyring by setting the "secret_value"-variable
+EOHELP
+}
+
+clear() {
+    secret-tool clear application rbw profile "$rbw_profile" type master_password
+}
+
+getpin() {
+    echo 'OK'
+
+    title=""
+    prompt=""
+    desc=""
+
+    while IFS=' ' read -r command args; do
+        case "$command" in
+            SETTITLE)
+                title="$args"
+                echo 'OK'
+                ;;
+            SETDESC)
+                desc="$args"
+                echo 'OK'
+                ;;
+            SETPROMPT)
+                prompt="$args"
+                echo 'OK'
+                ;;
+            GETPIN)
+                if [ "$prompt" = "Master Password" ]; then
+                    set +e
+                    secret_value="$(secret-tool lookup application rbw profile "$rbw_profile" type master_password)"
+                    err=$?
+                    set -e
+
+                    if [ "$err" = "1" ]; then
+                        secret_value="$(
+                            pinentry <<EOF | grep -E "^D " | cut -c3-
+SETTITLE rbw
+SETPROMPT Master Password
+SETDESC Please enter the master password for '$rbw_profile'
+%GETPIN
+EOF
+                        )"
+                        if [ -n "$secret_value" ]; then
+                            printf "%s" "$secret_value" | secret-tool store --label="$rbw_profile master password" application rbw profile "$rbw_profile" type master_password >/dev/null 2>&1
+                        fi
+                    fi
+
+                    printf 'D %s\n' "$secret_value"
+                    echo 'OK'
+                else
+                    secret_value="$(
+                        pinentry <<EOF | grep -E "^D " | cut -c3-
+SETTITLE $title
+SETPROMPT $prompt
+SETDESC $desc
+GETPIN
+EOF
+                    )"
+
+                    printf 'D %s\n' "$secret_value"
+                    echo 'OK'
+                fi
+                ;;
+            BYE)
+                exit
+                ;;
+            *)
+                echo 'ERR Unknown command'
+                ;;
+        esac
+    done
+}
+
+command="$1"
+case "$command" in
+    -h | --help | help)
+        help
+        ;;
+    -c | --clear | clear)
+        clear
+        ;;
+    *)
+        getpin
+        ;;
+esac
