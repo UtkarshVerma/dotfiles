@@ -79,6 +79,8 @@ return {
         nixpkgs_fmt = "nixpkgs-fmt",
         terraform_fmt = "",
         packer_fmt = "",
+        typstyle = "", -- TODO: Wait for https://github.com/mason-org/mason-registry/issues/8015
+        injected = "",
       }
 
       local conform_opts = util.plugin.opts("conform.nvim") --[[@as plugins.conform.config]]

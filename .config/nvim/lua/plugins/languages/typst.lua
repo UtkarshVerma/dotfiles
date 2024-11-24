@@ -18,7 +18,7 @@ return {
     opts = {
       servers = {
         ---@type lsp.typst_lsp.config
-        typst_lsp = {},
+        tinymist = {},
       },
     },
   },
@@ -28,7 +28,7 @@ return {
     ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
-        typst = { "typstfmt" },
+        typst = { "typstyle" },
       },
     },
   },
