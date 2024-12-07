@@ -19,7 +19,6 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     event = "LazyFile",
-    version = false, -- v0.9.2 causes crashes when parsing gohtml files.
     cmd = {
       "TSUpdateSync",
       "TSUpdate",

@@ -13,7 +13,7 @@ local M = {
   merge = util.merge,
 }
 
--- Get the pretty-print form of the stack-trace.
+---Get the pretty-print form of the stack-trace.
 ---@return string
 ---@nodiscard
 local function pretty_trace()
@@ -48,7 +48,7 @@ local function pretty_trace()
   return #trace > 0 and ("\n\n# stacktrace:\n" .. table.concat(trace, "\n")) or ""
 end
 
--- Try executing {fn} and log {message} if it fails.
+---Try executing {fn} and log {message} if it fails.
 ---@generic T
 ---@param fn fun():T?
 ---@param message string
@@ -68,7 +68,7 @@ function M.try(fn, message)
   return ok and result or nil
 end
 
--- Execute a {callback} on the `VeryLazy` event.
+---Execute a {callback} on the `VeryLazy` event.
 ---@param callback fun()
 function M.on_very_lazy(callback)
   vim.api.nvim_create_autocmd("User", {
@@ -77,7 +77,7 @@ function M.on_very_lazy(callback)
   })
 end
 
--- Delay notifications till `vim.notify` is replaced or after 500 ms, whichever is earlier.
+---Delay notifications till `vim.notify` is replaced or after 500 ms, whichever is earlier.
 function M.lazy_notify()
   local notifications = {}
   local function temp(...)
@@ -118,7 +118,7 @@ function M.lazy_notify()
   timer:start(500, 0, replay)
 end
 
--- Get up value for {func}'s {name} variable.
+---Get up value for {func}'s {name} variable.
 ---@generic T
 ---@param func fun(...):T
 ---@param name string
@@ -141,14 +141,21 @@ function M.get_upvalue(func, name)
   end
 end
 
--- Check if buffer contains a large file.
+---Check if buffer contains a large file.
 ---@return boolean
 ---@nodiscard
 function M.buf_has_large_file(bufnr)
-  return vim.api.nvim_buf_line_count(bufnr) > 5000
+  local max_size = 100 * 1024 -- 100 KiB.
+  local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+
+  if ok and stats and stats.size > max_size then
+    return true
+  end
+
+  return false
 end
 
--- Remove duplicates from list.
+---Remove duplicates from list.
 ---@generic T
 ---@param list T[]
 ---@return T[]

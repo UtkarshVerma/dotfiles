@@ -8,6 +8,16 @@
 ---@type LazyPluginSpec[]
 return {
   {
+    "nvim-treesitter",
+    ---@type plugins.treesitter.config
+    opts = {
+      ensure_installed = {
+        "typst",
+      },
+    },
+  },
+
+  {
     "kaarmu/typst.vim",
     ft = "typst",
   },
@@ -18,7 +28,9 @@ return {
     opts = {
       servers = {
         ---@type lsp.typst_lsp.config
-        tinymist = {},
+        tinymist = {
+          offset_encoding = "utf-8", -- HACK: Fix after nvim 0.10.3 releases
+        },
       },
     },
   },
