@@ -30,6 +30,56 @@
 local config = require("config")
 local util = require("util")
 
+---@param opts? {cwd?: string}
+local function live_multi_grep(opts)
+  opts = opts or {}
+  opts.cwd = opts.cwd or vim.uv.cwd()
+
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local make_entry = require("telescope.make_entry")
+
+  local finder = finders.new_async_job({
+    command_generator = function(prompt)
+      if not prompt or prompt == "" then
+        return nil
+      end
+
+      local pieces = vim.split(prompt, "  ")
+      local cmd = {
+        "rg",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
+      }
+      if pieces[1] then
+        vim.list_extend(cmd, { "--regexp", pieces[1] })
+      end
+
+      if pieces[2] then
+        vim.list_extend(cmd, { "--glob", pieces[2] })
+      end
+
+      return cmd
+    end,
+    cwd = opts.cwd,
+    entry_maker = make_entry.gen_from_vimgrep(opts),
+  })
+
+  pickers
+    .new(opts, {
+      prompt_title = "Multi Grep",
+      debounce = 100,
+      finder = finder,
+      previewer = require("telescope.config").values.grep_previewer(opts),
+      sorter = require("telescope.sorters").empty(), -- rg already sorts the results.
+    })
+    :find()
+end
+
 ---Return a function that spawns telescope with the `git_files` or `find_files` picker, depending on existence of the
 ---`.git` folder.
 ---@param opts? {cwd?: string|boolean}
@@ -84,7 +134,7 @@ return {
         { "<leader>gs", builtin.git_status, desc = "Status" },
 
         -- Search
-        { '<leader>s"', builtin.registers, desc = "Registers" },
+        { "<leader>sr", builtin.registers, desc = "Registers" },
         { "<leader>sa", builtin.autocommands, desc = "Auto commands" },
         { "<leader>sb", builtin.current_buffer_fuzzy_find, desc = "Buffer" },
         { "<leader>sc", builtin.command_history, desc = "Command history" },
@@ -92,7 +142,8 @@ return {
         -- stylua: ignore
         { "<leader>sd", function() builtin.diagnostics({ bufnr = 0 }) end, desc = "Document diagnostics" },
         { "<leader>sD", builtin.diagnostics, desc = "Workspace diagnostics" },
-        { "<leader>sg", builtin.live_grep, desc = "Grep" },
+        -- stylua: ignore
+        { "<leader>sg", function() live_multi_grep() end, desc = "Grep" },
         { "<leader>sh", builtin.help_tags, desc = "Help pages" },
         { "<leader>sH", builtin.highlights, desc = "Search highlight groups" },
         { "<leader>sk", builtin.keymaps, desc = "Keymaps" },
