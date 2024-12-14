@@ -33,9 +33,9 @@ chpwd_functions+=(__emit_osc7_sequence)     # Emit OSC7 on CWD change.
 export GPG_TTY="$TTY"
 
 # Initialise powerlevel10k instant prompt.
-if [ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]; then
-    source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+P10K="$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
+[ -r "$P10K" ] && source "$P10K"
+unset P10K
 
 # Plugins ---------------------------------------------------------------------
 ZINIT_HOME="$XDG_DATA_HOME/zsh/zinit"
@@ -58,15 +58,17 @@ zinit light nix-community/nix-zsh-completions
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
+zinit snippet OMZP::terraform
+zinit snippet OMZP::azure
 
 # Configurations --------------------------------------------------------------
 # Completions
-autoload -U compinit
+autoload -Uz compinit
 fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
-zmodload zsh/complist
 
-[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
+ZSH_CACHE="$XDG_CACHE_HOME/zsh"
+[ -d "$ZSH_CACHE" ] || mkdir -p "$ZSH_CACHE"
+zstyle ':completion:*' cache-path "$ZSH_CACHE/zcompcache"
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 _comp_options+=(globdots)       # Include hidden files.
 zinit cdreplay -q               # Run compdefs cached by zinit.
@@ -75,7 +77,7 @@ zinit cdreplay -q               # Run compdefs cached by zinit.
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
+zstyle ':completion:*' cache-path "$ZSH_CACHE/zcompcache"
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
 
@@ -103,6 +105,9 @@ if [[ "$TERM" =~ "^foot" ]]; then
     }
     zle -N clear-screen __clear_screen_keep_scrollback
 fi
+
+zmodload zsh/complist
+unset ZSH_CACHE
 
 # Vi mode ---------------------------------------------------------------------
 bindkey -v  # Use vim bindings.
@@ -163,7 +168,6 @@ alias \
     cbcopy="xclip -selection clipboard" \
     cbpaste="xclip -selection clipboard -out" \
     diff="diff --color=auto" \
-    docker="podman" \
     dosbox="dosbox -conf \$XDG_CONFIG_HOME/dosbox/dosbox.conf" \
     egrep="egrep --color=auto" \
     fgrep="fgrep --color=auto" \
