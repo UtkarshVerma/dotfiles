@@ -11,15 +11,6 @@ return {
     dependencies = {
       "nvim-web-devicons",
     },
-    keys = {
-      {
-        "<leader>?",
-        function()
-          require("which-key").show({ global = false })
-        end,
-        desc = "Buffer Local Keymaps (which-key)",
-      },
-    },
     opts_extend = { "spec" },
     ---@type plugins.which_key.config
     opts = {
@@ -51,13 +42,6 @@ return {
         { "<leader>w", group = "windows" },
         { "<leader>x", group = "diagnostics/quickfix" },
       },
-
-      -- spec = {
-      -- },
     },
-    config = function(_, opts)
-      local wk = require("which-key")
-      wk.setup(opts)
-    end,
   },
 }

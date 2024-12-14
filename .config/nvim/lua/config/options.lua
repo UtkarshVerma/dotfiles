@@ -2,31 +2,18 @@ local config = require("config")
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-vim.g.c_syntax_for_h = true
 
 local options = {
-  backup = false,
-  breakindent = true, -- Enable break indent
+  foldenable = true, -- Enable folds
+  foldcolumn = "0", -- Hide fold column
+
+  breakindent = true, -- Indent wrapped lines
   colorcolumn = "80",
-  errorbells = false,
   guifont = "monospace",
-  listchars = {
-    tab = "» ",
-    eol = "↴",
-    nbsp = "␣",
-    trail = "·",
-  },
-  foldcolumn = "0", -- Don't show the foldcolumn
-  foldlevel = 99, -- Keep all folds open
-  foldlevelstart = 99, -- Keep all folds open
-  foldenable = true,
   fillchars = {
     eob = " ", -- suppress ~ at EndOfBuffer
     diff = "╱", -- alternatives = ⣿ ░ ─
     msgsep = " ", -- alternatives: ‾ ─
-    fold = " ",
-    foldopen = "",
-    foldclose = "",
     vert = "┃", -- Used for window separator.
   },
   shiftwidth = 4, -- Size of an indent
@@ -35,27 +22,40 @@ local options = {
   title = true,
   titlestring = "%(%t - %)%(%{substitute(getcwd(), '^.*/', '', '')} - %)%{v:progname}",
   titlelen = 50,
-  undodir = "/tmp/nvim-undodir", -- Preserve undo history per reboot
 
-  clipboard = "unnamedplus", -- Sync with system clipboard
   completeopt = { "menuone", "noselect", "preview" },
-  conceallevel = 2, -- Hide concealed text.
+  honceallevel = 2, -- Hide concealed text.
   confirm = true, -- Confirm to save changes before exiting modified buffer
-  cursorline = true, -- Enable highlighting of the current line
+
+  cursorline = true, -- Enable current line highlight
+
   expandtab = true, -- Use spaces instead of tabs
   -- formatoptions = "jqlnt", -- tcqj
-  grepformat = "%f:%l:%c:%m",
-  grepprg = "rg, --vimgrep",
-  ignorecase = true, -- Ignore case
-  inccommand = "nosplit", -- preview incremental substitute
+
+  -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term.
+  ignorecase = true,
+  smartcase = true,
+
+  inccommand = "split", -- Preview substitutions live
   laststatus = 2, -- Always show statusline.
-  list = true, -- Show some invisible characters (tabs...)
+
+  -- Sets how neovim will display certain whitespace characters in the editor.
+  list = true,
+  listchars = {
+    tab = "» ",
+    eol = "↴",
+    nbsp = "␣",
+    trail = "·",
+  },
+
   mouse = "a", -- Enable mouse mode
-  number = true, -- Print line number
+
+  number = true, -- Line numbers
+  relativenumber = true, -- Relative line numbers
+
   pumblend = 10, -- Popup blend
   pumheight = 10, -- Maximum number of entries in a popup
-  relativenumber = true, -- Relative line numbers
-  scrolloff = 4, -- Lines of context
+  scrolloff = 10, -- Lines of context
   sessionoptions = {
     "blank",
     "buffers",
@@ -72,17 +72,20 @@ local options = {
   shiftround = true, -- Round indent
   showmode = false, -- Dont show mode since we have a statusline
   sidescrolloff = 8, -- Columns of context
-  signcolumn = "yes", -- Always show the signcolumn, otherwise it would shift the text each time
-  smartcase = true, -- Don't ignore case with capitals
+  signcolumn = "yes", -- Always show the signcolumn and avoid layout shift.
   smartindent = true, -- Insert indents automatically
   spelllang = { "en" },
+
   splitbelow = true, -- Put new windows below current
   splitright = true, -- Put new windows right of current
+
   termguicolors = true, -- True color support
-  timeoutlen = 300,
-  undofile = true,
+  undofile = true, -- Save undo history
   undolevels = 10000,
-  updatetime = 200, -- Save swap file and trigger CursorHold
+
+  updatetime = 200, -- Reduce CursorHold trigger duration
+  timeoutlen = 300, -- Decrease mapped sequence wait time
+
   wildmode = "longest:full,full", -- Command-line completion mode
   winminwidth = 5, -- Minimum window width
   wrap = false, -- Disable line wrap
@@ -91,9 +94,16 @@ local options = {
   virtualedit = "block", -- Allow cursor to move where there is no text in visual block mode
 }
 
+-- Sync clipboard between OS and Neovim.
+-- Schedule the setting after `UiEnter` because it can increase startup-time.
+vim.schedule(function()
+  vim.opt.clipboard = "unnamedplus"
+end)
+
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
+
 vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
 vim.opt.formatoptions:remove({ "c", "r", "o" })
 

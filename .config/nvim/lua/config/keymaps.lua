@@ -20,11 +20,6 @@ local keys = {
   { "j", "v:count == 0 ? 'gj' : 'j'", mode = { "n", "x" }, desc = "Better up", expr = true },
   { "k", "v:count == 0 ? 'gk' : 'k'", mode = { "n", "x" }, desc = "Better down", expr = true },
 
-  { "<c-h>", "<c-w>h", desc = "Go to left window", remap = true },
-  { "<c-j>", "<c-w>j", desc = "Go to lower window", remap = true },
-  { "<c-k>", "<c-w>k", desc = "Go to upper window", remap = true },
-  { "<c-l>", "<c-w>l", desc = "Go to right window", remap = true },
-
   { "<c-up>", "<cmd>resize +2<cr>", desc = "Increase window height" },
   { "<c-down>", "<cmd>resize -2<cr>", desc = "Decrease window height" },
   { "<c-left>", "<cmd>vertical resize -2<cr>", desc = "Decrease window width" },
@@ -35,9 +30,7 @@ local keys = {
   { "<leader>bb", "<cmd>e #<cr>", desc = "Switch to other buffer" },
 
   { "<esc>", "<cmd>noh<cr><esc>", mode = { "i", "n" }, desc = "Escape and clear hlsearch" },
-  { "gw", "*N", mode = { "n", "x" }, desc = "Search word under cursor" },
   { "<c-s>", "<cmd>w<cr><esc>", mode = { "i", "x", "n", "s" }, desc = "Save file" },
-  { "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
 
   -- Saner behavior of n and N.
   -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
@@ -46,12 +39,10 @@ local keys = {
   { "N", "'nN'[v:searchforward].'zv'", expr = true, desc = "Previous search result" },
   { "N", "'nN'[v:searchforward]", mode = { "x", "o" }, expr = true, desc = "Previous search result" },
 
-  { "<leader>xl", "<cmd>lopen<cr>", desc = "Location List" },
-  { "<leader>xq", "<cmd>copen<cr>", desc = "Quickfix List" },
-  -- stylua: ignore start
-  { "[q", function() vim.cmd.cprev() end, desc = "Previous quickfix" },
-  { "]q", function() vim.cmd.cnext() end, desc = "Next quickfix" },
-  -- stylua: ignore end
+  { "<leader>xl", "<cmd>lopen<cr>", desc = "Location list" },
+  { "<leader>xq", "<cmd>copen<cr>", desc = "Quickfix list" },
+  { "[q", "<cmd>cprev<cr>", desc = "Previous quickfix" },
+  { "]q", "<cmd>cnext<cr>", desc = "Next quickfix" },
 
   {
     "<leader>gl",
@@ -89,12 +80,10 @@ local keys = {
   { "<leader>w|", "<C-W>v", desc = "Split window right", remap = true },
 
   -- Tabs
-  { "<leader><tab>l", "<cmd>tablast<cr>", desc = "Last tab" },
-  { "<leader><tab>f", "<cmd>tabfirst<cr>", desc = "First tab" },
-  { "<leader><tab><tab>", "<cmd>tabnew<cr>", desc = "New tab" },
-  { "<leader><tab>]", "<cmd>tabnext<cr>", desc = "Next tab" },
+  { "<leader><tab>n", "<cmd>tabnew<cr>", desc = "New tab" },
   { "<leader><tab>d", "<cmd>tabclose<cr>", desc = "Close tab" },
-  { "<leader><tab>[", "<cmd>tabprevious<cr>", desc = "Previous tab" },
+  { "<leader><tab>l", "<cmd>tabnext<cr>", desc = "Next tab" },
+  { "<leader><tab>h", "<cmd>tabprevious<cr>", desc = "Previous tab" },
 
   -- Diagnostics
   { "]d", goto_diagnostic("next"), desc = "Next diagnostic" },

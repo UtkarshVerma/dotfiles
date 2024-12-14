@@ -4,7 +4,6 @@
 ---@field reindent_linewise? boolean
 
 ---@alias plugins.mini.operators.operator "evaluate"|"exchange"|"multiply"|"replace"|"sort"
-
 ---@alias plugins.mini.operators.config table<plugins.mini.operators.operator, plugins.mini.operators.entry>
 
 ---@type LazyPluginSpec[]

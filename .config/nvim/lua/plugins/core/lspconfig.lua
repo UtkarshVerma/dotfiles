@@ -17,16 +17,15 @@ local util = require("util")
 
 ---@type plugins.lspconfig.key[]
 local keys = {
-  { "<leader>cl", "<cmd>LspInfo<cr>", desc = "Lsp info" },
   {
     "gd",
     function()
       require("telescope.builtin").lsp_definitions({ reuse_win = true })
     end,
     desc = "Goto definition",
-    method = "textDocument/definition",
+    { "<leader>cl", "<cmd>LspInfo<cr>", desc = "Lsp info" },
   },
-  { "gr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
+  -- { "gr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
   { "gD", vim.lsp.buf.declaration, desc = "Goto declaration" },
   {
     "gI",
@@ -35,13 +34,14 @@ local keys = {
     end,
     desc = "Goto implementation",
   },
-  {
-    "gt",
-    function()
-      require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
-    end,
-    desc = "Goto type definition",
-  },
+  -- TODO: This clashes with tab switching.
+  -- {
+  --   "gt",
+  --   function()
+  --     require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
+  --   end,
+  --   desc = "Goto type definition",
+  -- },
   { "K", vim.lsp.buf.hover, desc = "Hover" },
   { "gK", vim.lsp.buf.signature_help, desc = "Signature help", method = "textDocument/signatureHelp" },
   {
@@ -206,6 +206,7 @@ return {
 
   {
     "williamboman/mason-lspconfig.nvim",
+    dir = "~/git/others/mason-lspconfig.nvim",
     event = "LazyFile",
     dependencies = {
       "mason.nvim",

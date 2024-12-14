@@ -9,7 +9,7 @@ local autocommands = {
   },
 
   -- stylua: ignore
-  { "TextYankPost", function(_) vim.highlight.on_yank() end, desc = "Highlight on yank" },
+  { "TextYankPost", function() vim.highlight.on_yank() end, desc = "Highlight on yank" },
 
   {
     "VimResized",
@@ -76,13 +76,13 @@ local autocommands = {
       vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = arg.buf })
     end,
     pattern = {
+      "checkhealth",
       "help",
       "man",
       "notify",
       "qf",
       "query",
       "spectre_panel",
-      "checkhealth",
     },
     desc = "Close with q",
   },

@@ -1,10 +1,12 @@
+---@module "Comment"
+---@class plugins.comment.config: CommentConfig
+
 ---@type LazyPluginSpec[]
 return {
   {
     "numToStr/Comment.nvim",
     event = "LazyFile",
-    ---@type CommentConfig
-    ---@diagnostic disable-next-line: missing-fields
+    ---@type plugins.comment.config
     opts = {
       mappings = {
         basic = true,

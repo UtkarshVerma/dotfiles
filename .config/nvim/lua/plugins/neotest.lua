@@ -9,7 +9,7 @@ return {
     ---@type plugins.which_key.config
     opts = {
       spec = {
-        { "<leader>t", group = "test" },
+        { "<leader>T", group = "test" },
       },
     },
   },
@@ -18,63 +18,63 @@ return {
     "nvim-neotest/neotest",
     keys = {
       {
-        "<leader>tt",
+        "<leader>Tt",
         function()
           require("neotest").run.run(vim.fn.expand("%"))
         end,
         desc = "Run file",
       },
       {
-        "<leader>tT",
+        "<leader>TT",
         function()
           require("neotest").run.run(vim.uv.cwd())
         end,
         desc = "Run all test files",
       },
       {
-        "<leader>tr",
+        "<leader>Tr",
         function()
           require("neotest").run.run()
         end,
         desc = "Run nearest",
       },
       {
-        "<leader>tl",
+        "<leader>Tl",
         function()
           require("neotest").run.run_last()
         end,
         desc = "Run last",
       },
       {
-        "<leader>ts",
+        "<leader>Ts",
         function()
           require("neotest").summary.toggle()
         end,
         desc = "Toggle summary",
       },
       {
-        "<leader>to",
+        "<leader>To",
         function()
           require("neotest").output.open({ enter = true, auto_close = true })
         end,
         desc = "Show output",
       },
       {
-        "<leader>tO",
+        "<leader>TO",
         function()
           require("neotest").output_panel.toggle()
         end,
         desc = "Toggle output panel",
       },
       {
-        "<leader>tS",
+        "<leader>TS",
         function()
           require("neotest").run.stop()
         end,
         desc = "Stop",
       },
       {
-        "<leader>tw",
+        "<leader>Tw",
         function()
           require("neotest").watch.toggle(vim.fn.expand("%"))
         end,
