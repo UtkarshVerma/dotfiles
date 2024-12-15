@@ -24,7 +24,7 @@ local options = {
   titlelen = 50,
 
   completeopt = { "menuone", "noselect", "preview" },
-  honceallevel = 2, -- Hide concealed text.
+  conceallevel = 2, -- Hide concealed text.
   confirm = true, -- Confirm to save changes before exiting modified buffer
 
   cursorline = true, -- Enable current line highlight
