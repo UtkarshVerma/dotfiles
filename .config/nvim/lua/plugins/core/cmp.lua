@@ -6,7 +6,6 @@
 return {
   {
     "hrsh7th/nvim-cmp",
-    ---@diagnostic disable-next-line: assign-type-mismatch
     version = false,
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {

@@ -18,13 +18,13 @@ return {
     opts = {
       snippet_engine = "luasnip",
       languages = {
-        ---@diagnostic disable-next-line: missing-fields
+        ---@diagnostic disable: missing-fields
         lua = {
-          ---@diagnostic disable-next-line: missing-fields
           template = {
             annotation_convention = "emmylua",
           },
         },
+        ---@diagnostic enable: missing-fields
       },
     },
   },
