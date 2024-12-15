@@ -188,11 +188,11 @@ return {
     "nvim-dap",
     keys = {
       {
-        "<leader>td",
+        "<leader>dn",
         function()
           require("neotest").run.run({ strategy = "dap" })
         end,
-        desc = "Debug nearest",
+        desc = "Nearest test",
       },
     },
   },
