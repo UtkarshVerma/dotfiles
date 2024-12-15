@@ -1,4 +1,3 @@
----@module "lazy"
 ---@module "which-key"
 
 ---@class plugins.which_key.config: wk.Config

@@ -1,8 +1,24 @@
+---@alias plugins.mini.move.config.mapping_key
+--- |"left"
+--- |"right"
+--- |"down"
+--- |"up"
+--- |"line_left"
+--- |"line_right"
+--- |"line_down"
+--- |"line_up"
+---@alias plugins.mini.move.config.mappings table<plugins.mini.move.config.mapping_key,string>
+
+---@class plugins.mini.move.config
+---@field mappings? plugins.mini.move.config.mappings
+
+---@type LazyPluginSpec[]
 return {
   {
     "echasnovski/mini.move",
     keys = function(plugin, _)
       local opts = require("lazy.core.plugin").values(plugin, "opts", false)
+
       return {
         { opts.mappings.left, mode = "v" },
         { opts.mappings.right, mode = "v" },
@@ -15,6 +31,7 @@ return {
         opts.mappings.line_up,
       }
     end,
+    ---@type plugins.mini.move.config
     opts = {
       mappings = {
         -- Visual selection mappings

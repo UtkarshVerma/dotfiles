@@ -48,13 +48,6 @@ local keys = {
   { "<leader>ul", "<cmd>Lazy<cr>", desc = "Lazy" },
   { "<leader>qq", "<cmd>qa<cr>", desc = "Quit" },
 
-  -- stylua: ignore start
-  { "<leader>ts", function() util.toggle.option("spell") end, desc = "Spelling" },
-  { "<leader>tw", function() util.toggle.option("wrap") end, desc = "Word wrap" },
-  { "<leader>td", util.toggle.diagnostics, desc = "Diagnostics" },
-  { "<leader>tc", function() util.toggle.option("conceallevel", { 0, conceallevel }) end, desc = "Conceal" },
-  -- stylua: ignore end
-
   -- Terminal mappings
   { "<esc><esc>", "<c-\\><c-n>", mode = "t", desc = "Enter normal mode" },
   { "<c-/>", "<cmd>close<cr>", mode = "t", desc = "Hide terminal" },
@@ -76,10 +69,6 @@ local keys = {
   -- Diagnostics
   { "]d", goto_diagnostic("next"), desc = "Next diagnostic" },
   { "[d", goto_diagnostic("prev"), desc = "Previous diagnostic" },
-
-  -- Inlay hints
-  -- stylua: ignore
-  { "<leader>ti", function() util.toggle.inlay_hints(0) end, desc = "Inlay hints" },
 
   {
     "<leader>ur",

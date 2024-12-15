@@ -1,7 +1,7 @@
 ---@class util.plugin
 local M = {}
 
--- Check if {plugin} exists in the spec.
+---Check if {plugin} exists in the spec.
 ---@param plugin string
 ---@return boolean
 ---@nodiscard
@@ -9,7 +9,7 @@ function M.exists(plugin)
   return require("lazy.core.config").spec.plugins[plugin] ~= nil
 end
 
--- Get options for plugin {name}.
+---Get options for plugin {name}.
 ---@param name string
 ---@return table?
 ---@nodiscard
@@ -23,7 +23,7 @@ function M.opts(name)
   return Plugin.values(plugin, "opts", false)
 end
 
--- Execute {callback} after plugin {name} is loaded.
+---Execute {callback} after plugin {name} is loaded.
 ---@param name string
 ---@param callback fun(name:string)
 function M.on_load(name, callback)
@@ -44,6 +44,15 @@ function M.on_load(name, callback)
       end
     end,
   })
+end
+
+---Check if {plugin} is loaded.
+---@param plugin string
+---@return boolean
+---@nodiscard
+function M.is_loaded(plugin)
+  local Config = require("lazy.core.config")
+  return Config.plugins[plugin] and Config.plugins[plugin]._.loaded ~= nil
 end
 
 function M.setup()
