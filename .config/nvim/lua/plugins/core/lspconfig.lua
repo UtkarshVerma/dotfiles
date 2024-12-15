@@ -42,6 +42,13 @@ local keys = {
   --   end,
   --   desc = "Goto type definition",
   -- },
+  {
+    "gr",
+    function()
+      require("telescope.builtin").lsp_references({ reuse_win = true })
+    end,
+    "Goto references",
+  },
   { "K", vim.lsp.buf.hover, desc = "Hover" },
   { "gK", vim.lsp.buf.signature_help, desc = "Signature help", method = "textDocument/signatureHelp" },
   {
