@@ -77,20 +77,19 @@ return {
         ---@type rustaceanvim.lsp.ClientOpts
         server = {
           on_attach = function(_, bufnr)
-            vim.keymap.set("n", "<leader>cR", function()
+            -- Use rust-analyzer's code action grouping.
+            vim.keymap.set("n", "<leader>ca", function()
               vim.cmd.RustLsp("codeAction")
             end, { desc = "Code action", buffer = bufnr })
-            vim.keymap.set("n", "<leader>dr", function()
+
+            vim.keymap.set("n", "<leader>dR", function()
               vim.cmd.RustLsp("debuggables")
             end, { desc = "Rust debuggables", buffer = bufnr })
           end,
-          -- NOTE: https://github.com/hrsh7th/cmp-nvim-lsp/issues/72
-          capabilities = vim.lsp.protocol.make_client_capabilities(),
           default_settings = {
             ["rust-analyzer"] = {},
           },
         },
-
         dap = {},
       }
     end,
