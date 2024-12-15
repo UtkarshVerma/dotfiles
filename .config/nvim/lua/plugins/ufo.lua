@@ -16,11 +16,7 @@ return {
     ---@type plugins.ufo.config
     opts = {
       open_fold_hl_timeout = 0, -- Disable fold highlight.
-      provider_selector = function(bufnr, _, _)
-        if util.buf_has_large_file(bufnr) then
-          return { "indent" }
-        end
-
+      provider_selector = function(_, _, _)
         return { "treesitter", "indent" }
       end,
     },

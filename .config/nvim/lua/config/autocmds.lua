@@ -65,7 +65,7 @@ local autocommands = {
 
   {
     "VimLeave",
-    command = "set guicursor= | call chansend(v:stderr, '\x1b[ q')",
+    "set guicursor= | call chansend(v:stderr, '\x1b[ q')",
     desc = "Restore default cursor on exit",
   },
 

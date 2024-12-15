@@ -12,6 +12,7 @@ return {
     },
   },
 
+  -- TODO: Consider using nvim-dbee?
   {
     "tpope/vim-dadbod",
     cmd = "DB",

@@ -6,7 +6,6 @@ local M = {
   fs = require("util.fs"),
   log = require("util.log"),
   plugin = require("util.plugin"),
-  terminal = require("util.terminal"),
   toggle = require("util.toggle"),
   ui = require("util.ui"),
 
@@ -116,43 +115,6 @@ function M.lazy_notify()
 
   -- After 500 ms, replay notifications anyway as something might have failed.
   timer:start(500, 0, replay)
-end
-
----Get up value for {func}'s {name} variable.
----@generic T
----@param func fun(...):T
----@param name string
----@return unknown?
----@nodiscard
-function M.get_upvalue(func, name)
-  local i = 1
-
-  while true do
-    local n, v = debug.getupvalue(func, i)
-    if n == nil then
-      return nil
-    end
-
-    if n == name then
-      return v
-    end
-
-    i = i + 1
-  end
-end
-
----Check if buffer contains a large file.
----@return boolean
----@nodiscard
-function M.buf_has_large_file(bufnr)
-  local max_size = 100 * 1024 -- 100 KiB.
-  local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
-
-  if ok and stats and stats.size > max_size then
-    return true
-  end
-
-  return false
 end
 
 ---Remove duplicates from list.

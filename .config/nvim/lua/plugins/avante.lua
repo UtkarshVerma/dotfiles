@@ -1,32 +1,22 @@
 ---@module "avante"
 ---@module "copilot"
-
+---
 ---@class plugins.avante.config: avante.Config
 ---@class plugins.copilot.config: copilot_config
 
 ---@type LazyPluginSpec[]
 return {
   {
-    "zbirenbaum/copilot.lua",
-    ---@type plugins.copilot.config
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown", "Avante" },
     opts = {
-      suggestion = {
-        keymap = {
-          accept = "<M-l>",
-          accept_word = false,
-          accept_line = false,
-          next = "<M-]>",
-          prev = "<M-[>",
-          dismiss = "<C-]>",
-        },
-      },
+      file_types = { "markdown", "Avante" },
     },
   },
 
   {
     -- Support for image pasting.
     "HakonHarnes/img-clip.nvim",
-    event = "VeryLazy",
     opts = {
       default = {
         embed_image_as_base64 = false,
@@ -41,22 +31,30 @@ return {
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
-    lazy = false,
     build = "make",
     dependencies = {
-      "nvim-treesitter",
       "dressing.nvim",
       "plenary.nvim",
+      "nvim-cmp",
       "nui.nvim",
       "nvim-web-devicons",
       "img-clip.nvim",
-      "copilot.lua",
-      "markview.nvim",
+      "zbirenbaum/copilot.lua",
+      "render-markdown.nvim",
     },
     ---@type plugins.avante.config
     opts = {
       auto_suggestions_provider = "copilot",
       provider = "claude",
+      mappings = {
+        suggestion = {
+          accept = "<c-j>",
+          next = "<m-]>",
+          prev = "<m-[>",
+          dismiss = "<c-]>",
+        },
+      },
+
       claude = {
         api_key_name = "cmd:rbw get --folder=api-keys anthropic avante",
       },

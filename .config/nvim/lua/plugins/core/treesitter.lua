@@ -31,12 +31,7 @@ return {
     opts_extend = { "ensure_installed" },
     ---@type plugins.treesitter.config
     opts = {
-      highlight = {
-        enable = true,
-        disable = function(_, bufnr)
-          return util.buf_has_large_file(bufnr)
-        end,
-      },
+      highlight = { enable = true },
       indent = { enable = true },
       ensure_installed = {},
       incremental_selection = {

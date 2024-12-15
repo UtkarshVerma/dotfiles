@@ -44,20 +44,11 @@ local keys = {
   { "[q", "<cmd>cprev<cr>", desc = "Previous quickfix" },
   { "]q", "<cmd>cnext<cr>", desc = "Next quickfix" },
 
-  {
-    "<leader>gl",
-    function()
-      util.terminal.open({ "lazygit" }, { esc_esc = false, ctrl_hjkl = false })
-    end,
-    desc = "Lazygit",
-  },
-
   { "<leader>ui", vim.show_pos, desc = "Inspect position" },
   { "<leader>ul", "<cmd>Lazy<cr>", desc = "Lazy" },
   { "<leader>qq", "<cmd>qa<cr>", desc = "Quit" },
 
   -- stylua: ignore start
-  { "<leader>tt", function() util.terminal.open() end, desc = "Terminal" },
   { "<leader>ts", function() util.toggle.option("spell") end, desc = "Spelling" },
   { "<leader>tw", function() util.toggle.option("wrap") end, desc = "Word wrap" },
   { "<leader>td", util.toggle.diagnostics, desc = "Diagnostics" },
@@ -66,18 +57,15 @@ local keys = {
 
   -- Terminal mappings
   { "<esc><esc>", "<c-\\><c-n>", mode = "t", desc = "Enter normal mode" },
-  { "<C-h>", "<cmd>wincmd h<cr>", mode = "t", desc = "Go to left window" },
-  { "<C-j>", "<cmd>wincmd j<cr>", mode = "t", desc = "Go to lower window" },
-  { "<C-k>", "<cmd>wincmd k<cr>", mode = "t", desc = "Go to upper window" },
-  { "<C-l>", "<cmd>wincmd l<cr>", mode = "t", desc = "Go to right window" },
-  { "<C-/>", "<cmd>close<cr>", mode = "t", desc = "Hide terminal" },
-  { "<c-_>", "<cmd>close<cr>", mode = "t", desc = "which_key_ignore" },
+  { "<c-/>", "<cmd>close<cr>", mode = "t", desc = "Hide terminal" },
 
   -- Windows
-  { "<leader>ww", "<C-W>p", desc = "Other window", remap = true },
-  { "<leader>wd", "<C-W>c", desc = "Delete window", remap = true },
-  { "<leader>w-", "<C-W>s", desc = "Split window below", remap = true },
-  { "<leader>w|", "<C-W>v", desc = "Split window right", remap = true },
+  { "<leader>ww", "<cmd>wincmd p<cr>", desc = "Other window" },
+  { "<leader>wd", "<cmd>close<cr>", desc = "Delete window" },
+  { "<leader>wk", "<cmd>leftabove split<cr>", desc = "Split window top" },
+  { "<leader>wl", "<cmd>rightbelow vsplit<cr>", desc = "Split window right" },
+  { "<leader>wj", "<cmd>rightbelow split<cr>", desc = "Split window below" },
+  { "<leader>wh", "<cmd>leftabove vsplit<cr>", desc = "Split window left" },
 
   -- Tabs
   { "<leader><tab>n", "<cmd>tabnew<cr>", desc = "New tab" },

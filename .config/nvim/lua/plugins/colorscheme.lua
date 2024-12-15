@@ -9,9 +9,9 @@ return {
     priority = 1000,
     ---@type plugins.catppuccin.config
     opts = {
-      color_overrides = {
-        mocha = require("util").colors,
-      },
+      -- color_overrides = {
+      --   mocha = require("util").colors,
+      -- },
       integrations = {
         alpha = false,
         cmp = true,
