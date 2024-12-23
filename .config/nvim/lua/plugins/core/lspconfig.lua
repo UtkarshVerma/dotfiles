@@ -1,161 +1,92 @@
 ---@module "mason-lspconfig.settings"
 
----@class plugins.lspconfig.config.server: lsp.base
----@field keys? plugins.lspconfig.key[]
+---@class plugins.lspconfig.config.server: vim.lsp.ClientConfig
+---@field keys? plugins.lspconfig.keymap[]
 ---@field setup? fun(opts:plugins.lspconfig.config.server):boolean
 
 ---@class plugins.lspconfig.config
 ---@field capabilities? table
 ---@field servers? table<string, plugins.lspconfig.config.server>
 
----@class plugins.lspconfig.key: LazyKeysSpec
+---@class plugins.lspconfig.keymap
+---@field [1] string
+---@field [2] string|fun()
+---@field desc string
+---@field mode? string|string[]
 ---@field method? string
 
 ---@class plugins.mason_lspconfig.config: MasonLspconfigSettings
 
 local util = require("util")
 
----@type plugins.lspconfig.key[]
-local keys = {
-  {
-    "gd",
-    function()
-      require("telescope.builtin").lsp_definitions({ reuse_win = true })
-    end,
-    desc = "Goto definition",
-    { "<leader>cl", "<cmd>LspInfo<cr>", desc = "Lsp info" },
-  },
-  -- { "gr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
-  { "gD", vim.lsp.buf.declaration, desc = "Goto declaration" },
-  {
-    "gI",
-    function()
-      require("telescope.builtin").lsp_implementations({ reuse_win = true })
-    end,
-    desc = "Goto implementation",
-  },
-  -- TODO: This clashes with tab switching.
-  -- {
-  --   "gt",
-  --   function()
-  --     require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
-  --   end,
-  --   desc = "Goto type definition",
-  -- },
-  {
-    "gr",
-    function()
-      require("telescope.builtin").lsp_references({ reuse_win = true })
-    end,
-    "Goto references",
-  },
-  { "K", vim.lsp.buf.hover, desc = "Hover" },
-  { "gK", vim.lsp.buf.signature_help, desc = "Signature help", method = "textDocument/signatureHelp" },
-  {
-    "<c-k>",
-    vim.lsp.buf.signature_help,
-    mode = "i",
-    desc = "Signature help",
-    method = "textDocument/signatureHelp",
-  },
-  {
-    "<leader>ca",
-    vim.lsp.buf.code_action,
-    desc = "Code action",
-    method = "textDocument/codeAction",
-  },
+---@type plugins.lspconfig.keymap[]
+local buffer_keymaps_base = {
+  { "gd", "<cmd>Telescope lsp_definitions<cr>", desc = "Definitions", method = "textDocument/definition" },
+  { "gr", "<cmd>Telescope lsp_references<cr>", desc = "References", method = "textDocument/references" },
+  { "gI", "<cmd>Telescope lsp_implementations<cr>", desc = "Implementations", method = "textDocument/implementation" },
+  { "gD", vim.lsp.buf.declaration, desc = "Declaration", method = "textDocument/declaration" },
+  { "gt", "<cmd>Telescope lsp_type_definitions<cr>", desc = "Type definition", method = "textDocument/typeDefinition" },
+  { "K", vim.lsp.buf.hover, desc = "Hover", method = "textDocument/hover" },
+  { "<c-k>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature help", method = "textDocument/signatureHelp" },
+  { "<leader>cs", vim.lsp.buf.signature_help, desc = "Signature help", method = "textDocument/signatureHelp" },
+  { "<leader>ca", vim.lsp.buf.code_action, desc = "Code action", method = "textDocument/codeAction" },
   { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", method = "textDocument/rename" },
-  {
-    "<leader>cA",
-    function()
-      vim.lsp.buf.code_action({
-        context = {
-          only = {
-            "source",
-          },
-          diagnostics = {},
-        },
-      })
-    end,
-    desc = "Source action",
-    method = "textDocument/codeAction",
-  },
   { "<leader>cc", vim.lsp.codelens.run, desc = "Run codelens", mode = { "n", "v" }, method = "textDocument/codeLens" },
-  {
-    "<leader>cC",
-    vim.lsp.codelens.refresh,
-    desc = "Refresh and display codelens",
-    mode = { "n" },
-    method = "textDocument/codeLens",
-  },
+  { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh and display codelens", method = "textDocument/codeLens" },
 }
 
--- Check if any LSP client in buffer {bufnr} supports {method}.
+---Check if any LSP client in buffer {bufnr} supports {method}.
 ---@param method string
 ---@param bufnr? integer
 ---@return boolean
 ---@nodiscard
 local function buffer_supports(method, bufnr)
   local clients = vim.lsp.get_clients({ bufnr = bufnr })
-  for _, client in ipairs(clients) do
-    if client.supports_method(method) then
-      return true
-    end
-  end
 
-  return false
+  ---@param client vim.lsp.Client
+  return vim.iter(clients):any(function(client)
+    return client.supports_method(method)
+  end)
 end
 
--- Get keymaps for buffer {bufnr}.
+---Apply LSP keymaps for buffer {bufnr}.
 ---@param bufnr integer
----@return table<string, LazyKeys>
----@nodiscard
-local function get_keymaps(bufnr)
-  local lazy_keys = require("lazy.core.handler.keys")
-  if not lazy_keys.resolve then
-    return {}
-  end
-
-  local lsp_keymaps = vim.deepcopy(keys)
-  local opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
+local function apply_buffer_keymaps(bufnr)
+  local buffer_keymaps = vim.deepcopy(buffer_keymaps_base)
   local clients = vim.lsp.get_clients({ bufnr = bufnr })
-  for _, client in ipairs(clients) do
+  local opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
+
+  ---@param client vim.lsp.Client
+  vim.iter(clients):each(function(client)
     local server_keymaps = opts.servers[client.name] and opts.servers[client.name].keys or {}
-    vim.list_extend(lsp_keymaps, server_keymaps)
-  end
+    vim.list_extend(buffer_keymaps, server_keymaps)
+  end)
 
-  lsp_keymaps = vim.tbl_filter(function(keymap)
-    local method = keymap.method
-    keymap.method = nil
-    keymap.buffer = bufnr
-
-    return not method or buffer_supports(method, bufnr)
-  end, lsp_keymaps)
-
-  return lazy_keys.resolve(lsp_keymaps)
+  vim
+    .iter(buffer_keymaps)
+    ---@param keymap plugins.lspconfig.keymap
+    :filter(function(keymap)
+      local method = keymap.method
+      return not method or buffer_supports(method, bufnr)
+    end)
+    ---@param keymap plugins.lspconfig.keymap
+    :each(function(keymap)
+      ---@diagnostic disable-next-line: missing-fields
+      vim.keymap.set(keymap.mode or "n", keymap[1], keymap[2], { desc = keymap.desc })
+    end)
 end
 
--- Bind {keymaps} to buffer {bufnr}.
----@param keymaps table<string, LazyKeys>
-local function bind_keys(keymaps)
-  local lazy_keys = require("lazy.core.handler.keys")
-
-  for _, keymap in pairs(keymaps) do
-    local opts = lazy_keys.opts(keymap)
-    vim.keymap.set(keymap.mode or "n", keymap.lhs, keymap.rhs, opts)
-  end
-end
-
--- Execute {callback} on the `LspAttach` event.
+---Execute {callback} on the `LspAttach` event.
 ---@param callback fun(client: vim.lsp.Client, bufnr?: integer)
 local function on_lsp_attach(callback)
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      if client == nil then
+      if not client then
         return
       end
+
       callback(client, bufnr)
     end,
   })
@@ -165,15 +96,13 @@ end
 return {
   {
     "neovim/nvim-lspconfig",
-    dependencies = { "cmp-nvim-lsp" },
+    dependencies = { "blink.cmp" },
     keys = {
       { "<leader>uL", "<cmd>LspInfo<cr>", "LSP information" },
     },
     init = function(_)
       on_lsp_attach(function(client, bufnr)
-        -- Setup keymaps.
-        local keymaps = get_keymaps(bufnr)
-        bind_keys(keymaps)
+        apply_buffer_keymaps(bufnr)
 
         -- Highlight the word under cursor when it rests for some time.
         if client.server_capabilities.documentHighlightProvider then
@@ -201,30 +130,36 @@ return {
         end
       end)
     end,
-    opts = function(_, _)
-      ---@type plugins.lspconfig.config
-      return {
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
-        servers = {},
-      }
+
+    ---@param opts plugins.lspconfig.config
+    opts = function(_, opts)
+      -- Communicate blink.cmp's completion capabilities to all language servers.
+      for _, config in pairs(opts.servers or {}) do
+        config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+      end
+
+      return opts
     end,
+
+    -- Let mason-lspconfig launch the language servers.
     config = function(_, _) end,
   },
 
   {
     "williamboman/mason-lspconfig.nvim",
-    dir = "~/git/others/mason-lspconfig.nvim",
+    version = false, -- NOTE: For ginko_ls which is not present in v1.31.0.
     event = "LazyFile",
     dependencies = {
       "mason.nvim",
       "nvim-lspconfig",
     },
-    opts = function(_, opts)
+    opts = function(_, _)
       local lspconfig_opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
       local servers = lspconfig_opts.servers or {}
 
       ---@type plugins.mason_lspconfig.config
-      return vim.tbl_deep_extend("force", opts, {
+      ---@diagnostic disable-next-line: missing-fields
+      return {
         ensure_installed = vim.tbl_keys(servers),
         handlers = {
           -- Default handler.
@@ -233,20 +168,15 @@ return {
               return
             end
 
-            local server_opts = vim.tbl_deep_extend("force", {
-              capabilities = vim.deepcopy(lspconfig_opts.capabilities) or {},
-            } --[[@as plugins.lspconfig.config.server]], servers[server])
-
-            if server_opts.setup ~= nil then
-              if server_opts.setup(server_opts) then
-                return
-              end
+            local server_opts = servers[server]
+            if server_opts.setup and server_opts.setup(server_opts) then
+              return
             end
 
             require("lspconfig")[server].setup(server_opts)
           end,
         },
-      })
+      }
     end,
   },
 }

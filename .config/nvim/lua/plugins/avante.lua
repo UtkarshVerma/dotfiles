@@ -35,7 +35,6 @@ return {
     dependencies = {
       "dressing.nvim",
       "plenary.nvim",
-      "nvim-cmp",
       "nui.nvim",
       "nvim-web-devicons",
       "img-clip.nvim",

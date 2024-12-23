@@ -31,13 +31,20 @@ return {
   },
 
   {
-    "nvim-cmp",
-    opts = function(_, opts)
-      opts.sources = opts.sources or {}
-      table.insert(opts.sources, {
-        name = "lazydev",
-        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-      })
-    end,
+    "blink.cmp",
+    ---@type plugins.blink.config
+    opts = {
+      sources = {
+        default = { "lazydev" },
+        providers = {
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            -- Make lazydev completions top priority.
+            score_offset = 100,
+          },
+        },
+      },
+    },
   },
 }

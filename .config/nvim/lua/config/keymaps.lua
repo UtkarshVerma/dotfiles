@@ -53,7 +53,7 @@ local keys = {
   { "<c-/>", "<cmd>close<cr>", mode = "t", desc = "Hide terminal" },
 
   -- Windows
-  { "<leader>ww", "<cmd>wincmd p<cr>", desc = "Other window" },
+  { "<leader>ww", "<cmd>wincmd w<cr>", desc = "Other window" },
   { "<leader>wd", "<cmd>close<cr>", desc = "Delete window" },
   { "<leader>wk", "<cmd>leftabove split<cr>", desc = "Split window top" },
   { "<leader>wl", "<cmd>rightbelow vsplit<cr>", desc = "Split window right" },

@@ -4,6 +4,16 @@
 ---@type LazyPluginSpec[]
 return {
   {
+    "catppuccin",
+    ---@type plugins.catppuccin.config
+    opts = {
+      integrations = {
+        snacks = true,
+      },
+    },
+  },
+
+  {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,

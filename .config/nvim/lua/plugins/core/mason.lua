@@ -6,6 +6,16 @@ local util = require("util")
 ---@type LazyPluginSpec[]
 return {
   {
+    "catppuccin",
+    ---@type plugins.catppuccin.config
+    opts = {
+      integrations = {
+        mason = true,
+      },
+    },
+  },
+
+  {
     "williamboman/mason.nvim",
     cmd = "Mason",
     keys = {
@@ -14,14 +24,13 @@ return {
     build = ":MasonUpdate",
     opts_extend = { "ensure_installed" },
     ---@type plugins.mason.config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       ensure_installed = {},
     },
     ---@param opts plugins.mason.config
     config = function(_, opts)
-      if type(opts.ensure_installed) == "table" then
-        opts.ensure_installed = util.dedup(opts.ensure_installed)
-      end
+      opts.ensure_installed = util.dedup(opts.ensure_installed)
 
       require("mason").setup(opts)
 

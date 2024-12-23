@@ -1,9 +1,11 @@
----@class lsp.typst_lsp.config.settings
+---@module "snacks"
+
+---@class lsp.tinymist.config.settings
 ---@field exportPdf? "onType"|"onSave"|"never"
 ---@field serverPath? string
 
----@class lsp.typst_lsp.config: lsp.base
----@field settings? lsp.typst_lsp.config.settings
+---@class lsp.tinymist.config: plugins.lspconfig.config.server
+---@field settings? lsp.tinymist.config.settings
 
 ---@type LazyPluginSpec[]
 return {
@@ -24,12 +26,35 @@ return {
 
   {
     "nvim-lspconfig",
+    dependencies = { "snacks.nvim" },
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
-        ---@type lsp.typst_lsp.config
+        ---@type lsp.tinymist.config
         tinymist = {
-          offset_encoding = "utf-8", -- HACK: Fix after nvim 0.10.3 releases
+          on_attach = function(client, _)
+            Snacks.toggle
+              .new({
+                name = "Export PDF on type",
+                get = function()
+                  return client.settings.exportPdf == "onType"
+                end,
+                set = function(state)
+                  ---@type lsp.tinymist.config.settings
+                  if state then
+                    client.settings.exportPdf = "onType"
+                  else
+                    client.settings.exportPdf = "never"
+                  end
+
+                  client.notify("workspace/didChangeConfiguration", { settings = client.settings })
+                end,
+              })
+              :map("<leader>te", { desc = "Export PDF on type" })
+          end,
+          settings = {
+            exportPdf = "never",
+          },
         },
       },
     },

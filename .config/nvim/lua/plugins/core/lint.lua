@@ -7,7 +7,7 @@
 
 local util = require("util")
 
--- Override `{default_linters}` with `{linters}` in-place.
+---Override `{default_linters}` with `{linters}` in-place.
 ---@param default_linters lint.Linter[]
 ---@param linters plugins.lint.linter
 local function override_linters(default_linters, linters)
@@ -17,7 +17,7 @@ local function override_linters(default_linters, linters)
     if type(default_linter) == "table" then
       default_linter = vim.tbl_deep_extend("force", default_linter, linter)
 
-      if linter.prepend_args ~= nil then
+      if linter.prepend_args then
         vim.list_extend(linter.prepend_args, default_linter.args)
         default_linter.args = vim.deepcopy(linter.prepend_args)
         linter.prepend_args = nil

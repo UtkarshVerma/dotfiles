@@ -1,37 +1,16 @@
 ---@class util.log
 local M = {}
 
--- Log {message} as information.
----@param message string
----@param title? string
-function M.info(message, title)
-  M.notify(message, { title = title, level = vim.log.levels.INFO })
-end
-
--- Log {message} as a warning.
----@param message string
----@param title? string
-function M.warn(message, title)
-  M.notify(message, { title = title, level = vim.log.levels.WARN })
-end
-
--- Log {message} as an error.
----@param message string
----@param title? string
-function M.error(message, title)
-  M.notify(message, { title = title, level = vim.log.levels.ERROR })
-end
-
--- Dispatch a notification with message {message}.
+---Dispatch a notification with message {message}.
 ---@param message string
 ---@param opts? {title?: string, once?: boolean, level?: integer, replace?: string, lang?: string}
-function M.notify(message, opts)
+local function notify(message, opts)
   opts = opts or {}
   local lang = opts.lang or "markdown"
-  local notify = opts.once and vim.notify_once or vim.notify
+  local notify_func = opts.once and vim.notify_once or vim.notify
   local level = opts.level or vim.log.levels.INFO
 
-  notify(message, level, {
+  notify_func(message, level, {
     title = opts.title or "Editor",
     on_open = function(win)
       local ok = pcall(function()
@@ -52,6 +31,27 @@ function M.notify(message, opts)
       end
     end,
   })
+end
+
+---Log {message} as information.
+---@param message string
+---@param title? string
+function M.info(message, title)
+  notify(message, { title = title, level = vim.log.levels.INFO })
+end
+
+---Log {message} as a warning.
+---@param message string
+---@param title? string
+function M.warn(message, title)
+  notify(message, { title = title, level = vim.log.levels.WARN })
+end
+
+---Log {message} as an error.
+---@param message string
+---@param title? string
+function M.error(message, title)
+  notify(message, { title = title, level = vim.log.levels.ERROR })
 end
 
 return M

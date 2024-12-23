@@ -103,6 +103,16 @@ end
 ---@type LazyPluginSpec[]
 return {
   {
+    "catppuccin",
+    ---@type plugins.catppuccin.config
+    opts = {
+      integrations = {
+        telescope = { enabled = true, style = "nvchad" },
+      },
+    },
+  },
+
+  {
     "nvim-telescope/telescope-fzf-native.nvim",
     dependencies = { "telescope.nvim" },
     build = "make",
@@ -125,6 +135,7 @@ return {
       return {
         -- Find
         { "<leader>fb", builtin.buffers, desc = "Buffers" },
+        ---@diagnostic disable-next-line: assign-type-mismatch
         { "<leader>fc", search_files({ cwd = vim.fn.stdpath("config") }), desc = "Config file" },
         { "<leader>ff", search_files(), desc = "Files" },
         { "<leader>fr", builtin.oldfiles, desc = "Recent" },
@@ -154,14 +165,8 @@ return {
         -- stylua: ignore
         { "<leader>sw", function() builtin.grep_string({ word_match = "-w" }) end, desc = "Word" },
         { "<leader>sw", builtin.grep_string, mode = "v", desc = "Selection" },
-        {
-          "<leader>uc",
-          function()
-            builtin.colorscheme({ enable_preview = true })
-          end,
-          desc = "Colorscheme with preview",
-        },
         -- stylua: ignore start
+        { "<leader>uc", function() builtin.colorscheme({ enable_preview = true }) end, desc = "Colorscheme" },
         { "<leader>ss", function() builtin.lsp_document_symbols() end, desc = "Goto symbol" },
         { "<leader>sS", function() builtin.lsp_dynamic_workspace_symbols() end, desc = "Goto symbol (workspace)" },
         -- stylua: ignore end

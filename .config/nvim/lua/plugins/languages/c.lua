@@ -1,4 +1,4 @@
----@class lsp.clangd.config.capabilities: lsp.base.capabilities
+---@class lsp.clangd.config.capabilities: plugins.lspconfig.config.server
 ---@field offsetEncoding? string[]
 
 ---@class lsp.clangd.config.init_options
@@ -15,10 +15,10 @@ local drivers = { "/usr/bin/**/clang-*" }
 local platformio_dir = os.getenv("PLATFORMIO_CORE_DIR")
 local cuda_path = os.getenv("CUDA_PATH")
 if platformio_dir then
-  table.insert(drivers, string.format("%s/**/bin/*-gcc", platformio_dir))
+  drivers[#drivers + 1] = string.format("%s/**/bin/*-gcc", platformio_dir)
 end
 if cuda_path then
-  table.insert(drivers, string.format("%s/bin/nvcc", cuda_path))
+  drivers[#drivers + 1] = string.format("%s/bin/nvcc", cuda_path)
 end
 
 local query_drivers = "--query-driver=" .. table.concat(drivers, ",")
@@ -58,40 +58,6 @@ return {
           keys = {
             { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
           },
-          root_dir = function(file)
-            return require("lspconfig.util").root_pattern(
-              "Makefile",
-              "configure.ac",
-              "configure.in",
-              "config.h.in",
-              "meson.build",
-              "meson_options.txt",
-              "build.ninja"
-            )(file) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(
-              file
-            ) or require("lspconfig.util").find_git_ancestor(file)
-          end,
-          capabilities = {
-            offsetEncoding = { "utf-16" },
-            textDocument = {
-              completion = {
-                completionItem = {
-                  commitCharactersSupport = true,
-                  insertReplaceSupport = true,
-                  snippetSupport = false,
-                  deprecatedSupport = true,
-                  labelDetailsSupport = true,
-                  preselectSupport = false,
-                  resolveSupport = {
-                    properties = { "documentation", "detail", "additionalTextEdits" },
-                  },
-                  tagSupport = {
-                    valueSet = { 1 },
-                  },
-                },
-              },
-            },
-          },
           cmd = {
             "clangd",
             "--clang-tidy",
@@ -101,7 +67,7 @@ return {
             "--function-arg-placeholders",
             "--enable-config",
             query_drivers,
-            -- Auto-format only if .clang-format exists
+            -- Auto-format only if .clang-format exists.
             "--fallback-style=none",
           },
           init_options = {
@@ -109,62 +75,9 @@ return {
             completeUnimported = true,
             clangdFileStatus = true,
           },
-          setup = function(_)
-            return false
-          end,
         },
       },
     },
-  },
-
-  {
-    "nvim-cmp",
-    ---@param opts plugins.cmp.config
-    opts = function(_, opts)
-      local cmp = require("cmp")
-
-      opts.sorting = opts.sorting or {}
-      opts.sorting.comparators = {
-        cmp.config.compare.offset,
-        cmp.config.compare.exact,
-        cmp.config.compare.recently_used,
-        require("clangd_extensions.cmp_scores"),
-        cmp.config.compare.kind,
-        cmp.config.compare.sort_text,
-        cmp.config.compare.length,
-        cmp.config.compare.order,
-      }
-    end,
-  },
-
-  {
-    "p00f/clangd_extensions.nvim",
-    -- TODO: Specify types
-    opts = {
-      inlay_hints = {
-        inline = true,
-      },
-      ast = {
-        role_icons = {
-          type = "",
-          declaration = "",
-          expression = "",
-          specifier = "",
-          statement = "",
-          ["template argument"] = "",
-        },
-        kind_icons = {
-          Compound = "",
-          Recovery = "",
-          TranslationUnit = "",
-          PackExpansion = "",
-          TemplateTypeParm = "",
-          TemplateTemplateParm = "",
-          TemplateParamObject = "",
-        },
-      },
-    },
-    config = function() end,
   },
 
   {

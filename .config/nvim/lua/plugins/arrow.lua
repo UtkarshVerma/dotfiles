@@ -1,7 +1,7 @@
 ---@class plugins.arrow.config
 ---@field leader_key? string
 ---@field hide_handbook? boolean
----@field window? vim.window.opts
+---@field window? {border?: string}
 
 ---@type LazyPluginSpec[]
 return {

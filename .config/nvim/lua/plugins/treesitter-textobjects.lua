@@ -8,8 +8,6 @@
 ---@class plugins.treesitter_textobjects.config
 ---@field move? plugins.treesitter_textobjects.config.move
 
-local util = require("util")
-
 ---@type LazyPluginSpec[]
 return {
   {

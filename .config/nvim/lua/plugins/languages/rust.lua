@@ -24,8 +24,8 @@ return {
               "K",
               function()
                 if vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
-                  require("crates").show_popup()
                 else
+                  require("crates").show_popup()
                   vim.lsp.buf.hover()
                 end
               end,
@@ -35,15 +35,6 @@ return {
         },
       },
     },
-  },
-
-  {
-    "nvim-cmp",
-    ---@param opts plugins.cmp.config
-    opts = function(_, opts)
-      opts.sources = opts.sources or {}
-      table.insert(opts.sources, { name = "crates" })
-    end,
   },
 
   {
@@ -63,7 +54,13 @@ return {
     tag = "stable",
     opts = {
       completion = {
-        cmp = { enabled = true },
+        crates = { enabled = true },
+      },
+      lsp = {
+        enabled = true,
+        actions = true,
+        completion = true,
+        hover = true,
       },
     },
   },
@@ -77,14 +74,10 @@ return {
         ---@type rustaceanvim.lsp.ClientOpts
         server = {
           on_attach = function(_, bufnr)
-            -- Use rust-analyzer's code action grouping.
-            vim.keymap.set("n", "<leader>ca", function()
-              vim.cmd.RustLsp("codeAction")
-            end, { desc = "Code action", buffer = bufnr })
-
             vim.keymap.set("n", "<leader>dR", function()
               vim.cmd.RustLsp("debuggables")
-            end, { desc = "Rust debuggables", buffer = bufnr })
+              ---@diagnostic disable-next-line: missing-fields
+            end, { desc = "Debuggables (Rust)", buffer = bufnr })
           end,
           default_settings = {
             ["rust-analyzer"] = {},

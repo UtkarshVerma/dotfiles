@@ -11,7 +11,7 @@
 ---@class lsp.bashls.config.settings
 ---@field bashIde? lsp.bashls.config.settings.bash_ide
 
----@class lsp.bashls.config: lsp.base
+---@class lsp.bashls.config: plugins.lspconfig.config.server
 ---@field settings? lsp.bashls.config.settings
 
 -- TODO: Make this dynamically inferred.

@@ -12,7 +12,6 @@ return {
     },
     init = function(_)
       vim.api.nvim_create_autocmd("VimEnter", {
-        ---@param data vim.autocommand.callback.arg
         callback = vim.schedule_wrap(function(data)
           if data.file ~= "" and vim.fn.isdirectory(data.file) ~= 0 then
             require("oil").open(data.file)

@@ -5,6 +5,16 @@
 ---@type LazyPluginSpec[]
 return {
   {
+    "catppuccin",
+    ---@type plugins.catppuccin.config
+    opts = {
+      integrations = {
+        which_key = true,
+      },
+    },
+  },
+
+  {
     "folke/which-key.nvim",
     event = "VeryLazy",
     dependencies = {
@@ -24,7 +34,6 @@ return {
       },
       spec = {
         { "g", group = "goto" },
-        { "gz", group = "surround" },
         { "]", group = "next" },
         { "[", group = "prev" },
         { "<leader><tab>", group = "tabs" },

@@ -5,6 +5,16 @@ local util = require("util")
 ---@type LazyPluginSpec[]
 return {
   {
+    "catppuccin",
+    ---@type plugins.catppuccin.config
+    opts = {
+      integrations = {
+        neotest = true,
+      },
+    },
+  },
+
+  {
     "which-key.nvim",
     ---@type plugins.which_key.config
     opts = {

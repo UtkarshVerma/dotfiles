@@ -13,7 +13,7 @@
 ---@field json? lsp.jsonls.config.settings.json
 ---@field schemas? table[]
 
----@class lsp.jsonls.config: lsp.base
+---@class lsp.jsonls.config: plugins.lspconfig.config.server
 ---@field settings? lsp.jsonls.config.settings
 
 ---@type LazyPluginSpec[]

@@ -28,17 +28,14 @@ return {
       require("lazy.core.loader").add_to_rtp(plugin)
       require("nvim-treesitter.query_predicates")
     end,
-    cmd = {
-      "TSUpdateSync",
-      "TSUpdate",
-      "TSInstall",
-    },
+    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = {
       { "<c-space>", desc = "Increment selection" },
       { "<bs>", desc = "Decrement selection", mode = "x" },
     },
     opts_extend = { "ensure_installed" },
     ---@type plugins.treesitter.config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       highlight = { enable = true },
       indent = { enable = true },

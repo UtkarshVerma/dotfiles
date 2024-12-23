@@ -1,4 +1,6 @@
----@alias config.autocommand {[1]: vim.autocommand.event, [2]: vim.autocommand.callback|string}|vim.autocommand.opts
+---@class config.autocommand: vim.api.keyset.create_autocmd
+---@field [1] string|string[]
+---@field [2] string|fun()
 
 ---@type config.autocommand[]
 local autocommands = {
@@ -101,7 +103,6 @@ for _, autocommand in ipairs(autocommands) do
   autocommand[1] = nil
   autocommand[2] = nil
 
-  ---@type vim.autocommand.opts
   local opts = autocommand
   opts[type(callback) == "string" and "command" or "callback"] = callback
 

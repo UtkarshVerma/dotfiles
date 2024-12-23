@@ -20,13 +20,16 @@ return {
 
   {
     "scalameta/nvim-metals",
-    dependencies = { "plenary.nvim" },
+    dependencies = {
+      "plenary.nvim",
+      "blink.cmp",
+    },
     ft = { "scala", "sbt" },
     opts = function(_, _)
       local map = vim.keymap.set
 
       return {
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        capabilities = require("blink").default_capabilities(),
         on_attach = function(_, _)
           local metals = require("metals")
           metals.setup_dap()

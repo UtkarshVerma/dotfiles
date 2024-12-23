@@ -2,15 +2,11 @@
 ---@field lsp_fallback? boolean
 ---@field timeout_ms? integer
 
----@class plugins.conform.config
----@field notify_on_error? boolean
----@field format_on_save? plugins.conform.config.format_on_save|fun(bufnr:integer):plugins.conform.config.format_on_save?
----@field formatters? table<string, conform.FormatterConfigOverride|fun(bufnr:integer):conform.FormatterConfigOverride>
----@field formatters_by_ft? table<string, conform.FormatterUnit[]>
+---@class plugins.conform.config: conform.setupOpts
 
 local util = require("util")
 
--- Check if buffer {bufnr} can be formatted.
+---Check if buffer {bufnr} can be formatted.
 ---@param bufnr integer
 ---@return boolean
 ---@nodiscard
@@ -25,24 +21,21 @@ local function can_format(bufnr)
   return global_autoformat
 end
 
--- Display autoformat status for buffer {bufnr}.
+---Display autoformat status for buffer {bufnr}.
 ---@param bufnr? integer
 local function show_status(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local enabled = can_format(bufnr)
   local buffer_autoformat = vim.b[bufnr].autoformat --[[@as boolean?]]
 
-  local lines = {
-    (enabled and "enabled" or "disabled"),
-    string.format("- [%s] global", vim.g.autoformat and "x" or " "),
-    string.format(
-      "- [%s] buffer%s",
-      (buffer_autoformat or enabled) and "x" or " ",
-      buffer_autoformat == nil and " (inherit)" or ""
-    ),
-  }
+  local message = string.format(
+    "%s: buffer (%s%s), global (%s)",
+    (enabled and "Enabled" or "Disabled"),
+    (buffer_autoformat or enabled) and "yes" or "no",
+    buffer_autoformat == nil and ", inherited" or "",
+    vim.g.autoformat and "yes" or "no"
+  )
 
-  local message = table.concat(lines, "\n")
   local title = "Format"
   if enabled then
     util.log.info(message, title)
@@ -51,7 +44,7 @@ local function show_status(bufnr)
   end
 end
 
--- Toggle formatting for {mode}.
+---Toggle formatting for {mode}.
 ---@param mode "buffer"|"global"
 local function toggle_autoformat(mode)
   local bufnr = vim.api.nvim_get_current_buf()
@@ -111,8 +104,8 @@ return {
     keys = {
       { "<leader>uC", "<cmd>ConformInfo<cr>", desc = "Conform information" },
       -- stylua: ignore start
-      { "<leader>tf", function() toggle_autoformat("global") end, desc = "Auto-format (global)" },
-      { "<leader>tF", function() toggle_autoformat("buffer") end, desc = "Auto-format (buffer)" },
+      { "<leader>tf", function() toggle_autoformat("buffer") end, desc = "Auto-format (buffer)" },
+      { "<leader>tF", function() toggle_autoformat("global") end, desc = "Auto-format (global)" },
       -- stylua: ignore end
       {
         "<leader>cF",
@@ -135,6 +128,7 @@ return {
           return nil
         end
 
+        ---@type conform.FormatOpts
         return { timeout_ms = 500, lsp_fallback = true }
       end,
       formatters_by_ft = {},
