@@ -9,7 +9,7 @@ return {
         local lines = vim.api.nvim_buf_get_lines(0, 0, cursor_line - 1, false)
         for _, line in ipairs(lines) do
           if line:match("-- stylua: ignore start") then
-            return sn(nil, t(" end\n"))
+            return sn(nil, t({ " end", "" }))
           end
         end
 
