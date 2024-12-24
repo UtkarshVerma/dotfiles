@@ -18,6 +18,7 @@ return {
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
+        ---@type lsp.taplo.config
         taplo = {
           keys = {
             {
