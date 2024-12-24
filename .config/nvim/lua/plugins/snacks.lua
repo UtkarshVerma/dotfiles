@@ -20,16 +20,23 @@ return {
     keys = {
       -- stylua: ignore start
       { "<leader>gl", function() Snacks.lazygit() end, desc = "Lazygit" },
+      { "<leader>tt", function() Snacks.terminal.toggle() end, desc = "Terminal" },
       -- stylua: ignore end
     },
-    opts = function(_, _)
-      ---@type plugins.snacks.config
-      return {
-        bigfile = { enabled = true },
-        lazygit = { enabled = true },
-        toggle = { enabled = true, which_key = false },
-      }
-    end,
+    ---@type plugins.snacks.config
+    opts = {
+      bigfile = { enabled = true },
+      lazygit = { enabled = true },
+      toggle = { enabled = true, which_key = false },
+      terminal = {
+        ---@diagnostic disable-next-line: missing-fields
+        win = {
+          wo = {
+            winbar = "", -- Disable winbar.
+          },
+        },
+      },
+    },
     config = function(_, opts)
       require("snacks").setup(opts)
 
