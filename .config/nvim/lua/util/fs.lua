@@ -3,7 +3,7 @@ local M = {}
 
 M.path_sep = package.config:sub(1, 1)
 
--- Normalize slashes in {path}, expand "~" and remove trailing slashes.
+---Normalize slashes in {path}, expand "~" and remove trailing slashes.
 ---@param path string
 ---@return string
 ---@nodiscard
@@ -17,7 +17,7 @@ function M.normalize(path)
   return path
 end
 
--- Get the current working directory.
+---Get the current working directory.
 ---@return string?
 ---@nodiscard
 function M.cwd()

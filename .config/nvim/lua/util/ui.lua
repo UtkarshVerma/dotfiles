@@ -13,19 +13,19 @@
 ---@class util.ui
 local M = {}
 
--- Get the foreground color for highlight {name}.
+---Get the foreground color for highlight {name}.
 ---@param name string
----@return Highlight?
+---@return vim.api.keyset.hl_info?
 ---@nodiscard
 function M.fg(name)
   ---@diagnostic disable-next-line: undefined-field
-  local hl = vim.api.nvim_get_hl(0, { name = name }) --[[@as Highlight]]
+  local hl = vim.api.nvim_get_hl(0, { name = name })
   local fg = hl.fg
 
   return fg and { fg = string.format("#%06x", fg) }
 end
 
--- Get borderchars of type {type} in specified {order}.
+---Get borderchars of type {type} in specified {order}.
 ---@param type? util.ui.border.type
 ---@param order? string
 ---@param overrides? util.ui.border.chars
