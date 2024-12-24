@@ -3,7 +3,7 @@
 # Default programs
 export EDITOR=nvim
 export BROWSER=brave
-export FILE_MANAGER=lf
+export FILE_MANAGER=yazi
 export SYSTEM_MONITOR=btop
 
 case "$XDG_SESSION_TYPE" in
@@ -109,6 +109,7 @@ export AWT_TOOLKIT=MToolkit
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
 export SUDO_ASKPASS="$HOME/.local/bin/passprompt"
 export PIPENV_VENV_IN_PROJECT=1
+export XML_CATALOG_FILES="$XDG_CONFIG_HOME/xml/catalog"
 
 # nix
 export NIX_PATH="$XDG_STATE_HOME/nix/defexpr/channels"
