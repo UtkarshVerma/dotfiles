@@ -2,5 +2,5 @@
 Name=File Manager
 Icon=system-file-manager
 Type=Application
-Exec=terminal -e lf %u
+Exec=terminal -e yazi %u
 MimeType=inode/directory;

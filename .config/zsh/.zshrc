@@ -202,6 +202,7 @@ function dpaste() {
 configs=(
     "$ZDOTDIR/.p10k.zsh"
     "$XDG_CONFIG_HOME/lf/lf.sh"
+    "$XDG_CONFIG_HOME/yazi/yazi.sh"
     "/usr/bin/virtualenvwrapper_lazy.sh"
 )
 

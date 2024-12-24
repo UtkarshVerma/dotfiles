@@ -1,0 +1,22 @@
+# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
+# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+[manager]
+mouse_events = ["click", "scroll", "move", "drag"]
+
+# Disable previews for remotes.
+[[plugin.prepend_preloaders]]
+name = "~/remotes/**"
+run = "noop"
+
+[plugin]
+prepend_previewers = [
+    # Archive previewer
+    { mime = "application/*zip", run = "ouch" },
+    { mime = "application/x-tar", run = "ouch" },
+    { mime = "application/x-bzip2", run = "ouch" },
+    { mime = "application/x-7z-compressed", run = "ouch" },
+    { mime = "application/x-rar", run = "ouch" },
+    { mime = "application/x-xz", run = "ouch" },
+]

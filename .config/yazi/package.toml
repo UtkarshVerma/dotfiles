@@ -1,0 +1,12 @@
+[plugin]
+deps = [
+    { use = "yazi-rs/plugins:hide-preview", rev = "c7feb90" },
+    { use = "yazi-rs/plugins:max-preview", rev = "c7feb90" },
+    { use = "yazi-rs/plugins:full-border", rev = "c7feb90" },
+    { use = "yazi-rs/plugins:chmod", rev = "c7feb90" },
+    { use = "dedukun/bookmarks", rev = "35da107" },
+    { use = "ndtoan96/ouch", rev = "b869886" },
+]
+
+[flavor]
+deps = []

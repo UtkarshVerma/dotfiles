@@ -1,0 +1,33 @@
+# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
+# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
+
+[manager]
+prepend_keymap = [
+	# Wrap scrolling.
+	{ on = "k", run = "plugin arrow --args=-1" },
+	{ on = "j", run = "plugin arrow --args=1" },
+
+	{ on = "!", run = 'shell "$SHELL" --block', desc = "Open shell here" },
+	{ on = ["g", "r"], run = '''shell 'ya emit cd "$(git rev-parse --show-toplevel)"'''', desc = "Change directory to git root" },
+
+	{ on = ["g", "p"], run = "plugin hide-preview", desc = "Toggle preview" },
+	{ on = ["g", "m"], run = "plugin max-preview", desc = "Maximize or restore preview" },
+	{ on = ["c", "m"], run = "plugin chmod", desc = "Chmod on selected files" },
+	{ on = "T", run = "plugin smart-tab", desc = "Open dir in new tab" },
+	{ on = "C", run = "plugin ouch --args=zip", desc = "Compress with ouch" },
+
+	{ on = ["g", "d"], run = '''shell 'dragon-drop --and-exit --on-top "$@"'''', desc = "Make selection draggable" },
+	{ on = ["g", "D"], run = '''shell 'dragon-drop --target --and-exit --on-top "$@"'''', desc = "Paste dropped item to CWD" },
+
+	# Bookmarks.
+	{ on = "m", run = "plugin bookmarks --args=save", desc = "Bookmark CWD" },
+	{ on = "'", run = "plugin bookmarks --args=jump", desc = "Jump to a bookmark" },
+	{ on = ["b", "d"], run = "plugin bookmarks --args=delete", desc = "Delete a bookmark" },
+	{ on = ["b", "D"], run = "plugin bookmarks --args=delete_all", desc = "Delete all bookmarks" },
+
+	# Disable defaults. Kept at the bottom so above keymaps can override these.
+	{ on = ["g", "h"], run = "noop" },
+	{ on = ["g", "c"], run = "noop" },
+	{ on = ["g", "d"], run = "noop" },
+]

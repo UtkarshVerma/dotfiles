@@ -1,4 +1,3 @@
-#!/bin/sh
 # `lf` wrapper that allows changing CWD on exit whenever the command below is
 # executed in `lf`.
 #
