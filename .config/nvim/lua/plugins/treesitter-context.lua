@@ -1,9 +1,6 @@
 ---@module "snacks"
 
----@class plugins.treesitter_context.config
----@field max_lines? integer
----@field mode? "cursor"|"topline"
----@field on_attach? fun(bufnr:number):boolean
+---@class plugins.treesitter_context.config: TSContext.Config
 
 ---@type LazyPluginSpec[]
 return {
@@ -14,7 +11,13 @@ return {
       "nvim-treesitter",
       "snacks.nvim",
     },
-    opts = function(_, _)
+    ---@type plugins.treesitter_context.config
+    ---@diagnostic disable-next-line: missing-fields
+    opts = {
+      mode = "cursor",
+      max_lines = 3,
+    },
+    config = function(_, opts)
       local tsc = require("treesitter-context")
 
       Snacks.toggle
@@ -31,8 +34,7 @@ return {
         })
         :map("<leader>tc", { desc = "Treesitter context" })
 
-      ---@type plugins.treesitter_context.config
-      return { mode = "cursor", max_lines = 3 }
+      tsc.setup(opts)
     end,
   },
 }
