@@ -107,14 +107,6 @@ return {
       { "<leader>tf", function() toggle_autoformat("buffer") end, desc = "Auto-format (buffer)" },
       { "<leader>tF", function() toggle_autoformat("global") end, desc = "Auto-format (global)" },
       -- stylua: ignore end
-      {
-        "<leader>cF",
-        function()
-          require("conform").format({ formatters = { "injected" } })
-        end,
-        mode = { "n", "v" },
-        desc = "Format injected languages",
-      },
     },
     init = function()
       vim.g.autoformat = true

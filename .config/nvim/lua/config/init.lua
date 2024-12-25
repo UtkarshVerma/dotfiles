@@ -18,7 +18,7 @@ function M.setup()
   -- Autocmds can be loaded lazily when not opening a file.
   local lazy_autocmds = vim.fn.argc(-1) == 0
   if not lazy_autocmds then
-    M.load("autocmds")
+    M.load("autocommands")
   end
 
   local group = vim.api.nvim_create_augroup("Editor", {})
@@ -27,7 +27,7 @@ function M.setup()
     pattern = "VeryLazy",
     callback = function()
       if lazy_autocmds then
-        M.load("autocmds")
+        M.load("autocommands")
       end
 
       M.load("keymaps")
@@ -36,7 +36,7 @@ function M.setup()
 end
 
 ---Load configuration for {name}.
----@param name "autocmds"|"options"|"keymaps"
+---@param name "autocommands"|"options"|"keymaps"
 function M.load(name)
   local mod = "config." .. name
   if require("lazy.core.cache").find(mod)[1] then

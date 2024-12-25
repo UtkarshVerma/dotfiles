@@ -1,29 +1,14 @@
-local util = require("util")
+---@class config.keymap
+---@field [1] string
+---@field [2] string|fun()
+---@field mode? string|string[]
+---@field expr? boolean
+---@field desc? string
 
-local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
-
---- Go to next or previous diagnostic of severity {severity} based on {direction}.
----@param direction "next"|"prev"
----@param severity vim.diagnostic.Severity?
----@return fun()
-local function goto_diagnostic(direction, severity)
-  local go = direction == "next" and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-  severity = severity and vim.diagnostic.severity[severity] or nil
-
-  return function()
-    go({ severity = severity })
-  end
-end
-
----@type LazyKeysSpec[]
-local keys = {
-  { "j", "v:count == 0 ? 'gj' : 'j'", mode = { "n", "x" }, desc = "Better up", expr = true },
-  { "k", "v:count == 0 ? 'gk' : 'k'", mode = { "n", "x" }, desc = "Better down", expr = true },
-
-  { "<c-up>", "<cmd>resize +2<cr>", desc = "Increase window height" },
-  { "<c-down>", "<cmd>resize -2<cr>", desc = "Decrease window height" },
-  { "<c-left>", "<cmd>vertical resize -2<cr>", desc = "Decrease window width" },
-  { "<c-right>", "<cmd>vertical resize +2<cr>", desc = "Increase window width" },
+---@type config.keymap[]
+local keymaps = {
+  { "j", "v:count == 0 ? 'gj' : 'j'", mode = { "n", "x" }, expr = true, desc = "Better up" },
+  { "k", "v:count == 0 ? 'gk' : 'k'", mode = { "n", "x" }, expr = true, desc = "Better down" },
 
   { "<s-h>", "<cmd>bprevious<cr>", desc = "Previous buffer" },
   { "<s-l>", "<cmd>bnext<cr>", desc = "Next buffer" },
@@ -67,23 +52,26 @@ local keys = {
   { "<leader><tab>h", "<cmd>tabprevious<cr>", desc = "Previous tab" },
 
   -- Diagnostics
-  { "]d", goto_diagnostic("next"), desc = "Next diagnostic" },
-  { "[d", goto_diagnostic("prev"), desc = "Previous diagnostic" },
+  { "]d", vim.diagnostic.goto_next, desc = "Next diagnostic" },
+  { "[d", vim.diagnostic.goto_prev, desc = "Previous diagnostic" },
 
   {
     "<leader>ur",
-    "<cmd>nohlsearch<bar>diffupdate<bar>normal! <c-l><cr>",
+    "<cmd>nohlsearch<bar>diffupdate<bar>normal!<c-l><cr>",
     desc = "Redraw / clear hlsearch / diff update",
   },
 
   { "p", "_dP", mode = "v", desc = "Preserve copied content on paste" },
 }
 
-for _, mapping in ipairs(keys) do
-  vim.keymap.set(
-    mapping.mode or "n",
-    mapping[1],
-    mapping[2],
-    { desc = mapping.desc, expr = mapping.expr, remap = mapping.remap }
-  )
-end
+---@param keymap config.keymap
+vim.iter(keymaps):each(function(keymap)
+  ---@type vim.keymap.set.Opts
+  local opts = {
+    expr = keymap.expr,
+    desc = keymap.desc,
+    silent = true,
+  }
+
+  vim.keymap.set(keymap.mode or "n", keymap[1], keymap[2], opts)
+end)

@@ -128,10 +128,10 @@ return {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
     dependencies = { "plenary.nvim" },
-    ---@type fun(_:LazyPlugin, _:LazyKeysSpec):LazyKeys[]
     keys = function(_, _)
       local builtin = require("telescope.builtin")
 
+      ---@type LazyKeysSpec[]
       return {
         -- Find
         { "<leader>fb", builtin.buffers, desc = "Buffers" },
@@ -177,13 +177,8 @@ return {
     opts = {
       defaults = {
         prompt_prefix = " " .. config.icons.misc.Search .. " ",
-        selection_caret = config.icons.misc.ChevronRight .. " ",
-        entry_prefix = "  ",
-        borderchars = {
-          prompt = util.ui.borderchars("thick"),
-          results = util.ui.borderchars("thick"),
-          preview = util.ui.borderchars("thick"),
-        },
+        selection_caret = " ",
+        entry_prefix = " ",
         sorting_strategy = "ascending",
         results_title = "",
         layout_config = {
@@ -191,6 +186,8 @@ return {
             prompt_position = "top",
             preview_width = 0.55,
           },
+          width = 0.87,
+          height = 0.8,
         },
       },
     },

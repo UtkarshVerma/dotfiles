@@ -1,6 +1,8 @@
----@class config.autocommand: vim.api.keyset.create_autocmd
+---@class config.autocommand
 ---@field [1] string|string[]
 ---@field [2] string|fun()
+---@field desc? string
+---@field pattern? string|string[]
 
 ---@type config.autocommand[]
 local autocommands = {
@@ -43,16 +45,6 @@ local autocommands = {
   },
 
   {
-    "FileType",
-    function(_)
-      vim.opt_local.wrap = true
-      vim.opt_local.spell = true
-    end,
-    desc = "Wrap and check for spell in text files",
-    pattern = { "gitcommit", "markdown" },
-  },
-
-  {
     "BufWritePre",
     function(arg)
       if arg.match:match("^%w%w+://") then
@@ -80,11 +72,8 @@ local autocommands = {
     pattern = {
       "checkhealth",
       "help",
-      "man",
-      "notify",
       "qf",
       "query",
-      "spectre_panel",
     },
     desc = "Close with q",
   },
@@ -97,14 +86,19 @@ local autocommands = {
   },
 }
 
-for _, autocommand in ipairs(autocommands) do
-  local event = autocommand[1]
-  local callback = autocommand[2]
-  autocommand[1] = nil
-  autocommand[2] = nil
+---@param autocommand config.autocommand
+vim.iter(autocommands):each(function(autocommand)
+  ---@type vim.api.keyset.create_autocmd
+  local opts = {
+    desc = autocommand.desc,
+    pattern = autocommand.pattern,
+  }
+  local action = autocommand[2]
+  if type(action) == "string" then
+    opts.command = action
+  else
+    opts.callback = action
+  end
 
-  local opts = autocommand
-  opts[type(callback) == "string" and "command" or "callback"] = callback
-
-  vim.api.nvim_create_autocmd(event, opts)
-end
+  vim.api.nvim_create_autocmd(autocommand[1], opts)
+end)
