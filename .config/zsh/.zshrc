@@ -222,6 +222,10 @@ if command_exists direnv; then
     eval "$(direnv hook zsh)" 
 fi
 
+if command_exists pio; then
+    eval "$(_PIO_COMPLETE=zsh_source pio)"
+fi
+
 if command_exists fzf; then
     # Ctrl-f: cd fzf-selected directory.
     bindkey -s '\C-f' '^ucd "$(dirname "$(fzf)")"\n'
