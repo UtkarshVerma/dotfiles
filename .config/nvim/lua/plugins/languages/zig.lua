@@ -15,6 +15,7 @@ return {
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
+        ---@diagnostic disable-next-line: missing-fields
         zls = {},
       },
     },
