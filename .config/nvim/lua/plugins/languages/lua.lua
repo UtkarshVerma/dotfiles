@@ -23,6 +23,7 @@ return {
     opts = {
       servers = {
         ---@type lsp.lua_ls.config
+        ---@diagnostic disable-next-line: missing-fields
         lua_ls = {
           settings = {
             format = { enable = false },

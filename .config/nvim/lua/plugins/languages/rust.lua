@@ -19,6 +19,7 @@ return {
     opts = {
       servers = {
         ---@type lsp.taplo.config
+        ---@diagnostic disable-next-line: missing-fields
         taplo = {
           keys = {
             {
@@ -70,6 +71,9 @@ return {
     "mrcjkb/rustaceanvim",
     version = "^5",
     lazy = false, -- It's lazy by default.
+    dependencies = {
+      "nvim-dap",
+    },
     init = function(_)
       vim.g.rustaceanvim = {
         ---@type rustaceanvim.lsp.ClientOpts
@@ -80,17 +84,15 @@ return {
               ---@diagnostic disable-next-line: missing-fields
             end, { desc = "Debuggables (Rust)", buffer = bufnr })
           end,
-          default_settings = {
-            ["rust-analyzer"] = {},
-          },
         },
-        dap = {},
       }
     end,
   },
 
   {
     "neotest",
+    ---@type plugins.neotest.config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       adapters = {
         ["rustaceanvim.neotest"] = {},

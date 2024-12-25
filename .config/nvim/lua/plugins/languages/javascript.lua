@@ -18,6 +18,7 @@ return {
     opts = {
       servers = {
         -- TODO: Switch to biome lsp in nvim v0.10
+        ---@diagnostic disable-next-line: missing-fields
         ts_ls = {
           -- Disable formatter in favour of biome.
           on_attach = function(client)
@@ -66,6 +67,7 @@ return {
             },
           },
         },
+        ---@diagnostic disable-next-line: missing-fields
         biome = {},
       },
     },

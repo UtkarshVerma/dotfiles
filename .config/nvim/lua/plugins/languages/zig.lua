@@ -20,4 +20,16 @@ return {
       },
     },
   },
+
+  {
+    "neotest",
+    dependencies = { "lawrence-laz/neotest-zig" },
+    ---@type plugins.neotest.config
+    ---@diagnostic disable-next-line: missing-fields
+    opts = {
+      adapters = {
+        ["neotest-zig"] = {},
+      },
+    },
+  },
 }
