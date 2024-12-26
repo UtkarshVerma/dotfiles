@@ -1,4 +1,5 @@
 ---@module "mason-lspconfig.settings"
+---@module "snacks"
 
 ---@class plugins.lspconfig.config.server: vim.lsp.ClientConfig
 ---@field keys? plugins.lspconfig.keymap[]
@@ -96,11 +97,17 @@ end
 return {
   {
     "neovim/nvim-lspconfig",
-    dependencies = { "blink.cmp" },
+    dependencies = {
+      "blink.cmp",
+      "snacks.nvim",
+    },
     keys = {
       { "<leader>uL", "<cmd>LspInfo<cr>", "LSP information" },
     },
-    init = function(_)
+    ---@type  plugins.lspconfig.config
+    opts = {},
+    -- Let mason-lspconfig launch the language servers.
+    config = function(_, _)
       on_lsp_attach(function(client, bufnr)
         apply_buffer_keymaps(bufnr)
 
@@ -128,21 +135,12 @@ return {
             end,
           })
         end
+
+        if client.supports_method("textDocument/inlayHints") then
+          Snacks.toggle.inlay_hints():map("<leader>ti", { desc = "Inlay hints" })
+        end
       end)
     end,
-
-    ---@param opts plugins.lspconfig.config
-    opts = function(_, opts)
-      -- Communicate blink.cmp's completion capabilities to all language servers.
-      for _, config in pairs(opts.servers or {}) do
-        config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-      end
-
-      return opts
-    end,
-
-    -- Let mason-lspconfig launch the language servers.
-    config = function(_, _) end,
   },
 
   {
@@ -156,6 +154,11 @@ return {
     opts = function(_, _)
       local lspconfig_opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
       local servers = lspconfig_opts.servers or {}
+
+      -- Communicate blink.cmp's completion capabilities to all language servers.
+      for _, config in pairs(servers) do
+        config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+      end
 
       ---@type plugins.mason_lspconfig.config
       ---@diagnostic disable-next-line: missing-fields

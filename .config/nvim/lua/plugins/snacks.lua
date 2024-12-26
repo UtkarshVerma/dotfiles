@@ -43,7 +43,6 @@ return {
       Snacks.toggle.option("spell"):map("<leader>ts", { desc = "Spelling" })
       Snacks.toggle.option("wrap"):map("<leader>tw", { desc = "Word wrap" })
       Snacks.toggle.diagnostics():map("<leader>td", { desc = "Diagnostics" })
-      Snacks.toggle.inlay_hints():map("<leader>ti", { desc = "Inlay hints" })
     end,
   },
 }
