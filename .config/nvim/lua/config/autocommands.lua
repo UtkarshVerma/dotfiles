@@ -67,7 +67,7 @@ local autocommands = {
     "FileType",
     function(arg)
       vim.bo[arg.buf].buflisted = false
-      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = arg.buf })
+      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = arg.buf, desc = "Close buffer" })
     end,
     pattern = {
       "checkhealth",
@@ -83,6 +83,12 @@ local autocommands = {
     'setlocal noswapfile nobackup noundofile shada=""',
     pattern = "/dev/shm/gopass*",
     desc = "Do not cache data for gopass secrets",
+  },
+
+  {
+    "TermOpen",
+    "setlocal nonumber norelativenumber signcolumn=no",
+    desc = "Hide numbers and signcolumn in terminal buffers",
   },
 }
 
