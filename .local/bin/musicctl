@@ -2,9 +2,27 @@
 # Wrapper script for controlling music across mpd and MPRIS.
 # It mimics the CLI arguments of mpc.
 
-args="-s --player=spotify,mpv,%any"
+set -eu
+
+get_active_mpris_player() {
+    set --
+
+    players="$(playerctl -l | cut -d. -f1)"
+    for player in $players; do
+        if status="$(playerctl --player="$player" status)" && [ "$status" != "Stopped" ]; then
+            set -- "$@" "$(playerctl --player="$player" metadata -f "{{playerName}}: {{title}} - {{artist}} ({{status}})")"
+        fi
+    done
+
+    if [ $# -gt 1 ]; then
+        printf "%s\n" "$@" | menu -p "Media:" -l $# || return 1
+    else
+        echo "$1"
+    fi | cut -d: -f1
+}
+
 # shellcheck disable=2086
-if status="$(playerctl $args status)" && [ "$status" != "Stopped" ]; then
+if player="$(get_active_mpris_player)" && [ -n "$player" ]; then
     case "$1" in
         seek | volume)
             [ "$1" = "seek" ] && subcmd="position"
@@ -14,7 +32,7 @@ if status="$(playerctl $args status)" && [ "$status" != "Stopped" ]; then
         prev) set -- previous ;;
         current) set -- status ;;
     esac
-    exec playerctl $args "$@"
+    exec playerctl --no-messages --player="$player" "$@"
 fi
 
 exec mpc -q "$@"
