@@ -121,6 +121,7 @@ export XCURSOR_SIZE=32
 QT_QPA_PLATFORM=xcb
 [ "$XDG_SESSION_TYPE" = wayland ] && QT_QPA_PLATFORM=wayland
 export QT_QPA_PLATFORM
+export ADW_DISABLE_PORTAL=1
 
 # Colorize `less`
 export LESS=-R
