@@ -27,20 +27,23 @@ return {
           auto_show_delay_ms = 200,
         },
         list = {
-          selection = "auto_insert",
+          selection = {
+            preselect = false,
+            auto_insert = true,
+          },
         },
       },
       sources = {
         providers = {
-          buffer = {
-            min_keyword_length = 5,
-          },
+          buffer = { min_keyword_length = 5 },
         },
-        default = { "lsp", "path", "buffer" },
+        default = { "snippets", "lsp", "path", "buffer" },
+      },
+      signature = {
+        enabled = true,
       },
       keymap = {
         preset = "none",
-
         ["<c-space>"] = { "show", "show_documentation", "hide_documentation" },
         ["<tab>"] = { "select_next", "snippet_forward", "fallback" },
         ["<s-tab>"] = { "select_prev", "snippet_backward", "fallback" },
