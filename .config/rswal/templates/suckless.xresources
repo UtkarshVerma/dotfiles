@@ -15,7 +15,7 @@ window.foreground: {{colors.special.foreground}}
 !! st
 *.alpha: {{variables.alpha}}
 *.cursorColor: {{colors.special.cursor}}
-*.font: monospace:pixelsize=18
+*.font: monospace:pixelsize=17
 
 *.foreground: {{colors.special.foreground}}
 *.background: {{colors.special.background}}
