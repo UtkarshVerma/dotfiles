@@ -1,7 +1,7 @@
 @import "colors"
 
 window {
-	font: "monospace 16";
+	font: "monospace 14";
 	width: env(WIDTH, 40%);
 	transparency: "real";
 	background-color: @background;
@@ -21,15 +21,15 @@ prompt, entry, case-indicator {
 }
 prompt {
 	text-color: @color9;
-	padding: 0.6em 0 0.6em 0.6em;
+	padding: 0.4em 0 0.4em 0.4em;
 }
 entry {
 	text-color: @color13;
-	padding: 0.6em;
+	padding: 0.4em;
 }
 case-indicator {
 	text-color: @color11;
-	padding: 0.6em 0.6em 0.6em 0;
+	padding: 0.4em 0.4em 0.4em 0;
 }
 
 listview {
@@ -48,12 +48,12 @@ element-icon, element-text {
 }
 element-icon {
 	size: 1.3em;
-	padding: 0.6em 0 0.6em 0.6em;
+	padding: 0.4em 0 0.4em 0.4em;
 }
 element-text {
 	text-color: @color12;
 	highlight: bold underline;
-	padding: 0.6em;
+	padding: 0.4em;
 	vertical-align: 0.6;
 }
 element selected {
