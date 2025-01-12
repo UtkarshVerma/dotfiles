@@ -25,7 +25,7 @@ local function file_path()
   if #parts > max_part_count then
     local lead_parts = { unpack(parts, 1, math.floor(max_part_count / 2)) }
     local trail_parts = { unpack(parts, #parts - (max_part_count - #lead_parts) + 1, #parts) }
-    parts = vim.tbl_flatten({ lead_parts, "…", trail_parts })
+    parts = vim.iter({ lead_parts, "…", trail_parts }):flatten():totable()
   end
 
   return table.concat(parts, path_sep) .. "%m%r"
