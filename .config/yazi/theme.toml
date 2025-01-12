@@ -30,3 +30,16 @@ separator_style = { fg = "gray" }
 
 [help]
 footer = { fg = "reset", bg = "reset", reversed = true }
+
+[icon]
+dirs = [
+    { name = "desktop", text = "" },
+    { name = "development", text = "" },
+    { name = "documents", text = "" },
+    { name = "downloads", text = "" },
+    { name = "movies", text = "" },
+    { name = "music", text = "" },
+    { name = "pictures", text = "" },
+    { name = "public", text = "" },
+    { name = "videos", text = "" },
+]
