@@ -1,33 +1,27 @@
-include:
-  - secrets.yaml
-
 plugins:
-  - spotify
-  - fromfilename
   - fetchart
   - embedart
-  - lyrics
   - lastgenre
+  - lyrics
   - duplicates
+  - replaygain
+  - mbsync
   - scrub
+  - zero
 
 directory: ~/music
-library: ~/.cache/beets/library.db
-
-spotify:
-  source_weight: 0.0
-
-musicbrainz:
-  enabled: false
+library: ~/music/library.db
 
 lyrics:
-  sources:
-    - lyricwiki
-    - lyrics.com
-    - musixmatch
+  synced: yes
 
-paths:
-  singleton: $artist/$title
+replaygain:
+  backend: gstreamer
 
 import:
   move: true
+  languages: en
+
+zero:
+  fields: comments
+  update_database: true

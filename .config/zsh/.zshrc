@@ -63,13 +63,14 @@ zinit snippet OMZP::azure
 
 # Configurations --------------------------------------------------------------
 # Completions
-autoload -Uz compinit
+autoload -Uz compinit bashcompinit
 fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
 
 ZSH_CACHE="$XDG_CACHE_HOME/zsh"
 [ -d "$ZSH_CACHE" ] || mkdir -p "$ZSH_CACHE"
 zstyle ':completion:*' cache-path "$ZSH_CACHE/zcompcache"
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+bashcompinit
 _comp_options+=(globdots)       # Include hidden files.
 zinit cdreplay -q               # Run compdefs cached by zinit.
 
