@@ -13,6 +13,7 @@ local keymaps = {
   { "<s-h>", "<cmd>bprevious<cr>", desc = "Previous buffer" },
   { "<s-l>", "<cmd>bnext<cr>", desc = "Next buffer" },
   { "<leader>bb", "<cmd>e #<cr>", desc = "Switch to other buffer" },
+  { "<leader><leader>", "<cmd>e #<cr>", desc = "Switch to other buffer" },
 
   { "<esc>", "<cmd>noh<cr><esc>", mode = { "i", "n" }, desc = "Escape and clear hlsearch" },
   { "<c-s>", "<cmd>w<cr><esc>", mode = { "i", "x", "n", "s" }, desc = "Save file" },
