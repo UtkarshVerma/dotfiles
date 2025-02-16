@@ -11,6 +11,7 @@ return {
   {
     "which-key.nvim",
     ---@type plugins.which_key.config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       spec = {
         { "<leader>d", group = "debug" },

@@ -1,5 +1,4 @@
 ---@module "which-key"
-
 ---@class plugins.which_key.config: wk.Config
 
 ---@type LazyPluginSpec[]
@@ -22,6 +21,7 @@ return {
     },
     opts_extend = { "spec" },
     ---@type plugins.which_key.config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       preset = "classic",
       icons = {

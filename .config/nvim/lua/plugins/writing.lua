@@ -6,6 +6,7 @@ return {
     opts = {
       servers = {
         harper_ls = {
+          filetypes = { "markdown", "typst" },
           on_attach = function(client, _)
             local function update_spell_check()
               client.settings["harper-ls"].linters.spell_check = vim.opt.spell:get()
