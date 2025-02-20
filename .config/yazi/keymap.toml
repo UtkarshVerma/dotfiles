@@ -5,8 +5,8 @@
 [manager]
 prepend_keymap = [
 	# Wrap scrolling.
-	{ on = "k", run = "plugin arrow --args=-1" },
-	{ on = "j", run = "plugin arrow --args=1" },
+	{ on = "k", run = "plugin arrow -1" },
+	{ on = "j", run = "plugin arrow 1" },
 
 	{ on = "!", run = 'shell "$SHELL" --block', desc = "Open shell here" },
 	{ on = ["g", "r"], run = '''shell 'ya emit cd "$(git rev-parse --show-toplevel)"'''', desc = "Change directory to git root" },
@@ -15,16 +15,16 @@ prepend_keymap = [
 	{ on = ["g", "m"], run = "plugin max-preview", desc = "Maximize or restore preview" },
 	{ on = ["c", "m"], run = "plugin chmod", desc = "Chmod on selected files" },
 	{ on = "T", run = "plugin smart-tab", desc = "Open dir in new tab" },
-	{ on = "C", run = "plugin ouch --args=zip", desc = "Compress with ouch" },
+	{ on = "C", run = "plugin ouch zip", desc = "Compress with ouch" },
 
 	{ on = ["g", "d"], run = '''shell 'dragon-drop --and-exit --on-top "$@"'''', desc = "Make selection draggable" },
 	{ on = ["g", "D"], run = '''shell 'dragon-drop --target --and-exit --on-top "$@"'''', desc = "Paste dropped item to CWD" },
 
 	# Bookmarks.
-	{ on = "m", run = "plugin bookmarks --args=save", desc = "Bookmark CWD" },
-	{ on = "'", run = "plugin bookmarks --args=jump", desc = "Jump to a bookmark" },
-	{ on = ["b", "d"], run = "plugin bookmarks --args=delete", desc = "Delete a bookmark" },
-	{ on = ["b", "D"], run = "plugin bookmarks --args=delete_all", desc = "Delete all bookmarks" },
+	{ on = "m", run = "plugin bookmarks save", desc = "Bookmark CWD" },
+	{ on = "'", run = "plugin bookmarks jump", desc = "Jump to a bookmark" },
+	{ on = ["b", "d"], run = "plugin bookmarks delete", desc = "Delete a bookmark" },
+	{ on = ["b", "D"], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
 
 	# Disable defaults. Kept at the bottom so above keymaps can override these.
 	{ on = ["g", "h"], run = "noop" },

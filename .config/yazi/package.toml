@@ -1,12 +1,32 @@
-[plugin]
-deps = [
-    { use = "yazi-rs/plugins:hide-preview", rev = "c7feb90" },
-    { use = "yazi-rs/plugins:max-preview", rev = "c7feb90" },
-    { use = "yazi-rs/plugins:full-border", rev = "c7feb90" },
-    { use = "yazi-rs/plugins:chmod", rev = "c7feb90" },
-    { use = "dedukun/bookmarks", rev = "35da107" },
-    { use = "ndtoan96/ouch", rev = "b869886" },
-]
+[[plugin.deps]]
+use = "yazi-rs/plugins:hide-preview"
+rev = "c7feb90"
+hash = "5be5885898ca9df783bdec0d402bf4b0"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:max-preview"
+rev = "c7feb90"
+hash = "9bc26d10d2f6e2aa93b10905b1b76979"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:full-border"
+rev = "c7feb90"
+hash = "a61bb2d21a08bf1d18f0a549e5eb1475"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:chmod"
+rev = "c7feb90"
+hash = "36c82bb433078e8e752351d961cac777"
+
+[[plugin.deps]]
+use = "dedukun/bookmarks"
+rev = "35da107"
+hash = "fd34cd65230077697e9240ec6ee49931"
+
+[[plugin.deps]]
+use = "ndtoan96/ouch"
+rev = "b869886"
+hash = "6bc9e0b2139467c8d2cc6c5fb954206c"
 
 [flavor]
 deps = []
