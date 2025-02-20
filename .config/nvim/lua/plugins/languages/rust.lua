@@ -1,4 +1,5 @@
 ---@module "rustaceanvim"
+---@class plugins.crates.config: crates.UserConfig
 
 ---@type LazyPluginSpec[]
 return {
@@ -54,9 +55,12 @@ return {
     "saecki/crates.nvim",
     event = { "BufRead Cargo.toml" },
     tag = "stable",
+    ---@type plugins.crates.config
     opts = {
       completion = {
-        crates = { enabled = true },
+        crates = {
+          enabled = false,
+        },
       },
       lsp = {
         enabled = true,

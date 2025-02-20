@@ -143,7 +143,7 @@ vim.diagnostic.config({
   float = {
     focusable = false,
     style = "minimal",
-    source = "if_many",
+    source = true,
   },
 })
 
