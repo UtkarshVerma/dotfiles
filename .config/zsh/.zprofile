@@ -20,13 +20,13 @@ esac
 # XDG paths
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_DATA_DIRS="\
 $XDG_STATE_HOME/nix/profile/share:\
 $XDG_DATA_HOME:\
 /usr/local/share:\
 /usr/share"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
 
 # ~/ cleanup
 export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
@@ -43,6 +43,7 @@ export COURSIER_BIN_DIR="$XDG_DATA_HOME/coursier/bin"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export DIFFPROG="nvim -d"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export DOTNET_CLI_HOME="$XDG_DATA_HOME/dotnet"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GOPATH="$XDG_DATA_HOME/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
@@ -62,6 +63,7 @@ export PLATFORMIO_CACHE_DIR="$XDG_CACHE_HOME/platformio"
 export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME/platformio"
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
+export PYTHON_HISTORY="$XDG_STATE_HOME/python/history"
 export REDISCLI_HISTFILE="$XDG_STATE_HOME/redis/history"
 export ROS_HOME="$XDG_CACHE_HOME/ros"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
