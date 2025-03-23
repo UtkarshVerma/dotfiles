@@ -1,32 +1,32 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:hide-preview"
-rev = "c7feb90"
-hash = "5be5885898ca9df783bdec0d402bf4b0"
+rev = "2730199"
+hash = "53f826884e2c7e521cecc492a7f31d7e"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:max-preview"
-rev = "c7feb90"
-hash = "9bc26d10d2f6e2aa93b10905b1b76979"
+rev = "2730199"
+hash = "a8025f2bb311e869069364fba01abffc"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "c7feb90"
-hash = "a61bb2d21a08bf1d18f0a549e5eb1475"
+rev = "2730199"
+hash = "1f3dad061209081a6b04dd6ff2cb06c7"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "c7feb90"
-hash = "36c82bb433078e8e752351d961cac777"
+rev = "2730199"
+hash = "2f1053f89d1a301a648ab181d0948e38"
 
 [[plugin.deps]]
 use = "dedukun/bookmarks"
-rev = "35da107"
-hash = "fd34cd65230077697e9240ec6ee49931"
+rev = "95b2c58"
+hash = "17a094653b7d0db4ac68ed531d2e1412"
 
 [[plugin.deps]]
 use = "ndtoan96/ouch"
-rev = "b869886"
-hash = "6bc9e0b2139467c8d2cc6c5fb954206c"
+rev = "ce6fb75"
+hash = "ed6c185514109d7c5463f609282b220c"
 
 [flavor]
 deps = []
