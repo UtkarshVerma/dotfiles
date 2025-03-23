@@ -1,6 +1,6 @@
 ---@module "avante"
 ---@module "copilot"
----
+
 ---@class plugins.avante.config: avante.Config
 ---@class plugins.copilot.config: copilot_config
 
@@ -42,6 +42,7 @@ return {
       "render-markdown.nvim",
     },
     ---@type plugins.avante.config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       auto_suggestions_provider = "copilot",
       provider = "claude",
