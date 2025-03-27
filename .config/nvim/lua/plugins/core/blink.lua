@@ -16,7 +16,7 @@ return {
   {
     "saghen/blink.cmp",
     event = "VeryLazy",
-    version = "v0.*", -- Use a release tag to download pre-built binaries.
+    version = "v1.*", -- Use a release tag to download pre-built binaries.
     opts_extend = { "sources.default" },
 
     ---@type plugins.blink.config

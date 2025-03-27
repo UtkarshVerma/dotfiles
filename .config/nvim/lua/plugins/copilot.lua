@@ -1,37 +1,43 @@
+---@module "copilot"
+
 ---@class plugins.copilot_chat.config: CopilotChat.config
+---@class plugins.copilot.config: copilot_config
 
 ---@type LazyPluginSpec[]
 return {
-  {
-    "blink.cmp",
-    dependencies = {
-      "giuxtaposition/blink-cmp-copilot",
-    },
-    ---@type plugins.blink.config
-    opts = {
-      sources = {
-        default = { "copilot" },
-        providers = {
-          copilot = {
-            name = "copilot",
-            module = "blink-cmp-copilot",
-            score_offset = 100,
-            async = true,
-          },
-        },
-      },
-    },
-  },
-
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     build = ":Copilot auth",
     event = "BufReadPost",
+    ---@type plugins.copilot.config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
-      suggestion = { enabled = false },
-      panel = { enabled = false },
+      suggestion = {
+        auto_trigger = true,
+        keymap = {
+          accept = "<c-j>",
+        },
+      },
     },
+    ---@param opts plugins.copilot.config
+    config = function(_, opts)
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuOpen",
+        callback = function()
+          vim.b.copilot_suggestion_hidden = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuClose",
+        callback = function()
+          vim.b.copilot_suggestion_hidden = false
+        end,
+      })
+
+      require("copilot").setup(opts)
+    end,
   },
 
   {
