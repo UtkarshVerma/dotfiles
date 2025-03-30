@@ -10,7 +10,7 @@ return {
           on_attach = function(client, _)
             local function update_spell_check()
               client.settings["harper-ls"].linters.spell_check = vim.opt.spell:get()
-              client.notify("workspace/didChangeConfiguration", { settings = client.settings })
+              client:notify("workspace/didChangeConfiguration", { settings = client.settings })
             end
 
             update_spell_check()

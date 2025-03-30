@@ -5,17 +5,27 @@ vim.g.maplocalleader = " "
 
 local options = {
   foldenable = true, -- Enable folds
+  foldlevel = 99, -- Start with all folds open
+  foldmethod = "expr",
+  foldexpr = "v:lua.vim.treesitter.foldexpr()", -- Use treesitter for folding
+  foldtext = "", -- Text shown when fold is closed
   foldcolumn = "0", -- Hide fold column
 
-  breakindent = true, -- Indent wrapped lines
-  colorcolumn = "80",
-  guifont = "monospace",
   fillchars = {
+    foldopen = "",
+    foldclose = "",
+    foldsep = " ",
+    fold = " ",
     eob = " ", -- suppress ~ at EndOfBuffer
     diff = "╱", -- alternatives = ⣿ ░ ─
     msgsep = " ", -- alternatives: ‾ ─
     vert = "┃", -- Used for window separator.
   },
+
+  breakindent = true, -- Indent wrapped lines
+  colorcolumn = "80",
+  guifont = "monospace",
+
   shiftwidth = 4, -- Size of an indent
   swapfile = false,
   tabstop = 4, -- Number of spaces tabs count for
@@ -92,13 +102,13 @@ local options = {
 
   splitkeep = "screen",
   virtualedit = "block", -- Allow cursor to move where there is no text in visual block mode
-}
 
--- Sync clipboard between OS and Neovim.
--- Schedule the setting after `UiEnter` because it can increase startup-time.
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
+  -- Only set clipboard if not in ssh, to make sure the OSC 52
+  -- integration works automatically.
+  clipboard = vim.env.SSH_TTY and "" or "unnamedplus", -- Sync with system clipboard
+
+  smoothscroll = true,
+}
 
 for k, v in pairs(options) do
   vim.opt[k] = v
@@ -138,16 +148,18 @@ vim.diagnostic.config({
     source = "if_many",
     prefix = "●",
   },
-  virtual_lines = false,
   severity_sort = true,
   float = {
     focusable = false,
     style = "minimal",
     source = true,
   },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = config.icons.diagnostics.Error,
+      [vim.diagnostic.severity.WARN] = config.icons.diagnostics.Warn,
+      [vim.diagnostic.severity.INFO] = config.icons.diagnostics.Info,
+      [vim.diagnostic.severity.HINT] = config.icons.diagnostics.Hint,
+    },
+  },
 })
-
-for name, icon in pairs(config.icons.diagnostics) do
-  name = "DiagnosticSign" .. name
-  vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-end

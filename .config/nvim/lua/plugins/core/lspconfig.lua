@@ -46,7 +46,7 @@ local function buffer_supports(method, bufnr)
 
   ---@param client vim.lsp.Client
   return vim.iter(clients):any(function(client)
-    return client.supports_method(method)
+    return client:supports_method(method)
   end)
 end
 
@@ -125,7 +125,7 @@ return {
         end
 
         -- Enable code lens.
-        if vim.lsp.codelens and client.supports_method("textDocument/codeLens") then
+        if vim.lsp.codelens and client:supports_method("textDocument/codeLens") then
           vim.lsp.codelens.refresh({ bufnr = bufnr })
 
           vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
@@ -136,7 +136,7 @@ return {
           })
         end
 
-        if client.supports_method("textDocument/inlayHints") then
+        if client:supports_method("textDocument/inlayHints") then
           Snacks.toggle.inlay_hints():map("<leader>ti", { desc = "Inlay hints" })
         end
       end)

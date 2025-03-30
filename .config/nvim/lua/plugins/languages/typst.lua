@@ -47,7 +47,7 @@ return {
                     client.settings.exportPdf = "never"
                   end
 
-                  client.notify("workspace/didChangeConfiguration", { settings = client.settings })
+                  client:notify("workspace/didChangeConfiguration", { settings = client.settings })
                 end,
               })
               :map("<leader>te", { desc = "Export PDF on type" })

@@ -48,8 +48,4 @@ require("lazy").setup({
   },
 })
 
--- HACK: Workaround for nvim v0.10.3.
--- https://github.com/neovim/neovim/issues/31675
-vim.hl = vim.highlight
-
 config.setup()

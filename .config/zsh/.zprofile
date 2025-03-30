@@ -106,7 +106,6 @@ if command -v ruby >/dev/null 2>&1 && command -v gem >/dev/null 2>&1; then
 fi
 
 # Misc
-export NVIM_LISTEN_ADDRESS=/tmp/nvim
 export AWT_TOOLKIT=MToolkit
 export GOOGLE_APPLICATION_CREDENTIALS="$XDG_DATA_HOME/gcloud/credentials.json"
 export SUDO_ASKPASS="$HOME/.local/bin/passprompt"
