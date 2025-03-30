@@ -15,10 +15,8 @@ return {
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
-        verible = {
-          cmd = { "verible-verilog-ls", "--rules_config_search" },
-        },
-        svls = {},
+        ---@diagnostic disable-next-line: missing-fields
+        verible = {},
       },
     },
   },

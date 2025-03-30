@@ -36,17 +36,8 @@ return {
             },
           },
         },
-      },
-    },
-  },
-
-  {
-    "mason.nvim",
-    ---@type plugins.mason.config
-    opts = {
-      ensure_installed = {
-        "rust-analyzer",
-        "codelldb",
+        ---@diagnostic disable-next-line: missing-fields
+        rust_analyzer = {},
       },
     },
   },
@@ -67,39 +58,6 @@ return {
         actions = true,
         completion = true,
         hover = true,
-      },
-    },
-  },
-
-  {
-    "mrcjkb/rustaceanvim",
-    version = "^5",
-    lazy = false, -- It's lazy by default.
-    dependencies = {
-      "nvim-dap",
-    },
-    init = function(_)
-      vim.g.rustaceanvim = {
-        ---@type rustaceanvim.lsp.ClientOpts
-        server = {
-          on_attach = function(_, bufnr)
-            vim.keymap.set("n", "<leader>dR", function()
-              vim.cmd.RustLsp("debuggables")
-              ---@diagnostic disable-next-line: missing-fields
-            end, { desc = "Debuggables (Rust)", buffer = bufnr })
-          end,
-        },
-      }
-    end,
-  },
-
-  {
-    "neotest",
-    ---@type plugins.neotest.config
-    ---@diagnostic disable-next-line: missing-fields
-    opts = {
-      adapters = {
-        ["rustaceanvim.neotest"] = {},
       },
     },
   },
