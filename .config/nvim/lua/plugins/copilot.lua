@@ -1,7 +1,10 @@
 ---@module "copilot"
+---@module "snacks"
 
 ---@class plugins.copilot_chat.config: CopilotChat.config
 ---@class plugins.copilot.config: copilot_config
+
+local is_enabled = false
 
 ---@type LazyPluginSpec[]
 return {
@@ -10,10 +13,15 @@ return {
     cmd = "Copilot",
     build = ":Copilot auth",
     event = "BufReadPost",
+    keys = {
+      { "<leader>as", "<cmd>Copilot toggle<cr>", desc = "Toggle copilot", mode = { "n", "v" } },
+    },
     ---@type plugins.copilot.config
     ---@diagnostic disable-next-line: missing-fields
     opts = {
+      panel = { enabled = false },
       suggestion = {
+        enabled = true,
         auto_trigger = true,
         keymap = {
           accept = "<c-j>",
@@ -22,21 +30,28 @@ return {
     },
     ---@param opts plugins.copilot.config
     config = function(_, opts)
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "BlinkCmpMenuOpen",
-        callback = function()
-          vim.b.copilot_suggestion_hidden = true
-        end,
-      })
+      Snacks.toggle
+        .new({
+          name = "Copilot",
+          get = function()
+            if not is_enabled then
+              return false
+            end
 
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "BlinkCmpMenuClose",
-        callback = function()
-          vim.b.copilot_suggestion_hidden = false
-        end,
-      })
-
-      require("copilot").setup(opts)
+            return not require("copilot.client").is_disabled()
+          end,
+          set = function(state)
+            if state then
+              require("copilot").setup(opts)
+              require("copilot.command").enable()
+              is_enabled = true
+            else
+              require("copilot.command").disable()
+              is_enabled = false
+            end
+          end,
+        })
+        :map("<leader>ac", { desc = "Toggle copilot" })
     end,
   },
 
