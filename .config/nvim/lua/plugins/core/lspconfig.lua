@@ -22,11 +22,12 @@ local util = require("util")
 
 ---@type plugins.lspconfig.keymap[]
 local buffer_keymaps_base = {
-  { "gd", "<cmd>Telescope lsp_definitions<cr>", desc = "Definitions", method = "textDocument/definition" },
-  { "gr", "<cmd>Telescope lsp_references<cr>", desc = "References", method = "textDocument/references" },
-  { "gI", "<cmd>Telescope lsp_implementations<cr>", desc = "Implementations", method = "textDocument/implementation" },
-  { "gD", vim.lsp.buf.declaration, desc = "Declaration", method = "textDocument/declaration" },
-  { "gt", "<cmd>Telescope lsp_type_definitions<cr>", desc = "Type definition", method = "textDocument/typeDefinition" },
+  -- stylua: ignore start
+  { "gd", function() Snacks.picker.lsp_definitions() end , desc = "Definitions", method = "textDocument/definition" },
+  { "gr", function() Snacks.picker.lsp_references() end, desc = "References", method = "textDocument/references" },
+  { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Implementations", method = "textDocument/implementation" },
+  { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Type definitions", method = "textDocument/typeDefinition" },
+  { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Declaration", method = "textDocument/declaration" },
   { "K", vim.lsp.buf.hover, desc = "Hover", method = "textDocument/hover" },
   { "<c-k>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature help", method = "textDocument/signatureHelp" },
   { "<leader>cs", vim.lsp.buf.signature_help, desc = "Signature help", method = "textDocument/signatureHelp" },
@@ -145,7 +146,6 @@ return {
 
   {
     "williamboman/mason-lspconfig.nvim",
-    version = false, -- NOTE: For ginko_ls which is not present in v1.31.0.
     event = "LazyFile",
     dependencies = {
       "mason.nvim",
