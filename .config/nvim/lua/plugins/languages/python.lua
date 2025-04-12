@@ -29,10 +29,23 @@ return {
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
-        pyright = {},
+        ---@diagnostic disable-next-line: missing-fields
+        pyright = {
+          settings = {
+            pyright = {
+              disableOrganizeImports = true, -- Use ruff for organizing imports.
+            },
+            python = {
+              analysis = {
+                ignore = { "*" }, -- Exclusively use ruff for linting.
+              },
+            },
+          },
+        },
+        ---@diagnostic disable-next-line: missing-fields
         ruff = {
           on_attach = function(client, _)
-            client.server_capabilities.hoverProvider = false
+            client.server_capabilities.hoverProvider = false -- Use pyright for hover.
           end,
           keys = {
             {
