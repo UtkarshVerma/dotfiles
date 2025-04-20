@@ -6,14 +6,14 @@ if [ "$1" = "--type" ]; then
     shift
 fi
 
-choice=$(gopass list --flat | menu "$@")
+choice=$(rbw list | menu "$@")
 
 [ -n "$choice" ] || exit
 
 if [ $typeit -eq 0 ]; then
-    gopass show -c "$choice" 2>/dev/null
+    rbw get --clipboard "$choice"
 else
-    gopass show --password "$choice" | {
+    rbw get --password "$choice" | {
         IFS= read -r pass
         printf %s "$pass"
     } | xdotool type --clearmodifiers --file -
