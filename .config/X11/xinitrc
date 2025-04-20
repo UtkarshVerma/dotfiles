@@ -16,6 +16,8 @@ autostart="\
     picom
     unclutter
     parcellite -n
+    musicup
+    playerctld
     breaks
     nm-applet
     redshift

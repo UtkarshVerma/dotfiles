@@ -1,38 +1,37 @@
 #!/bin/sh
-# Wrapper script for controlling music across mpd and MPRIS.
+# Wrapper script for controlling music across MPRIS players.
 # It mimics the CLI arguments of mpc.
 
 set -eu
 
-get_active_mpris_player() {
-    set --
-
-    players="$(playerctl -l | cut -d. -f1)"
-    for player in $players; do
-        if status="$(playerctl --player="$player" status)" && [ "$status" != "Stopped" ]; then
-            set -- "$@" "$(playerctl --player="$player" metadata -f "{{playerName}}: {{title}} - {{artist}} ({{status}})")"
-        fi
-    done
-
-    if [ $# -gt 1 ]; then
-        printf "%s\n" "$@" | menu -p "Media:" -l $# || return 1
-    else
-        echo "$1"
-    fi | cut -d: -f1
-}
+# Some simple argparsing
+REMOTE_MODE=0
+case "$1" in
+    -r | --remote)
+        REMOTE_MODE=1
+        shift
+        ;;
+    -h | --help)
+        echo "usage: $(basename 0) [-c|--copy, -h|--help]"
+        exit
+        ;;
+esac
 
 # shellcheck disable=2086
-if player="$(get_active_mpris_player)" && [ -n "$player" ]; then
-    case "$1" in
-        seek | volume)
-            [ "$1" = "seek" ] && subcmd="position"
-            set -- "${subcmd:-"$1"}" "${2#?}${2%%[[:digit:]]*}"
-            ;;
-        toggle) set -- play-pause ;;
-        prev) set -- previous ;;
-        current) set -- status ;;
-    esac
-    exec playerctl --no-messages --player="$player" "$@"
+case "$1" in
+    seek | volume)
+        [ "$1" = "seek" ] && subcmd="position"
+        set -- "${subcmd:-"$1"}" "${2#?}${2%%[[:digit:]]*}"
+        ;;
+    toggle) set -- play-pause ;;
+    prev) set -- previous ;;
+    current) set -- status ;;
+esac
+
+if [ $REMOTE_MODE -eq 1 ]; then
+    set -- --player=kdeconnect "$@"
+else
+    set -- --ignore-player=kdeconnect "$@"
 fi
 
-exec mpc -q "$@"
+exec playerctl "$@"
