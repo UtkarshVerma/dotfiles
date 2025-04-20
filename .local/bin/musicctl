@@ -4,19 +4,6 @@
 
 set -eu
 
-# Some simple argparsing
-REMOTE_MODE=0
-case "$1" in
-    -r | --remote)
-        REMOTE_MODE=1
-        shift
-        ;;
-    -h | --help)
-        echo "usage: $(basename 0) [-c|--copy, -h|--help]"
-        exit
-        ;;
-esac
-
 # shellcheck disable=2086
 case "$1" in
     seek | volume)
@@ -27,11 +14,5 @@ case "$1" in
     prev) set -- previous ;;
     current) set -- status ;;
 esac
-
-if [ $REMOTE_MODE -eq 1 ]; then
-    set -- --player=kdeconnect "$@"
-else
-    set -- --ignore-player=kdeconnect "$@"
-fi
 
 exec playerctl "$@"
