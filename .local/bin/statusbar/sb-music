@@ -10,15 +10,14 @@ case "$BLOCK_BUTTON" in
     6) terminal -e "$EDITOR" "$0" ;;
 esac
 
-icon="󰝚"
-paused_icon=""
-if status="$(playerctl --no-messages status)" && [ "$status" != "Stopped" ]; then
-    [ "$status" = "Paused" ] && icon="$paused_icon"
+status="$(playerctl --no-messages status)" || exit 1
+case "$status" in
+    Stopped) exit ;;
+    Paused) icon="" ;;
+    Playing) icon="󰝚" ;;
+esac
 
-    song="$(playerctl metadata --format="{{title}} - {{artist}}")"
-fi
-
-[ -z "$song" ] && exit
+song="$(playerctl metadata --format="{{title}} - {{artist}}")" || exit 2
 
 . sb-theme
 display "$icon $song"
