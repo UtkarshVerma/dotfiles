@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=DWM (X11)
+Exec=/etc/tuigreet/launchers/dwm.sh
