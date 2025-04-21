@@ -4,7 +4,7 @@
 (
     address: "127.0.0.1:6600",
     password: None,
-    theme: Some("catppuccin-macchiato"),
+    theme: Some("base-16"),
     cache_dir: None,
     on_song_change: None,
     volume_step: 5,
@@ -46,7 +46,7 @@
             "c":       ToggleConsume,
             "v":       ToggleSingle,
             "b":       SeekBack,
-            "~":       ShowHelp,
+            "?":       ShowHelp,
             "I":       ShowCurrentSongInfo,
             "O":       ShowOutputs,
             "P":       ShowDecoders,

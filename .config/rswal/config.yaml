@@ -29,3 +29,5 @@ templates:
     target: ~/.config/tofi/colors
   - source: fnott.ini
     target: ~/.config/fnott/fnott.ini
+  - source: rmpc.ron
+    target: ~/.config/rmpc/themes/base-16.ron

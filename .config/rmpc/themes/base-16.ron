@@ -1,0 +1,126 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    default_album_art_path: None,
+    show_song_table_header: true,
+    draw_borders: true,
+    format_tag_separator: " | ",
+    browser_column_widths: [20, 38, 42],
+    background_color: "#1e1e2e",
+    text_color: "#cdd6f4",
+    header_background_color: "#1e1e2e",
+    modal_background_color: "#1e1e2e",
+    tab_bar: (
+        enabled: true,
+        active_style: (fg: "black", bg: "#89b4fa", modifiers: "Bold"),
+        inactive_style: (),
+    ),
+    highlighted_item_style: (fg: "#89b4fa", modifiers: "Bold"),
+    current_item_style: (fg: "black", bg: "#89b4fa", modifiers: "Bold"),
+    borders_style: (fg: "#89b4fa"),
+    highlight_border_style: (fg: "#89b4fa"),
+    symbols: (song: "S", dir: "D", marker: "M", ellipsis: "..."),
+    progress_bar: (
+        symbols: ["-", ">", " "],
+        track_style: (fg: "#1e1e2e"),
+        elapsed_style: (fg: "#89b4fa"),
+        thumb_style: (fg: "#89b4fa", bg: "#1e1e2e"),
+    ),
+    scrollbar: (
+        symbols: ["│", "█", "▲", "▼"],
+        track_style: (),
+        ends_style: (),
+        thumb_style: (fg: "#89b4fa"),
+    ),
+    song_table_format: [
+        (
+            prop: (kind: Property(Artist),
+                default: (kind: Text("Unknown"))
+            ),
+            width: "20%",
+        ),
+        (
+            prop: (kind: Property(Title),
+                default: (kind: Text("Unknown"))
+            ),
+            width: "35%",
+        ),
+        (
+            prop: (kind: Property(Album), style: (fg: "#bac2de"),
+                default: (kind: Text("Unknown Album"), style: (fg: "#bac2de"))
+            ),
+            width: "30%",
+        ),
+        (
+            prop: (kind: Property(Duration),
+                default: (kind: Text("-"))
+            ),
+            width: "15%",
+            alignment: Right,
+        ),
+    ],
+    header: (
+        rows: [
+            (
+                left: [
+                    (kind: Text("["), style: (fg: "#f9e2af", modifiers: "Bold")),
+                    (kind: Property(Status(State)), style: (fg: "#f9e2af", modifiers: "Bold")),
+                    (kind: Text("]"), style: (fg: "#f9e2af", modifiers: "Bold"))
+                ],
+                center: [
+                    (kind: Property(Song(Title)), style: (modifiers: "Bold"),
+                        default: (kind: Text("No Song"), style: (modifiers: "Bold"))
+                    )
+                ],
+                right: [
+                    (kind: Property(Widget(Volume)), style: (fg: "#89b4fa"))
+                ]
+            ),
+            (
+                left: [
+                    (kind: Property(Status(Elapsed))),
+                    (kind: Text(" / ")),
+                    (kind: Property(Status(Duration))),
+                    (kind: Text(" (")),
+                    (kind: Property(Status(Bitrate))),
+                    (kind: Text(" kbps)"))
+                ],
+                center: [
+                    (kind: Property(Song(Artist)), style: (fg: "#f9e2af", modifiers: "Bold"),
+                        default: (kind: Text("Unknown"), style: (fg: "#f9e2af", modifiers: "Bold"))
+                    ),
+                    (kind: Text(" - ")),
+                    (kind: Property(Song(Album)),
+                        default: (kind: Text("Unknown Album"))
+                    )
+                ],
+                right: [
+                    (
+                        kind: Property(Widget(States(
+                            active_style: (fg: "#bac2de", modifiers: "Bold"),
+                            separator_style: (fg: "#bac2de")))
+                        ),
+                        style: (fg: "#585b70")
+                    ),
+                ]
+            ),
+        ],
+    ),
+    browser_song_format: [
+        (
+            kind: Group([
+                (kind: Property(Track)),
+                (kind: Text(" ")),
+            ])
+        ),
+        (
+            kind: Group([
+                (kind: Property(Artist)),
+                (kind: Text(" - ")),
+                (kind: Property(Title)),
+            ]),
+            default: (kind: Property(Filename))
+        ),
+    ],
+)
