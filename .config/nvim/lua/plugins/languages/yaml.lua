@@ -54,11 +54,16 @@ return {
     opts = {
       servers = {
         ---@type lsp.yamlls.config
+        ---@diagnostic disable-next-line: missing-fields
         yamlls = {
           -- Lazy-load schemastore when needed.
           ---@param new_config lsp.yamlls.config
-          on_new_config = function(new_config, _)
-            new_config.settings.yaml["schemas"] = require("schemastore").yaml.schemas()
+          on_new_config = function(new_config)
+            new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+              "force",
+              new_config.settings.yaml.schemas or {},
+              require("schemastore").yaml.schemas()
+            )
           end,
           -- Have to add this for yamlls to understand that we support line folding.
           capabilities = {
@@ -73,15 +78,8 @@ return {
             redhat = { telemetry = { enabled = false } },
             yaml = {
               keyOrdering = false,
-              hover = true,
-              completion = true,
-              validate = true,
-
-              format = {
-                enable = true,
-                printWidth = (tonumber(vim.o.colorcolumn) or 80) - 1,
-              },
-
+              validate = false, -- Use yamllint instead.
+              format = { enable = false }, -- Built-in formatter is prettier, which is slow.
               schemaStore = {
                 -- Disable built-in schemaStore support in favour of the nvim plugin.
                 enable = false,
@@ -124,7 +122,7 @@ return {
         yamlfmt = {
           prepend_args = {
             "-formatter",
-            "type=basic,retain_line_breaks=true",
+            "type=basic,retain_line_breaks=true,pad_line_comments=2",
           },
         },
       },
