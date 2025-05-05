@@ -5,8 +5,8 @@ ALL_kver="/boot/vmlinuz-linux-lts"
 
 PRESETS=('default' 'fallback')
 
-default_uki="/boot/EFI/Linux/arch-linux-lts.efi"
+default_uki="/efi/Linux/arch-linux-lts.efi"
 default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
 
-fallback_uki="/boot/EFI/Linux/arch-linux-lts-fallback.efi"
+fallback_uki="/efi/Linux/arch-linux-lts-fallback.efi"
 fallback_options="-S autodetect"
