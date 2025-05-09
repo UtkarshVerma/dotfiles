@@ -84,7 +84,7 @@ local options = {
   sidescrolloff = 8, -- Columns of context
   signcolumn = "yes", -- Always show the signcolumn and avoid layout shift.
   smartindent = true, -- Insert indents automatically
-  spelllang = { "en" },
+  spelllang = { "en_gb" },
 
   splitbelow = true, -- Put new windows below current
   splitright = true, -- Put new windows right of current

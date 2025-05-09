@@ -16,6 +16,7 @@ local platformio_dir = os.getenv("PLATFORMIO_CORE_DIR")
 local cuda_path = os.getenv("CUDA_PATH")
 if platformio_dir then
   drivers[#drivers + 1] = string.format("%s/**/bin/*-gcc", platformio_dir)
+  drivers[#drivers + 1] = string.format("%s/**/bin/*-g++", platformio_dir)
 end
 if cuda_path then
   drivers[#drivers + 1] = string.format("%s/bin/nvcc", cuda_path)

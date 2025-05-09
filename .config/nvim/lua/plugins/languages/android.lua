@@ -5,7 +5,7 @@ return {
     ---@type plugins.treesitter.config
     opts = {
       ensure_installed = {
-        "nix",
+        "dart",
       },
     },
   },
@@ -14,20 +14,17 @@ return {
     "nvim-lspconfig",
     ---@type plugins.lspconfig.config
     opts = {
-      servers = {
-        ---@diagnostic disable-next-line: missing-fields
-        nil_ls = {},
-      },
+      servers = {},
     },
   },
 
   {
-    "conform.nvim",
-    ---@type plugins.conform.config
-    opts = {
-      formatters_by_ft = {
-        nix = { "nixfmt" },
-      },
+    "nvim-flutter/flutter-tools.nvim",
+    lazy = false,
+    dependencies = {
+      "plenary.nvim",
+      "dressing.nvim",
     },
+    config = true,
   },
 }
