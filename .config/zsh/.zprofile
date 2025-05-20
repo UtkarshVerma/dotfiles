@@ -125,7 +125,7 @@ export QT_QPA_PLATFORM
 export ADW_DISABLE_PORTAL=1
 
 # Colorize `less`
-export LESS=-R
+export LESS=--RAW-CONTROL-CHARS
 export LESSOPEN="| highlight -O ansi %s 2>/dev/null"
 export LESS_TERMCAP_mb="$(
     tput bold
@@ -160,6 +160,9 @@ export LESS_TERMCAP_ZN="$(tput ssubm)"
 export LESS_TERMCAP_ZV="$(tput rsubm)"
 export LESS_TERMCAP_ZO="$(tput ssupm)"
 export LESS_TERMCAP_ZW="$(tput rsupm)"
+
+# Docker
+export COMPOSE_BAKE=true
 
 # fcitx
 export GTK_IM_MODULE=fcitx5

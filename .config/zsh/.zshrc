@@ -191,9 +191,8 @@ $(find "$bin_dir/statusbar/" -type f)
 EOF
 }
 
-function dpaste() {
-    if local url="$(curl --silent --form 'format=url' --form 'content=<-' \
-        "https://dpaste.org/api/")"; then
+function snipaste() {
+    if local url="$(curl --silent --form file=@- "https://0x0.st")"; then
         printf "%s" "$url" | xclip -selection clipboard &&
             echo "URL \"$url\" copied to clipboard."
     fi
