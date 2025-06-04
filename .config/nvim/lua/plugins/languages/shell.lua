@@ -8,8 +8,7 @@
 ---@field shellcheckArguments? string[]|string Additional ShellCheck arguments. Note that we already add the following arguments: --shell, --format, --external-sources.
 ---@field shfmt? lsp.bashls.settings.shfmt
 
--- TODO: Make this dynamically inferred.
-local BASHDB_DIR = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter/extension/bashdb_dir"
+local BASHDB_DIR = vim.fn.expand("$MASON/packages/bash-debug-adapter/extension/bashdb_dir")
 
 ---@type LazyPluginSpec[]
 return {

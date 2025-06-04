@@ -107,8 +107,7 @@ return {
     },
     ---@type  plugins.lspconfig.config
     opts = {},
-    -- Let mason-lspconfig launch the language servers.
-    config = function(_, _)
+    config = function(_, opts)
       on_lsp_attach(function(client, bufnr)
         apply_buffer_keymaps(bufnr)
 
@@ -141,11 +140,20 @@ return {
           Snacks.toggle.inlay_hints():map("<leader>ti", { desc = "Inlay hints" })
         end
       end)
+
+      for server, server_opts in pairs(opts.servers or {}) do
+        if server_opts.setup and server_opts.setup(server_opts) then
+          return
+        end
+
+        vim.lsp.config(server, server_opts)
+        vim.lsp.enable(server)
+      end
     end,
   },
 
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     event = "LazyFile",
     dependencies = {
       "mason.nvim",
@@ -164,21 +172,7 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       return {
         ensure_installed = vim.tbl_keys(servers),
-        handlers = {
-          -- Default handler.
-          function(server)
-            if not servers[server] then
-              return
-            end
-
-            local server_opts = servers[server]
-            if server_opts.setup and server_opts.setup(server_opts) then
-              return
-            end
-
-            require("lspconfig")[server].setup(server_opts)
-          end,
-        },
+        automatic_enable = false, -- nvim-lspconfig will enable the LSPs.
       }
     end,
   },

@@ -16,7 +16,7 @@ return {
   },
 
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = "Mason",
     keys = {
       { "<leader>um", "<cmd>Mason<cr>", desc = "Mason" },
