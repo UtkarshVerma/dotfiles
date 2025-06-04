@@ -31,7 +31,12 @@ return {
     opts = {
       servers = {
         ---@type lsp.tinymist.config
+        ---@diagnostic disable-next-line: missing-fields
         tinymist = {
+          root_dir = function(bufnr, callback)
+            local root_dir = vim.fs.root(bufnr, { ".git" }) or vim.fn.expand("%:p:h")
+            callback(root_dir)
+          end,
           on_attach = function(client, _)
             Snacks.toggle
               .new({

@@ -1,7 +1,7 @@
 ---@module "mason-lspconfig.settings"
 ---@module "snacks"
 
----@class plugins.lspconfig.config.server: vim.lsp.ClientConfig
+---@class plugins.lspconfig.config.server: vim.lsp.Config
 ---@field keys? plugins.lspconfig.keymap[]
 ---@field setup? fun(opts:plugins.lspconfig.config.server):boolean
 
