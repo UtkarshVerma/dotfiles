@@ -170,8 +170,12 @@ return {
 
       ---@type plugins.mason_lspconfig.config
       ---@diagnostic disable-next-line: missing-fields
+
+      -- If NVIM_MASON_SKIP_INSTALL is set, skip automatic installation.
+      local skip_install = os.getenv("NVIM_MASON_SKIP_INSTALL") == "1"
+
       return {
-        ensure_installed = vim.tbl_keys(servers),
+        ensure_installed = skip_install and {} or vim.tbl_keys(servers),
         automatic_enable = false, -- nvim-lspconfig will enable the LSPs.
       }
     end,
