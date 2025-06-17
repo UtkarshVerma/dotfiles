@@ -1,6 +1,8 @@
+local _, colors = pcall(require, "util.colors")
+
 ---@class util
 local M = {
-  colors = require("util.colors"),
+  colors = colors,
   fs = require("util.fs"),
   log = require("util.log"),
   plugin = require("util.plugin"),
