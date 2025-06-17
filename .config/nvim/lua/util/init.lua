@@ -1,5 +1,3 @@
-local util = require("lazy.core.util")
-
 ---@class util
 local M = {
   colors = require("util.colors"),
@@ -7,8 +5,6 @@ local M = {
   log = require("util.log"),
   plugin = require("util.plugin"),
   ui = require("util.ui"),
-
-  merge = util.merge,
 }
 
 ---Get the pretty-print form of the stack-trace.
