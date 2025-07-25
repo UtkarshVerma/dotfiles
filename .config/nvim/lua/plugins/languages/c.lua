@@ -11,7 +11,11 @@
 ---@field init_options? lsp.clangd.config.init_options
 
 -- Whitelist compilers used by PlatformIO and CUDA.
-local drivers = { "/usr/bin/**/clang-*" }
+local drivers = {
+  "/usr/bin/**/clang-*",
+  "/nix/store/**/bin/*-gcc",
+  "/nix/store/**/bin/*-g++",
+}
 local platformio_dir = os.getenv("PLATFORMIO_CORE_DIR")
 local cuda_path = os.getenv("CUDA_PATH")
 if platformio_dir then
@@ -57,7 +61,7 @@ return {
         ---@type lsp.clangd.config
         clangd = {
           keys = {
-            { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
+            { "<leader>ch", "<cmd>LspClangdSwitchSourceHeader<cr>", desc = "Switch source/header (C/C++)" },
           },
           cmd = {
             "clangd",
