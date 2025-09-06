@@ -1,6 +1,7 @@
----@class plugins.nvim_dap.adapter: Adapter
----@class plugins.nvim_dap.configuration: Configuration
----@class plugins.nvim_dap.session: Session
+---@module "dap"
+---@class plugins.nvim_dap.adapter: dap.Adapter
+---@class plugins.nvim_dap.configuration: dap.Configuration
+---@class plugins.nvim_dap.session: dap.Session
 
 ---@class plugins.nvim_dap.config
 ---@field adapters? table<string, plugins.nvim_dap.adapter|fun(callback:fun(adapter:plugins.nvim_dap.adapter), config?:plugins.nvim_dap.configuration, parent?:plugins.nvim_dap.session)>
@@ -102,6 +103,7 @@ return {
       -- TODO: Use an autocommand to reload config.
       local vscode = require("dap.ext.vscode")
       local json = require("plenary.json")
+      ---@diagnostic disable-next-line: duplicate-set-field
       vscode.json_decode = function(str)
         return vim.json.decode(json.json_strip_comments(str))
       end

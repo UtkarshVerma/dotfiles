@@ -56,12 +56,12 @@ return {
         ---@type lsp.yamlls.config
         ---@diagnostic disable-next-line: missing-fields
         yamlls = {
-          -- Lazy-load schemastore when needed.
-          ---@param new_config lsp.yamlls.config
-          on_new_config = function(new_config)
-            new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+          on_init = function(client)
+            -- Lazy-load schemastore when needed.
+            ---@diagnostic disable-next-line: inject-field
+            client.config.settings.yaml.schemas = vim.tbl_deep_extend(
               "force",
-              new_config.settings.yaml.schemas or {},
+              client.config.settings.yaml.schemas or {},
               require("schemastore").yaml.schemas()
             )
           end,

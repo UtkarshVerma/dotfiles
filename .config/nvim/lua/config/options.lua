@@ -137,6 +137,7 @@ vim.filetype.add({
     sub = "spice",
     tf = "terraform",
     v = "verilog",
+    vh = "verilog",
   },
 })
 

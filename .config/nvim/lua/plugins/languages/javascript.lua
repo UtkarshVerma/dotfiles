@@ -17,7 +17,6 @@ return {
     ---@type plugins.lspconfig.config
     opts = {
       servers = {
-        -- TODO: Switch to biome lsp in nvim v0.10
         ---@diagnostic disable-next-line: missing-fields
         ts_ls = {
           -- Disable formatter in favour of biome.
@@ -69,38 +68,6 @@ return {
         },
         ---@diagnostic disable-next-line: missing-fields
         biome = {},
-      },
-    },
-  },
-
-  {
-    "conform.nvim",
-    opts = {
-      formatters_by_ft = {
-        -- TODO: This is slower. Prefer biome lsp which will be supported in nvim v0.10
-        javascript = { "biomejs" },
-        typescript = { "biomejs" },
-      },
-      formatters = {
-        biomejs = function(_)
-          local conform_util = require("conform.util")
-
-          return {
-            command = conform_util.from_node_modules("biome"),
-            stdin = true,
-            cwd = conform_util.root_file({
-              "biome.json",
-            }),
-            args = {
-              "format",
-              "--stdin-file-path",
-              "$FILENAME",
-              "--indent-style=" .. (vim.o.expandtab and "space" or "tab"),
-              "--indent-width=" .. vim.o.shiftwidth,
-              "--line-width=" .. (tonumber(vim.o.colorcolumn) or 80),
-            },
-          }
-        end,
       },
     },
   },
