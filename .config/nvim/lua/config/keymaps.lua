@@ -10,6 +10,9 @@ local keymaps = {
   { "j", "v:count == 0 ? 'gj' : 'j'", mode = { "n", "x" }, expr = true, desc = "Better up" },
   { "k", "v:count == 0 ? 'gk' : 'k'", mode = { "n", "x" }, expr = true, desc = "Better down" },
 
+  { "<s-h>", "<cmd>bprevious<cr>", desc = "Switch to previous buffer" },
+  { "<s-l>", "<cmd>bnext<cr>", desc = "Switch to next buffer" },
+
   { "<leader>bb", "<cmd>e #<cr>", desc = "Switch to other buffer" },
   { "<leader><leader>", "<cmd>e #<cr>", desc = "Switch to other buffer" },
 
