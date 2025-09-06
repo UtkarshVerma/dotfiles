@@ -162,20 +162,33 @@ return {
     opts = function(_, _)
       local lspconfig_opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
       local servers = lspconfig_opts.servers or {}
+      local external_servers = {
+        "mojo", -- Unavailable.
+        "nil_ls", -- Built from source (Rust), which is slow.
+      }
 
       -- Communicate blink.cmp's completion capabilities to all language servers.
       for _, config in pairs(servers) do
         config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
       end
 
+      -- If NVIM_MASON_AUTO_INSTALL is set, then auto install packages.
+      local auto_install = os.getenv("NVIM_MASON_AUTO_INSTALL") == "1"
+
+      local ensure_installed = vim
+        .iter(vim.tbl_keys(servers))
+        :map(function(server)
+          if vim.list_contains(external_servers, server) then
+            return nil
+          end
+
+          return server
+        end)
+        :totable()
+
       ---@type plugins.mason_lspconfig.config
-      ---@diagnostic disable-next-line: missing-fields
       return {
-        ensure_installed = {
-          "lua-language-server",
-          "clangd",
-          "rust-analyzer",
-        },
+        ensure_installed = auto_install and ensure_installed or {},
         automatic_enable = false, -- nvim-lspconfig will enable the LSPs.
       }
     end,
