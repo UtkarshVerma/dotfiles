@@ -5,7 +5,7 @@
 # for dark and light modes under `[flavor]`, and do so in those flavors instead.
 "$schema" = "https://yazi-rs.github.io/schemas/theme.json"
 
-[manager]
+[mgr]
 count_copied = { fg = "reset" }
 count_cut = { fg = "reset" }
 count_selected = { fg = "reset" }
