@@ -162,7 +162,6 @@ return {
     opts = function(_, _)
       local lspconfig_opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
       local servers = lspconfig_opts.servers or {}
-      local external_servers = { "mojo" }
 
       -- Communicate blink.cmp's completion capabilities to all language servers.
       for _, config in pairs(servers) do
@@ -171,23 +170,12 @@ return {
 
       ---@type plugins.mason_lspconfig.config
       ---@diagnostic disable-next-line: missing-fields
-
-      -- If NVIM_MASON_SKIP_INSTALL is set, skip automatic installation.
-      local skip_install = os.getenv("NVIM_MASON_SKIP_INSTALL") == "1"
-
-      local ensure_installed = vim
-        .iter(vim.tbl_keys(servers))
-        :map(function(server)
-          if vim.list_contains(external_servers, server) then
-            return nil
-          end
-
-          return server
-        end)
-        :totable()
-
       return {
-        ensure_installed = skip_install and {} or ensure_installed,
+        ensure_installed = {
+          "lua-language-server",
+          "clangd",
+          "rust-analyzer",
+        },
         automatic_enable = false, -- nvim-lspconfig will enable the LSPs.
       }
     end,
