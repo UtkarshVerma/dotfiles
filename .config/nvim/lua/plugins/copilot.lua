@@ -1,8 +1,8 @@
 ---@module "copilot"
 ---@module "snacks"
 
----@class plugins.copilot_chat.config: CopilotChat.config
----@class plugins.copilot.config: copilot_config
+---@class plugins.copilot_chat.config: CopilotChat.config.Config
+---@class plugins.copilot.config: CopilotConfig
 
 local is_enabled = false
 
@@ -17,7 +17,7 @@ return {
       { "<leader>as", "<cmd>Copilot toggle<cr>", desc = "Toggle copilot", mode = { "n", "v" } },
     },
     ---@type plugins.copilot.config
-    ---@diagnostic disable-next-line: missing-fields
+    ---@diagnostic disable: missing-fields
     opts = {
       panel = { enabled = false },
       suggestion = {
@@ -28,6 +28,8 @@ return {
         },
       },
     },
+    ---@diagnostic enable: missing-fields
+
     ---@param opts plugins.copilot.config
     config = function(_, opts)
       Snacks.toggle
