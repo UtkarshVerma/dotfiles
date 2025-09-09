@@ -201,6 +201,7 @@ function snipaste() {
 # Integrations ----------------------------------------------------------
 configs=(
     "$ZDOTDIR/.p10k.zsh"
+    "$ZDOTDIR/machine.zsh" # Machine-specific config.
     "$XDG_CONFIG_HOME/lf/lf.sh"
     "$XDG_CONFIG_HOME/yazi/yazi.sh"
     "/usr/bin/virtualenvwrapper_lazy.sh"
