@@ -154,7 +154,10 @@ return {
 
   {
     "mason-org/mason-lspconfig.nvim",
-    event = "LazyFile",
+    -- LazyFile loads on BufReadPost but starting from v2, mason seems to not attach the LSP for the first buffer.
+    -- Hence, use BufReadPre as a workaround.
+    -- https://github.com/mason-org/mason-lspconfig.nvim/issues/590
+    event = { "BufReadPre", "BufNewFile", "BufWritePre" },
     dependencies = {
       "mason.nvim",
       "nvim-lspconfig",
