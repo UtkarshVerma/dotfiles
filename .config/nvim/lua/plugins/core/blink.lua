@@ -16,7 +16,7 @@ return {
   {
     "saghen/blink.cmp",
     event = "VeryLazy",
-    version = "v1.*", -- Use a release tag to download pre-built binaries.
+    version = "1.*", -- Use a release tag to download pre-built binaries.
     opts_extend = { "sources.default" },
 
     ---@type plugins.blink.config
@@ -35,9 +35,14 @@ return {
       },
       sources = {
         providers = {
+          lsp = {
+            -- Show buffer suggestions even when the LSP has items. This is useful in cases where the LSP (e.g.
+            -- neocmake) is always going to suggest items even when they are bad.
+            fallbacks = {},
+          },
           buffer = { min_keyword_length = 5 },
         },
-        default = { "snippets", "lsp", "path", "buffer" },
+        default = { "lsp", "snippets", "path", "buffer" },
       },
       signature = {
         enabled = true,

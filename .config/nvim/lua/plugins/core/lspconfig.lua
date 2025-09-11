@@ -170,11 +170,6 @@ return {
         "nil_ls", -- Built from source (Rust), which is slow.
       }
 
-      -- Communicate blink.cmp's completion capabilities to all language servers.
-      for _, config in pairs(servers) do
-        config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-      end
-
       -- If NVIM_MASON_AUTO_INSTALL is set, then auto install packages.
       local auto_install = os.getenv("NVIM_MASON_AUTO_INSTALL") == "1"
 
