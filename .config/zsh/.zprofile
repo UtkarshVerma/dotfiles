@@ -12,7 +12,7 @@ case "$XDG_SESSION_TYPE" in
         export STATUSBAR=dwmblocks
         ;;
     wayland)
-        export TERMINAL=foot
+        export TERMINAL=ghostty
         export STATUSBAR=waybar
         ;;
 esac

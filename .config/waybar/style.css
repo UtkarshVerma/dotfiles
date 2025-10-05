@@ -1,0 +1,26 @@
+@import "./colors.css";
+
+* {
+  font-family: monospace;
+  font-size: 16px;
+  color: @foreground;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+window > box {
+  background-color: @background;
+  margin: 20px 20px 0 20px; /* Let hyprland manage the bottom margin. */
+}
+
+#workspaces button {
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
+}
+
+#workspaces button.empty {
+  opacity: 0.5;
+}

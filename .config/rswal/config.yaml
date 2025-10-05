@@ -11,6 +11,8 @@ hooks:
   - reload-ui.sh
 
 templates:
+  - source: colors.gtk
+    target: ~/.config/waybar/colors.css
   - source: colors.rasi
     target: ~/.config/rofi/themes/colors.rasi
   - source: dunstrc

@@ -1,0 +1,67 @@
+@define-color color0 {{colors.normal.black}};
+@define-color color1 {{colors.normal.red}};
+@define-color color2 {{colors.normal.green}};
+@define-color color3 {{colors.normal.yellow}};
+@define-color color4 {{colors.normal.blue}};
+@define-color color5 {{colors.normal.magenta}};
+@define-color color6 {{colors.normal.cyan}};
+@define-color color7 {{colors.normal.white}};
+
+@define-color color8 {{colors.bright.black}};
+@define-color color9 {{colors.bright.red}};
+@define-color color10 {{colors.bright.green}};
+@define-color color11 {{colors.bright.yellow}};
+@define-color color12 {{colors.bright.blue}};
+@define-color color13 {{colors.bright.magenta}};
+@define-color color14 {{colors.bright.cyan}};
+@define-color color15 {{colors.bright.white}};
+
+@define-color background {{toRgba colors.special.background variables.alpha}};
+@define-color foreground {{toRgba colors.special.foreground variables.alpha}};
+@define-color selection {{toRgba colors.special.cursor 0.024}};
+
+.color1 {
+    color: @color1;
+}
+.color2 {
+    color: @color2;
+}
+.color3 {
+    color: @color3;
+}
+.color4 {
+    color: @color4;
+}
+.color5 {
+    color: @color5;
+}
+.color6 {
+    color: @color6;
+}
+.color7 {
+    color: @color7;
+}
+.color8 {
+    color: @color8;
+}
+.color9 {
+    color: @color9;
+}
+.color10 {
+    color: @color10;
+}
+.color11 {
+    color: @color11;
+}
+.color12 {
+    color: @color12;
+}
+.color13 {
+    color: @color13;
+}
+.color14 {
+    color: @color14;
+}
+.color15 {
+    color: @color15;
+}

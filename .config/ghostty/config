@@ -1,0 +1,11 @@
+window-theme = system
+window-decoration = false
+gtk-titlebar = false
+
+font-size = 12
+theme = Catppuccin Mocha
+font-family = monospace
+background-opacity = 0.8
+
+# Let it run in the background to reduce startup time.
+quit-after-last-window-closed = false

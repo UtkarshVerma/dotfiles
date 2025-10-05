@@ -23,6 +23,11 @@ display() {
 
     case "$STATUSBAR" in
         dwmblocks) echo "^C$color^$1" ;;
+        waybar)
+            # Return output in i3blocks style.
+            # https://github.com/Alexays/Waybar/wiki/Module:-Custom#return-type
+            printf "%s\n\ncolor%d\n" "$1" "$color"
+            ;;
         *) echo "$1" ;;
     esac
 }

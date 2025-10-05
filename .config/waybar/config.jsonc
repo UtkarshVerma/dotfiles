@@ -1,0 +1,145 @@
+{
+	"reload_style_on_change": true,
+	"layer": "top",
+	"position": "top",
+	"spacing": 0,
+	"height": 26,
+	"modules-left": [
+		"hyprland/workspaces",
+		"hyprland/window"
+	],
+	"modules-right": [
+		"custom/email",
+		"custom/music",
+		"custom/disk",
+		"custom/memory",
+		"custom/cpu",
+		"custom/microphone",
+		"custom/screen-recording",
+		"custom/audio",
+		"custom/battery",
+		"custom/date",
+		"tray"
+	],
+	"hyprland/workspaces": {
+		"on-click": "activate",
+		"format": "{icon}",
+		"format-icons": {
+			"urgent": "",
+			"active": "", // focused workspace on current monitor
+			"visible": "", // focused workspace on other monitors
+			"default": "",
+			"empty": "" // persistent (created by this split-workspace plugin)
+		},
+		"all-outputs": false
+	},
+	"hyprland/window": {
+		"format": "{title}",
+		"icon": true
+	},
+	"custom/email": {
+		"exec": "sb-email",
+		"interval": 600,
+		"signal": 1,
+		"on-click": "BLOCK_BUTTON=1 sb-mail",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-mail",
+		"on-click-right": "BLOCK_BUTTON=3 sb-mail",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-mail",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-mail"
+	},
+	"custom/music": {
+		"exec": "sb-music",
+		"interval": "once",
+		"signal": 2,
+		"on-click": "BLOCK_BUTTON=1 sb-music",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-music",
+		"on-click-right": "BLOCK_BUTTON=3 sb-music",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-music",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-music"
+	},
+	"custom/disk": {
+		"exec": "sb-disk",
+		"interval": 1800,
+		"signal": 3,
+		"on-click": "BLOCK_BUTTON=1 sb-disk",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-disk",
+		"on-click-right": "BLOCK_BUTTON=3 sb-disk",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-disk",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-disk"
+	},
+	"custom/memory": {
+		"exec": "sb-memory",
+		"interval": 10,
+		"signal": 4,
+		"on-click": "BLOCK_BUTTON=1 sb-memory",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-memory",
+		"on-click-right": "BLOCK_BUTTON=3 sb-memory",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-memory",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-memory"
+	},
+	"custom/cpu": {
+		"exec": "sb-loadavg",
+		"interval": 5,
+		"signal": 5,
+		"on-click": "BLOCK_BUTTON=1 sb-loadavg",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-loadavg",
+		"on-click-right": "BLOCK_BUTTON=3 sb-loadavg",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-loadavg",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-loadavg"
+	},
+	"custom/mic": {
+		"exec": "sb-mic",
+		"interval": "once",
+		"signal": 6,
+		"on-click": "BLOCK_BUTTON=1 sb-mic",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-mic",
+		"on-click-right": "BLOCK_BUTTON=3 sb-mic",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-mic",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-mic"
+	},
+	"custom/screen-recording": {
+		"exec": "sb-record",
+		"interval": "once",
+		"signal": 7,
+		"on-click": "BLOCK_BUTTON=1 sb-record",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-record",
+		"on-click-right": "BLOCK_BUTTON=3 sb-record",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-record",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-record"
+	},
+	"custom/audio": {
+		"exec": "sb-volume",
+		"interval": "once",
+		"signal": 8,
+		"smooth-scrolling-threshold": 0.12,
+		"on-click": "BLOCK_BUTTON=1 sb-volume",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-volume",
+		"on-click-right": "BLOCK_BUTTON=3 sb-volume",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-volume",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-volume"
+	},
+	"custom/battery": {
+		"exec": "sb-battery",
+		"interval": 5,
+		"signal": 9,
+		"on-click": "BLOCK_BUTTON=1 sb-battery",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-battery",
+		"on-click-right": "BLOCK_BUTTON=3 sb-battery",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-battery",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-battery"
+	},
+	"custom/date": {
+		"exec": "sb-date",
+		"interval": 1,
+		"signal": 10,
+		"on-click": "BLOCK_BUTTON=1 sb-date",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-date",
+		"on-click-right": "BLOCK_BUTTON=3 sb-date",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-date",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-date"
+	},
+	"tray": {
+		"icon-size": 12,
+		"spacing": 12
+	}
+}
