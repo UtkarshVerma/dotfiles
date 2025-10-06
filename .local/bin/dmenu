@@ -23,11 +23,23 @@ get_parent_rect() {
 }
 
 get_bar_geometry() {
-    focusedSystray="$(xwininfo -root -tree | grep 'dwmsystray' | head -1 |
-        awk '{ print $NF }')"
-    geometries="$(xwininfo -root -tree | grep '("dwm" "dwm")' |
-        awk '{ print $(NF - 1) }')"
-    get_parent_rect "$focusedSystray" "$geometries"
+    case "$XDG_SESSION_TYPE" in
+        x11)
+            focused_systray="$(xwininfo -root -tree | grep 'dwmsystray' | head -1 |
+                awk '{ print $NF }')"
+            geometries="$(xwininfo -root -tree | grep '("dwm" "dwm")' |
+                awk '{ print $(NF - 1) }')"
+            get_parent_rect "$focused_systray" "$geometries"
+            ;;
+        wayland) case "$XDG_CURRENT_DESKTOP" in
+            Hyprland)
+                active_monitor="$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')"
+                hyprctl layers -j |
+                    jq -r --arg mon "$active_monitor" '.[$mon].levels.[].[] | select(.namespace == "waybar") | "\(.w)x\(.h)+\(.x)+\(.y)"'
+                ;;
+        esac ;;
+
+    esac
 }
 
 script_dir="${0%/*}"

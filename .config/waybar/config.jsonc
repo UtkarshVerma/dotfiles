@@ -1,6 +1,6 @@
 {
 	"reload_style_on_change": true,
-	"layer": "top",
+	"layer": "bottom", // dmenu must be able to appear over it.
 	"position": "top",
 	"spacing": 0, // Let CSS specify this.
 	"height": 40, // Fix the height so there is not layout shift.

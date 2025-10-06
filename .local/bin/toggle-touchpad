@@ -11,12 +11,19 @@ notify() {
         Touchpad "$message"
 }
 
-touchpad_id="$(xinput list | grep Touchpad | cut -d'=' -f2 | cut -f1)"
-if xinput list-props "$touchpad_id" | grep "Device Enabled" | grep -q "1$"; then
-    xinput disable "$touchpad_id"
-    notify disabled
-    exit
-fi
+case "$XDG_SESSION_TYPE" in
+    x11)
+        touchpad_id="$(xinput list | grep Touchpad | cut -d'=' -f2 | cut -f1)"
+        if xinput list-props "$touchpad_id" | grep "Device Enabled" | grep -q "1$"; then
+            xinput disable "$touchpad_id"
+            notify disabled
+            exit
+        fi
 
-xinput enable "$touchpad_id"
-notify enabled
+        xinput enable "$touchpad_id"
+        notify enabled
+        ;;
+    wayland)
+        # TODO:
+        ;;
+esac

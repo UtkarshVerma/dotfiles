@@ -8,8 +8,13 @@ shift_args() {
     args="${args#"$IFS"}" # IFS may or may not be present.
 }
 
-menu=dmenu
-[ "$XDG_SESSION_TYPE" = wayland ] && menu=tofi
+case "$XDG_SESSION_TYPE" in
+    x11) menu=dmenu ;;
+    wayland)
+        # dmenu works best.
+        menu=dmenu
+        ;;
+esac
 
 IFS="$(printf '\nx')" && IFS="${IFS%x}"
 args="$*"
