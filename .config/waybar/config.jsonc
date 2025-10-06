@@ -2,8 +2,9 @@
 	"reload_style_on_change": true,
 	"layer": "top",
 	"position": "top",
-	"spacing": 0,
-	"height": 26,
+	"spacing": 0, // Let CSS specify this.
+	"height": 45, // Fix the height so there is not layout shift.
+	"margin": "20px 20px 0 20px", // Let Hyprland manage the bottom margin.
 	"modules-left": [
 		"hyprland/workspaces",
 		"hyprland/window"
@@ -21,26 +22,37 @@
 		"custom/date",
 		"tray"
 	],
+	// https://github.com/Alexays/Waybar/wiki/Module:-Hyprland#workspaces
 	"hyprland/workspaces": {
 		"on-click": "activate",
 		"format": "{icon}",
+		// This is needed for the split-workspace plugin so that workspace
+		// names are consistent with what is shown in the bar.
 		"format-icons": {
-			"urgent": "",
-			"active": "", // focused workspace on current monitor
-			"visible": "", // focused workspace on other monitors
-			"default": "",
-			"empty": "" // persistent (created by this split-workspace plugin)
+			"1": "1",
+			"2": "2",
+			"3": "3",
+			"4": "4",
+			"5": "5",
+			"6": "1",
+			"7": "2",
+			"8": "3",
+			"9": "4",
+			"10": "5"
 		},
 		"all-outputs": false
 	},
 	"hyprland/window": {
 		"format": "{title}",
-		"icon": true
+		"icon": true,
+		"icon-size": 16,
+		"tooltip": false
 	},
 	"custom/email": {
-		"exec": "sb-email",
+		"exec": "sb-mail",
 		"interval": 600,
 		"signal": 1,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-mail",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-mail",
 		"on-click-right": "BLOCK_BUTTON=3 sb-mail",
@@ -51,6 +63,8 @@
 		"exec": "sb-music",
 		"interval": "once",
 		"signal": 2,
+		"tooltip": false,
+		"max-length": 50,
 		"on-click": "BLOCK_BUTTON=1 sb-music",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-music",
 		"on-click-right": "BLOCK_BUTTON=3 sb-music",
@@ -61,6 +75,7 @@
 		"exec": "sb-disk",
 		"interval": 1800,
 		"signal": 3,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-disk",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-disk",
 		"on-click-right": "BLOCK_BUTTON=3 sb-disk",
@@ -71,6 +86,7 @@
 		"exec": "sb-memory",
 		"interval": 10,
 		"signal": 4,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-memory",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-memory",
 		"on-click-right": "BLOCK_BUTTON=3 sb-memory",
@@ -81,16 +97,18 @@
 		"exec": "sb-loadavg",
 		"interval": 5,
 		"signal": 5,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-loadavg",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-loadavg",
 		"on-click-right": "BLOCK_BUTTON=3 sb-loadavg",
 		"on-scroll-up": "BLOCK_BUTTON=4 sb-loadavg",
 		"on-scroll-down": "BLOCK_BUTTON=5 sb-loadavg"
 	},
-	"custom/mic": {
+	"custom/microphone": {
 		"exec": "sb-mic",
 		"interval": "once",
 		"signal": 6,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-mic",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-mic",
 		"on-click-right": "BLOCK_BUTTON=3 sb-mic",
@@ -101,6 +119,7 @@
 		"exec": "sb-record",
 		"interval": "once",
 		"signal": 7,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-record",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-record",
 		"on-click-right": "BLOCK_BUTTON=3 sb-record",
@@ -111,6 +130,7 @@
 		"exec": "sb-volume",
 		"interval": "once",
 		"signal": 8,
+		"tooltip": false,
 		"smooth-scrolling-threshold": 0.12,
 		"on-click": "BLOCK_BUTTON=1 sb-volume",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-volume",
@@ -122,6 +142,7 @@
 		"exec": "sb-battery",
 		"interval": 5,
 		"signal": 9,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-battery",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-battery",
 		"on-click-right": "BLOCK_BUTTON=3 sb-battery",
@@ -132,6 +153,7 @@
 		"exec": "sb-date",
 		"interval": 1,
 		"signal": 10,
+		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-date",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-date",
 		"on-click-right": "BLOCK_BUTTON=3 sb-date",
@@ -139,7 +161,7 @@
 		"on-scroll-down": "BLOCK_BUTTON=5 sb-date"
 	},
 	"tray": {
-		"icon-size": 12,
-		"spacing": 12
+		"icon-size": 16,
+		"spacing": 10
 	}
 }
