@@ -1,20 +1,39 @@
 #!/bin/sh
 
-typeit=0
+type_it=0
 if [ "$1" = "--type" ]; then
-    typeit=1
+    type_it=1
     shift
 fi
 
-choice=$(rbw list | menu "$@")
+choice=$(rbw list --fields=name,user,folder | awk -F'\t' '{
+    printf "/"
+    if ($3 != "") printf "%s/", $3
+    printf "%s/%s\n", $1, $2
+}' | menu -p "Password:" -i -l 5 "$@")
 
 [ -n "$choice" ] || exit
 
-if [ $typeit -eq 0 ]; then
-    rbw get --clipboard "$choice"
+old_ifs="$IFS"
+IFS='/'
+# shellcheck disable=SC2086
+set -- $choice
+IFS="$old_ifs"
+shift # Get rid of leading empty field.
+
+# If the chosen secret is contained in a folder, then move its argument to the back.
+if [ $# -eq 3 ]; then
+    folder="$1"
+    shift
+    set -- --folder "$folder" "$@"
+fi
+
+if [ $type_it -eq 0 ]; then
+    rbw get --clipboard "$@"
 else
-    rbw get --password "$choice" | {
-        IFS= read -r pass
-        printf %s "$pass"
-    } | xdotool type --clearmodifiers --file -
+    rbw get --field=password "$@" |
+        case "$XDG_SESSION_TYPE" in
+            x11) xdotool type --clearmodifiers --file - ;;
+            wayland) wtype - ;;
+        esac
 fi
