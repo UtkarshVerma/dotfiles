@@ -3,7 +3,7 @@
 	"layer": "top",
 	"position": "top",
 	"spacing": 0, // Let CSS specify this.
-	"height": 45, // Fix the height so there is not layout shift.
+	"height": 40, // Fix the height so there is not layout shift.
 	"margin": "20px 20px 0 20px", // Let Hyprland manage the bottom margin.
 	"modules-left": [
 		"hyprland/workspaces",

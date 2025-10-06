@@ -9,7 +9,7 @@
   border: none;
   border-radius: 0;
   font-family: monospace;
-  font-size: 16px;
+  font-size: 15px;
   color: @foreground;
   min-width: 0;
 }
@@ -27,8 +27,15 @@ window#waybar {
   padding: 0 15px;
 }
 
-#workspaces button.empty {
-  opacity: 0.5;
+/* GTK3 CSS does not support `display: none`, so use this workaround. */
+#workspaces button.empty:not(.active) {
+  padding: 0;
+  margin: 0;
+  color: transparent;
+  background: transparent;
+}
+#workspaces button.empty:not(.active) .workspace-label {
+  font-size: 0;
 }
 
 #workspaces button.active {
