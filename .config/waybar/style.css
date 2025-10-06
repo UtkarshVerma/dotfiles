@@ -12,6 +12,7 @@
   font-size: 15px;
   color: @foreground;
   min-width: 0;
+  transition: none; /* Disable all animations. */
 }
 
 window#waybar {
@@ -25,6 +26,12 @@ window#waybar {
 
 #workspaces button {
   padding: 0 15px;
+}
+
+#workspaces button:hover {
+  box-shadow: none;
+  text-shadow: none;
+  background: none;
 }
 
 /* GTK3 CSS does not support `display: none`, so use this workaround. */
