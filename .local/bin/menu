@@ -1,5 +1,47 @@
 #!/bin/sh
-# Wrap around dmenu and bemenu to provide a unified menu.
+# Wrap around dmenu and bemenu to provide a unified menu. Also positions the menu on top of the
+# statusbar if no positioning arguments are specified.
+
+get_parent_rect() {
+    focused_x="${1#+}"
+    focused_x="${focused_x%+*}"
+    focused_y="${1##*+}"
+
+    for geometry in $2; do
+        x="${geometry#*+}"
+        x="${x%+*}"
+        y="${geometry##*+}"
+        width="${geometry%%x*}"
+        height="${geometry%%+*}"
+        height="${height##*x}"
+
+        if [ "$focused_x" -ge "$x" ] && [ "$focused_x" -le "$((x + width))" ] &&
+            [ "$focused_y" -ge "$y" ] && [ "$focused_y" -le "$((y + height))" ]; then
+            echo "$geometry"
+            return
+        fi
+    done
+}
+
+get_bar_geometry() {
+    case "$XDG_SESSION_TYPE" in
+        x11)
+            focused_systray="$(xwininfo -root -tree | grep 'dwmsystray' | head -1 |
+                awk '{ print $NF }')"
+            geometries="$(xwininfo -root -tree | grep '("dwm" "dwm")' |
+                awk '{ print $(NF - 1) }')"
+            get_parent_rect "$focused_systray" "$geometries"
+            ;;
+        wayland) case "$XDG_CURRENT_DESKTOP" in
+            Hyprland)
+                active_monitor="$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')"
+                hyprctl layers -j |
+                    jq -r --arg mon "$active_monitor" '.[$mon].levels.[].[] | select(.namespace == "waybar") | "\(.w)x\(.h)+\(.x)+\(.y)"'
+                ;;
+        esac ;;
+
+    esac
+}
 
 shift_args() {
     arg="${args%%"$IFS"*}"
@@ -10,11 +52,34 @@ shift_args() {
 
 case "$XDG_SESSION_TYPE" in
     x11) menu=dmenu ;;
-    wayland)
-        # dmenu works best.
-        menu=dmenu
-        ;;
+    wayland) menu=dmenu ;;
 esac
+
+must_append_position_flags=1
+for arg in "$@"; do
+    case "$arg" in
+        -W | -h | -w) must_append_position_flags=1 ;;
+    esac
+done
+
+if [ $must_append_position_flags -ne 0 ]; then
+    bar_geometry="$(get_bar_geometry)"
+
+    height="${bar_geometry#*x}"
+    height="${height%%+*}"
+    set -- "$@" -h "$height"
+
+    width="${bar_geometry%x*}"
+    set -- "$@" -W "$width"
+
+    x_offset="${bar_geometry#*+}"
+    x_offset="${x_offset%+*}"
+    set -- "$@" -X "$x_offset"
+
+    y_offset="${bar_geometry##*+}"
+    [ "$y_offset" -lt 0 ] && y_offset="$x_offset"
+    set -- "$@" -Y "$y_offset"
+fi
 
 IFS="$(printf '\nx')" && IFS="${IFS%x}"
 args="$*"
@@ -27,20 +92,48 @@ while [ -n "$args" ]; do
             case "$menu" in
                 # TODO: Make args dynamically inferred from config.
                 tofi) set -- "$@" --horizontal=false --num-results="$arg" --height=300 --result-spacing=5 ;;
-                *) set -- "$@" -l "$arg" ;;
+                dmenu) set -- "$@" -l "$arg" ;;
+            esac
+            ;;
+        -Y)
+            shift_args
+            case "$menu" in
+                tofi) set -- "$@" --margin-top "$arg" ;;
+                dmenu) set -- "$@" -Y "$arg" ;;
+            esac
+            ;;
+        -X)
+            shift_args
+            case "$menu" in
+                tofi) ;; # Not supported.
+                dmenu) set -- "$@" -X "$arg" ;;
+            esac
+            ;;
+        -h)
+            shift_args
+            case "$menu" in
+                tofi) set -- "$@" --height "$arg" ;;
+                dmenu) set -- "$@" -h "$arg" ;;
+            esac
+            ;;
+        -W)
+            shift_args
+            case "$menu" in
+                tofi) set -- "$@" --width "$arg" ;;
+                dmenu) set -- "$@" -W "$arg" ;;
             esac
             ;;
         -i)
             case "$menu" in
                 tofi) ;; # Case-insenstive by default.
-                *) set -- "$@" -i "$arg" ;;
+                dmenu) set -- "$@" -i "$arg" ;;
             esac
             ;;
         -p)
             shift_args
             case "$menu" in
                 tofi) set -- "$@" --prompt-text="$arg" ;;
-                *) set -- "$@" -p "$arg" ;;
+                dmenu) set -- "$@" -p "$arg" ;;
             esac
             ;;
         -ps)
