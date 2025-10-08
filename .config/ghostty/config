@@ -7,5 +7,9 @@ theme = Catppuccin Mocha
 font-family = monospace
 background-opacity = 0.8
 
+# Does not make sense to inherit working directory on tiling window managers
+# where most of the time another terminal will be in focus.
+window-inherit-working-directory = false
+
 # Let it run in the background to reduce startup time.
 quit-after-last-window-closed = false
