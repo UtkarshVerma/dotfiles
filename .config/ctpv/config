@@ -1,7 +1,0 @@
-set chafasixel
-
-# Animation won't work in lf.
-preview gifs .gif {{
-    chafa --format=sixels --size="$w"x"$h" --animate=off "$f"
-    exit 1
-}}
