@@ -91,3 +91,7 @@ window#waybar {
 #tray {
   padding: 0 15px;
 }
+
+#tray menu {
+  background-color: @background;
+}

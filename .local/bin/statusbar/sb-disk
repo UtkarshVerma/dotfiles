@@ -7,14 +7,17 @@ esac
 
 . sb-theme
 
-disk_usage() {
-    used_bytes="$(df --output=avail "$1" | tail -n 1)"
-    used_gibs="$(echo "scale=1; $used_bytes / 1024 / 1024" | bc)"
+path="$1"
+case "$path" in
+    /) icon="" ;;
+    /home) icon="" ;;
+    *) icon="󰋊" ;;
+esac
 
-    percent_used="$(df --output=pcent "$1" | tail -n 1 | grep -o '[[:digit:]]\+')"
-    [ "$percent_used" -le 10 ] && color=10
+used_bytes="$(df --output=avail "$path" | tail -n 1)"
+used_gibs="$(echo "scale=1; $used_bytes / 1024 / 1024" | bc)"
 
-    display "${used_gibs}G" "$color"
-}
+percent_used="$(df --output=pcent "$1" | tail -n 1 | grep -o '[[:digit:]]\+')"
+[ "$percent_used" -ge 90 ] && color=9
 
-echo "$(display "󰋊") $(disk_usage "/")$(display "|")$(disk_usage "/home")"
+display "$icon ${used_gibs}G" "$color"
