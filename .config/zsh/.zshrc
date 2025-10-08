@@ -26,6 +26,18 @@ function __emit_osc7_sequence() {
     printf "\033]7;file://%s%s\033\\" "$(hostname)" "$encoded"
 }
 
+function __init_completion() {
+    autoload -Uz compinit bashcompinit
+    fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
+
+    compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+    bashcompinit
+    zicdreplay               # Run compdefs cached by zinit.
+}
+
+ZSH_CACHE="$XDG_CACHE_HOME/zsh"
+[ -d "$ZSH_CACHE" ] || mkdir -p "$ZSH_CACHE"
+
 __set_cursor beam                           # Set cursor on startup.
 __emit_osc7_sequence                        # Emit OSC7 on launch.
 chpwd_functions+=(__emit_osc7_sequence)     # Emit OSC7 on CWD change.
@@ -45,36 +57,23 @@ if [ ! -d "$ZINIT_HOME" ]; then
 fi
 source "$ZINIT_HOME/zinit.zsh"
 
-zinit ice depth=1
+zinit depth=1 light-mode for romkatv/powerlevel10k
+zinit wait lucid for \
+    atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
+    blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions \
+    chisui/zsh-nix-shell \
+    atinit"__init_completion" zsh-users/zsh-syntax-highlighting \
+    Aloxaf/fzf-tab
 
-zinit light romkatv/powerlevel10k
-zinit light chisui/zsh-nix-shell
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
-zinit light Aloxaf/fzf-tab
-zinit light nix-community/nix-zsh-completions
-
-zinit snippet OMZP::git
-zinit snippet OMZP::sudo
-zinit snippet OMZP::archlinux
-zinit snippet OMZP::terraform
-zinit snippet OMZP::azure
+zinit ice as"completion"
+zinit snippet OMZP::terraform/_terraform
 
 # Configurations --------------------------------------------------------------
 # Completions
-autoload -Uz compinit bashcompinit
-fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
-
-ZSH_CACHE="$XDG_CACHE_HOME/zsh"
-[ -d "$ZSH_CACHE" ] || mkdir -p "$ZSH_CACHE"
-zstyle ':completion:*' cache-path "$ZSH_CACHE/zcompcache"
-compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
-bashcompinit
 _comp_options+=(globdots)       # Include hidden files.
-zinit cdreplay -q               # Run compdefs cached by zinit.
 
 # Completion styling
+zstyle ':completion:*' cache-path "$ZSH_CACHE/zcompcache"
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
@@ -224,7 +223,12 @@ if command_exists direnv; then
 fi
 
 if command_exists pio; then
-    eval "$(_PIO_COMPLETE=zsh_source pio)"
+    # HACK: This relies on compdef, so load it using zinit.
+    tempfile="$(mktemp)"
+    _PIO_COMPLETE=zsh_source pio > "$tempfile"
+    zinit light "$tempfile"
+    rm "$tempfile"
+    unset "tempfile"
 fi
 
 if command_exists fzf; then
