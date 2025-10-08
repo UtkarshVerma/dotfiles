@@ -55,8 +55,8 @@ while [ -n "$args" ]; do
 done
 
 case "$TERMINAL" in
-    # ghostty) set -- "$@" ;; # Use existing process if possible.
-    *) ;; # Do nothing.
+    ghostty) set -- "$@" +new-window ;; # Use existing process if possible.
+    *) ;;                               # Do nothing.
 esac
 
 exec "$TERMINAL" "$@"
