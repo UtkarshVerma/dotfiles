@@ -24,7 +24,7 @@ while [ -n "$args" ]; do
             case "$TERMINAL" in
                 alacritty) set -- "$@" --class "$arg",Alacritty ;;
                 foot) set -- "$@" -a "$arg" ;;
-                st) set -- "$@" - "$arg" ;;
+                st) set -- "$@" -n "$arg" ;;
             esac
             ;;
         -d | --dir)
