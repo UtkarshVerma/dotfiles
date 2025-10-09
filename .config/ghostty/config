@@ -13,3 +13,12 @@ window-inherit-working-directory = false
 
 # Let it run in the background to reduce startup time.
 quit-after-last-window-closed = false
+
+# Don't ask for confirmation when closing.
+confirm-close-surface = false
+
+# Only focus the terminal on a bell notification.
+bell-features = no-system, no-audio, attention, no-title, no-border
+
+# Do not show window size changes on resize.
+resize-overlay = never
