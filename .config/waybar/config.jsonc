@@ -12,8 +12,7 @@
 	"modules-right": [
 		"custom/email",
 		"custom/music",
-		"custom/disk-root",
-		"custom/disk-home",
+		"custom/disk",
 		"custom/memory",
 		"custom/cpu",
 		"custom/microphone",
@@ -72,18 +71,8 @@
 		"on-scroll-up": "BLOCK_BUTTON=4 sb-music",
 		"on-scroll-down": "BLOCK_BUTTON=5 sb-music"
 	},
-	"custom/disk-root": {
-		"exec": "sb-disk /",
-		"interval": 1800,
-		"tooltip": false,
-		"on-click": "BLOCK_BUTTON=1 sb-disk",
-		"on-click-middle": "BLOCK_BUTTON=2 sb-disk",
-		"on-click-right": "BLOCK_BUTTON=3 sb-disk",
-		"on-scroll-up": "BLOCK_BUTTON=4 sb-disk",
-		"on-scroll-down": "BLOCK_BUTTON=5 sb-disk"
-	},
-	"custom/disk-home": {
-		"exec": "sb-disk /home",
+	"custom/disk": {
+		"exec": "sb-disk",
 		"interval": 1800,
 		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-disk",

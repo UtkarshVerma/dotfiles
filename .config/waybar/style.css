@@ -81,15 +81,15 @@ window#waybar {
 /* Right modules ----------------------------------------------------------- */
 .modules-right {
   background-color: @bg-overlay;
-  padding-left: 5px;
+  padding: 0 20px;
 }
 
-.modules-right > * > :not(#tray) {
-  margin: 0 10px;
+.modules-right widget:not(:first-child) > label {
+  padding-left: 20px
 }
 
 #tray {
-  padding: 0 15px;
+  padding-left: 20px;
 }
 
 #tray menu {
