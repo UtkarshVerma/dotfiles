@@ -19,9 +19,11 @@ esac
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
 # Do not clutter user home directory
-HISTFILE="$XDG_STATE_HOME/bash/history"
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}"/bash/history
 
 # User config
-if [ -f "$XDG_CONFIG_HOME/bash/bashrc" ]; then
-    . "$XDG_CONFIG_HOME/bash/bashrc"
+BASHRC="${XDG_CONFIG_HOME:-$HOME/.config}"/bash/bashrc
+if [ -f "$BASHRC" ]; then
+    . "$BASHRC"
 fi
+unset BASHRC
