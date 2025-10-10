@@ -14,6 +14,7 @@
 		"custom/music",
 		"custom/disk",
 		"custom/memory",
+		"custom/swap",
 		"custom/cpu",
 		"custom/microphone",
 		"custom/screen-recording",
@@ -46,7 +47,8 @@
 		"format": "{title}",
 		"icon": true,
 		"icon-size": 16,
-		"tooltip": false
+		"tooltip": false,
+		"separate-outputs": true
 	},
 	"custom/email": {
 		"exec": "sb-mail",
@@ -73,7 +75,7 @@
 	},
 	"custom/disk": {
 		"exec": "sb-disk",
-		"interval": 1800,
+		"interval": 5,
 		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-disk",
 		"on-click-middle": "BLOCK_BUTTON=2 sb-disk",
@@ -83,7 +85,7 @@
 	},
 	"custom/memory": {
 		"exec": "sb-memory",
-		"interval": 10,
+		"interval": 1,
 		"signal": 4,
 		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-memory",
@@ -92,9 +94,19 @@
 		"on-scroll-up": "BLOCK_BUTTON=4 sb-memory",
 		"on-scroll-down": "BLOCK_BUTTON=5 sb-memory"
 	},
+	"custom/swap": {
+		"exec": "sb-swap",
+		"interval": 1,
+		"tooltip": false,
+		"on-click": "BLOCK_BUTTON=1 sb-swap",
+		"on-click-middle": "BLOCK_BUTTON=2 sb-swap",
+		"on-click-right": "BLOCK_BUTTON=3 sb-swap",
+		"on-scroll-up": "BLOCK_BUTTON=4 sb-swap",
+		"on-scroll-down": "BLOCK_BUTTON=5 sb-swap"
+	},
 	"custom/cpu": {
 		"exec": "sb-loadavg",
-		"interval": 5,
+		"interval": 1,
 		"signal": 5,
 		"tooltip": false,
 		"on-click": "BLOCK_BUTTON=1 sb-loadavg",
