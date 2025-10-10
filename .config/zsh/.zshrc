@@ -165,8 +165,6 @@ bindkey '\C-e' edit-command-line
 # Aliases ---------------------------------------------------------------------
 alias \
     cat="bat" \
-    cbcopy="xclip -selection clipboard" \
-    cbpaste="xclip -selection clipboard -out" \
     diff="diff --color=auto" \
     dosbox="dosbox -conf \$XDG_CONFIG_HOME/dosbox/dosbox.conf" \
     egrep="egrep --color=auto" \
@@ -181,6 +179,19 @@ alias \
     vi="nvim" \
     yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 
+case "$XDG_SESSION_TYPE" in
+    x11)
+        alias \
+            cbcopy="xclip -selection clipboard" \
+            cbpaste="xclip -selection clipboard -out"
+        ;;
+    wayland)
+        alias \
+            cbcopy="wl-copy" \
+            cbpaste="wl-paste"
+        ;;
+esac
+
 # Functions -------------------------------------------------------------------
 function se() {
     local bin_dir="$HOME/.local/bin"
@@ -192,7 +203,7 @@ EOF
 
 function snipaste() {
     if local url="$(curl --silent --form file=@- "https://0x0.st")"; then
-        printf "%s" "$url" | xclip -selection clipboard &&
+        printf "%s" "$url" | cbcopy &&
             echo "URL \"$url\" copied to clipboard."
     fi
 }
