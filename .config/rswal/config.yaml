@@ -3,7 +3,8 @@ theme: catppuccin
 variables:
   alpha: 0.85
   icon-theme: Papirus-Dark
-  gap: 10
+  gap_outer: 20
+  gap_inner: 10
 
 hooks:
   - set-wallpaper.sh
@@ -12,24 +13,20 @@ hooks:
 
 templates:
   - source: colors.gtk
+    target: ~/.config/waybar/theme.css
+  - source: waybar.css
     target: ~/.config/waybar/colors.css
   - source: colors.rasi
     target: ~/.config/rofi/themes/colors.rasi
-  - source: dunstrc
-    target: ~/.config/dunst/dunstrc
+  - source: overrides.dunstrc
+    target: ~/.config/dunst/dunstrc.d/10-overrides.conf
   - source: suckless.xresources
     target: ~/.config/X11/Xresources/suckless
   - source: nvim.lua
     target: ~/.config/nvim/lua/util/colors.lua
-  - source: colors.hyprland
-    target: ~/.config/hypr/colors.conf
-  - source: colors.foot
-    target: ~/.config/foot/colors.ini
+  - source: variables.hyprland
+    target: ~/.config/hypr/variables.conf
   - source: colors.sh
     target: ~/.cache/rswal/colors.sh
-  - source: colors.tofi
-    target: ~/.config/tofi/colors
-  - source: fnott.ini
-    target: ~/.config/fnott/fnott.ini
   - source: rmpc.ron
     target: ~/.config/rmpc/themes/base-16.ron

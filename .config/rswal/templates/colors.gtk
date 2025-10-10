@@ -20,9 +20,6 @@
 @define-color foreground {{toRgba colors.special.foreground variables.alpha}};
 @define-color selection {{toRgba colors.special.cursor 0.024}};
 
-@define-color bg-base {{toRgba colors.special.background (mul variables.alpha variables.alpha)}};
-@define-color bg-overlay {{toRgba colors.special.background (div (sub variables.alpha (mul variables.alpha variables.alpha)) (sub 1 (mul variables.alpha variables.alpha)))}};
-
 .color1 {
     color: @color1;
 }

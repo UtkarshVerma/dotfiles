@@ -19,3 +19,6 @@ $color15 = rgb({{strip colors.bright.white}})
 $background = rgba({{strip colors.special.background}}{{hex (int (mul variables.alpha 255))}})
 $foreground = rgba({{strip colors.special.foreground}}{{hex (int (mul variables.alpha 255))}})
 $selection = rgba({{strip colors.special.cursor}}06)
+
+$gap_outer = {{variables.gap_outer}}
+$gap_inner = {{variables.gap_inner}}

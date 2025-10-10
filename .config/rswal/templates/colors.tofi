@@ -1,6 +1,0 @@
-background-color = {{colors.special.background}}{{hex (int (mul variables.alpha 255))}}
-text-color = {{colors.special.foreground}}
-prompt-color = {{colors.special.background}}
-prompt-background = {{colors.normal.red}}
-selection-color = {{colors.special.background}}
-selection-background = {{colors.normal.red}}
