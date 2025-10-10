@@ -170,9 +170,6 @@ return {
         "nil_ls", -- Built from source (Rust), which is slow.
       }
 
-      -- If NVIM_MASON_AUTO_INSTALL is set, then auto install packages.
-      local auto_install = os.getenv("NVIM_MASON_AUTO_INSTALL") == "1"
-
       local ensure_installed = vim
         .iter(vim.tbl_keys(servers))
         :map(function(server)
@@ -183,6 +180,8 @@ return {
           return server
         end)
         :totable()
+
+      local auto_install = os.getenv("NVIM_MASON_AUTO_INSTALL") == "1"
 
       ---@type plugins.mason_lspconfig.config
       return {

@@ -32,6 +32,11 @@ return {
     config = function(_, opts)
       opts.ensure_installed = util.dedup(opts.ensure_installed)
 
+      -- If NVIM_MASON_AUTO_INSTALL is set, then auto install packages.
+      if os.getenv("NVIM_MASON_AUTO_INSTALL") ~= "1" then
+        opts.ensure_installed = {}
+      end
+
       require("mason").setup(opts)
 
       local mr = require("mason-registry")
