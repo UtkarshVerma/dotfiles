@@ -10,6 +10,7 @@ display() {
             sb-music) color=14 ;;
             sb-disk) color=10 ;;
             sb-memory) color=15 ;;
+            sb-swap) color=10 ;;
             sb-loadavg) color=11 ;;
             sb-mic) color=9 ;;
             sb-record) color=9 ;;

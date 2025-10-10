@@ -1,12 +1,12 @@
 #!/bin/sh
-# Display RAM usage.
+# Display swap usage.
 
 case "$BLOCK_BUTTON" in
     6) terminal -e "$EDITOR" "$0" ;;
 esac
 
-used_mib="$(free --mebi | grep '^Mem:' | tr -s ' ' | cut -d' ' -f3)"
+used_mib="$(free --mebi | grep '^Swap:' | tr -s ' ' | cut -d' ' -f3)"
 used_gib="$(echo "scale=2; $used_mib / 1024" | bc)"
 
 . sb-theme
-display " $(printf "%.2f" "$used_gib")G"
+display "󰾴 $(printf "%.2f" "$used_gib")G"
