@@ -12,7 +12,9 @@ case "$XDG_SESSION_TYPE" in
         export STATUSBAR=dwmblocks
         ;;
     wayland)
-        export TERMINAL=ghostty
+        # Use st until ghostty implements -e support for +new-window.
+        # https://github.com/ghostty-org/ghostty/issues/8862
+        export TERMINAL=st
         export STATUSBAR=waybar
         ;;
 esac
