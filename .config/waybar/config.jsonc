@@ -5,6 +5,7 @@
 	"spacing": 0, // Let CSS specify this.
 	"height": 37, // Fix the height so there is not layout shift.
 	"margin": "20px 20px 0 20px", // Let Hyprland manage the bottom margin.
+	"fixed-center": false, // This is needed for modules-right to grow as required.
 	"modules-left": [
 		"hyprland/workspaces",
 		"hyprland/window"
