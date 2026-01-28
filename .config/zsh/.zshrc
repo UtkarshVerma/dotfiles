@@ -57,16 +57,16 @@ if [ ! -d "$ZINIT_HOME" ]; then
 fi
 source "$ZINIT_HOME/zinit.zsh"
 
+# Must load fzf-tab before autosuggestions to play well with tab completion.
 zinit depth=1 light-mode for romkatv/powerlevel10k
 zinit wait lucid for \
-    atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
+    Aloxaf/fzf-tab \
+    atload="_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
+    atinit"__init_completion" zsh-users/zsh-syntax-highlighting \
     blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions \
     chisui/zsh-nix-shell \
-    atinit"__init_completion" zsh-users/zsh-syntax-highlighting \
-    Aloxaf/fzf-tab
+    as"completion" OMZP::terraform/_terraform
 
-zinit ice as"completion"
-zinit snippet OMZP::terraform/_terraform
 
 # Configurations --------------------------------------------------------------
 # Completions
@@ -195,7 +195,9 @@ esac
 # Functions -------------------------------------------------------------------
 function se() {
     local bin_dir="$HOME/.local/bin"
-    cat <<EOF | sed "s|$bin_dir/||g" | fzf | sed "s|^|$bin_dir/|g" | xargs -r "$EDITOR"
+
+    # Ensure that bat is not used.
+    command cat <<EOF | sed "s|$bin_dir/||g" | fzf | sed "s|^|$bin_dir/|g" | xargs -r "$EDITOR"
 $(find "$bin_dir/" -type l -xtype f)
 $(find "$bin_dir/statusbar/" -type f)
 EOF
