@@ -15,7 +15,7 @@ wpctl() {
 }
 
 case "$BLOCK_BUTTON" in
-    1) setsid --fork terminal -e pulsemixer ;;
+    1) terminal -e wiremix ;;
     2) wpctl set-mute toggle ;;
     4) wpctl set-volume 3%+ ;;
     5) wpctl set-volume 3%- ;;
