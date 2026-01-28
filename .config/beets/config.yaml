@@ -1,26 +1,59 @@
+include:
+  - machine.yaml
+
 plugins:
-  - fetchart
-  - embedart
+  - convert
   - lastgenre
   - lyrics
   - duplicates
   - replaygain
-  - mbsync
   - scrub
   - zero
+  - mbsync
+  - embyupdate  # Notify Jellyfin on library update. (Define secrets in machine.yaml.)
+  - info
+
+  # Album art: Fetch and embed.
+  - fetchart
+  - embedart
+
+  # Autotaggers.
+  - chroma
+  - musicbrainz
+  - fromfilename
 
 directory: ~/music
 library: ~/music/library.db
 
+embedart:
+  maxwidth: 1000  # Downscale bigger images to keep file sizes reasonable.
+
+convert:
+  auto: true  # Automatically transcode non-MP3 files.
+  quiet: true  # It is too noisy by default.
+  never_convert_lossy_files: true
+  delete_originals: true
+  format: opus
+  formats:
+    opus:
+      command: opus-transcode $source $dest
+
 lyrics:
-  synced: yes
+  synced: true  # Prefer synced lyrics.
+  sources:
+    # - google
+    - lrclib
 
 replaygain:
-  backend: gstreamer
+  backend: ffmpeg  # GStreamer does not support parallel analysis.
 
 import:
   move: true
-  languages: en
+  languages: en  # Prefer English aliases.
+
+mbpseudo:
+  scripts:
+    - Latn
 
 zero:
   fields: comments

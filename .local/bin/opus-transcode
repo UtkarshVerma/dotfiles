@@ -1,0 +1,40 @@
+#!/bin/sh
+
+err() {
+    printf 'opus-transcode: %s\n' "$*" >&2
+    exit 1
+}
+
+[ "$#" -eq 2 ] || err "usage: $0 SOURCE DEST"
+src=$1
+dst=$2
+
+[ -r "$src" ] || err "source not readable: $src"
+
+channels=$(ffprobe -v error \
+    -select_streams a:0 \
+    -show_entries stream=channels \
+    -of default=nw=1:nk=1 "$src") || err "ffprobe failed"
+
+case "$channels" in
+    '' | *[!0-9]*) err "invalid channel count: $channels" ;;
+esac
+
+# Bitrate policy.
+# https://wiki.xiph.org/Opus_Recommended_Settings
+if [ "$channels" -gt 2 ]; then
+    bitrate=256k
+    set -- -mapping_family 1
+else
+    bitrate=128k
+    set --
+fi
+
+ffmpeg -nostdin -v error -y \
+    -i "$src" -vn \
+    -map 0:a \
+    -map_metadata 0 \
+    -map_chapters 0 \
+    -c:a libopus -b:a "$bitrate" -vbr on \
+    "$@" \
+    "$dst" || err "ffmpeg failed"
