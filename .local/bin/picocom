@@ -1,0 +1,8 @@
+#!/bin/sh
+# Wrapper script for picocom to override the escape character.
+
+PATH="$(getconf PATH)"
+export PATH
+
+# Use 'b' as escape character instead because tmux uses 'a'.
+exec picocom --escape b "$@"

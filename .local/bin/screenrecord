@@ -17,8 +17,10 @@ record_region() {
 
     case "$XDG_SESSION_TYPE" in
         x11)
-            set -- ffmpeg -f x11grab -r 60 -s "${width}x${height}" \
-                -i "$DISPLAY+$x_offset,$y_offset"
+            audio_sink="$(pactl get-default-sink)"
+            set -- ffmpeg \
+                -f x11grab -r 60 -s "${width}x${height}" -i "$DISPLAY+$x_offset,$y_offset" \
+                -f pulse -i "$audio_sink.monitor" -c:a libopus
 
             # Use NVENC if GPU, if possible.
             if [ "$(supergfxctl --get)" = "Hybrid" ]; then
@@ -26,7 +28,7 @@ record_region() {
             fi
             ;;
         wayland)
-            set -- wf-recorder -f
+            set -- wf-recorder -af
             ;;
     esac
 
