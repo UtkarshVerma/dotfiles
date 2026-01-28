@@ -36,17 +36,18 @@ window#waybar {
 }
 
 /* GTK3 CSS does not support `display: none`, so use this workaround. */
-#workspaces button.empty:not(.active) {
+#workspaces button.empty:not(.active):not(.visible) {
   padding: 0;
   margin: 0;
   color: transparent;
   background: transparent;
 }
-#workspaces button.empty:not(.active) .workspace-label {
+#workspaces button.empty:not(.active):not(.visible) .workspace-label {
   font-size: 0;
 }
 
-#workspaces button.active {
+#workspaces button.active,
+#workspaces button.visible {
   box-shadow: inset 0 2px 0 0; /* Using border changes child height. */
 }
 

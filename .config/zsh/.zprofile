@@ -16,6 +16,11 @@ case "$XDG_SESSION_TYPE" in
         # https://github.com/ghostty-org/ghostty/issues/8862
         export TERMINAL=st
         export STATUSBAR=waybar
+
+        export ELECTRON_OZONE_PLATFORM_HINT=wayland
+
+        # Hyprland doesn't pick up theme from index.theme, so hardcode it.
+        export XCURSOR_THEME=vimix
         ;;
 esac
 
