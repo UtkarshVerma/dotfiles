@@ -4,10 +4,6 @@
 
 [mgr]
 prepend_keymap = [
-	# Wrap scrolling.
-	{ on = "k", run = "plugin arrow -1" },
-	{ on = "j", run = "plugin arrow 1" },
-
 	{ on = "!", run = 'shell "$SHELL" --block', desc = "Open shell here" },
 	{ on = ["g", "r"], run = '''shell 'ya emit cd "$(git rev-parse --show-toplevel)"'''', desc = "Change directory to git root" },
 
