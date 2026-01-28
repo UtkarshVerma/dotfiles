@@ -47,10 +47,12 @@ return {
           on_new_config = function(new_config, _)
             new_config.settings.json["schemas"] = require("schemastore").json.schemas()
           end,
+          init_options = {
+            provideFormatter = false,
+          },
           ---@type lsp.jsonls.config
           settings = {
             json = {
-              format = { enable = false },
               validate = { enable = true },
             },
           },
@@ -64,7 +66,7 @@ return {
     ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
-        json = { "biome" },
+        -- json = { "biome" },
       },
     },
   },

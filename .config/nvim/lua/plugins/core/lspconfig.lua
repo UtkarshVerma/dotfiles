@@ -33,8 +33,8 @@ local buffer_keymaps_base = {
   { "<leader>cs", vim.lsp.buf.signature_help, desc = "Signature help", method = "textDocument/signatureHelp" },
   { "<leader>ca", vim.lsp.buf.code_action, desc = "Code action", method = "textDocument/codeAction" },
   { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", method = "textDocument/rename" },
-  { "<leader>cc", vim.lsp.codelens.run, desc = "Run codelens", mode = { "n", "v" }, method = "textDocument/codeLens" },
-  { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh and display codelens", method = "textDocument/codeLens" },
+  { "<leader>cl", vim.lsp.codelens.run, desc = "Run codelens", mode = { "n", "v" }, method = "textDocument/codeLens" },
+  { "<leader>cL", vim.lsp.codelens.refresh, desc = "Refresh and display codelens", method = "textDocument/codeLens" },
 }
 
 ---Check if any LSP client in buffer {bufnr} supports {method}.
