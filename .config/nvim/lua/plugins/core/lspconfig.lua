@@ -11,7 +11,7 @@
 
 ---@class plugins.lspconfig.keymap
 ---@field [1] string
----@field [2] string|fun()
+---@field [2] string|fun(client?: vim.lsp.Client)
 ---@field desc string
 ---@field mode? string|string[]
 ---@field method? string
@@ -34,7 +34,7 @@ local buffer_keymaps_base = {
   { "<leader>ca", vim.lsp.buf.code_action, desc = "Code action", method = "textDocument/codeAction" },
   { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", method = "textDocument/rename" },
   { "<leader>cl", vim.lsp.codelens.run, desc = "Run codelens", mode = { "n", "v" }, method = "textDocument/codeLens" },
-  { "<leader>cL", vim.lsp.codelens.refresh, desc = "Refresh and display codelens", method = "textDocument/codeLens" },
+  { "<leader>cL", vim.lsp.codelens.refresh , desc = "Refresh and display codelens", method = "textDocument/codeLens" },
 }
 
 ---Check if any LSP client in buffer {bufnr} supports {method}.
@@ -60,7 +60,21 @@ local function apply_buffer_keymaps(bufnr)
 
   ---@param client vim.lsp.Client
   vim.iter(clients):each(function(client)
-    local server_keymaps = opts.servers[client.name] and opts.servers[client.name].keys or {}
+    local server_keymaps = opts.servers[client.name] and vim.deepcopy(opts.servers[client.name].keys) or {}
+    server_keymaps = vim
+      .iter(server_keymaps)
+      :map(function(keymap)
+        local callback = keymap[2]
+        if type(callback) == "function" then
+          keymap[2] = function()
+            callback(client)
+          end
+        end
+
+        return keymap
+      end)
+      :totable()
+
     vim.list_extend(buffer_keymaps, server_keymaps)
   end)
 

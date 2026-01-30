@@ -1,11 +1,27 @@
----@module "snacks"
-
----@class lsp.tinymist.config.settings
----@field exportPdf? "onType"|"onSave"|"never"
----@field serverPath? string
+---@module "codesettings"
 
 ---@class lsp.tinymist.config: plugins.lspconfig.config.server
----@field settings? lsp.tinymist.config.settings
+---@field settings? lsp.tinymist.Tinymist
+
+---@param client vim.lsp.Client
+local function cycle_export_state(client)
+  local states = { "never", "onSave", "onType" }
+
+  local function next_state(cur)
+    for i, v in ipairs(states) do
+      if v == cur then
+        return states[(i % #states) + 1]
+      end
+    end
+  end
+
+  local cur = client.settings.exportPdf or "never"
+  local next = next_state(cur)
+
+  client.settings.exportPdf = next
+  client:notify("workspace/didChangeConfiguration", { settings = client.settings })
+  vim.notify("Export PDF: " .. next)
+end
 
 ---@type LazyPluginSpec[]
 return {
@@ -20,11 +36,6 @@ return {
   },
 
   {
-    "kaarmu/typst.vim",
-    ft = "typst",
-  },
-
-  {
     "nvim-lspconfig",
     dependencies = { "snacks.nvim" },
     ---@type plugins.lspconfig.config
@@ -33,44 +44,22 @@ return {
         ---@type lsp.tinymist.config
         ---@diagnostic disable-next-line: missing-fields
         tinymist = {
+          keys = {
+            { "<leader>te", cycle_export_state, desc = "Cycle export PDF" },
+          },
           root_dir = function(bufnr, callback)
             local root_dir = vim.fs.root(bufnr, { ".git" }) or vim.fn.expand("%:p:h")
             callback(root_dir)
           end,
-          on_attach = function(client, _)
-            Snacks.toggle
-              .new({
-                name = "Export PDF on type",
-                get = function()
-                  return client.settings.exportPdf == "onType"
-                end,
-                set = function(state)
-                  ---@type lsp.tinymist.config.settings
-                  if state then
-                    client.settings.exportPdf = "onType"
-                  else
-                    client.settings.exportPdf = "never"
-                  end
-
-                  client:notify("workspace/didChangeConfiguration", { settings = client.settings })
-                end,
-              })
-              :map("<leader>te", { desc = "Export PDF on type" })
-          end,
+          -- https://myriad-dreamin.github.io/tinymist/frontend/neovim.html
           settings = {
             exportPdf = "never",
+            formatterMode = "typstyle",
+            lint = {
+              enabled = true,
+            },
           },
         },
-      },
-    },
-  },
-
-  {
-    "conform.nvim",
-    ---@type plugins.conform.config
-    opts = {
-      formatters_by_ft = {
-        typst = { "typstyle" },
       },
     },
   },
