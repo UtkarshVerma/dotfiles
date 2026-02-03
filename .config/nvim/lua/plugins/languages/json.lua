@@ -66,7 +66,8 @@ return {
     ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
-        -- json = { "biome" },
+        json = { "biome" },
+        jsonc = { "biome" },
       },
     },
   },

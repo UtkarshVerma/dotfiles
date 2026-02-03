@@ -6,8 +6,8 @@ return {
   {
     "mrjones2014/codesettings.nvim",
     cmd = "Codesettings",
-    -- Recommended by the author to load on these filetypes for jsonls integration.
-    ft = { "json", "jsonc" },
+    -- Recommended by the author to load on these filetypes for jsonls and lua_ls integration.
+    ft = { "json", "lua", "jsonc" },
     init = function()
       vim.lsp.config("*", {
         before_init = function(_, config)
@@ -17,6 +17,8 @@ return {
     end,
     ---@type plugins.codesettings.config
     ---@diagnostic disable-next-line: missing-fields
-    opts = {},
+    opts = {
+      live_reload = true,
+    },
   },
 }
