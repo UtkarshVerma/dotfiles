@@ -7,15 +7,6 @@
 [init]
 	defaultBranch = main
 
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
-
-[url "ssh://git@github.com/"]
-	insteadOf = git://github.com/
-
-[url "ssh://git@gitlab.com/"]
-	insteadOf = https://gitlab.com/
-
 [include]
 	path = ./delta.inc
 	path = ./machine.inc # Machine-specific gitignored config.
