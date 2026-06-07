@@ -25,7 +25,7 @@ return {
     ---@type plugins.conform.config
     opts = {
       formatters_by_ft = {
-        tex = { "latexindent" },
+        tex = { "tex-fmt" },
       },
       formatters = {
         latexindent = {
