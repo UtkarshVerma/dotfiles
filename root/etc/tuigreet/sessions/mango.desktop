@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=Mango (Wayland)
+Exec=/etc/tuigreet/launchers/mango.sh

@@ -2,7 +2,7 @@
 
 # Default programs
 export EDITOR=nvim
-export BROWSER=brave
+export BROWSER=brave-browser
 export FILE_MANAGER=yazi
 export SYSTEM_MONITOR=btop
 
@@ -54,7 +54,7 @@ export DOTNET_CLI_HOME="$XDG_DATA_HOME/dotnet"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GOPATH="$XDG_DATA_HOME/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
-export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc:$XDG_CONFIG_HOME/gtk-2.0/gtkrc.mine"
 export HUGO_CACHES_MODULES_DIR="$XDG_DATA_HOME/hugo"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
@@ -107,6 +107,16 @@ $XDG_STATE_HOME/nix/profile/bin:\
 $HOME/.local/bin/statusbar:\
 $HOME/.local/bin:\
 $PATH"
+
+# Tell pkg-config to also look in local prefix.
+export PKG_CONFIG_PATH="$HOME/.local/lib64/pkgconfig:\
+$HOME/.local/share/pkgconfig:\
+$PKG_CONFIG_PATH"
+
+# Dynamically load libraries from the local prefix too.
+export LD_LIBRARY_PATH="$HOME/.local/lib64:\
+$HOME/.local/lib:\
+$LD_LIBRARY_PATH"
 
 # Add RubyGems to PATH, if installed
 if command -v ruby >/dev/null 2>&1 && command -v gem >/dev/null 2>&1; then
@@ -185,7 +195,7 @@ export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on"
 # Bus address used by dbus-broker user service on Arch
 export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
 
-if [ -z "$SSH_AUTH_SOCK" ]; then
-    # Authentication socket used by the gnome-keyring-daemon user service on Arch
-    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
-fi
+
+# Use KDE Wallet for SSH key passphrases
+export SSH_ASKPASS=/usr/bin/ksshaskpass
+export SSH_ASKPASS_REQUIRE=prefer

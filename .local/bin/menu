@@ -38,8 +38,23 @@ get_bar_geometry() {
                 hyprctl layers -j |
                     jq -r --arg mon "$active_monitor" '.[$mon].levels.[].[] | select(.namespace == "waybar") | "\(.w)x\(.h)+\(.x)+\(.y)"'
                 ;;
-        esac ;;
+            mango)
+                active_monitor="$(mmsg get all-monitors | jq '.monitors[] | select(.active)')"
+                mmsg -ex | grep "$active_monitor" | cut -d' ' -f2- | while read -r key value; do
+                    case $key in
+                        x) x="$value" ;;
+                        y) y="$value" ;;
+                        width) width="$value" ;;
+                        height) 
+                            height="$value"
 
+                            # This is the last line so just echo here once everything is populated.
+                            # Can't print outside because this is run inside a pipe.
+                            echo "${width}x${height}+$x+$y"
+                            ;;
+                    esac
+                done
+        esac ;;
     esac
 }
 

@@ -7,6 +7,8 @@
 	"margin": "20px 20px 0 20px", // Let Hyprland manage the bottom margin.
 	"fixed-center": false, // This is needed for modules-right to grow as required.
 	"modules-left": [
+		"ext/workspaces",
+		"dwl/window",
 		"hyprland/workspaces",
 		"hyprland/window"
 	],
@@ -24,6 +26,16 @@
 		"custom/date",
 		"tray"
 	],
+	"ext/workspaces": {
+		"format": "{icon}",
+		"ignore-hidden": true,
+		"on-click": "activate",
+		"on-click-right": "deactivate",
+		"sort-by-id": true
+	},
+	"dwl/window": {
+		"format": "[{layout}] {title}"
+	},
 	// https://github.com/Alexays/Waybar/wiki/Module:-Hyprland#workspaces
 	"hyprland/workspaces": {
 		"on-click": "activate",
@@ -94,16 +106,6 @@
 		"on-click-right": "BLOCK_BUTTON=3 sb-memory",
 		"on-scroll-up": "BLOCK_BUTTON=4 sb-memory",
 		"on-scroll-down": "BLOCK_BUTTON=5 sb-memory"
-	},
-	"custom/swap": {
-		"exec": "sb-swap",
-		"interval": 1,
-		"tooltip": false,
-		"on-click": "BLOCK_BUTTON=1 sb-swap",
-		"on-click-middle": "BLOCK_BUTTON=2 sb-swap",
-		"on-click-right": "BLOCK_BUTTON=3 sb-swap",
-		"on-scroll-up": "BLOCK_BUTTON=4 sb-swap",
-		"on-scroll-down": "BLOCK_BUTTON=5 sb-swap"
 	},
 	"custom/cpu": {
 		"exec": "sb-loadavg",

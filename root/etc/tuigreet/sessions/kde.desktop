@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=KDE (Wayland)
+Exec=/etc/tuigreet/launchers/kde.sh

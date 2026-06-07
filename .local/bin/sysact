@@ -14,6 +14,11 @@ case "$XDG_CURRENT_DESKTOP" in
         lock_cmd=hyprlock
         display_off_cmd="sleep 0.2 && hyprctl dispatch dpms off"
         ;;
+    mango)
+        logout_cmd="mmsg -q"
+        lock_cmd=hyprlock
+        display_off_cmd="sleep 0.2 && hyprctl dispatch dpms off"
+        ;;
 esac
 
 choices="\

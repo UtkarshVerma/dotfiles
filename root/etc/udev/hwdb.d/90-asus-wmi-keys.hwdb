@@ -1,2 +1,0 @@
-evdev:name:Asus WMI hotkeys:dmi:bvn*:bvr*:bd*:svnASUS*:pn*:pvr*
- KEYBOARD_KEY_7c=190		# Mic mute

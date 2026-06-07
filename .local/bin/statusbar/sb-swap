@@ -9,4 +9,10 @@ used_mib="$(free --mebi | grep '^Swap:' | tr -s ' ' | cut -d' ' -f3)"
 used_gib="$(echo "scale=2; $used_mib / 1024" | bc)"
 
 . sb-theme
-display "󰾴 $(printf "%.2f" "$used_gib")G"
+
+# NOTE:
+# The locale must be set for printf explicity to handle non-US locales
+# where the comma is used as a decimal point. One such case is when
+# the system shell is bash and locale is Dutch. dash seems to ignore
+# the locale so this is not required there.
+display "󰾴 $(LC_NUMERIC=en_US.UTF-8 printf "%.2f" "$used_gib")G"

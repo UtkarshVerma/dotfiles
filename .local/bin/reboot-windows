@@ -4,7 +4,5 @@
 
 set -e
 
-bootNum="$(efibootmgr | grep "Windows" | head -1 | cut -d'*' -f1)"
-bootNum="${bootNum#Boot}"
-efibootmgr --bootnext "$bootNum"
+asahi-bless --next --set-boot-macos
 reboot

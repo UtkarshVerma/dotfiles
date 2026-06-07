@@ -19,6 +19,13 @@ set_hyprland_wallpaper() {
     hyprpaper_ipc wallpaper ",$WALLPAPER"
 }
 
+set_mango_wallpaper() {
+    old_pids="$(pgrep -x wbg)"
+    setsid wbg -s "$WALLPAPER" >/dev/null 2>&1 &
+    sleep 0.1
+    [ -n "$old_pids" ] && kill $old_pids
+}
+
 printf "Setting wallpaper"
 
 [ ! -f "$WALLPAPER" ] &&
@@ -32,6 +39,7 @@ case "$XDG_SESSION_TYPE" in
     wayland)
         case "$XDG_CURRENT_DESKTOP" in
             Hyprland) set_hyprland_wallpaper ;;
+            mango) set_mango_wallpaper ;;
         esac
         ;;
 esac

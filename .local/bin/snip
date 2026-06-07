@@ -24,7 +24,7 @@ snip_to() {
 
     case "$XDG_SESSION_TYPE" in
         x11)
-            shotgun -g "${width}x$height+$x+$y" "$output" | xclip -sel c -target image/png
+            maim -g "${width}x$height+$x+$y" "$output" | xclip -sel c -target image/png
             ;;
         wayland)
             grim -g "$x,$y ${width}x$height" -c "$output" | wl-copy --type image/png

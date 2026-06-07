@@ -9,19 +9,14 @@ notify() {
         "Battery" "$1"
 }
 
-case "$BLOCK_BUTTON" in
-    1) notify "$(acpi -b | awk -F ': |, ' '{printf "%s\n%s\n", $2, $4}')" ;;
-    6) terminal -e "$EDITOR" "$0" ;;
-esac
+print_capacity() {
+    battery="$1"
+    if [ ! -r "$battery/capacity" ]; then
+        echo >&2 "error: could not read capacity from $battery"
+        return 1
+    fi
 
-. sb-theme
-
-# Loop through all attached batteries.
-for battery in /sys/class/power_supply/BAT?*; do
-    # If non-first battery, print a space separator.
-    [ -n "${capacity+x}" ] && printf " "
-
-    capacity="$(cat "$battery/capacity" 2>&1)"
+    capacity="$(cat "$battery/capacity")"
     if [ "$capacity" -gt 90 ]; then
         status=" "
     elif [ "$capacity" -gt 60 ]; then
@@ -34,7 +29,12 @@ for battery in /sys/class/power_supply/BAT?*; do
         status=" "
     fi
 
-    case "$(cat "$battery/status" 2>&1)" in
+    if [ ! -r "$battery/status" ]; then
+        echo >&2 "error: could not read status from $battery"
+        return 2
+    fi
+
+    case "$(cat "$battery/status")" in
         Full) status=" " ;;
         Discharging)
             if [ "$capacity" -le 20 ]; then
@@ -45,8 +45,24 @@ for battery in /sys/class/power_supply/BAT?*; do
         Charging) status="󰚥$status" ;;
         "Not charging") status=" " ;;
         Unknown) status="? $status" ;;
-        *) exit 1 ;;
+        *) return 3 ;;
     esac
 
     display "$status$capacity%" "$color"
-done
+}
+
+case "$BLOCK_BUTTON" in
+    1) notify "$(acpi -b | awk -F ': |, ' '{printf "%s\n%s\n", $2, $4}')" ;;
+    6) terminal -e "$EDITOR" "$0" ;;
+esac
+
+. sb-theme
+
+# Attempt Mac battery first and then others.
+if [ -d /sys/class/power_supply/macsmc-battery ]; then
+    print_capacity /sys/class/power_supply/macsmc-battery
+    exit
+fi
+
+# TODO: Pick the first availabe BAT?.
+battery=
