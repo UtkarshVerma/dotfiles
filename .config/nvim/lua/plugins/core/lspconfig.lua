@@ -23,18 +23,16 @@ local util = require("util")
 ---@type plugins.lspconfig.keymap[]
 local buffer_keymaps_base = {
   -- stylua: ignore start
-  { "gd", function() Snacks.picker.lsp_definitions() end , desc = "Definitions", method = "textDocument/definition" },
-  { "gr", function() Snacks.picker.lsp_references() end, desc = "References", method = "textDocument/references" },
-  { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Implementations", method = "textDocument/implementation" },
-  { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Type definitions", method = "textDocument/typeDefinition" },
-  { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Declaration", method = "textDocument/declaration" },
-  { "K", vim.lsp.buf.hover, desc = "Hover", method = "textDocument/hover" },
-  { "<c-k>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature help", method = "textDocument/signatureHelp" },
-  { "<leader>cs", vim.lsp.buf.signature_help, desc = "Signature help", method = "textDocument/signatureHelp" },
-  { "<leader>ca", vim.lsp.buf.code_action, desc = "Code action", method = "textDocument/codeAction" },
-  { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", method = "textDocument/rename" },
-  { "<leader>cl", vim.lsp.codelens.run, desc = "Run codelens", mode = { "n", "v" }, method = "textDocument/codeLens" },
-  { "<leader>cL", vim.lsp.codelens.refresh , desc = "Refresh and display codelens", method = "textDocument/codeLens" },
+  { "gd",         function() Snacks.picker.lsp_definitions() end,      desc = "Definitions",      method = "textDocument/definition" },
+  { "gr",         function() Snacks.picker.lsp_references() end,       desc = "References",       method = "textDocument/references" },
+  { "gI",         function() Snacks.picker.lsp_implementations() end,  desc = "Implementations",  method = "textDocument/implementation" },
+  { "gy",         function() Snacks.picker.lsp_type_definitions() end, desc = "Type definitions", method = "textDocument/typeDefinition" },
+  { "gD",         function() Snacks.picker.lsp_declarations() end,     desc = "Declaration",      method = "textDocument/declaration" },
+  { "K",          vim.lsp.buf.hover,                                   desc = "Hover",            method = "textDocument/hover" },
+  { "<c-k>",      vim.lsp.buf.signature_help,                          mode = "i",                desc = "Signature help",               method = "textDocument/signatureHelp" },
+  { "<leader>cs", vim.lsp.buf.signature_help,                          desc = "Signature help",   method = "textDocument/signatureHelp" },
+  { "<leader>ca", vim.lsp.buf.code_action,                             desc = "Code action",      method = "textDocument/codeAction" },
+  { "<leader>cr", vim.lsp.buf.rename,                                  desc = "Rename",           method = "textDocument/rename" },
 }
 
 ---Check if any LSP client in buffer {bufnr} supports {method}.
@@ -62,34 +60,34 @@ local function apply_buffer_keymaps(bufnr)
   vim.iter(clients):each(function(client)
     local server_keymaps = opts.servers[client.name] and vim.deepcopy(opts.servers[client.name].keys) or {}
     server_keymaps = vim
-      .iter(server_keymaps)
-      :map(function(keymap)
-        local callback = keymap[2]
-        if type(callback) == "function" then
-          keymap[2] = function()
-            callback(client)
+        .iter(server_keymaps)
+        :map(function(keymap)
+          local callback = keymap[2]
+          if type(callback) == "function" then
+            keymap[2] = function()
+              callback(client)
+            end
           end
-        end
 
-        return keymap
-      end)
-      :totable()
+          return keymap
+        end)
+        :totable()
 
     vim.list_extend(buffer_keymaps, server_keymaps)
   end)
 
   vim
-    .iter(buffer_keymaps)
-    ---@param keymap plugins.lspconfig.keymap
-    :filter(function(keymap)
-      local method = keymap.method
-      return not method or buffer_supports(method, bufnr)
-    end)
-    ---@param keymap plugins.lspconfig.keymap
-    :each(function(keymap)
-      ---@diagnostic disable-next-line: missing-fields
-      vim.keymap.set(keymap.mode or "n", keymap[1], keymap[2], { desc = keymap.desc })
-    end)
+      .iter(buffer_keymaps)
+  ---@param keymap plugins.lspconfig.keymap
+      :filter(function(keymap)
+        local method = keymap.method
+        return not method or buffer_supports(method, bufnr)
+      end)
+  ---@param keymap plugins.lspconfig.keymap
+      :each(function(keymap)
+        ---@diagnostic disable-next-line: missing-fields
+        vim.keymap.set(keymap.mode or "n", keymap[1], keymap[2], { desc = keymap.desc })
+      end)
 end
 
 ---Execute {callback} on the `LspAttach` event.
@@ -138,18 +136,6 @@ return {
           })
         end
 
-        -- Enable code lens.
-        if vim.lsp.codelens and client:supports_method("textDocument/codeLens") then
-          vim.lsp.codelens.refresh({ bufnr = bufnr })
-
-          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-            buffer = bufnr,
-            callback = function(_)
-              vim.lsp.codelens.refresh({ bufnr = bufnr })
-            end,
-          })
-        end
-
         if client:supports_method("textDocument/inlayHints") then
           Snacks.toggle.inlay_hints():map("<leader>ti", { desc = "Inlay hints" })
         end
@@ -180,20 +166,20 @@ return {
       local lspconfig_opts = util.plugin.opts("nvim-lspconfig") --[[@as plugins.lspconfig.config]]
       local servers = lspconfig_opts.servers or {}
       local external_servers = {
-        "mojo", -- Unavailable.
+        "mojo",   -- Unavailable.
         "nil_ls", -- Built from source (Rust), which is slow.
       }
 
       local ensure_installed = vim
-        .iter(vim.tbl_keys(servers))
-        :map(function(server)
-          if vim.list_contains(external_servers, server) then
-            return nil
-          end
+          .iter(vim.tbl_keys(servers))
+          :map(function(server)
+            if vim.list_contains(external_servers, server) then
+              return nil
+            end
 
-          return server
-        end)
-        :totable()
+            return server
+          end)
+          :totable()
 
       local auto_install = os.getenv("NVIM_MASON_AUTO_INSTALL") == "1"
 

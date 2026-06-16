@@ -16,29 +16,30 @@ local util = require("util")
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    version = false,
     build = ":TSUpdate",
     event = { "LazyFile", "VeryLazy" },
     lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
-    init = function(plugin)
-      -- PERF: Add nvim-treesitter queries to the rtp and its custom query predicates early.
-      -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-      -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-      -- Luckily, the only things that those plugins need are the custom queries, which we make available
-      -- during startup.
-      require("lazy.core.loader").add_to_rtp(plugin)
-      require("nvim-treesitter.query_predicates")
+    init = function(_)
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          -- Enable treesitter highlighting and disable regex syntax
+          pcall(vim.treesitter.start)
+          -- Enable treesitter-based indentation
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
     end,
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = {
       { "<c-space>", desc = "Increment selection" },
-      { "<bs>", desc = "Decrement selection", mode = "x" },
+      { "<bs>",      desc = "Decrement selection", mode = "x" },
     },
     opts_extend = { "ensure_installed" },
     ---@type plugins.treesitter.config
     ---@diagnostic disable-next-line: missing-fields
     opts = {
-      highlight = { enable = true },
-      indent = { enable = true },
       ensure_installed = {},
       incremental_selection = {
         enable = true,
@@ -55,7 +56,14 @@ return {
         opts.ensure_installed = util.dedup(opts.ensure_installed)
       end
 
-      require("nvim-treesitter.configs").setup(opts)
+      require("nvim-treesitter").setup(opts)
+      local installed = require('nvim-treesitter.config').get_installed()
+      local to_install = vim.iter(opts.ensure_installed)
+          :filter(function(parser)
+            return not vim.tbl_contains(installed, parser)
+          end)
+          :totable()
+      require('nvim-treesitter').install(to_install)
     end,
   },
 }

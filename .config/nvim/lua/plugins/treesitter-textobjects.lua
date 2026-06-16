@@ -1,59 +1,70 @@
----@class plugins.treesitter_textobjects.config.move
----@field enable? boolean
----@field goto_next_start? table<string, string>
----@field goto_next_end? table<string, string>
----@field goto_previous_start? table<string, string>
----@field goto_previous_end? table<string, string>
-
----@class plugins.treesitter_textobjects.config
----@field move? plugins.treesitter_textobjects.config.move
-
 ---@type LazyPluginSpec[]
 return {
   {
-    "nvim-treesitter",
-    dependencies = { "nvim-treesitter-textobjects" },
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    version = false,
+    event = "VeryLazy",
+    init = function()
+      -- Disable entire built-in ftplugin mappings to avoid conflicts.
+      -- See https://github.com/neovim/neovim/tree/master/runtime/ftplugin for built-in ftplugins.
+      vim.g.no_plugin_maps = true
+    end,
     opts = {
-      ---@type plugins.treesitter_textobjects.config
-      textobjects = {
-        move = {
-          enable = true,
-          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
-          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
-          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
-          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
-        },
+      move = {
+        set_jumps = true, -- whether to set jumps in the jumplist
       },
     },
-  },
+    config = function(_, opts)
+      require("nvim-treesitter-textobjects").setup(opts)
 
-  {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    event = "VeryLazy",
-    -- NOTE: https://github.com/nvim-treesitter/nvim-treesitter-textobjects/issues/513
-    commit = "73e44f43c70289c70195b5e7bc6a077ceffddda4",
-    opts = {},
-    config = function(_, _)
-      -- When in diff mode, we want to use the default
-      -- vim text objects c & C instead of the treesitter ones.
-      local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
-      local configs = require("nvim-treesitter.configs")
-      for name, fn in pairs(move) do
-        if name:find("goto") == 1 then
-          move[name] = function(q, ...)
-            if vim.wo.diff then
-              local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
-              for key, query in pairs(config or {}) do
-                if q == query and key:find("[%]%[][cC]") then
-                  vim.cmd("normal! " .. key)
-                  return
-                end
-              end
-            end
-            return fn(q, ...)
-          end
-        end
-      end
+      vim.keymap.set({ "n", "x", "o" }, "]m", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "]]", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects")
+      end)
+      -- You can also pass a list to group multiple queries.
+      vim.keymap.set({ "n", "x", "o" }, "]o", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start({ "@loop.inner", "@loop.outer" }, "textobjects")
+      end)
+      -- You can also use captures from other query groups like `locals.scm` or `folds.scm`
+      vim.keymap.set({ "n", "x", "o" }, "]s", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@local.scope", "locals")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "]z", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@fold", "folds")
+      end)
+
+      vim.keymap.set({ "n", "x", "o" }, "]M", function()
+        require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "][", function()
+        require("nvim-treesitter-textobjects.move").goto_next_end("@class.outer", "textobjects")
+      end)
+
+      vim.keymap.set({ "n", "x", "o" }, "[m", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[[", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer", "textobjects")
+      end)
+
+      vim.keymap.set({ "n", "x", "o" }, "[M", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_end("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[]", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_end("@class.outer", "textobjects")
+      end)
+
+      -- Go to either the start or the end, whichever is closer.
+      -- Use if you want more granular movements
+      vim.keymap.set({ "n", "x", "o" }, "]d", function()
+        require("nvim-treesitter-textobjects.move").goto_next("@conditional.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[d", function()
+        require("nvim-treesitter-textobjects.move").goto_previous("@conditional.outer", "textobjects")
+      end)
     end,
   },
 }

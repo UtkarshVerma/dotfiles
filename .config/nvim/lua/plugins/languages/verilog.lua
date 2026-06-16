@@ -5,8 +5,9 @@ return {
     ---@type plugins.treesitter.config
     opts = {
       ensure_installed = {
-        "verilog",
+        "systemverilog",
         "tcl",
+        "vhdl",
       },
     },
   },
