@@ -1,0 +1,8 @@
+# Keychron WebHID / VIA / Launcher access
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0ad0", TAG+="uaccess"
+
+# STM32 DFU bootloader access for firmware flashing
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+
+# Keychron Link: Wireless 2.4 GHz dongle
+SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d030", TAG+="uaccess"
