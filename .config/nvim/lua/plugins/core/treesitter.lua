@@ -23,11 +23,24 @@ return {
     lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
     init = function(_)
       vim.api.nvim_create_autocmd('FileType', {
-        callback = function()
-          -- Enable treesitter highlighting and disable regex syntax
-          pcall(vim.treesitter.start)
-          -- Enable treesitter-based indentation
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        callback = function(ev)
+          local language = vim.treesitter.language.get_lang(ev.match)
+          if not language then
+            return
+          end
+
+          local installed_parsers = require("nvim-treesitter").get_installed()
+          if not vim.tbl_contains(installed_parsers, language) then
+            return
+          end
+
+          -- Enable syntax highlighting.
+          vim.treesitter.start()
+
+          -- Enable indents if the parser supports it.
+          if vim.treesitter.query.get(language, "indents") then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
         end,
       })
     end,
